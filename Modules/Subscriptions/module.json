@@ -1,0 +1,13 @@
+{
+    "name": "Subscriptions",
+    "alias": "subscriptions",
+    "description": "Unlock premium content with subscriptions",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\Subscriptions\\Providers\\SubscriptionsServiceProvider"
+    ],
+    "files": [
+        "Helpers/functions.php"
+    ]
+}

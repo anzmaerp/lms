@@ -1,0 +1,453 @@
+/* Subscription Banner style Start */  
+.am-subcription-banner{
+    .am-learning_details{
+        h1{
+            margin-bottom: 30px;
+            color: rgba($color: $heading-color, $alpha: 0.7);
+            font: 400 rem(44) / em(52, 44) $body-font-family;
+            span{
+                display: block;
+                color: $theme-color;
+                font-style: italic !important;
+                font: 500 rem(66) / em(88, 66) $playfair-font-family;
+            }
+        }
+        p{
+            margin: 0;
+            color: $body-font-color;
+            font: 400 rem(20) / em(30, 20) $body-font-family;
+        }
+    }
+    .am-btns {
+        gap: 10px;
+        display: flex;
+        margin-top: 70px;
+        align-items: center;
+        .am-primary-btn,
+        .am-primary-btn-white{
+            padding: 16px 36px;
+            font: 600 rem(16) / em(24, 16) $body-font-family;
+        }
+        .am-primary-btn{
+            border-color: $btn-black;
+            background-color: $btn-black;
+            &:hover{
+                opacity: 0.8;
+            }
+        }
+        .am-primary-btn-white{
+            border-color: $btn-black;
+            &:hover{
+                border-color: $btn-color;
+            }
+        }
+    }
+    .am-learning_video{
+        padding: 0;
+        height: auto;
+        border-radius: 0;
+        background: transparent;
+        &::after,
+        &::before{
+            display: none;
+        }
+        .am-learning_video_img{
+            margin: 0;
+            width: 100%;
+            img{
+                width: 100%;
+                display: block;
+            }
+            figcaption{
+                img{
+                    width: 74px;
+                    height: 46px;
+                    position: absolute;
+                    left: 126px;
+                    bottom: 148px;
+                }
+            }
+        }
+    }
+}
+.am-rendom-floating {
+    animation: rendom 15s ease-in-out infinite;
+}
+@keyframes rendom{
+    0% {
+        transform: translate(20px, -50px);
+    }
+    10% {
+        transform: translate(0);
+    }
+    25% {
+        transform: translate(0);
+    }
+    32% {
+        transform: translate(20px, -50px);
+    }
+    48% {
+        transform: translate(40px, 20px);
+    }
+    60% {
+        transform: translate(40px, 20px);
+    }
+    70% {
+        transform: translate(0);
+    }
+    80% {
+        transform: translate(0);
+    }
+    90% {
+        transform: translate(0);
+    }
+    100% {
+        transform: translate(20px, -50px);
+    }
+}
+/* Subscription Banner style End */
+/* Subscription Section  style Start */
+.pb-themesection:has(.am-subscription) .container-fluid > .row > *,
+.pb-themesection:has(.am-faqs) .container-fluid > .row > *{
+    padding: 0;
+}
+.am-subscription{
+    padding: 100px 0;
+    background-color: #fff;
+}
+.am-subscription_content{
+    .am-steps_content_unlock {
+        margin: 0;
+        text-align: left;
+        margin-bottom: 100%;
+        margin-bottom: 40px;
+        span{
+            margin-left: 34px;
+        }
+        h3{
+            margin: 0;
+        }
+        p{
+            font: 400 rem(16) / em(24, 16) $body-font-family;
+            margin: 10px 0 0;
+        }
+    }
+}
+.am-pricing-card {
+    display: flex;
+    max-width: 416px;
+    overflow: hidden;
+    border-radius: 16px;
+    flex-direction: column;
+    background-color: $secondary-color;
+    border: 1px solid transparent;
+    box-shadow: 0px 1px 2px rgba(16, 24, 40, 0.05);
+}
+
+.am-plan-header {
+    gap: 10px;
+    width: 100%;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    border-bottom: 1px solid rgba(88, 88, 88, 0.10);
+}
+
+.am-plan-icon-wrapper {
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    border-radius: 159px;
+    justify-content: center;
+    border: 1px solid $theme-color;
+}
+
+.am-plan-icon {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    padding: 10px;
+    align-items: center;
+    border-radius: 100px;
+    justify-content: center;
+    background-color: $theme-color;
+    i{
+        font-size: 20px;
+        &:before{
+            color: #fff;
+        }
+    }
+    img{
+        max-width: 44px;
+        height: 44px;
+    }
+}
+
+.am-plan-title {
+    margin: 0;
+    letter-spacing: 0.1px;
+    color: rgba($color: $heading-color, $alpha: 0.7);
+    font: 500 rem(20) / em(24, 20) $body-font-family;
+}
+
+.am-plan-description {
+    margin: 0;
+    color: $body-font-color;
+    font: 400 rem(14)/em(22,14) $body-font-family;
+}
+
+.am-price-container {
+    gap: 6px;
+    display: flex;
+    align-items: center;
+    font-family: $body-font-family;
+}
+
+.am-price-amount {
+    color: $heading-color;
+    letter-spacing: 0.15px;
+    font: 500 rem(30)/em(36,30) $body-font-family;
+}
+
+.am-price-period {
+    color: $body-font-color;
+    font: 400 rem(14)/em(22,14) $body-font-family;
+}
+
+.am-features-section {
+    width: 100%;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+}
+
+.am-features-container {
+    border-radius: $radius;
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+}
+
+.am-features-title {
+    margin-bottom: 16px;
+    color: $heading-color;
+    font: 400 rem(16)/em(24,16) $body-font-family;
+}
+
+.am-features-list {
+    gap: 12px;
+    margin: 0;
+    width: 100%;
+    display: flex;
+    list-style: none;
+    flex-direction: column;
+    font: 400 rem(14)/em(22,14) $body-font-family;
+}
+
+.am-feature-item {
+    gap: 6px;
+    margin: 0;
+    width: 100%;
+    display: flex;
+    align-items: center;
+
+    &:first-child {
+        margin-top: 0;
+    }
+    i{
+        font-size: 16px;
+        &:before{
+            font-weight: 600;
+            color: #14A800;
+        }
+    }
+}
+
+.am-feature-label {
+    color: $body-font-color;
+    flex: 1;
+}
+
+.am-feature-value {
+    color: rgba($color: $heading-color, $alpha: 0.7);
+}
+
+.am-buy-button {
+    width: 100%;
+    outline: none;
+    margin-top: 30px;
+    border-radius: $radius;
+    background: transparent;
+    border: 1px solid rgba(245, 92, 43, 1);
+
+    &:hover,
+    &:focus {
+        color: #fff;
+        background-color: rgba(245, 92, 43, 1);
+    }
+
+    &:focus {
+        outline: none;
+    }
+}
+
+.am-visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+}
+.am-active{
+    border-color: $theme-color;
+    .am-buy-button{
+        background-color: #F55C2B;
+        color: #fff;
+        &:hover{
+            background-color: #F55C2B;
+            color: #fff;
+        }
+    }
+}
+
+.am-learning-insights {
+    display: flex;
+    margin-top: 40px;
+    overflow: hidden;
+    font-weight: 400;
+    border-radius: 12px;
+    flex-direction: column;
+    justify-content: center;
+    font-family: $body-font-family;
+}
+
+.am-insights-section,
+.am-support-section,
+.am-resources-section {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    justify-content: flex-start;
+    .am-section-title {
+        align-self: stretch;
+        width: 100%;
+        gap: 10px;
+        margin-top: 20px;
+        font: 400 rem(16) / em(24, 16) $body-font-family;
+        color: #000;
+    }
+}
+
+
+.am-insights-content,
+.am-support-content,
+.am-resources-content {
+    width: 100%;
+    display: flex;
+    margin: 10px 0;
+    overflow: hidden;
+    color: $text-light;
+    padding-bottom: 10px;
+    flex-direction: column;
+    justify-content: center;
+    font: 400 rem(14) / em(22, 14) $body-font-family;
+    border-bottom: 1px solid rgba(88, 88, 88, 0.1);
+}
+
+.am-content-row {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: 24px;
+}
+
+.am-feature-item2 {
+    gap: 10px;
+    height: 100%;
+    display: flex;
+    padding: 11px 0;
+    align-items: center;
+    width: calc(33.33% - 16px);
+    i{
+        font-size: 16px;
+        font-weight: 600;
+        &:before{
+            color: #14A800;
+        }
+    }
+    i.am-icon-multiply-02{
+        &:before{
+            color: #F04438;
+        }
+    }
+}
+
+.am-feature-text {
+    flex: 1;
+    margin: 0;
+    flex-basis: 0%;
+    font: 400 rem(14) / em(21, 14) $body-font-family;
+}
+/* Subscription Section style End */  
+/* How it Section style Start */  
+.am-how-itwork{
+    .am-shap-image{
+        left: 0;
+        top: -25%;
+        position: absolute;
+    }
+    .am-steps_content_unlock{
+        max-width: 841px;
+    }
+    .am-steps_content_unlock{
+        p{
+            max-width: 841px;
+        }
+    }
+    .am-how-itwork-content{
+        margin-top: 40px;
+    }
+    .am-steps_content_start_info{
+        gap: 40px;
+        figure{
+            height: 100%;
+            width: 100%;
+            img{
+                max-width: 100%;
+            }
+        }
+    }
+    .am-steps_content_start_info_redirect {
+        p{
+            max-width: 100%;
+        }
+    }
+}
+/* How it Section style End */  
+/* FAQ Section style Start */  
+.am-faqs{
+    padding: 100px 0;
+    background-color: #fff;
+    .am-faq-page{
+        margin: 40px auto 0;
+    }
+}
+.am-faqtab-content{
+    .accordion-header{
+        span{
+            i{
+                &:before{
+                    font-size: 18px;
+                    color: $theme-color;
+                }
+            }
+        }
+    } 
+
+} 
+/* FAQ Section style End */  

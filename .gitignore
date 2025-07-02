@@ -1,0 +1,75 @@
+# Dependency directories
+/node_modules
+/vendor
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Storage directory
+/storage/*
+!/storage/public/
+!.gitignore
+
+# Log files
+*.log
+
+# Cache and temporary files
+bootstrap/cache/*
+*.tmp
+*.temp
+
+# Debug files
+*.swp
+*.swo
+.DS_Store
+.idea
+.vscode
+
+# Build assets
+/public/build
+/public/hot
+
+# User uploaded content
+/public/storage
+/public/uploads
+
+# Large files
+*.zip
+*.rar
+*.7z
+
+# Operating system files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Testing
+.phpunit.result.cache
+
+# IDE specific files
+.htaccess
+.phpstorm.meta.php
+._*
+
+# Composer
+/composer.lock
+
+# Node.js
+package-lock.json
+yarn.lock
+
+# Laravel specific
+bootstrap/compiled.php
+storage/framework/views/*.php
+storage/framework/cache/*
+storage/logs/*
+
+# Development assets
+blog-default.png
+bgshape.png
+
+# Local development files
+lernen.zip
+lernenNew.zip

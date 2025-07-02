@@ -1,0 +1,14 @@
+{
+    "name": "KuponDeal",
+    "alias": "kupondeal",
+    "description": "Coupon Management System",
+    "keywords": [],
+    "priority": 0,
+    "version": "pro",
+    "providers": [
+        "Modules\\KuponDeal\\Providers\\KuponDealServiceProvider"
+    ],
+    "files": [
+        "/helpers/functions.php"
+    ]
+}

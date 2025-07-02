@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="200" height="50" viewBox="0 0 200 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect width="40" height="40" rx="8" fill="#1E40AF"/>
+    <path d="M20 15L25 20L20 25" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M15 20H25" stroke="white" stroke-width="2" stroke-linecap="round"/>
+    <text x="60" y="32" font-family="Arial" font-size="24" fill="#1E40AF">Hesabe</text>
+</svg> 

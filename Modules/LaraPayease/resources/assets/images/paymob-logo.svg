@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="200" height="50" viewBox="0 0 200 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M40 10H10C8.89543 10 8 10.8954 8 12V38C8 39.1046 8.89543 40 10 40H40C41.1046 40 42 39.1046 42 38V12C42 10.8954 41.1046 10 40 10Z" fill="#2D3748"/>
+    <path d="M25 20L30 25L25 30" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M20 25H30" stroke="white" stroke-width="2" stroke-linecap="round"/>
+    <text x="60" y="32" font-family="Arial" font-size="24" fill="#2D3748">Paymob</text>
+</svg> 

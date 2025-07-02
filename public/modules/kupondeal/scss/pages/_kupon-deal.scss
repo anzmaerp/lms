@@ -1,0 +1,637 @@
+/** ====== Coupons Start ====== **/
+.kd-allcoupons{
+    padding: 44px;
+    @media screen and (max-width: 767px) {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+    &_filter{
+        display: flex;
+        margin-bottom: 30px;
+        align-items: center;
+        justify-content: space-between;
+        @media screen and (max-width: 767px) {
+            gap: 20px;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+    }
+    &_search{
+        display: flex;
+        position: relative;
+        align-items: center;
+        width: 100%;
+        max-width: 400px;
+        @media screen and (max-width: 767px) {
+            max-width: 100%;
+        }
+        & > input{
+            padding-right: 40px;
+        }
+        & > i{
+            right: 16px;
+            position: absolute;
+        }
+    }
+    &_list{
+        margin: -10px;
+        list-style: none;
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(284px, 1fr));
+        & > li{
+            width: 100%;
+            padding: 10px;
+            list-style-type: none;
+        }
+    }
+    &_tab{
+        display: flex;
+        background: $formbg;
+        border-radius: 9999px;
+        padding: 4px;
+        & > a{
+            min-width: 102px;
+            padding: 6px 10px;
+            text-align: center;
+            z-index: 1;
+            position: relative;
+            border-radius: 9999px;
+            color: rgba($color: $heading-color, $alpha: 0.8);
+            font: 400 rem(14)/em(20,14) $theme-font-family;
+            &:before{
+                content: '';
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                z-index: -1;
+                position: absolute;
+                background: $clr-white;
+                border-radius: 9999px;
+                @extend %transition;
+                transform: scale(0);
+                box-shadow: 0px 1px 3px 0px rgba(16, 24, 40, 0.10);
+            }
+            &.kd-active{
+                &:before{
+                    transform: scale(1);
+                }
+            }
+        }
+    }
+}
+.kd-coupon{
+    &_item{
+        width: 100%;
+        list-style-type: none;
+        @extend %transition;
+        border-radius: 10px;
+        &:hover{
+            box-shadow: 0 4px 8px rgba($btnhover-color, 0.1);
+        }
+        &_title{
+            gap: 5px;
+            width: 100%;
+            margin-top: 7px;
+            display: flex;
+            align-items: center;
+            & > em{
+                color: rgba($color: $clr-white, $alpha: 0.8);
+                font: normal 400 rem(16)/em(22,16) $theme-font-family;
+            }
+            &_content{
+                position: relative;
+                .am-tooltip-text{
+                    width: auto;
+                    z-index: 99;
+                    bottom: 100%;
+                    white-space: nowrap;
+                    text-align: center;
+                }
+                &:hover{
+                    .am-tooltip-text{
+                        opacity: 1;
+                        visibility: visible;
+                    }
+                }
+                & > em{
+                    overflow: hidden;
+                    position: relative;
+                    text-overflow: ellipsis;
+                    display: -webkit-box;
+                    -webkit-line-clamp: 1;
+                    -webkit-box-orient: vertical;
+                    color: rgba($color: $clr-white, $alpha: 0.9);
+                    font: 400 rem(18)/em(22,18) $theme-font-family;
+                }
+            }
+        }
+    }
+    &_header{
+        @extend %flex;
+        position: relative;
+        padding: 20px 16px;
+        background: $btnhover-color;
+        border-radius: 10px 10px 0 0;
+        justify-content: space-between;
+        &_discount{
+            span{
+                @extend %flex;
+                color: $clr-white;
+                align-items: center;
+                font: 700 rem(30)/em(38,30) $theme-font-family;
+                & > em{
+                    margin-left: 8px;
+                    color: rgba($color: $clr-white, $alpha: 0.9);
+                    font: 400 rem(16)/em(28,16) $theme-font-family;
+                }
+            }
+            sup{
+                top: -2px;
+            }
+            
+        }
+        .kd-coupon_shape{
+            z-index: 0;
+            right: 0px;
+            height: 6px;
+            width: 100%;
+            content: "";
+            bottom: -4px;
+            position: absolute;
+            border-bottom: 8px dotted transparent;
+        }
+    }
+    &_body{
+        padding: 29px 20px 20px;
+        border-radius: 0 0 10px 10px;
+        background-color: rgba($color: #754FFE, $alpha: 0.06);
+        em{
+            display: block;
+            margin: 0 0 4px;
+            color: $body-font-color;
+            font: 400 rem(13)/em(18,13) $theme-font-family;
+        }
+        h3{
+            gap: 6px;
+            display: flex;
+            margin: 0 0 4px;
+            word-break: break-word;
+            font: 500 rem(18)/em(24,18) $theme-font-family;
+            & > a{
+                padding: 5px 0;
+                font-size: 14px;
+                i{
+                    display: block;
+                }
+            }
+        }
+        span{
+            display: block;
+            font: 400 rem(14)/em(18,14) $theme-font-family;
+            color: rgba($color: $body-font-color, $alpha: 0.8);
+        }
+    }
+}
+.kd-itemdropdown{
+    top: 20px;
+    right: 16px;
+    position: absolute;
+    & > a{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        i{
+            transform: rotate(90deg);
+            &:before{
+                color: $clr-white;
+            }
+        }
+    }
+    &_list{
+        border: 0;
+        padding: 8px;
+        min-width: 150px;
+        list-style: none;
+        background: $clr-white;
+        border-radius: $radius;
+        box-shadow: 0px 20px 24px -4px rgba(16, 24, 40, 0.08), 0px 8px 8px -4px rgba(16, 24, 40, 0.03);
+        li{
+            list-style-type: none;
+            & + li{margin-top: 2px;}
+            a{
+                gap: 10px;
+                padding: 10px;
+                display: flex;
+                align-items: center;
+                @extend %transition;
+                border-radius: $radius;
+                color: $body-font-color;
+                font: 500 rem(14)/em(20,14) $theme-font-family;
+                &:hover{
+                    background: $formbg;
+                }
+                i::before{
+                    font-size: 16px;
+                }
+            }
+        }
+    }
+}
+.kd-title{
+    &_wrap{
+        @extend %flex;
+        margin: 0 0 20px;
+        align-items: flex-start;
+        justify-content: space-between;
+        @media screen and (max-width: 767px) {
+            flex-direction: column;
+            gap: 20px;
+            align-items: flex-start;
+        }
+    }
+    h2{
+        margin: 0 0 2px;
+        color: rgba($color: $heading-color, $alpha: 0.9);
+        font: 600 rem(24)/em(32,24) $theme-font-family;
+    }
+    p{
+        margin: 0;
+        letter-spacing: normal;
+        color: $body-font-color;
+        font: 400 rem(14)/em(20,14) $theme-font-family;
+    }
+}
+
+.kd-couponsempty{
+    width: 100%;
+    &_container{
+        width: 100%;
+        padding: 30px;
+        display: flex;
+        min-height: 270px;
+        align-items: center;
+        flex-direction: column;
+        justify-content: center;
+        height: calc(100vh - 344px);
+        figure{
+            margin: 0 0 20px;
+        }
+        h3{
+            font: 500 rem(20)/em(30,20) $theme-font-family;
+            color: rgba($color: $heading-color, $alpha: 0.7);
+        }
+        p{
+            color: $body-font-color;
+            font: 400 rem(14)/em(20,14) $theme-font-family;
+        }
+    }
+}
+.cp-cont:has(.kd-colorpicker){
+    width: 100%;
+    .cpBG {
+        @media screen and (max-width: 380px) {
+            left: 0;
+        }
+        @media screen and (max-width: 340px) {
+            left: -15px;
+        }
+    }
+}
+.kd-coupon-modal{
+    .am-btn-group{
+        gap: 10px;
+        @extend %flex;
+        justify-content: flex-end;
+    }
+    .select2-container .select2-selection--single .select2-selection__rendered{
+        line-height: 18px;
+    }
+    .modal-content{
+        overflow: visible;
+    }
+    .am-switchbtn-box{
+        @extend %transition;
+        .am-switchbtn{
+            padding: 0;
+            align-items: flex-start;
+            background: transparent;
+            label{
+                max-width: 270px;
+                font: 400 rem(12)/em(18,12) $theme-font-family;
+                color: rgba($color: $body-font-color, $alpha: 0.7);
+            }
+            input{
+                border: 0;
+                width: 44px;
+                height: 24px;
+                @extend %transition;
+                background: $formbg;
+                &::before{
+                    top: 1px;
+                    left: 2px;
+                    background: $clr-white;
+                    box-shadow: 0px 1px 3px 0px rgba(16, 24, 40, 0.10), 0px 1px 2px 0px rgba(16, 24, 40, 0.06);
+                }
+                &:checked{
+                    border: 0;
+                    background: $theme-color;
+                    &::before{
+                        left: 20px;
+                        box-shadow: none;
+                        background: $clr-white !important;
+                    }
+                }
+            }
+        }
+        .kd-coupon-order{
+            gap: 0 20px;
+            padding: 10px;
+            @extend %flex;
+            margin-top: 16px;
+            align-items: center;
+            border-radius: 10px;
+            justify-content: space-between;
+            @extend %transition;
+            &:hover,
+            &.active{
+                background: $clr-white;
+            }
+            &_title{
+                cursor: pointer;
+                h4{
+                    color: $body-font-color;
+                    font: 500 rem(14)/em(20,14) $theme-font-family;
+                }
+                span{
+                    display: block;
+                    font: 500 rem(12)/em(18,12) $theme-font-family;
+                    color: rgba($color: $body-font-color, $alpha: 0.5);
+                }
+            }
+            &_btns{
+                gap: 8px;
+                @extend %flex;
+                align-items: center;
+                span{
+                    width: 32px;
+                    height: 32px;
+                    @extend %flex;
+                    cursor: pointer;
+                    align-items: center;
+                    border-radius: 10px;
+                    justify-content: center;
+                    &.am-order-delete{
+                        background: #FEF3F2;
+                        i::before{color: #F04438;}
+                    }
+                    &.am-order-edit{
+                        background: $theme-color;
+                        i::before{color: $clr-white;}
+                    }
+                }
+            }
+            &_form{
+                width: 100%;
+                margin-top: 10px;
+            }
+        }
+        &:has(input:checked){
+            padding: 12px;
+            border-radius: 10px;
+            background: $formbg;
+        }
+    }
+}
+.kd-colorpicker{
+    position: relative;
+    &_wrap{
+        .cpBG {
+            bottom: 100%;
+            border-radius: 10px;
+            border: 1px solid $border-color;
+            box-shadow: 0px 0px 30px 0px rgba($btnhover-color, 0.06);
+            .cp-hues,
+            .cp-alpha,
+            .cp-colors{
+                border: 1px solid $border-color;
+                border-radius: 10px;
+            }
+            .cp-colors .cp-white .cp-black,
+            .cp-alpha .cp-bg{
+                border-radius: 10px;
+            }
+            .cp-buttons{
+                gap: 10px;
+                display: flex;
+                .btn{
+                    gap: 6px;
+                    width: 100%;
+                    border:0;
+                    margin: 0;
+                    opacity: 1;
+                    z-index: 0;
+                    height: auto;
+                    max-width: 50%;
+                    cursor: pointer;
+                    overflow: hidden;
+                    color: $clr-white;
+                    position: relative;
+                    padding: 8px 18px;
+                    @extend %transition;
+                    align-items: center;
+                    display: inline-flex;
+                    background-image: none;
+                    justify-content: center;
+                    border-radius: $radius;
+                    background-color: $theme-color;
+                    font: 500 rem(14)/em(20,14) $theme-font-family;
+                }
+                .btn-none{
+                    padding: 7px 14px;
+                    background: $clr-white;
+                    border-radius: 10px;
+                    color: $text-light;
+                    background-color: transparent;
+                    border: 1px solid $border-color;
+                }
+            }
+            .cp-values{
+                @extend %flex;
+                & > span{
+                    font: normal 400 14px/20px $theme-font-family;
+                }
+                .cp-input-color{
+                    gap: 10px;
+                    flex: auto;
+                    width: 100%;
+                    display: flex;
+                    margin-left: 0;
+                    .cp-prev{
+                        width: 40px;
+                        height: 40px;
+                        flex: none;
+                        i{
+                            width: 100%;
+                            height: 40px;
+                            box-shadow: none;
+                            border-radius: 10px;
+                            border: 1px solid $border-color;
+                        }
+                    }
+                    .cp-hex{
+                        width: 100%;
+                        input{
+                            width: 100%;
+                        }
+                    }
+                }
+            }
+            .cp-input-colorrow{
+                gap: 10px;
+                width: 100%;
+                display: flex;
+                margin: 10px 0 0;
+                font: 400 14px/20px $theme-font-family;
+                input{
+                    width: 100%;
+                }
+                & > div{
+                    gap: 4px;
+                    @extend %flex;
+                    align-items: center;
+                }
+            }
+        }
+    }
+    .form-control{
+        padding-left: 52px;
+    }
+}
+.kd-colordemo{
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    border-radius: 10px 0 0 10px;
+}
+// Skeleton
+.kd-coupon{
+    &_skeleton{
+        width: 100%;
+        border-radius: 12px;
+        background: $clr-white;
+        .kd-coupon{
+            &_header{
+                margin: 0;
+                height: 115px;
+                @extend %skeleton;
+                background: rgba($color: #ebebea, $alpha: 0.6);
+                span{
+                    sup{
+                        top: 0;
+                        width: 50px;
+                        display: block;
+                        height: 38px;
+                        border-radius: 10px;
+                        @extend %skeleton;
+                    }
+                    em{
+                        width: 100px;
+                        margin-top: 4px;
+                        display: block;
+                        height: 28px;
+                        @extend %skeleton;
+                        border-radius: 10px;
+                    }
+                }
+                .kd-itemdropdown{
+                    @extend %skeleton;
+                    width: 28px;
+                    display: block;
+                    border-radius: 10px;
+                    height: 28px;
+                    @extend %skeleton;
+                }
+            }
+            &_body{
+                min-height: 108px;
+                @extend %skeleton;
+                background: rgba($color: #ebebea, $alpha: 0.3);
+                span,
+                em{
+                    width: 100px;
+                    height: 18px;
+                    @extend %skeleton;
+                    border-radius: 10px;
+                }
+                h3{
+                    height: 24px;
+                    width: 100%;
+                    @extend %skeleton;
+                    border-radius: 10px;
+                }
+            }
+        }
+    }
+}
+.select2-container--default.select2-container--disabled .select2-selection--single{
+    pointer-events: none;
+}
+.kd-switchbtn{
+    gap: 10px;
+    @extend %flex;
+    align-items: center;
+    padding: 10px 12px;
+    border-radius: 10px;
+    justify-content: space-between;
+    border: 1px solid $border-color;
+    span{
+        @extend %h6;
+    }
+    input{
+        width: 32px;
+        height: 18px;
+        outline: none;
+        cursor: pointer;
+        position: relative;
+        border-radius: 50px;
+        -webkit-appearance: none;
+        border: 1.5px solid $lighter;
+        background: $formbg;
+    }
+    label{
+        margin: 0;
+        cursor: pointer;
+        span{
+            @extend %p14;
+            margin: 0 !important;
+            line-height: 20px !important;
+            color: $theme_color !important;
+            font-family: $theme-font-family !important;
+        }
+    }
+    input:checked{
+        background: $theme_color;
+        border: 1.5px solid transparent;
+    }
+} 
+.kd-switchbtn{
+    & input{
+        &::before{
+            left: -1px;
+            content: "";
+            top: -1.2px;
+            width: 18px;
+            height: 18px;
+            transition: 0.5s;
+            position: absolute;
+            border-radius: 50%;
+            background: $clr-white;
+            box-shadow: 0px 4px 5px rgba($btnhover-color, 0.15);
+        }
+        &:checked::before{
+            left: 13px;
+            background: $clr-white;
+        }
+    }    
+} 

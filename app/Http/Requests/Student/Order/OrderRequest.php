@@ -1,0 +1,63 @@
+<?php
+
+namespace App\Http\Requests\Student\Order;
+
+use App\Http\Requests\BaseFormRequest;
+use Illuminate\Foundation\Http\FormRequest;
+
+class OrderRequest extends BaseFormRequest
+{
+
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array<string, mixed>
+     */
+    public function rules()
+    {
+        $imageFileExt = setting('_general.allowed_image_extensions') ?? 'jpg,png';
+        $imageFileSize = (int) (setting('_general.max_image_size') ?? '5');
+        $imageValidation = (!empty($this->input('paymentMethod')) && str_starts_with($this->input('paymentMethod'), 'offline-') ? 'required' : 'nullable') . '|mimes:' . $imageFileExt . '|max:' . $imageFileSize * 1024;
+        return [
+            'firstName' => 'required|string|max:150',
+            'lastName' => 'required|string|max:150',
+            'paymentMethod' => 'required|string|max:150',
+            'phone' => 'nullable|regex:/^(\+?\(?\d{1,4}\)?)?[\d\s\-]{7,15}$/',
+            'email' => 'required|email',
+            'country' => 'required|string|max:150',
+            'state' => 'required|string|max:255',
+            'zipcode' => 'required|regex:/^[A-Za-z0-9\s\-]{3,10}$/',
+            'city' => 'required|string|max:150',
+            'image' => $imageValidation,
+        ];
+    }
+
+    public function messages()
+    {
+        $imageFileSize = setting('_general.max_image_size') ?? '5';
+        return [
+            'required' => __('general.required_field'),
+            'paymentMethod.required' => __('general.method_required'),
+            'email' => __('general.invalid_email'),
+            'max' => __('validation.max_file_size_err', ['file_size' => $imageFileSize . 'MB']),
+            'required_with' => __('general.required_field'),
+            'zipcode.regex' => __('general.invalid_zipcode'),
+        ];
+    }
+
+    /**
+     * Prepare the data for validation.
+     */
+    protected function prepareForValidation(): void
+    {
+        $this->merge([
+            'firstName' => sanitizeTextField($this->firstName),
+            'lastName' => sanitizeTextField($this->lastName),
+            'paymentMethod' => sanitizeTextField($this->paymentMethod),
+            'company' => sanitizeTextField($this->company),
+            'country' => sanitizeTextField($this->country),
+            'state' => sanitizeTextField($this->state),
+            'city' => sanitizeTextField($this->city),
+        ]);
+    }
+}

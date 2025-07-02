@@ -1,0 +1,28 @@
+<?php
+
+return [
+    'send' => 'يرسل',
+    'resolution' => 'دقة',
+    'dispute_reason' => 'سبب النزاع',
+    'add_dispute_reason' => 'اضف ملحوظة السبب',
+    'select_a_dispute_reason' => 'حدد سبب نزاع',
+    'select_winning_party' => 'اختر الطرف الفائز',
+    'leave_comment' => 'اترك التعليق ل',
+    'resolve_dispute' => 'حل النزاع',
+    'open' => 'يفتح',
+    'closed' => 'مغلق',
+    'no_disputes_found' => 'لم يتم العثور على نزاعات',
+    'all_disputes' => 'كل النزاعات',
+    'no_conversation' => 'لا محادثة',
+    'no_conversation_message' => 'لا توجد محادثة لهذا النزاع ، أرسل رسالة المسؤول أولاً',
+    'no_dispute_request_message' => 'لم يتم قبول طلب النزاع الخاص بك من قبل المسؤول حتى الآن. من فضلك انتظر الرد.',
+    'under_review' => 'تحت المراجعة',
+    'in_discussion' => 'في المناقشة',
+    'dispute_already_closed' => 'نزاع مغلق بالفعل',
+    'disputes_overview' => 'نظرة عامة على المنازعات',
+    'dispute_resolved' => 'تم حل النزاع بنجاح',
+    'no_messages_yet' => 'لا توجد رسائل بعد!',
+    'no_messages_detail' => 'ستظهر محادثاتك هنا بمجرد البدء في الدردشة.',
+    'type_your_message_here' => 'اكتب رسالتك هنا',
+    'winning_party' => 'حفلة رابحة',
+];
