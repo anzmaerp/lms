@@ -248,8 +248,9 @@ class PaymentFactory
                 'keys' => [
                     'vendor_key'   => '',
                     'provider_key' => '',
-                    'currency'     => 'ُEGP',
                 ],
+                'exchange_rate' => '',
+                'currency' => 'ُEGP',
             ],
 
         ];

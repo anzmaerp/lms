@@ -78,7 +78,13 @@ return [
         //     'domain' => '',
         // ],
 
-        'fawaterk' => null,
+        'fawaterk' => [
+            'currency' => 'EGP',
+            'vendor_key' => '',
+            'providor_key' => '',
+            'status' => 'on',
+            'exchange_rate' => '',
+        ],
 
     ],
 ];
