@@ -1,0 +1,58 @@
+.am-assignlist_wrap{
+    &.am-assignlist-skeleton{
+        height: auto;
+        .am-assignlist_item{
+            & > span{
+                width: 100%;
+                display: block;
+                height: 150px;
+                @extend %skeleton;
+                border-radius: 10px;
+            }
+            .am-assignlist_item_content{
+                .am-assignlist_coursename{
+                    .am-assignlist_coursetitle{
+                        span{
+                            width: 80px;
+                            height: 20px;
+                            @extend %skeleton;
+                            border-radius: 4px;
+                        }
+                        em{
+                            width: 70px;
+                            height: 18px;
+                            display: block;
+                            margin-top: 4px;
+                            @extend %skeleton;
+                            border-radius: 4px;
+                        }
+                    }
+                    .am-itemdropdown{
+                        width: 15px;
+                        height: 15px;
+                        @extend %skeleton;
+                        border-radius: 4px;
+                    }
+                }
+                .am-assignlist_item_footer{
+                    li{
+                        span{
+                            width: 60%;
+                            height: 18px;
+                            display: block;
+                            @extend %skeleton;
+                            border-radius: 4px;
+                        }
+                        em{
+                            width: 30%;
+                            height: 14px;
+                            display: block;
+                            @extend %skeleton;
+                            border-radius: 4px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

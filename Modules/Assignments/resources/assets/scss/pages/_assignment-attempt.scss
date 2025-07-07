@@ -1,0 +1,284 @@
+.am-assignment{
+    &_attempt-wrap{
+        height: 100%;
+        background: $formbg;
+        padding: 30px 20px 0;
+    }
+    &_attempt{
+        width: 100%;
+        @extend %flex;
+        margin: 0 auto;
+        max-width: 1040px;
+        flex-direction: column;   
+        background: $clr-white;
+        border-radius: 20px 20px 0 0;
+        min-height: calc(100vh - 30px);
+        box-shadow: 0px 12px 16px -4px rgba(0, 0, 0, 0.08), 0px 4px 6px -2px rgba(0, 0, 0, 0.03);
+        &_body{
+            width: 100%;
+            padding: 60px 20px;
+        }
+        .am-assignment_body{
+            .form-group{
+                padding: 0;
+                &:last-child{
+                    margin-top: 30px;
+                }
+            }
+        }
+        &_content{
+            width: 100%;
+            margin: 0 auto;
+            max-width: 680px;
+        }
+        .am-userbox{
+            flex-wrap: wrap;
+            border-radius: 0;
+            padding: 0 0 40px;
+            background: $clr-white;
+            figure{
+                margin: 0;
+                width: 38px;
+                height: 38px;
+                img{
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                    border-radius: 50%;
+                }
+            }
+            &::before,
+            &::after{
+                display: none;
+            }
+            h3{margin: 0;}
+            &_name{
+                gap: 10px;
+                width: 100%;
+                @extend %flex;
+                align-items: center;
+                h5{
+                    margin: 0;
+                    color: $heading-color;
+                    font: 600 rem(12)/em(18,12) $heading-font-family;
+                }
+                span{
+                    margin: -2px;
+                    display: block;
+                    color: $body-font-color;
+                    font: 400 rem(12)/em(18,12) $body-font-family;
+                }
+            }
+        }
+        .am-assignment_section{
+            padding: 30px 0;
+            border-top: 1px solid $border-color;
+            &+.am-assignment_section{
+                margin-top: 0;
+            }
+            &_title{
+                gap: 10px;
+                display: flex;
+                align-items: center;
+                margin-bottom: 8px;
+                justify-content: space-between;
+                h5{margin: 0;}
+                .am-assignment_section_points{
+                    width: max-content;
+                    span{
+                        padding: 0;
+                        line-height: 0;
+                        height: 24px;
+                        background: transparent;
+                        input{
+                            text-align: center;
+                            height: 24px;
+                            padding: 1px 8px;
+                            border-radius: 6px;
+                            background: #fff;
+                            border: 1px solid #EAEAEA;
+                            box-shadow: 0px 1px 2px 0px rgba(16, 24, 40, 0.05);
+                            color: var(--Other-Colors-Light-Color, #585858);
+                            
+                            /* Text sm/Regular 14 */
+                            font-family: "SF Pro Text";
+                            font-size: 14px;
+                            font-style: normal;
+                            font-weight: 400;
+                            line-height: 20px; /* 142.857% */
+                            width: auto;
+                            max-width: 45px;
+                            
+/* Shadows/shadow-xs */
+                        }
+                    }
+                }
+            }
+        }
+        .am-assignment_desc{
+            border: 0;
+            padding: 0;
+            box-shadow: none;
+            p{
+                margin: 0;
+                opacity: 0.9;
+                a{
+                    color: inherit;
+                    text-decoration: underline;
+                    &:hover{
+                        color: #2e90fa;
+                    }
+                }
+            }
+        }
+        &_btns{
+            margin-top: 12px;
+            .am-btn{
+                i{
+                    font-size: 12px;
+                    &::before{
+                        color: $clr-white;
+                    }
+                }
+            }
+        }
+    }
+    &_banner{
+        gap: 20px;
+        width: 100%;
+        @extend %flex;
+        min-height: 250px;
+        align-items: center;
+        flex-direction: column;
+        justify-content: center;
+        border-radius: 20px 20px 0 0;
+        background-size: cover !important;
+        background: url('../images/banner-bg.png') no-repeat center;
+        figure{
+            max-width: 169.55px;
+            img{
+                width: 100%;
+                object-fit: cover;
+            }
+        }
+        h1{
+            color: rgba($color: $clr-white, $alpha: 0.9);
+            font: 600 rem(30)/em(38,30) $heading-font-family;
+        }
+    }
+    &_submit-wrap{
+        .am-assignment_header{
+            gap: 16px;
+            @extend %flex;
+            align-items: center;
+            justify-content: space-between;
+            h2{
+                margin: 0;
+            }
+            em{
+                font-weight: 600;
+                color: rgba($color: $heading-color, $alpha: 0.7);
+            }
+            .am-userbox{
+                padding: 0;
+            }
+        }
+        .am-assignment_section{
+            border: 0;
+            padding: 0;
+            margin-top: 20px;
+            .form-group{
+                padding: 0;
+                textarea{
+                    background: $clr-white;
+                    border: 1px solid $border-color;
+                    box-shadow: 0px 1px 2px 0px rgba(16, 24, 40, 0.05);
+                }
+            }
+            & + .am-assignment_section{
+                margin-top: 20px;
+            }
+        }
+        .am-uploadoption{
+            max-width: 100%;
+        }
+        .am-uploadfile{
+            gap: 10px;
+            .am-border-svg {
+                stroke: $border-color;
+            }
+        }
+        .am-assignment_attachfile{
+            &>i::before{
+                color: #079455;
+            }
+            span{
+                i::before{
+                    opacity: 0.3;
+                }
+            }
+        }
+        .am-assignment_desc{
+            padding: 10px;
+            border: 1px solid $border-color;
+            box-shadow: 0px 1px 2px 0px rgba(16, 24, 40, 0.05);
+            p+p{
+                margin-top: 20px;
+            }
+            &_vtwo{
+                border: 0;
+                padding: 0;
+                box-shadow: none
+                
+            }
+        }
+    }
+}
+.am-assignment_submitmsg{
+    @extend %flex;
+    max-width: 328px;
+    margin: 0 auto 40px;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    .am-deletepopup_icon{
+        &.confirm-icon{
+            background: #DBFAE6;
+            &::before{
+                background: #17B26A;
+            }
+            &::after{
+                background: rgba($color: #DBFAE6, $alpha: 0.6);
+            }
+            span{
+                i::before{
+                    color: #17B26A;
+                }
+                &::before{
+                    background: rgba($color: #17B26A, $alpha: 0.3);
+                }
+                &::after{
+                    background: rgba($color: #DBFAE6, $alpha: 0.7);
+                }
+            }
+        }
+        &.warning-icon{
+            background: #FEF3F2;
+        }
+    }
+    h2{
+        margin: 24px 0 0;
+        text-align: center;
+        color: $heading-color;
+        font: 600 rem(18)/em(20,18) $heading-font-family;
+    }
+    p{
+        margin: 4px 0 0;
+        text-align: center;
+        color: $body-font-color;
+        font: 400 rem(14)/em(20,14) $body-font-family;
+    }
+    .am-btn{
+        margin-top: 24px;
+    }
+}

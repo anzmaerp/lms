@@ -1,0 +1,12 @@
+{
+    "name": "CourseBundles",
+    "alias": "coursebundles",
+    "description": "Course Bundles Management System",
+    "keywords": [],
+    "priority": 0,
+    "version": "pro",
+    "providers": [
+        "Modules\\CourseBundles\\Providers\\CourseBundlesServiceProvider"
+    ],
+    "files": ["helpers/functions.php"]
+}

@@ -1,0 +1,278 @@
+.am-assignments{    
+    &_submitted{
+        padding: 30px 24px;
+    }
+    &_table{
+        margin-top: 16px;
+        padding: 6px 6px 0;
+        border-radius: 12px;
+        box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.10), 0px 1px 2px 0px rgba(0, 0, 0, 0.06);
+    }
+}
+.am-userbox{
+    gap: 16px;
+    padding: 30px;
+    @extend %flex;
+    overflow: hidden;
+    flex-wrap: nowrap;
+    position: relative;
+    border-radius: 12px;
+    background: $formbg;
+    align-items: center;
+    &_vtwo{
+        align-items: flex-start;
+
+    }
+    figure{
+        flex: none;
+        width: 80px;
+        height: 80px;
+        border-radius: 8px;
+        img{
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+    }
+    &_detail{
+        h3{
+            color: $heading-color;
+            font: 600 rem(20)/em(30,20) $heading-font-family;
+        }
+        p{
+            color: $body-font-color;
+            font: 400 rem(14)/em(20,14) $body-font-family;
+        }
+        ul{
+            gap: 20px;
+            padding: 0;
+            @extend %flex;
+            margin: 8px 0 0;
+            align-items: center;
+            li{
+                gap: 5px;
+                @extend %flex;
+                list-style: none;
+                align-items: center;
+                span{
+                    color: $body-font-color;
+                    font: 400 rem(14)/em(20,14) $body-font-family;
+                    em{
+                        font-weight: 500;
+                        font-style: normal;
+                    }
+                }
+            }
+        }
+        .toggle-description{
+            text-decoration: underline;
+        }
+    }
+    &::before{
+        top: -43px;
+        left: -27px;
+        width: 87px;
+        content: "";
+        height: 87px;
+        filter: blur(97px);
+        position: absolute;
+        border-radius: 12px;
+        background: #ABBFFF;
+    }
+    &::after{
+        content: "";
+        right: 13px;
+        width: 87px;
+        height: 87px;
+        bottom: -25px;
+        filter: blur(162px);
+        position: absolute;
+        border-radius: 12px;
+        background: $theme-color;
+        pointer-events: none;
+    }
+    & > img{
+        top: 0;
+        right: 0;
+        width: 263.8px;
+        height: 161.5px;
+        object-fit: cover;
+        position: absolute;
+        pointer-events: none;
+    }
+}
+.am-filter-area {
+    gap: 16px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    margin: 24px 0 16px;
+    justify-content: space-between;
+    h2{
+        color: rgba($color: $heading-color, $alpha: 0.8);
+        font: 600 rem(20) / em(30, 20) $heading-font-family;
+    }
+
+    .am-form-group {
+        position: relative;
+        .select2-container
+            .select2-selection--single
+            .select2-selection__rendered {
+            padding-top: 9px;
+            padding-bottom: 9px;
+        }
+        .am-form-control {
+            height: 40px;
+            min-width: 320px;
+            border-radius: 10px;
+            border-color: $border-color;
+            background-color: $clr-white;
+            padding: 10px 45px 10px 16px;
+            font: 400 rem(14) / em(20, 14) $body-font-family;
+            &::placeholder {
+                color: $body-font-color;
+            }
+        }
+        svg {
+            top: 50%;
+            right: 16px;
+            position: absolute;
+            pointer-events: none;
+            transform: translateY(-50%);
+        }
+    }
+
+    .am-filters {
+        gap: 16px;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+
+        .am-select2 {
+            height: 40px;
+            width: 200px;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 10px;
+            border-color: $border-color;
+            background-color: $clr-white;
+            font: 400 rem(14) / em(20, 14) $body-font-family;
+        }
+        .select2-selection {
+            background: $clr-white;
+            border: 1px solid $border-color;
+        }
+    }
+}
+.am-table{
+    &_submitted{
+        thead{
+            tr{
+                th{
+                    &:first-child{
+                        width: 100%;
+                        max-width: 38%;
+                    }
+                    &:nth-child(2),
+                    &:nth-child(4){
+                        width: 100%;
+                        max-width: 15%;
+                    }
+                    &:nth-child(3),
+                    &:nth-child(5){
+                        width: 100%;
+                        max-width: 12%;
+                    }
+                    &:last-child{
+                        width: 100%;
+                        max-width: 8%;
+                    }       
+                }
+            }
+        }
+        tbody{
+            tr{
+                td{
+                    padding: 12px;
+                    &:last-child{
+                        text-align: end;
+                        .am-btn{
+                            padding: 7px 14px;
+                            background: $formbg;
+                            color: $body-font-color;
+                            white-space: nowrap;
+                        }
+                    }
+                    .am-user{
+                        &_info{
+                            gap: 10px;
+                            margin: 0;
+                            padding: 0;
+                            @extend %flex;
+                            align-items: center;
+                            figure{
+                                width: 30px;   
+                                height: 30px;
+                                border-radius: 50%;
+                                img{
+                                    width: 100%;
+                                    height: 100%;
+                                    object-fit: cover;
+                                    border-radius: 50%;
+                                }
+                            }
+                        }
+                        &_detail{
+                            h6{
+                                color: $heading-color;
+                                font: 400 rem(14)/em(20,14) $heading-font-family;
+                            }
+                            span{
+                                display: block;
+                                font: 400 rem(12)/em(18,12) $body-font-family;
+                                color: rgba($color: $body-font-color, $alpha: 0.9);
+                            }
+                        }
+                    }
+                    & > span{
+                        color: $body-font-color;
+                        font: 400 rem(14)/em(20,14) $body-font-family;
+                    }
+                    .am-pass-tag{
+                        gap: 6px;
+                        padding: 2px 6px;
+                        border-radius: 6px;
+                        align-items: center;
+                        display: inline-flex;
+                        background: $clr-white;
+                        color: $body-font-color;
+                        border: 1px solid $border-color;
+                        font: 500 rem(12)/em(18,12) $body-font-family;
+                        &_dott{
+                            width: 8px;
+                            height: 8px;
+                            border-radius: 50%;
+                            background: #2B9C0E;
+                        }
+                    }       
+                }
+                &+tr{
+                    border-top: 1px solid #F2F2F2;
+                }
+            }
+        }  
+    }
+}
+.am-label_wrap{
+    gap: 8px;
+    display: flex;
+    justify-content: space-between;
+    span{
+        color: $text-light;
+        font: 400 rem(12)/em(18,12) $body-font-family;
+        strong{
+            font-weight: 600;
+        }
+    }
+}

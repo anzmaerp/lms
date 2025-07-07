@@ -1,0 +1,13 @@
+{
+    "name": "IPManager",
+    "alias": "ipmanager",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\IPManager\\Providers\\IPManagerServiceProvider"
+    ],
+    "files": [
+        "helpers/functions.php"
+    ]
+}

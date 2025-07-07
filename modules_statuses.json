@@ -4,5 +4,9 @@
     "Subscriptions": true,
     "Courses": true,
     "Quiz": true,
-    "KuponDeal": true
+    "KuponDeal": true,
+    "Assignments": true,
+    "CourseBundles": true,
+    "IPManager": true,
+    "Upcertify": true
 }

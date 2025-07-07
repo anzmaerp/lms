@@ -1,0 +1,40 @@
+.am-tr-skeleton{
+    .am-user_info{
+        figure{
+            @extend %skeleton;
+        }
+    }
+    .am-user_detail{
+        span{
+            width: 150px;
+            height: 18px;
+            display: block;
+            @extend %skeleton;
+            border-radius: 4px;
+        }
+        em{
+            width: 160px;
+            height: 18px;
+            display: block;
+            margin-top: 2px;
+            @extend %skeleton;
+            border-radius: 4px;
+        }
+    }
+    td{
+        & > span{
+            width: 80px;
+            height: 24px;
+            display: block;
+            @extend %skeleton;
+            border-radius: 4px;
+        }
+    }
+    .am-btn-skeleton{
+        width: 112px;
+        height: 34px;
+        display: block;
+        @extend %skeleton;
+        border-radius: 10px;
+    }
+}

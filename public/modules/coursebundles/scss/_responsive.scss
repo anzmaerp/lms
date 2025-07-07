@@ -1,0 +1,30 @@
+@media (max-width: 1399px){
+    .cr-bundle-sidebar{
+        max-width: 350px;
+    }
+}
+@media (max-width: 991px){
+    .cr-bundle-details-area{
+        gap: 0;
+        max-width: 100%;
+        flex-wrap: wrap;
+    }
+    .cr-bundle-sidebar{
+        top: 12px;
+        order: -1;
+        max-width: 100%;
+    }
+}
+@media (max-width: 576px){
+    .cr-bundles{
+        padding: 12px 8px;
+    }
+    .cr-bundle-detail_courseitem{
+        flex-direction: column;
+        figure{max-width: 100%;}
+        .cr-bundle-course-detail{
+            border-radius: 0 0 12px 12px;
+            &_content{max-width: 100%;}
+        }
+    }
+}

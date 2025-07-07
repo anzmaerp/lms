@@ -1,0 +1,72 @@
+@media (max-width: 1560px) {
+    .am-assignlistpage{
+        > .am-title_wrap{
+            flex-direction: column;
+            align-items: flex-start;
+            .am-assignsearch_header{
+                max-width: 100%;
+            }
+        }
+    }
+}
+@media (max-width: 768px){
+    .am-dashboard_box_wrap{
+        &:has(.am-assignlistpage),
+        &:has(.am-create-assignment){
+            height: 100%;   
+        }
+    }
+    .am-assignlistpage > .am-title_wrap{
+        padding: 20px 10px 10px;
+        .am-assignsearch_header{
+            flex-direction: column;
+            .am-slots_wrap{
+                margin-left: 0;
+            }
+        }
+    }
+    .am-assignments{
+        &_submitted{
+            padding: 10px;
+        }
+    }
+    .am-userbox.am-userbox_vtwo{
+        padding: 12px;
+    }
+}
+@media (max-width: 576px){
+    .am-create-assignment{
+        padding: 10px;
+    }
+}
+@media (max-width: 480px){
+    .am-assignment{
+        &_header{padding: 20px;}
+    }
+}
+@media (max-width: 420px){
+    .am-assignsearch{
+        &_header{
+            .am-btn{width: 100%;}
+            .am-category-slots{
+                width: 100%;
+                li{
+                    width: 100%;
+                    button{
+                        width: 100%;
+                    }
+                }
+            }
+        }
+    }
+    .am-userbox.am-userbox_vtwo{
+        flex-wrap: wrap;
+    }
+    .am-assignments{
+        &_submitted{
+            .am-filters{
+                .am-form-group{width: 100%;}
+            }
+        }
+    }
+}

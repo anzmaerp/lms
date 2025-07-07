@@ -1,0 +1,53 @@
+.cr-bundle-detail_skeleton{
+    figure{
+        @extend %skeleton;
+    }
+    .cr-bundle-course-detail_content{
+        width: 100%;
+        &>span{
+            margin: 0;
+            width: 80%;
+            height: 24px;
+            display: block;
+            @extend %skeleton;
+            border-radius: 4px;
+        }
+        ul li{
+            em{
+                width: 14px;
+                height: 14px;
+                @extend %skeleton;
+                border-radius: 2px;
+            }
+            span{
+                width: 80px;
+                height: 20px;
+                display: block;
+                @extend %skeleton;
+                border-radius: 4px;
+            }
+        }
+        .cr-description-skeleton{
+            margin-top: 14px;
+            span{
+                width: 100%;
+                height: 20px;
+                display: block;
+                @extend %skeleton;
+                border-radius: 4px;
+                & + span{
+                    margin-top: 4px;
+                }
+            }
+        }
+    }
+    .cr-bundle-course-detail_price{
+        span{
+            width: 66px;
+            height: 28px;
+            display: block;
+            @extend %skeleton;
+            border-radius: 4px;
+        }
+    }
+}

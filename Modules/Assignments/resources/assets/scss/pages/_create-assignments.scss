@@ -1,0 +1,111 @@
+.am-create-assignment{
+    padding: 30px;
+    &_wrap{
+        width: 100%;
+        margin: 0 auto;
+        max-width: 788px;
+    }
+    .am-title_wrap{
+        margin: 0 0 30px;
+    }
+    &_content{
+        border-radius: 10px;
+        background: $clr-white;
+    }
+    .am-themeform{
+        .am-select{
+            .select2-container--default{width: 100% !important;}
+        }
+        .form-group {
+            .am-label-wrap{margin-bottom: 10px;}
+            label{
+                gap: 6px;
+                @extend %flex;
+                align-items: center;
+                .am-custom-tooltip{
+                    &.am-infoicon{
+                        padding: 0;
+                    }
+                }
+                &.am-uploadfile{
+                    gap: 10px;
+                    span{
+                        em{word-break: break-all;}
+                    }
+                    .am-border-svg {stroke: $border-color;}
+                }
+            }
+            .am-input-field{
+                &_icon{
+                    height: 38px;
+                    margin: 1px 0;
+                    border-left: 1px solid $border-color;
+                    font: 500 rem(12)/em(18,12) $body-font-family;
+                    color: rgba($color: $body-font-color, $alpha: 0.6);
+                }
+            }
+            .form-group-two-wrap{
+                &.form-group-deadline{
+                    .am-time-lable{visibility: hidden;}
+                }
+            }
+            .am-tooltip-text{
+                width: 280px;
+            }
+            .am-uploadoption{
+                max-width: 100%;
+                .am-assignment_section{
+                    margin-top: 16px;
+                }
+            }
+            .am-uploadfile{border: 0;}
+            textarea.form-control{height: 136px;}
+            &.am-form-btns{
+                margin-top: 30px;
+                padding-top: 30px;
+                border-top: 1px solid $border-color;
+            }
+        }
+    }
+}
+.flatpickr-calendar.hasTime.noCalendar{
+    overflow: hidden;
+    left: 1110px !important;
+    width: 380px !important;
+    box-shadow: none !important;
+    background: $formbg !important;
+    .flatpickr-time{
+        border-top: 0 !important;
+        .numInputWrapper{
+            span{width: 22px !important;}
+            .arrowUp{
+                border: 0 !important;
+                &:after{
+                    content: "\e9a4";
+                    top: 8px !important;
+                    border: 0 !important;
+                    right: 6px !important;
+                    font-family: "icomoon";
+                    font-size: 10px !important;
+                }
+            }
+            .arrowDown{
+                border: 0 !important;
+                &:after{
+                    content: "\e999";
+                    top: 8px !important;
+                    border: 0 !important;
+                    right: 6px !important;
+                    font-family: "icomoon";
+                    font-size: 10px !important;
+                }
+            }
+            &:hover{
+                background: transparent !important;
+            }
+            input:hover{
+                background: transparent !important;
+            }
+        }
+    }
+}

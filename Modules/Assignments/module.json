@@ -1,0 +1,14 @@
+{
+    "name": "Assignments",
+    "alias": "assignments",
+    "description": "Assignments Management System",
+    "keywords": [],
+    "priority": 0,
+    "version": "pro",
+    "providers": [
+        "Modules\\Assignments\\Providers\\AssignmentsServiceProvider"
+    ],
+    "files": [
+        "helpers/functions.php"
+    ]
+}
