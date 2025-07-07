@@ -7,7 +7,7 @@
                     <p>{{ __('admin/general.track_manage_income') }}</p>
                 </div>
                 <div class="am-insights_actions">
-                    <em>Filter by:</em>
+                    <em>{{ __('admin/general.filter_by') }}</em>
                     <span class="tb-select">
                         <input type="text" id="revenue-date-range" class="form-control">
                     </span>
@@ -69,7 +69,7 @@
                     <p>{{ __('admin/general.track_manage_income') }}</p>
                 </div>
                 <div class="am-insights_actions">
-                    <em>Filter by:</em>
+                    <em>{{ __('admin/general.filter_by') }}</em>
                     <span class="tb-select">
                         {{-- <span wire:click="clearSession">clear filters x</span> --}}
                         <input type="text" id="session-date-range" class="form-control">
@@ -242,10 +242,10 @@
             autoUpdateInput: true,
             alwaysShowCalendars: false,
             ranges: {
-                'This month': [moment().startOf('month'), moment().endOf('month')],
-                'Last month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
-                'This year': [moment().startOf('year'), moment().endOf('year')],
-                'Last year': [moment().subtract(1, 'year').startOf('year'), moment().subtract(1, 'year').endOf('year')]
+                '{{ __('general.this_month') }}': [moment().startOf('month'), moment().endOf('month')],
+                '{{ __('general.last_month') }}': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+                '{{ __('general.this_year') }}': [moment().startOf('year'), moment().endOf('year')],
+                '{{ __('general.last_year') }}': [moment().subtract(1, 'year').startOf('year'), moment().subtract(1, 'year').endOf('year')]
             }
         }
     
@@ -264,10 +264,10 @@
             autoUpdateInput: true,
             alwaysShowCalendars: false,
             ranges: {
-                'This month': [moment().startOf('month'), moment().endOf('month')],
-                'Last month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
-                'This year': [moment().startOf('year'), moment().endOf('year')],
-                'Last year': [moment().subtract(1, 'year').startOf('year'), moment().subtract(1, 'year').endOf('year')]
+                '{{ __('general.this_month') }}': [moment().startOf('month'), moment().endOf('month')],
+                '{{ __('general.last_month') }}': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+                '{{ __('general.this_year') }}': [moment().startOf('year'), moment().endOf('year')],
+                '{{ __('general.last_year') }}': [moment().subtract(1, 'year').startOf('year'), moment().subtract(1, 'year').endOf('year')]
             }
         }
     
