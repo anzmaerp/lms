@@ -98,7 +98,7 @@ class PaymentMethods extends Component
 
     public function updateSetting()
     {
-        dd($this->methods['fawaterk']);
+        // dd($this->methods['fawaterk']);
 
         $validations = [];
         foreach($this->methods[$this->edit_method] as $key => $value){
