@@ -16,7 +16,6 @@
         @php
             $googleFont = setting('_general.google_font') ?? 'Roboto';
         @endphp
-
         @if (!empty($googleFont))
             <link href="https://fonts.googleapis.com/css2?family={{ str_replace(' ', '+', $googleFont) }}&display=swap"
                 rel="stylesheet">
