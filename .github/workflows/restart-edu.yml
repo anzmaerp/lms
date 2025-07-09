@@ -14,7 +14,7 @@ jobs:
       - name: 📂 Sync files
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with:
-          server: www.restart-edu.net
+          server: 176.9.99.19
           username: "restart-edu@restart-edu.net"
           password: "rKzdJGfv50Vk"
           server-dir: /
