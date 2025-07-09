@@ -12,15 +12,41 @@ use Symfony\Component\HttpFoundation\Response;
 
 class Fawaterk extends BasePaymentDriver
 {
+
+
     use Currency;
 
+    protected string $vendorKey;
+    protected string $providerKey;
     protected string $baseUrl;
 
     public function __construct()
     {
+        $this->vendorKey = Crypt::decryptString(setting('fawaterk_vendor_key'));
+        $this->providerKey = Crypt::decryptString(setting('fawaterk_provider_key'));
         $this->baseUrl = setting('fawaterk_production_mode') == '1'
             ? 'https://app.fawaterk.com'
             : 'https://staging.fawaterk.com';
+    }
+
+    public function getKeys(): array
+    {
+        return [
+            'vendor_key' => $this->vendorKey,
+            'provider_key' => $this->providerKey,
+            'domain' => setting('fawaterk_domain'),
+        ];
+    }
+
+    public function generateHashKey(array $keys): string
+    {
+        $query = "Domain={$keys['domain']}&ProviderKey={$keys['provider_key']}";
+        return hash_hmac('sha256', $query, $keys['vendor_key'], false);
+    }
+
+    public function getMode(): string
+    {
+        return setting('fawaterk_production_mode') == '1' ? 'live' : 'test';
     }
 
     public function chargeCustomer(array $params)
@@ -28,14 +54,7 @@ class Fawaterk extends BasePaymentDriver
         try {
             $keys = $this->getKeys();
 
-            if (empty($keys['vendor_key']) || empty($keys['provider_key']) || empty($keys['domain'])) {
-                return [
-                    'status' => Response::HTTP_BAD_REQUEST,
-                    'message' => __('settings.fawaterk_missing_keys')
-                ];
-            }
-
-            $orderId = 'FAW_' . time() . '_' . Str::random(6);
+            $orderId = 'FAW_' . time() . '_' . \Str::random(6);
 
             session()->put('fawaterk_order_id', $orderId);
             session()->put('fawaterk_subscription_id', $params['order_id']);
@@ -55,116 +74,51 @@ class Fawaterk extends BasePaymentDriver
                     'custom_field2' => $params['user_id'] ?? '',
                 ],
                 'redirectionUrls' => [
-                    'successUrl' => setting('fawaterk_success_url'),
-                    'failUrl' => setting('fawaterk_fail_url'),
-                    'pendingUrl' => setting('fawaterk_pending_url'),
+                    'successUrl' => 'http://lms.localhost/payment/fawaterk/success',
+                    'failUrl'    => 'http://lms.localhost/payment/fawaterk/fail',
+                    'pendingUrl' => 'http://lms.localhost/payment/fawaterk/pending',
                 ],
                 'cartItems' => $params['items'],
                 'redirectOutIframe' => true,
-                'style' => [
-                    'listing' => 'vertical'
-                ]
+                'style' => ['listing' => 'vertical']
             ];
 
-            Log::info('fawaterk Payload:', $payload);
-
-            $response = Http::withHeaders([
-                'Authorization' => 'Bearer ' . $keys['vendor_key'],
+            $response = \Http::withHeaders([
+                'Authorization' => 'Bearer ' . $this->vendorKey,
                 'Content-Type' => 'application/json',
             ])->post($this->baseUrl . '/api/v2/createInvoice', $payload);
 
             if ($response->successful()) {
-                $data = $response->json();
                 return [
-                    'status' => Response::HTTP_OK,
-                    'redirect_url' => $data['url'] ?? null
+                    'status' => 200,
+                    'redirect_url' => $response->json()['url'] ?? null,
                 ];
             }
 
             return [
-                'status' => Response::HTTP_BAD_REQUEST,
+                'status' => 400,
                 'message' => $response->body()
             ];
         } catch (\Exception $e) {
-            Log::error('fawaterk Payment Exception: ' . $e->getMessage());
+            \Log::error('Fawaterk Error: ' . $e->getMessage());
             return [
-                'status' => Response::HTTP_INTERNAL_SERVER_ERROR,
+                'status' => 500,
                 'message' => $e->getMessage()
             ];
         }
     }
-
-    public function paymentResponse(array $params)
-    {
-        $orderId = $params['custom_field1'] ?? session()->get('fawaterk_subscription_id');
-        $transactionId = $params['transaction_id'] ?? $params['paymentId'] ?? $params['id'] ?? null;
-
-        session()->forget('fawaterk_order_id');
-        session()->forget('fawaterk_subscription_id');
-
-        if (!$orderId || !$transactionId) {
-            return [
-                'status' => 400,
-                'message' => __('settings.fawaterk_invalid_response'),
-            ];
-        }
-
-        return [
-            'status' => 200,
-            'data' => [
-                'order_id' => $orderId,
-                'transaction_id' => $transactionId,
-            ],
-            'message' => __('settings.fawaterk_success'),
-        ];
-    }
-
-    public function getKeys(): array
+    public function paymentResponse(array $params): array
     {
         return [
-            'vendor_key' => Crypt::decryptString(setting('fawaterk_vendor_key')),
-            'provider_key' => Crypt::decryptString(setting('fawaterk_provider_key')),
-            'domain' => setting('fawaterk_domain'),
+            'status' => $params['status'] ?? 'pending',
+            'transaction_id' => $params['transaction_id'] ?? null,
+            'order_id' => session()->get('fawaterk_subscription_id'),
+            'message' => $params['message'] ?? 'Transaction is being processed'
         ];
-    }
-
-    public function generateHashKey(array $keys): string
-    {
-        $query = "Domain={$keys['domain']}&ProviderKey={$keys['provider_key']}";
-        return hash_hmac('sha256', $query, $keys['vendor_key'], false);
-    }
-
-    public function getMode(): string
-    {
-        return setting('fawaterk_production_mode') == '1' ? 'live' : 'test';
     }
 
     public function driverName(): string
     {
         return 'fawaterk';
     }
-public function getSettings(): array
-{
-    return [
-        'vendor_key'     => '',
-        'provider_key'   => '',
-        'production_mode'=> setting('fawaterk_production_mode') == '1',
-        'status'         => setting('fawaterk_enabled') == '1' ? 'on' : 'off',
-    ];
-}
-
-public function getGatewayInfo(): array
-{
-    return [
-        'name' => 'fawaterk',
-        'status' => setting('fawaterk_enabled') == '1' ? 'on' : 'off',
-        'fields' => [
-            'vendor_key'     => ['label' => 'Vendor Key', 'type' => 'password'],
-            'provider_key'   => ['label' => 'Provider Key', 'type' => 'password'],
-            'production_mode'=> ['label' => 'Production Mode', 'type' => 'boolean'],
-        ]
-    ];
-}
-
-
 }
