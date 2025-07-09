@@ -235,8 +235,8 @@
                             @endif
                             <nav>
                                 <ul>
-                                    <li><a href="{{ url('terms-condition') }}">{{ __('general.terms_and_conditions') }}</a></li>
-                                    <li><a href="{{ url('privacy-policy') }}">{{ __('general.privacy_policy') }}</a></li>
+                                    <li><a href="{{ __('footer.terms_conditions_url') }}">{{ __('footer.terms_conditions_ar') }}</a></li>
+                                    <li><a href="{{ __('footer.privacy_policy_url') }}">{{ __('footer.privacy_policy_ar') }}</a></li>
                                 </ul>
                             </nav>
                         </div>

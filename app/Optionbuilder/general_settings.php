@@ -99,7 +99,16 @@ $settings =  [
             'desc'     => 'Select your preferred font',
             'options'  => getGoogleFontsList(), 
         ],
+
          [
+            'id'       => 'copy_right_ar',
+            'type'     => 'text',
+            'tab_id'        => 'general_tab',
+            'tab_title'     => __('settings.general'),
+            'label_title'   => __('settings.copy_right_ar'),
+            'placeholder'   => __('settings.enter_copy_right_ar'),
+        ],
+        [
             'id'       => 'copy_right',
             'type'     => 'text',
             'tab_id'        => 'general_tab',
