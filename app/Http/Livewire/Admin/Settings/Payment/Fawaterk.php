@@ -32,6 +32,7 @@ class Fawaterk extends Component
         }
 
         $settings['fawaterk_production_mode'] = $this->production_mode ? '1' : '0';
+        
         $settings['fawaterk_enabled'] = $this->enabled ? '1' : '0';
 
         foreach ($settings as $key => $value) {

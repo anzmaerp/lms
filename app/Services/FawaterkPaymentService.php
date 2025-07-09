@@ -2,31 +2,35 @@
 
 namespace Modules\LaraPayease\Drivers;
 
-use Modules\LaraPayease\BasePaymentDriver;
-use Modules\LaraPayease\Traits\Currency;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Crypt;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Str;
+use Modules\LaraPayease\Traits\Currency;
+use Modules\LaraPayease\BasePaymentDriver;
 use Symfony\Component\HttpFoundation\Response;
 
 class fawaterk extends BasePaymentDriver
 {
     use Currency;
-
     protected string $baseUrl;
+    protected string $vendorkey;
+    protected $isProduction;
+    protected $providerkey;
 
     public function __construct()
     {
-        $this->baseUrl = $this->getBaseUrl();
-    }
-
-    protected function getBaseUrl(): string
-    {
-        return setting('fawaterk_production_mode') == '1'
+        $paymentMethods = DB::table("optionbuilder__settings as os")->where('key', 'payment_method')->select('value')->first();
+        $info = unserialize($paymentMethods->value)['fawaterk'];
+        $this->vendorkey = $info['vendor_key'] ?? '';
+        $this->providerkey = $info['providor_key'] ?? '';
+        $this->isProduction = empty($info['enable_test_mode']);
+        $this->baseUrl = $this->isProduction
             ? 'https://app.fawaterk.com'
             : 'https://staging.fawaterk.com';
     }
+
 
     public function chargeCustomer(array $params)
     {
@@ -89,7 +93,6 @@ class fawaterk extends BasePaymentDriver
                 'status' => Response::HTTP_BAD_REQUEST,
                 'message' => $response->body(),
             ];
-
         } catch (\Exception $e) {
             Log::error('Fawaterk Payment Exception: ' . $e->getMessage());
             return [

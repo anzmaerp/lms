@@ -41,25 +41,34 @@ class PaymentMethods extends Component
     }
 
 
-    public function getSiteSettings()
-    {
-        $data = [];
-        $payment_methods = setting('admin_settings.payment_method');
-        if( !empty($payment_methods) ){
-            $data = $payment_methods;
-            foreach($data as $key => $value){
-                if( array_key_exists('enable_test_mode', $value) ){
-                    if(empty($value['enable_test_mode']) ){
-                        $data[$key]['enable_test_mode'] = false;
-                    }else{
-                        $data[$key]['enable_test_mode'] = true;
-                    }
-                }
-            }
+public function getSiteSettings()
+{
+    $data = [];
+
+    $payment_methods = setting('admin_settings.payment_method');
+
+    if (is_string($payment_methods)) {
+        $unserialized = @unserialize($payment_methods);
+
+        if ($unserialized !== false && is_array($unserialized)) {
+            $payment_methods = $unserialized;
+        } else {
+            return [];
         }
-        return $data;
     }
 
+    if (is_array($payment_methods)) {
+        $data = $payment_methods;
+
+        foreach ($data as $key => $value) {
+            if (array_key_exists('enable_test_mode', $value)) {
+                $data[$key]['enable_test_mode'] = !empty($value['enable_test_mode']);
+            }
+        }
+    }
+
+    return $data;
+}
     public function getSettings(){
         $payment_methods = $this->getSiteSettings();
         if(!empty($payment_methods)){

@@ -1,18 +1,3 @@
-    <head>
-        @php
-            $googleFont = setting('_general.google_font') ?? 'Roboto';
-        @endphp
-
-        @if (!empty($googleFont))
-            <link href="https://fonts.googleapis.com/css2?family={{ str_replace(' ', '+', $googleFont) }}&display=swap"
-                rel="stylesheet">
-            <style>
-                * {
-                    font-family: '{{ $googleFont }}', sans-serif !important;
-                }
-            </style>
-        @endif
-    </head>
     <div wire:init="loadData">
         <div class="cr-course-box">
             <div class="cr-content-box">
@@ -141,7 +126,7 @@
                 @else
                     <button wire:click="addSectionState(true)" class="cr-addbtn" wire:loading.attr="disabled"
                         wire:target="addSectionState(true)" wire:loading.class="am-btn_disable">
-                        <svg class="am-border-svg ">
+                        <svg class="am-border-svg">
                             <rect width="100%" height="100%"></rect>
                         </svg>
                         {{ __('courses::courses.create_section') }}
@@ -173,7 +158,7 @@
         <!-- edit model start -->
         <div wire:ignore.self class="modal fade cr-course-modal" id="edit-content" tabindex="-1"
             aria-labelledby="edit-contentlabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered ">
+            <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="edit-contentlabel">
@@ -228,9 +213,9 @@
         </div>
 
         <!-- Delete model start -->
-        <div wire:ignore.self class="modal fade cr-course-modal cr-course-del-modal " id="delete-confirm-modal"
+        <div wire:ignore.self class="modal fade cr-course-modal cr-course-del-modal" id="delete-confirm-modal"
             tabindex="-1" aria-labelledby="delete-curriculum-modalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered ">
+            <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-body">
                         <span class="cr-close" data-bs-dismiss="modal" aria-label="Close">
