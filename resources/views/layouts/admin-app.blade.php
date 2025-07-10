@@ -6,6 +6,8 @@
     $siteTitle = setting('_general.site_name') ?: env('APP_NAME');
     $translatedLangs = getTranslatedLanguages();
     $selectedLang = app()->getLocale() ?? 'en';
+    $fontSize = setting('_general.font_size') ?? 16;
+    $fontWeight = setting('_general.font_weight') ?? 400;
 
 @endphp
 
@@ -21,7 +23,13 @@
     <style>
         *:not(i) {
             font-family: 'IBM Plex Sans JP', sans-serif !important;
+
         }
+
+header * {
+    font-size: {{ $fontSize }}px !important;
+    font-weight: {{ $fontWeight }} !important;
+}
     </style>
     </style>
     @vite(['public/css/bootstrap.min.css', 'public/admin/css/themify-icons.css', 'public/admin/css/fontawesome/all.min.css', 'public/css/select2.min.css', 'public/css/mCustomScrollbar.min.css', 'public/admin/css/feather-icons.css'])
@@ -48,14 +56,14 @@
                             style="width: 32px; height: 32px; border-radius: 6px;">
                             <i class="ti-world fs-6 text-secondary"></i>
                         </button>
-    
+
                         <div class="p-0 border-0 shadow-sm dropdown-menu dropdown-menu-end"
                             aria-labelledby="langDropdown" style="min-width: 180px;">
                             <div class="px-3 py-2 border-bottom bg-light">
                                 <span
                                     class="text-center fw-semibold fs-7 text-muted d-block">{{ __('Choose Language') }}</span>
                             </div>
-    
+
                             <div class="px-2 py-1" style="max-height: 200px; overflow-y: auto;">
                                 @foreach ($translatedLangs as $locale => $langName)
                                     <form action="{{ route('switch-lang') }}" method="POST" class="w-100">

@@ -4,7 +4,7 @@ namespace Modules\LaraPayease\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Modules\LaraPayease\Drivers\fawaterk;
+use Modules\LaraPayease\Drivers\Fawaterk;
 use Modules\LaraPayease\Traits\Currency;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -16,7 +16,7 @@ class FawaterkPaymentController extends Controller
 
     public function __construct()
     {
-        $this->driver = new fawaterk();
+        $this->driver = new Fawaterk();
     }
 
     public function prepareCharge(Request $request)

@@ -6,17 +6,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     @php
-    $googleFont = setting('_general.google_font') ?? 'Roboto'; 
-@endphp
+        $googleFont = setting('_general.google_font') ?? 'Roboto';
+        $fontSize = setting('_general.font_size') ?? 16;
+        $fontWeight = setting('_general.font_weight') ?? 400;
+    @endphp
 
-@if(!empty($googleFont))
-    <link href="https://fonts.googleapis.com/css2?family={{ str_replace(' ', '+', $googleFont) }}&display=swap" rel="stylesheet">
-    <style>
-    *:not(i){
-            font-family: '{{ $googleFont }}', sans-serif !important;
-        }
-    </style>
-@endif
+    @if (!empty($googleFont))
+        <link href="https://fonts.googleapis.com/css2?family={{ str_replace(' ', '+', $googleFont) }}&display=swap"
+            rel="stylesheet">
+        <style>
+            *:not(i) {
+                font-family: '{{ $googleFont }}', sans-serif !important;
+            }
+
+            header * {
+                font-size: {{ $fontSize }}px !important;
+                font-weight: {{ $fontWeight }} !important;
+            }
+        </style>
+    @endif
 
     <x-meta-content :pageTitle="$pageTitle ?? null" :page="$page ?? null" :pageDescription="$pageDescription ?? null" :pageKeywords="$pageKeywords ?? null" :metaImage="$metaImage ?? null" />
 
