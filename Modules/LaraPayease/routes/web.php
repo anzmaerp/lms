@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Modules\LaraPayease\Drivers\Fawaterk;
 use Modules\LaraPayease\Http\Controllers\HesabePaymentController;
 use Modules\LaraPayease\Http\Controllers\PaymobPaymentController;
 use Modules\LaraPayease\Http\Controllers\StripePaymentController;
@@ -31,11 +32,21 @@ Route::prefix('payment/fawaterk')->group(function () {
     Route::get('/callback', [FawaterkPaymentController::class, 'callback'])->name('payment.fawaterk.callback');
 });
 
+Route::get('/payment/fawaterk/iframe/{order}', [FawaterkPaymentController::class, 'showIframe'])
+     ->name('fawaterk.iframe');
+
 // Add the Hesabe controller routes
 Route::group(['prefix' => 'larapayease/hesabe'], function () {
     Route::get('checkout', 'HesabeController@checkout')->name('larapayease.hesabe.checkout');
     Route::get('direct', 'HesabeController@directPayment')->name('larapayease.hesabe.direct');
 });
+
+
+Route::get('/payment/fawaterk/success', [FawaterkPaymentController::class, 'handleSuccess']);
+Route::get('/payment/fawaterk/fail', [FawaterkPaymentController::class, 'handleFail']);
+Route::get('/payment/fawaterk/pending', [FawaterkPaymentController::class, 'handlePending']);
+
+
 // Add the Hesabe controller routes
 // Route::group(['prefix' => 'larapayease/fawaterk'], function () {
 //     Route::get('checkout', 'FawaterkController@checkout')->name('larapayease.fawaterk.checkout');

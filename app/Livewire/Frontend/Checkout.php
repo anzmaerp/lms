@@ -361,7 +361,8 @@ class Checkout extends Component
                         'cancel_url' => route('checkout'),
                         'success_url' => route('thank-you', ['id' => $orderDetail->id]),
                         'email' => $orderDetail->email,
-                        'name' => $orderDetail->first_name,
+                        'first_name' => $orderDetail->first_name,
+                        'last_name' => $orderDetail->last_name,
                         'mobile' => $orderDetail->phone,
                         'payment_type' => '0', // means indirect payment
                     ]

@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Jobs\CompletePurchaseJob;
 use App\Models\Order;
-use App\Services\FawaterkPaymentService;
-use App\Services\OrderService;
 use Illuminate\Http\Request;
+use App\Services\OrderService;
+use App\Jobs\CompletePurchaseJob;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
+use App\Services\FawaterkPaymentService;
 use Modules\LaraPayease\Drivers\Fawaterk;
 
 class FawaterkPaymentController extends Controller
@@ -31,27 +32,25 @@ class FawaterkPaymentController extends Controller
         }
 
         $orderId = 'FAW_' . time() . '_' . \Str::random(6);
-
         session()->put('fawaterk_order_id', $orderId);
         session()->put('fawaterk_subscription_id', $paymentData['order_id']);
-
+        //$this->fawaterk->generateHashKey();
         return view('larapayease::iframe', [
             'envType' => setting('fawaterk_production_mode') == '1' ? 'live' : 'test',
-            'hashKey' => $this->fawaterk->generateHashKey($this->fawaterk->getKeys()),
+            'hashKey' => $this->fawaterk->generateHashKey(),
             'amount' => $paymentData['amount'],
             'currency' => 'EGP',
             'customer' => [
-                'first_name' => $paymentData['first_name'] ?? 'Customer',
-                'last_name' => $paymentData['last_name'] ?? 'Name',
-                'email' => $paymentData['email'] ?? 'customer@example.com',
-                'phone' => $paymentData['phone'] ?? '01000000000',
-                'address' => $paymentData['address'] ?? 'Cairo, Egypt'
+                'first_name' => $paymentData['first_name'],
+                'last_name' => $paymentData['last_name'],
+                'email' => $paymentData['email'] ,
+                'phone' => $paymentData['phone'] ,
+                'address' => $paymentData['address'] 
             ],
-            'cartItems' => $paymentData['items'], 
-            'order_id' => $orderId,
-            'user_id' => auth()->id(),
+            'cartItems' => $paymentData['items'],
+            'order_id' => $$paymentData['items'],
+            'user_id' => Auth::auth()->id(),
         ]);
-       dd($paymentData['items']);
     }
     /**
      * Handle success/fail/pending callback from Fawaterk
