@@ -27,14 +27,14 @@
         <link href="https://fonts.googleapis.com/css2?family={{ str_replace(' ', '+', $googleFont) }}&display=swap"
             rel="stylesheet">
         <style>
+            *:not(i) {
+                font-family: '{{ $googleFont }}', sans-serif !important;
+            }
 
-        *:not(i) {
-            font-family: '{{ $googleFont }}', sans-serif !important;     
-        }
-header * {
-    font-size: {{ $fontSize }}px !important;
-    font-weight: {{ $fontWeight }} !important;
-}
+            header * {
+                font-size: {{ $fontSize }}px !important;
+                font-weight: {{ $fontWeight }} !important;
+            }
         </style>
     @endif
 
