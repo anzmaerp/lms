@@ -4,6 +4,7 @@ namespace Modules\LaraPayease\Http\Controllers;
 
 use App\Facades\Cart;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Modules\LaraPayease\Traits\Currency;
 use Modules\LaraPayease\Drivers\Fawaterk;
@@ -72,10 +73,7 @@ class FawaterkPaymentController extends Controller
                 'quantity' => (int) $item['qty'],
             ];
         })->values()->toArray();
-
         $paymentData = session('payment_data');
-        //  dd($paymentData['items']);
-
         if (!$paymentData) {
             return redirect()->route('checkout')->with('error', 'No payment data found');
         }
@@ -83,9 +81,11 @@ class FawaterkPaymentController extends Controller
 
         session()->put('fawaterk_order_id', $paymentData['order_id']);
         session()->put('fawaterk_subscription_id', $paymentData['order_id']);
+        $paymentMethods = DB::table("optionbuilder__settings as os")->where('key', 'payment_method')->select('value')->first();
+        $info = unserialize($paymentMethods->value)['fawaterk'];
 
         return view('larapayease::iframe', [
-            'envType' => setting('fawaterk_production_mode') == '1' ? 'test' : 'live',
+            'envType' => $info['enable_test_mode'] == '1' ? 'test' : 'live',
             'hashKey'   => $this->driver->generateHashKey(),
             'apiKey'    => $this->driver->getKeys()['vendor_key'],
             'amount' => $paymentData['amount'],

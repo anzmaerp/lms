@@ -20,7 +20,7 @@
         .payment-container {
             width: 100%;
             max-width: 600px;
-            height: 360px;
+            height: 600;
             margin: 40px auto;
             background: #fff;
             padding: 25px;
@@ -65,7 +65,7 @@
     <script src="https://staging.fawaterk.com/fawaterkPlugin/fawaterkPlugin.min.js"></script>
     <script>
         const pluginConfig = {
-            envType: "test",
+            envType: "{{$envType}}",
             token: "{{ $apiKey }}",
             style: {
                 listing: "horizontal"

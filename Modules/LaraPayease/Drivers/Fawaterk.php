@@ -39,13 +39,7 @@ class Fawaterk extends BasePaymentDriver
             'vendor_key' => $this->vendorKey,
             'provider_key' => $this->providerKey,
             'domain' => parse_url(url('/'), PHP_URL_HOST),
-            // 'domain' => url('/'),
         ];
-    }
-
-    public function getMode(): string
-    {
-        return setting('fawaterk_production_mode') == '1' ? 'live' : 'test';
     }
 
     public function chargeCustomer(array $params)
