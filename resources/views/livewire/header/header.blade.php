@@ -3,27 +3,32 @@
 use Livewire\Volt\Component;
 use Diglactic\Breadcrumbs\Breadcrumbs;
 
-new class extends Component
-{
-
-};
+new class extends Component {};
 ?>
 
-    <head>
+<head>
 
-        @php
-            $googleFont = setting('_general.google_font') ?? 'Roboto';
-        @endphp
+    @php
+        $googleFont = setting('_general.google_font') ?? 'Roboto';
+        $fontSize = setting('_general.font_size') ?? 16;
+        $fontWeight = setting('_general.font_weight') ?? 400;
+    @endphp
 
-        @if (!empty($googleFont))
-            <link href="https://fonts.googleapis.com/css2?family={{ str_replace(' ', '+', $googleFont) }}&display=swap"
-                rel="stylesheet">
-            <style> * {
-                    font-family: '{{ $googleFont }}', sans-serif !important;
-                }
-            </style>
-        @endif
-    </head>
+    @if (!empty($googleFont))
+        <link href="https://fonts.googleapis.com/css2?family={{ str_replace(' ', '+', $googleFont) }}&display=swap"
+            rel="stylesheet">
+        <style>
+            *:not(i) {
+                font-family: '{{ $googleFont }}', sans-serif !important;
+            }
+
+header * {
+    font-size: {{ $fontSize }}px !important;
+    font-weight: {{ $fontWeight }} !important;
+}
+        </style>
+    @endif
+</head>
 <header class="am-header">
     {{ Breadcrumbs::render() }}
     <form class="am-header_form">

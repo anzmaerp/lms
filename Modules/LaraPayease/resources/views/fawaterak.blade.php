@@ -69,7 +69,6 @@
                 loader.classList.remove('hidden');
             });
 
-            // Auto-submit the form after a short delay (optional)
             setTimeout(() => {
                 if (form && !form.classList.contains('submitted')) {
                     form.classList.add('submitted');

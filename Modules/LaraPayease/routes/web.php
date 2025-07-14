@@ -26,8 +26,10 @@ Route::get('payease/paymob/callback', [PaymobPaymentController::class, 'handleCa
 Route::post('payease/hesabe', [HesabePaymentController::class, 'prepareCharge'])->name('payease.hesabe');
 Route::get('payease/hesabe/callback', [HesabePaymentController::class, 'handleCallback'])->name('payease.hesabe.callback');
 // Hesabe Routes
-Route::post('payease/fawaterk', [FawaterkPaymentController::class, 'prepareCharge'])->name('payease.fawaterk');
-Route::get('payease/fawaterk/callback', [FawaterkPaymentController::class, 'handleCallback'])->name('payease.fawaterk.callback');
+Route::prefix('payment/fawaterk')->group(function () {
+    Route::get('/process', [FawaterkPaymentController::class, 'process'])->name('payment.fawaterk.process');
+    Route::get('/callback', [FawaterkPaymentController::class, 'callback'])->name('payment.fawaterk.callback');
+});
 
 // Add the Hesabe controller routes
 Route::group(['prefix' => 'larapayease/hesabe'], function () {

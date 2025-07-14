@@ -23,7 +23,7 @@ $site_pages = DB::table(config('pagebuilder.db_prefix') . 'pages')
     ->select('id', 'name')
     ->where('status', 'published')
     ->get();
-    DB::disconnect();
+DB::disconnect();
 
 if (!empty($site_pages)) {
     foreach ($site_pages as  $single) {
@@ -89,7 +89,7 @@ $settings =  [
             'default'       => ['en'],
             'placeholder'   => __('settings.select_from_list'),
         ],
-         [
+        [
             'id'       => 'google_font',
             'type'     => 'select',
             'tab_id'        => 'general_tab',
@@ -97,25 +97,29 @@ $settings =  [
             'label_title'   => __('settings.select_font'),
             'label_desc'    => __('settings.select_font_desc'),
             'desc'     => 'Select your preferred font',
-            'options'  => getGoogleFontsList(), 
-        ],
-
-         [
-            'id'       => 'copy_right_ar',
-            'type'     => 'text',
-            'tab_id'        => 'general_tab',
-            'tab_title'     => __('settings.general'),
-            'label_title'   => __('settings.copy_right_ar'),
-            'placeholder'   => __('settings.enter_copy_right_ar'),
+            'options'  => getGoogleFontsList(),
         ],
         [
-            'id'       => 'copy_right',
-            'type'     => 'text',
-            'tab_id'        => 'general_tab',
-            'tab_title'     => __('settings.general'),
-            'label_title'   => __('settings.copy_right'),
-            'placeholder'   => __('settings.enter_copy_right'),
+            'id'           => 'font_size',
+            'type'         => 'number', 
+            'tab_id'       => 'general_tab',
+            'tab_title'    => __('settings.general'),
+            'label_title'  => __('settings.font_size'),
+            'label_desc'   => __('settings.enter_font_size'),
+            'default'      => 16,
+            'placeholder'  => __('settings.enter_font_size'),
         ],
+        [
+            'id'           => 'font_weight',
+            'type'         => 'number', 
+            'tab_id'       => 'general_tab',
+            'tab_title'    => __('settings.general'),
+            'label_title'  => __('settings.font_weight'),
+            'label_desc'   => __('settings.enter_font_weight'),
+            'default'      => 400,
+            'placeholder'  => __('settings.enter_font_weight'),
+        ],
+
         [
             'id'            => 'enable_multi_currency',
             'type'          => 'switch',
@@ -577,7 +581,7 @@ $settings =  [
             'class'         => '',
             'label_title'   => __('settings.invoice_logo'),
             'field_desc'    => __('settings.add_invoice_logo'),
-            'max_size'   => $image_size,               
+            'max_size'   => $image_size,
             'ext'    => [
                 'jpg',
                 'png',
@@ -613,7 +617,7 @@ $settings =  [
             'label_title'   => __('settings.company_address'),
             'placeholder'   => __('settings.enter_company_address'),
         ],
-     
+
 
 
         // [
@@ -782,23 +786,22 @@ $settings =  [
     ]
 ];
 
-if(isActiveModule('Courses')) {
+if (isActiveModule('Courses')) {
     $settings['fields'][] = [
-            'id'            => 'watermark_logo',
-            'type'          => 'file',
-            'tab_id'        => 'media',
-            'tab_title'     => __('settings.video_watermark'),
-            'value'         => '',
-            'class'         => '',
-            'label_title'   => __('settings.video_watermark'),
-            'field_desc'    => __('settings.add_video_watermark'),
-            'max_size'   => $image_size,                  // size in MB
-            'ext'    => [
-                'jpg',
-                'png',
-            ],
+        'id'            => 'watermark_logo',
+        'type'          => 'file',
+        'tab_id'        => 'media',
+        'tab_title'     => __('settings.video_watermark'),
+        'value'         => '',
+        'class'         => '',
+        'label_title'   => __('settings.video_watermark'),
+        'field_desc'    => __('settings.add_video_watermark'),
+        'max_size'   => $image_size,                  // size in MB
+        'ext'    => [
+            'jpg',
+            'png',
+        ],
     ];
 }
 
 return $settings;
-

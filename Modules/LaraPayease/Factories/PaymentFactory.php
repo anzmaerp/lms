@@ -249,10 +249,10 @@ class PaymentFactory
                     'vendor_key'   => '',
                     'provider_key' => '',
                 ],
-                'exchange_rate' => '',
-                'currency' => 'ُEGP',
+                'currency' => 'EGP',
+                'enable_test_mode' => false,
+                'ipn_url_type' => 'get.success',
             ],
-
         ];
     }
 
