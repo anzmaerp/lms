@@ -7,7 +7,7 @@
         <form class="am-switch-language am-multi-currency" action="{{ route('switch-currency') }}" method="POST">
             @csrf
             <input type="hidden" name="am-currency">
-            <div class="am-21 -select am-currency-select">
+            <div class="am-language-select am-currency-select">
                 <a href="javascript:void(0);" class="am-currency-anchor">
                     {!! $selectedCurrency['code'] . '&nbsp;' . $selectedCurrency['symbol'] !!}<i class="am-icon-chevron-down"></i>
                 </a>
