@@ -16,7 +16,7 @@
         !empty(setting('_maintenance.maintenance_email'))
     )
     
-    <div class="ln-container">
+    <div class="ln-container" style="background: white !important;">
         <div class="ln-wrapper">
             <div class="ln-content">
                 @if (!empty(setting('_maintenance.maintenance_logo')[0]['path']))
