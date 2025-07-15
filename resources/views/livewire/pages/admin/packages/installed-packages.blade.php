@@ -57,9 +57,9 @@
                                         <tr>
                                             <td data-label="{{ __('general.title') }}">
                                                 <div class="am-list-wrap">
-                                                    <figure>
+                                                    {{-- <figure>
                                                         <img src="{{ asset('addons/icons/'. $single->image) }}" alt="{{ $single->name }}" width="100"> 
-                                                    </figure>
+                                                    </figure> --}}
                                                     <span>
                                                         {!! $single->name !!}
                                                     </span>
