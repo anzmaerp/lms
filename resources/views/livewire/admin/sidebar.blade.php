@@ -108,7 +108,7 @@ new class extends Component {
                     ],
                 ],
             ],
-            [
+            /*[
                 'title' => __('sidebar.upgrade'),
                 'icon' => 'icon-upload-cloud',
                 'routes' => [
@@ -118,7 +118,7 @@ new class extends Component {
                         'permission' => 'can-manage-upgrade',
                     ],
                 ],
-            ],
+            ],*/
             [
                 'title' => __('sidebar.users'),
                 'icon' => 'icon-users',

@@ -12,42 +12,44 @@
                             <button class="tb-btn" wire:click="addNewPackage">{{ __('admin/general.add_new') }}</button>
                         </div>
                     </div>
+                    {{-- 
                     <div class="cards_wrap">
                         <ul>
                             @foreach ($packages as $package)
-                            <li>
-                                <div class="cards_item {{ $package['type'] == 'external' ? 'cards_item-purchase' : '' }}">
-                                    <figure>
-                                        <img src="{{ asset('addons/'.$package['image']) }}" alt="{{ $package['name'] }}">
-                                    </figure>
-                                    <div class="cards_item_content">
-                                        <h5>
-                                            {{ $package['name'] }} 
-                                            <span>{{ ucfirst($package['type']) }}</span>
-                                            @if($package['type'] == 'external' && !empty($package['demo_url']))
-                                                <em>{{ $package['price'] }}</em>
-                                            @endif
-                                        </h5>
-                                        <p>{{ $package['description'] }}</p>
-                                        <div class="cards_item_btns">
-                                            @if($package['type'] == 'core' && $package['status'] == 'active' && !empty($package['demo_url']))
-                                                <a class="tb-btnvtwo" href="{{ $package['demo_url'] }}" target="_blank">{{ __('admin/general.preview') }}</a>
-                                            @elseif($package['type'] == 'external' && $package['status'] == 'active' && $package['version'] == 'lite')
-                                                <a class="tb-btnvtwo" href="{{ $package['demo_url'] }}" target="_blank">{{ __('admin/general.upgrade') }}</a>
-                                            @elseif($package['type'] == 'external' && $package['status'] == 'inactive' && !empty($package['demo_url']))
-                                                <a class="tb-btnvtwo" href="{{ $package['demo_url'] }}" target="_blank">{{ __('admin/general.buy_now') }}</a>
-                                            @elseif($package['status'] == 'active' && !empty($package['demo_url']))
-                                                <a class="tb-btnvtwo" href="{{ $package['demo_url'] }}" target="_blank">{{ __('admin/general.preview') }}</a>
-                                            @elseif($package['status'] != 'active' && empty($package['demo_url']))
-                                                <button class="tb-btnvtwo btn-coming-soon" disabled>{{ __('admin/general.coming_soon') }}</button>
-                                            @endif
+                                <li>
+                                    <div class="cards_item {{ $package['type'] == 'external' ? 'cards_item-purchase' : '' }}">
+                                        <figure>
+                                            <img src="{{ asset('addons/'.$package['image']) }}" alt="{{ $package['name'] }}">
+                                        </figure>
+                                        <div class="cards_item_content">
+                                            <h5>
+                                                {{ $package['name'] }} 
+                                                <span>{{ ucfirst($package['type']) }}</span>
+                                                @if($package['type'] == 'external' && !empty($package['demo_url']))
+                                                    <em>{{ $package['price'] }}</em>
+                                                @endif
+                                            </h5>
+                                            <p>{{ $package['description'] }}</p>
+                                            <div class="cards_item_btns">
+                                                @if($package['type'] == 'core' && $package['status'] == 'active' && !empty($package['demo_url']))
+                                                    <a class="tb-btnvtwo" href="{{ $package['demo_url'] }}" target="_blank">{{ __('admin/general.preview') }}</a>
+                                                @elseif($package['type'] == 'external' && $package['status'] == 'active' && $package['version'] == 'lite')
+                                                    <a class="tb-btnvtwo" href="{{ $package['demo_url'] }}" target="_blank">{{ __('admin/general.upgrade') }}</a>
+                                                @elseif($package['type'] == 'external' && $package['status'] == 'inactive' && !empty($package['demo_url']))
+                                                    <a class="tb-btnvtwo" href="{{ $package['demo_url'] }}" target="_blank">{{ __('admin/general.buy_now') }}</a>
+                                                @elseif($package['status'] == 'active' && !empty($package['demo_url']))
+                                                    <a class="tb-btnvtwo" href="{{ $package['demo_url'] }}" target="_blank">{{ __('admin/general.preview') }}</a>
+                                                @elseif($package['status'] != 'active' && empty($package['demo_url']))
+                                                    <button class="tb-btnvtwo btn-coming-soon" disabled>{{ __('admin/general.coming_soon') }}</button>
+                                                @endif
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </li>
+                                </li>
                             @endforeach
                         </ul>
                     </div>
+                    --}}
                 </div>
             </div>
         </div>

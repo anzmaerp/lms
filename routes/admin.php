@@ -54,7 +54,7 @@ Route::middleware(['auth', 'verified', 'role:admin|sub_admin'])->prefix('admin')
     Route::get('invoices',          Invoices::class)->name('invoices')->middleware('permit-of:can-manage-invoices');
     Route::get('email-settings',    EmailTemplates::class)->name('email-settings')->middleware('permit-of:can-manage-email-settings');
     Route::get('notification-settings', NotificationTemplates::class)->name('notification-settings')->middleware('permit-of:can-manage-notification-settings');
-    Route::get('upgrade', Upgrade::class)->name('upgrade')->middleware('permit-of:can-manage-upgrade');
+    // Route::get('upgrade', Upgrade::class)->name('upgrade')->middleware('permit-of:can-manage-upgrade');
     Route::post('update-sass-style',    [App\Http\Controllers\Admin\GeneralController::class, 'updateSaas'])->middleware('permit-of:can-manage-option-builder');
     Route::middleware('permit-of:can-manage-addons')->prefix('packages')->as('packages.')->group(function () {
         Route::get('/', ManagePackages::class)->name('index');

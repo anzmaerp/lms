@@ -1,5 +1,4 @@
-
-<!-- 
+{{--
 <div class="col-xl-12 justify-content-center">
     <footer class="tb-footer-wrap">
         <div class="tb-copyright">
@@ -8,5 +7,5 @@
             @endif
         </div>
     </footer>
-</div> -->
-+-
+</div> 
+--}}
