@@ -52,6 +52,25 @@ Route::middleware($middleware)->get('get-pb-section', [PageBuilderController::cl
 
 Route::middleware($middleware)->get('pages/{id}/iframe', [PageBuilderController::class, 'iframe'])->name('pagebuilder.iframe');
 
+Route::middleware(['maintenance'])->group(function () {
+    Route::any('{locale}/{any?}', function (Request $request, $locale, $any = null) {
+        $currentLocale = app()->getLocale();
+        if ($locale !== $currentLocale) {
+            $newUrl = url($currentLocale . '/' . $any);
+            return redirect($newUrl);
+        }
+        app()->setLocale($locale);
+        session()->put('locale', $locale);
+
+        $realPath = $any ?? '';
+        $builder = new PageBuilderController();
+        return $builder->renderPage($realPath);
+    })->where([
+        'locale' => 'ar|en',
+        'any' => '.*',
+    ]);
+});
+
 Route::any('/{any}', function (Request $request) {
     $builder = new PageBuilderController();
     return $builder->renderPage($request->path());
