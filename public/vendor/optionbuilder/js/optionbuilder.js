@@ -180,10 +180,10 @@ jQuery(window).on("load", function () {
 	});
 
 	jQuery('.getcolor').on('change',function() {
-        let getcolor =  jQuery(this).val();
-		let setcolor = jQuery('.colorPicker--preview')
+		let getcolor =  jQuery(this).val();
+		//let setcolor = jQuery('.colorPicker--preview');
+		let setcolor = jQuery(this).closest('.colorPicker').find('.colorPicker--preview').first();
 		jQuery(setcolor).css("background-color", getcolor);
-        
     });
 
 	jQuery('.op-feildlisting li').on('click',function() {
@@ -521,6 +521,3 @@ function ConfirmationBox(params){
     });
 }
 initializeScripts();
-
-  
-  
