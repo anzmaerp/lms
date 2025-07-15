@@ -61,7 +61,6 @@ Route::middleware(['maintenance'])->group(function () {
         }
         app()->setLocale($locale);
         session()->put('locale', $locale);
-
         $realPath = $any ?? '';
         $builder = new PageBuilderController();
         return $builder->renderPage($realPath);

@@ -3,7 +3,7 @@
 <div class="am-find-tutors-area">
     <div class="am-searchhead">
         <div class="container">
-            <div class="row">
+            <div class="row">   
                 <div class="col-12">
                     <ol class="am-breadcrumb">
                         <li><a href="{{ url('/') }}">{{ __('sidebar.home') }}</a></li>

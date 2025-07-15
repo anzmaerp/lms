@@ -14,16 +14,13 @@
     $googleFont = setting('_general.google_font') ?? 'Roboto';
     $fontSize = setting('__general.font_size') ?? 16;
     $fontWeight = setting('__general.font_weight') ?? 400;
+    $searchBox = setting('_general.search_box');
     $theme_pri_color = setting('_theme.theme_pri_color');
     $theme_sec_color = setting('_theme.theme_sec_color');
 @endphp
 <div>
 
-    @php
-        $googleFont = setting('_general.google_font') ?? 'Roboto';
-        $fontSize = setting('_general.font_size') ?? 16;
-        $fontWeight = setting('_general.font_weight') ?? 400;
-    @endphp
+
 
     @if (!empty($googleFont))
         <link href="https://fonts.googleapis.com/css2?family={{ str_replace(' ', '+', $googleFont) }}&display=swap"
@@ -214,6 +211,8 @@
                             <strong class="am-logo">
                                 <x-application-logo />
                             </strong>
+
+
                             <nav class="am-navigation navbar-expand-xl">
                                 <div class="am-navbar-toggler">
                                     <div class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#tenavbar"
@@ -234,6 +233,36 @@
                                     @endif
                                 </ul>
                             </nav>
+                            @if($searchBox)
+                            <div class="navbar-search-area" style="margin-inline-start: auto; max-width: 600px;">
+                                <form method="GET" action="{{route('find-tutors')}}">
+                                    <div
+                                        style="display: flex; align-items: center; border-radius: 28px; overflow: hidden; border: 1px solid #ddd; height: 44px; background: #fff; box-shadow: 0 2px 6px rgba(0,0,0,0.08);">
+
+                                        <input type="search" name="q"
+                                            placeholder="{{ __('settings')['search_tutor_lec'] }}"
+                                            style="flex: 1; font-size: 15px; padding: 0 16px; border: none; outline: none; background: transparent; color: #333;">
+
+                                        <select name="category"
+                                            style="width: 100px; font-size: 13px; height: 100%; border: none; background: #f9f9f9; border-left: 1px solid #eee; padding: 0 10px; outline: none; color: {{ request('category') == 'courses' ? $theme_pri_color ?? '#007bff' : '#333' }}; cursor: pointer;">
+                                            <option value="lectures" style="color: {{ $theme_pri_color ?? '#007bff' }};">محاضرات</option>
+                                            <option value="courses" style="color: {{ $theme_pri_color ?? '#007bff' }};">دورات</option>
+                                        </select>
+
+                                        <button type="submit"
+                                            style="background: {{ $theme_pri_color ?? '#007bff' }}; color: #fff; border: none; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: background 0.3s ease;"
+                                            title="Search">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
+                                                fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                                                <path
+                                                    d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85zm-5.242 1.656a5.5 5.5 0 1 1 0-11 5.5 5.5 0 0 1 0 11z" />
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                            @endif
+
                             @auth
                                 <x-frontend.user-menu />
                             @endauth
@@ -250,6 +279,7 @@
                     </div>
                 </div>
             </div>
+
         </header>
     @endif
 </div>

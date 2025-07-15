@@ -93,6 +93,8 @@ return [
     'updated_record_success' => 'تم تحديث السجل بنجاح',
     'wrong_msg' => 'حدث خطأ ما، يرجى المحاولة مرة أخرى',
     'table_responsive' => 'جدول متجاوب',
+    'search_box' => 'تمكين مربع البحث',
+    'show_search_box' => 'تمكين مربع البحث للمحاضرات والدورات',
     'horizontal_scroll' => 'تمرير أفقي',
     'min_withdrawal_amt' => 'حد السحب الأدنى',
     'min_withdrawal_amt_desc' => 'الحد الأدنى للسحب للبائع',
@@ -840,4 +842,5 @@ return [
     'enter_privacy_policy_en' => 'ادخل سياسية الخصوصية باللغة الانجليزية',
     'privacy_policy_url' => 'رابط سياسية الخصوصية',
     'enter_privacy_policy_url' => 'ادخل رابط سياسية الخصوصية',
+    'search_tutor_lec' => 'ابحث عن الدورات او المحاضرات '
 ];
