@@ -23,13 +23,13 @@ new #[Layout('layouts.guest')] class extends Component {
     {
         $this->validate();
 
-        /*if (isActiveModule('ipmanager')) {
+        if (isActiveModule('ipmanager')) {
             $this->userLogData = validationUserLog($this->form->username);
             if (empty($this->userLogData)) {
                 $this->dispatch('showAlertMessage', type: 'error', title: __('ipmanager::ipmanager.error_title'), message: __('ipmanager::ipmanager.access_denied'));
                 return;
             }
-        }*/
+        }
 
         $this->form->authenticate();
         Session::regenerate();

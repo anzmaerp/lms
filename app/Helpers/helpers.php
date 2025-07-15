@@ -509,12 +509,12 @@ if (!function_exists('getCurrencySymbol')) {
 if (!function_exists('formatAmount')) {
     function formatAmount($amount, $currencySuperscript = false)
     {
-        $decimals = (int)( setting('_general.number_of_decimals') ?? 2);
+        $decimals = (int)(setting('_general.number_of_decimals') ?? 2);
         $decimalSeparator = (string)(!empty(setting('_general.decimal_separator')) ? setting('_general.decimal_separator') : '.');
         $thousandSeparator = (string)(!empty(setting('_general.thousand_separator')) ? setting('_general.thousand_separator') : ',');
         $formattedAmount = (string) number_format((float) $amount, $decimals, $decimalSeparator, $thousandSeparator);
         $currencyPosition = (string)(!empty(setting('_general.currency_position')) ? setting('_general.currency_position') : 'left');
-        
+
         switch ($currencyPosition) {
             case 'left':
                 return $currencySuperscript ? '<sup>' . getCurrencySymbol() . '</sup>' . $formattedAmount : getCurrencySymbol() . $formattedAmount;
@@ -652,7 +652,7 @@ if (!function_exists('getUserTimezone')) {
         $tz = $user?->id ? Cache::rememberForever('userTimeZone_' . $user->id, function () use ($user) {
             return current($user->accountSetting()?->where('meta_key', 'timezone')->pluck('meta_value')->first() ?? []);
         }) : null;
-        
+
         if ($tz) {
             return $tz;
         } else {
@@ -770,31 +770,31 @@ if (!function_exists('getGoogleFontsList')) {
     function getGoogleFontsList()
     {
         //return Cache::remember('google_fonts_list', now()->addDays(7), function () {
-            $apiKey = config('services.google_fonts.api_key');
+        $apiKey = config('services.google_fonts.api_key');
 
-            if (!$apiKey) {
-                return ['Roboto' => 'Roboto'];
-            }
+        if (!$apiKey) {
+            return ['Roboto' => 'Roboto'];
+        }
 
-            $url = "https://www.googleapis.com/webfonts/v1/webfonts?key={$apiKey}";
+        $url = "https://www.googleapis.com/webfonts/v1/webfonts?key={$apiKey}";
 
-            try {
-                $response = Http::get($url);
-                if ($response->ok()) {
-                    $data = $response->json();
-                    $fonts = [];
+        try {
+            $response = Http::get($url);
+            if ($response->ok()) {
+                $data = $response->json();
+                $fonts = [];
 
-                    foreach ($data['items'] ?? [] as $font) {
-                        $fonts[$font['family']] = $font['family'];
-                    }
-
-                    return $fonts;
+                foreach ($data['items'] ?? [] as $font) {
+                    $fonts[$font['family']] = $font['family'];
                 }
-            } catch (\Throwable $e) {
-                Log::error('Google Fonts API Error: ' . $e->getMessage());
-            }
 
-            return ['Roboto' => 'Roboto']; // fallback
+                return $fonts;
+            }
+        } catch (\Throwable $e) {
+            Log::error('Google Fonts API Error: ' . $e->getMessage());
+        }
+
+        return ['Roboto' => 'Roboto']; // fallback
         //});
     }
 }
@@ -2451,16 +2451,52 @@ if (!function_exists('getLocaleToSet')) {
         $localeToSet = 'en';
 
         if (!empty(session()->get('locale'))) {
-           $localeToSet = session()->get('locale');
+            $localeToSet = session()->get('locale');
         } else {
             $localeToSet = setting('_general.default_language') ?? 'en';
         }
         $selectedLang = getTranslatedLanguages($localeToSet);
-        if(!empty($selectedLang->rtl)){
+        if (!empty($selectedLang->rtl)) {
             session()->put('rtl', true);
         } else {
             session()->forget('rtl');
         }
         return $localeToSet;
+    }
+}
+
+if (!function_exists('validationUserLog')) {
+    function validationUserLog($username)
+    {
+        $user = User::where('email', $username)
+            ->orWhere('phone', $username)
+            ->toBase()
+            ->select('id')
+            ->first();
+
+        if (!$user) {
+            return [];
+        }
+
+        $ip         = request()->ip();
+        $userAgent  = request()->header('User-Agent');
+        $browser    = getBrowser($userAgent);
+        $os         = getOS($userAgent);
+        $device     = getDevice($userAgent);
+        $ipInfo     = getIpInfo($ip);
+
+        $countryName = Country::where('short_code', $ipInfo['country'])->value('name') ?? 'Unknown';
+
+        return [
+            'user_id'     => $user->id,
+            'ip'          => $ip,
+            'browser'     => $browser,
+            'os'          => $os,
+            'device'      => $device,
+            'country'     => $countryName,
+            'city'        => $ipInfo['city'] ?? null,
+            'latitude'    => $ipInfo['latitude'] ?? null,
+            'longitude'   => $ipInfo['longitude'] ?? null,
+        ];
     }
 }

@@ -14,6 +14,8 @@
     $googleFont = setting('_general.google_font') ?? 'Roboto';
     $fontSize = setting('__general.font_size') ?? 16;
     $fontWeight = setting('__general.font_weight') ?? 400;
+    $theme_pri_color = setting('_theme.theme_pri_color');
+    $theme_sec_color = setting('_theme.theme_sec_color');
 @endphp
 <div>
 
@@ -34,6 +36,34 @@
             header * {
                 font-size: {{ $fontSize }}px !important;
                 font-weight: {{ $fontWeight }} !important;
+            }
+
+            header .am-navigation a,
+            header .navbar-nav a {
+                color: {{ $theme_pri_color ?? '#000' }} !important;
+                background-color: transparent !important;
+            }
+
+            .am-sidebar-menu a {
+                display: block !important;
+                padding: 10px 15px;
+                color: {{ $theme_pri_color ?? '#000' }} !important;
+                background-color: transparent !important;
+                transition: all 0.3s ease;
+                border-radius: 5px;
+            }
+
+            header .am-navigation a,
+            header .am-sidebar-menu a,
+            header .navbar-nav a {
+                color: {{ $theme_pri_color ?? '#000' }} !important;
+                transition: all 0.3s ease;
+            }
+
+            .am-sidebar-menu a:hover,
+            .am-navigation a:hover,
+            .navbar-nav a:hover {
+                background-color: {{ $theme_sec_color ?? '#f00' }} !important;
             }
         </style>
     @endif
