@@ -9,6 +9,9 @@
         $googleFont = setting('_general.google_font') ?? 'Roboto';
         $fontSize = setting('_general.font_size') ?? 16;
         $fontWeight = setting('_general.font_weight') ?? 400;
+        $theme_pri_color = setting('_theme.theme_pri_color');
+        $theme_sec_color = setting('_theme.theme_sec_color');
+
     @endphp
 
     @if (!empty($googleFont))
@@ -25,6 +28,7 @@
             }
         </style>
     @endif
+
 
     <x-meta-content :pageTitle="$pageTitle ?? null" :page="$page ?? null" :pageDescription="$pageDescription ?? null" :pageKeywords="$pageKeywords ?? null" :metaImage="$metaImage ?? null" />
 
@@ -91,6 +95,9 @@
             height: 35px;
         }
     </style> --}}
+
+
+
 
 </head>
 
