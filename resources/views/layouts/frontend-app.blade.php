@@ -30,6 +30,7 @@
     @endif
 
 
+
     <x-meta-content :pageTitle="$pageTitle ?? null" :page="$page ?? null" :pageDescription="$pageDescription ?? null" :pageKeywords="$pageKeywords ?? null" :metaImage="$metaImage ?? null" />
 
     @vite(['public/css/bootstrap.min.css', 'public/css/fonts.css', 'public/css/icomoon/style.css', 'public/css/select2.min.css', 'public/css/splide.min.css'])
@@ -102,6 +103,7 @@
 </head>
 
 <body class="am-bodywrap @if (!empty(setting('_general.enable_rtl')) || !empty(session()->get('rtl'))) am-rtl @endif">
+
     <x-front.header :page="$page ?? null" />
     {{-- <main class="am-main"> --}}
     <main>

@@ -75,6 +75,8 @@ return [
     'free' => 'Free',
     'wrong_msg' => 'Something went wrong, please try again',
     'table_responsive' => 'Table responsive',
+    'search_box' => 'Activate Search Box',
+    'show_search_box' => 'Activate Search Box for Lectures and Courses',
     'horizontal_scroll' => 'Horizontal scroll',
     'min_withdrawal_amt' => 'Withdraw amount limit',
     'min_withdrawal_amt_desc' => 'Minimum withdrawal amount for seller',
@@ -842,4 +844,5 @@ return [
     'enter_terms_conditions_url' => 'Enter Terms and Conditions Url',
     'enter_copy_right_ar' => 'Enter Copy Rights in Arabic',
     'enter_copy_right_en' => 'Enter Copy Rights in English',
+    'search_tutor_lec' => 'Search for courses or lectures',
 ];

@@ -283,7 +283,6 @@ $settings =  [
             'placeholder'   => __('settings.select_option'),
             'default'       => env('APP_TIMEZONE', 'UTC')
         ],
-
         [
             'id'            => 'table_responsive',
             'type'          => 'select',
@@ -297,6 +296,16 @@ $settings =  [
             ],
             'default'       => 'no',
             'placeholder'   => __('settings.select_option'),
+         ],
+         [
+            'id'            => 'search_box',
+            'type'          => 'switch',
+            'tab_id'        => 'general_tab',
+            'tab_title'     => __('settings.general'),
+            'class'         => '',
+            'label_title'   => __('settings.search_box'),
+            'field_desc'    => __('settings.show_search_box'),
+            'value'         => '1',
         ],
         [
             'id'            => 'allowed_file_extensions',
