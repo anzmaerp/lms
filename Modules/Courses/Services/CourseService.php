@@ -378,6 +378,7 @@ class CourseService
      */
     protected function buildCourseQuery(int $instructorId = null, $with = [], $filters = [], $withCount = [], $withAvg = [])
     {
+        // logger()->info('Filters: ', $filters);
 
         $query = Course::query()
             ->whereNull('deleted_at')
