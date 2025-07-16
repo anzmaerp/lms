@@ -244,7 +244,7 @@
 
                                         <select name="type"
                                             style="width: 100px; font-size: 13px; height: 100%; border: none; background: #f9f9f9; border-left: 1px solid #eee; padding: 0 10px; outline: none; color: {{ request('category') == 'courses' ? $theme_pri_color ?? '#007bff' : '#333' }}; cursor: pointer;">
-                                            <option value="tutors" style="color: {{ $theme_pri_color ?? '#007bff' }};">{{__('app')['tutors']}}<</option>
+                                            <option value="tutors" style="color: {{ $theme_pri_color ?? '#007bff' }};">{{__('app')['tutors']}}</option>
                                             <option value="courses" style="color: {{ $theme_pri_color ?? '#007bff' }};">{{__('app')['courses']}}</option>
                                         </select>
 
