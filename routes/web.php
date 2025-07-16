@@ -122,7 +122,6 @@ Route::middleware(['locale', 'maintenance'])->group(function () {
     });
 
     Route::post('/remove-cart', [SiteController::class, 'removeCart']);
-
     Route::get('tutor/{slug}', [SearchController::class, 'tutorDetail'])->name('tutor-detail');
     Route::get('{gateway}/process/payment', [SiteController::class, 'processPayment'])->name('payment.process');
     Route::get('/payment/hesabe/callback', [SiteController::class, 'hesabePaymentCallback'])->name('payment.hesabe.callback');
@@ -136,7 +135,6 @@ Route::middleware(['locale', 'maintenance'])->group(function () {
     Route::get('pay/{id}', [SiteController::class, 'preparePayment'])->name('pay');
     Route::get('session/{id}', [SiteController::class, 'sessionDetail'])->name('session-detail');
     Route::post('book-session', [SiteController::class, 'bookSession'])->name('book-session');
-
     Route::get('/search', function (Request $request) {
         $type = $request->input('type');
         $q = $request->input('q');

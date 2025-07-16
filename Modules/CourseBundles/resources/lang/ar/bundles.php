@@ -22,7 +22,7 @@ return [
     // File Upload Texts
     'drop_file_here'                                    => 'قم بإفلات الملف هنا',
     'upload_file_text'                                  => 'اسحب الملف هنا أو <i>اضغط هنا</i> للرفع',
-    'upload_file_format'                                => implode(', ', explode(',', $image_file_ext)).' (بحد أقصى 800x400px) الحجم: '.$image_size.'MB',
+    'upload_file_format'                                => implode(', ', explode(',', $image_file_ext)) . ' (بحد أقصى 800x400px) الحجم: ' . $image_size . 'MB',
 
     // Pricing Section
     'pricing'                                           => 'التسعير',
@@ -107,7 +107,7 @@ return [
     'all'                                               => 'الكل',
 
     // empty view
-        'no_bundles_found'                                  => 'لم يتم العثور على نتائج!',
+    'no_bundles_found'                                  => 'لم يتم العثور على نتائج!',
     'all_bundles'                                       => 'كل الحزم',
     'short_description'                                 => 'وصف مختصر',
     'all_bundles'                                       => 'كل الحزم',
@@ -151,4 +151,6 @@ return [
     'free'                                              => 'مجاني',
     'get_bundle'                                        => 'احصل على الحزمة',
     'bundle_not_found'                                  => 'لم يتم العثور على الحزمة',
+    'select_instructor' => 'اختر المعلم',
+    'select_instructor_placeholder' => 'اختر أحد المعلمين لإسناد الباقة إليه',
 ];

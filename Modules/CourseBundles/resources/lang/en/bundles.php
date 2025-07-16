@@ -14,16 +14,16 @@ return [
     'bundle_short_description'                          => 'Short description',
     'bundle_short_description_placeholder'              => 'Write short description',
     'per_bundle'                                        => '/bundle',
-    
+
     // Tooltip and Placeholder Texts
     'select_courses_placeholder'                        => 'Select Courses',
     'tooltip_time_limit'                                => 'Select the courses you want to include in this bundle. This ensures that learners receive access to the right courses as part of their purchase.',
-    
+
     // File Upload Texts
     'drop_file_here'                                    => 'Drop File Here',
     'upload_file_text'                                  => 'Drop a file here or <i>click here</i> to upload',
-    'upload_file_format'                                => implode(', ', explode(',', $image_file_ext)).' (max. 800x400px) size:'.$image_size.'MB',
-    
+    'upload_file_format'                                => implode(', ', explode(',', $image_file_ext)) . ' (max. 800x400px) size:' . $image_size . 'MB',
+
     // Pricing Section
     'pricing'                                           => 'Pricing',
     'pricing_desc'                                      => 'Set the course bundle\'s sale price, and optional discounts to attract more learners.',
@@ -31,22 +31,22 @@ return [
     'sale_price'                                        => 'Bundle Sale Price',
     'allow_discount'                                    => 'Allow Discount',
     'optional'                                          => '(Optional)',
-    
+
     // Discount Section
     'choose_discount_amount'                            => 'Choose discount amount',
     'discount_description'                              => 'Select a discount percentage to adjust the final purchase price for this bundle to attract more learners.',
     'original_price'                                    => 'Original price',
-    
+
     // Discount Table Headers
     'discount_amount'                                   => 'Discount amount',
     'discount_price'                                    => 'Discount price',
     'purchase_price'                                    => 'Purchase price',
-    
+
     // Bundle Description Section
     'bundle_description'                                => 'Bundle Description',
     'bundle_description_desc'                           => 'Extra details to enhance your insights.',
     'bundle_description_placeholder'                    => 'Add description',
-    
+
     // Action Buttons
     'back'                                              => 'Back',
     'save'                                              => 'Save',
@@ -54,14 +54,14 @@ return [
     'listing_per_page'                                  => 'listings per page',
 
     // messages
-    'off'                                               => '% OFF', 
-    'of'                                                => 'of',          
+    'off'                                               => '% OFF',
+    'of'                                                => 'of',
     'hrs'                                               => 'hrs',
     'mins'                                              => 'mins',
-    'min'                                               => 'min',   
+    'min'                                               => 'min',
     'hr'                                                => 'hr',
-    'active_students'                                   => 'Active students',  
-    'active_student'                                    => 'Active student',  
+    'active_students'                                   => 'Active students',
+    'active_student'                                    => 'Active student',
     'publish_bundle_confirmation_title'                 => 'Publish Course Bundle Confirmation!',
     'publish_bundle_confirmation_desc'                  => 'Your course bundle is ready! Check the details and confirm to publish.',
     'publish'                                           => 'Publish',
@@ -72,8 +72,8 @@ return [
     'native'                                            => 'Native',
     'i_can_speak'                                       => 'I can speak',
     'more'                                              => 'more',
-    'reviews'                                           => 'Reviews',   
-    'lessons'                                           => 'Lessons',   
+    'reviews'                                           => 'Reviews',
+    'lessons'                                           => 'Lessons',
     'articles'                                          => 'Articles',
     'videos'                                            => 'videos',
     'duration'                                          => 'Duration',
@@ -84,18 +84,18 @@ return [
     'success_title'                                     => 'Success',
     'error_title'                                       => 'Error',
     'draft'                                             => 'Draft',
-    'published'                                         => 'Published', 
+    'published'                                         => 'Published',
     'archived'                                          => 'Archived',
     'Course'                                            => 'Course',
     'Courses'                                           => 'Courses',
     'course_bundle'                                     => 'Course Bundle',
-    'search'                                            => 'Search',    
+    'search'                                            => 'Search',
     'home'                                              => 'Home',
     'course_bundles'                                    => 'Course Bundles',
     'search_by_keywords'                                => 'Search by keywords',
 
     // bundle listing
-    'created_at'                                        => 'Created at',    
+    'created_at'                                        => 'Created at',
     'published_bundles'                                 => 'Published Bundles',
     'course_bundles_desc'                               => 'Make learning more accessible and rewarding by bundling courses into thoughtfully curated packages.',
     'create_a_new_bundle'                               => 'Create a New Bundle',
@@ -152,4 +152,6 @@ return [
     'free'                                              => 'Free',
     'get_bundle'                                        => 'Get Bundle',
     'bundle_not_found'                                  => 'Bundle not found',
+    'select_instructor' => 'Select Instructor',
+    'choose_instructor' => 'Choose Instructor',
 ];

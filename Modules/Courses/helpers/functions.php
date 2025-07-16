@@ -174,6 +174,7 @@ if(!function_exists('courseMenuOptions')) {
                 'courses.admin.courses' => __('courses::courses.all_courses'),
                 'courses.admin.categories' => __('courses::courses.categories'),
                 'courses.admin.course-enrollments' => __('courses::courses.course_enrollments'),
+                'courses.admin.course-bundles' => __('sidebar.coursebundles'),
             ];
 
             if(isPaidSystem()) {

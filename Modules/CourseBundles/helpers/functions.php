@@ -39,10 +39,14 @@ if (!function_exists('bundleMenuOptions')) {
                     [
                         'title' =>  __('coursebundles::bundles.manage_bundles'),
                         'icon'  => 'icon-layers',
-                        'permission' => 'can-manage-course-bundles',
+                        'permission' => 'can-manage-course-bundles,can-create-course-bundle',
                         'routes' => [
                             [
                                 'route' => 'coursebundles.admin.course-bundles-list',
+                                'title' => __('coursebundles::bundles.all_bundles'),
+                            ],
+                            [
+                                'route' => 'coursebundles.admin.create-course-bundle',
                                 'title' => __('coursebundles::bundles.all_bundles'),
                             ]
                         ],

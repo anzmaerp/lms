@@ -42,7 +42,7 @@ class SearchController extends Controller
         $filters['max_price']    = $request->get('max_price') ?? null;
         $filters['country']      = $request->get('country') ?? null;
         $filters['sort_by']      = $request->get('sort_by') ?? null;
-        $filters['type']   = $type ?? null; 
+        $filters['type']   = $type ?? null;     
 
 
         return view('frontend.find-tutors', compact('subjectGroups', 'subjects', 'helpContent', 'countries', 'languages', 'filters', 'searchOnlyCities', 'selectedCountry'));
