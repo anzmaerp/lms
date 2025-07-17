@@ -13,7 +13,7 @@ use Modules\CourseBundles\Models\Bundle;
 use Modules\CourseBundles\Services\BundleService;
 
 class BundleDetails extends Component
-{   
+{
     use WithPagination;
     public string $slug;
 
@@ -46,9 +46,9 @@ class BundleDetails extends Component
         $this->slug = $slug;
         $this->perPage =  setting('_general.per_page_record') ?? 10;
 
-        if($this->role == 'student'){
+        if ($this->role == 'student') {
             $bundleAddedToStudent = (new BundleService())->getPurchasedBundles(
-                bundleId: $this->bundle->id, 
+                bundleId: $this->bundle->id,
                 studentId: Auth::id(),
                 tutorId: $this->bundle->instructor_id
             );
@@ -62,15 +62,21 @@ class BundleDetails extends Component
         return (new BundleService())->getBundle(
             slug: $this->slug,
             relations: [
-                            'instructor' => fn($q) => $q
-                                    ->withCount(['bookingSlots as active_students'  => fn($query) => $query->whereStatus('active')])
-                                    ->withCount('reviews')
-                                    ->withAvg('reviews', 'rating'),
-                            'thumbnail:mediable_id,mediable_type,type,path',
-                            'instructor.profile',
-                            'courses','courses.category','courses.subcategory','courses.language','courses.instructor.profile', 'courses.pricing', 'courses.curriculums',
-                            'courses'=> fn($q) => $q->withCount('curriculums', 'videoCurriculums')->withSum('videoCurriculums', 'content_length')
-                        ],
+                'instructor' => fn($q) => $q
+                    ->withCount(['bookingSlots as active_students'  => fn($query) => $query->whereStatus('active')])
+                    ->withCount('reviews')
+                    ->withAvg('reviews', 'rating'),
+                'thumbnail:mediable_id,mediable_type,type,path',
+                'instructor.profile',
+                'courses',
+                'courses.category',
+                'courses.subcategory',
+                'courses.language',
+                'courses.instructor.profile',
+                'courses.pricing',
+                'courses.curriculums',
+                'courses' => fn($q) => $q->withCount('curriculums', 'videoCurriculums')->withSum('videoCurriculums', 'content_length')
+            ],
             withAvg: ['reviews:rating'],
             withCount: [
                 'courses'
@@ -102,7 +108,7 @@ class BundleDetails extends Component
     {
         $excludedId = $this->bundle->id ?? null;
         return (new BundleService())->getAllBundles(
-            with: ['thumbnail:mediable_id,mediable_type,type,path','instructor.profile'],
+            with: ['thumbnail:mediable_id,mediable_type,type,path', 'instructor.profile'],
             withCount: ['courses'],
             withSum: ['courses' => 'content_length'],
             filters: $this->filters,
@@ -119,12 +125,12 @@ class BundleDetails extends Component
     public function render()
     {
         $bundle = $this->bundle;
-        if(empty($bundle)){
+        if (empty($bundle)) {
             abort(404);
         }
         $bundleCourses = $this->bundleCourses;
         $bundlesData = $this->relatedBundles;
-        return view('coursebundles::livewire.bundle.bundle-details', compact('bundle','bundlesData', 'bundleCourses'));
+        return view('coursebundles::livewire.bundle.bundle-details', compact('bundle', 'bundlesData', 'bundleCourses'));
     }
 
     public function loadData()
@@ -178,14 +184,26 @@ class BundleDetails extends Component
             $this->dispatch('showAlertMessage', type: 'error', title: __('general.demosite_res_title'), message: __('general.demosite_res_txt'));
             return;
         }
-        if (!auth()?->check()) {
+        // if (!auth()?->check()) {
+        //     $this->dispatch(
+        //         'showAlertMessage',
+        //         type: 'error',
+        //         message: __('courses::courses.login_required')
+        //     );
+        //     return;
+        // }
+        if (!auth()->check()) {
+            session()->put('url.intended', request()->fullUrl());
+
             $this->dispatch(
                 'showAlertMessage',
                 type: 'error',
                 message: __('courses::courses.login_required')
             );
-            return;
+
+        return redirect('/login');
         }
+
 
         if (!auth()?->user()?->role == 'student') {
             $this->dispatch(
@@ -198,14 +216,14 @@ class BundleDetails extends Component
 
         $response = (new BookingService())->getFreeBundle($this->bundle->id);
 
-        if(empty($response['success'])) {
+        if (empty($response['success'])) {
             return $this->dispatch(
                 'showAlertMessage',
                 type: 'error',
                 message: __($response['message'])
-            ); 
+            );
         }
 
-        return redirect()->route('courses.course-list');  
+        return redirect()->route('courses.course-list');
     }
 }
