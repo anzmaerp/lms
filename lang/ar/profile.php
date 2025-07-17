@@ -51,7 +51,7 @@ return [
     'video_note' => 'حجم ملفك لا يتجاوز :size. الامتدادات المسموح بها (:extensions)',
     'profile_greeting_tutor' => 'مرحبًا! يمكنك الحصول على خدماتي التعليمية مباشرة في',
     'profile_greeting_student' => 'أود الحصول على خدمة تعليمية مباشرة في',
-    'unlock_details_msg' => 'انقر على الزر أدناه لشراء باقة وفتح تفاصيل الاتصال',
+    'unlock_details_msg' => 'انقر على الزر أدناه لشراء حزمة وفتح تفاصيل الاتصال',
     'unlock_details_btn' => 'فتح الميزات',
     'related_tutors' => 'استكشف معلمينا المرتبطين',
     'qualification' => 'المؤهلات',
@@ -71,5 +71,5 @@ return [
     'resume_highlights' => 'أبرز نقاط السيرة الذاتية',
     'social_profile_placeholder' => 'أدخل رابط :profile_name',
     'meta_keywords' => 'كلمات ميتا المفتاحية',
-    'meta_keywords_placeholder' => 'أدخل الكلمات المفتاحية الوصفية',
+    'meta_keywords_placeholder' => 'أدخل الكلمات المفتاحية (Meta Keywords) الخاصة بك',
 ];

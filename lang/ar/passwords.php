@@ -17,7 +17,7 @@ return [
     'connected_account' => 'الحساب المتصل حاليًا',
     'remind_me' => 'ذكرني قبل الدرس',
     'reminder_scheduled_lesson' => 'كم من الوقت مقدماً تود أن نرسل لك تذكيراً قبل الدرس المجدول؟',
-    'disconnect_google_calendar' => 'قطع الاتصال بتقويم Google',
+    'disconnect_google_calendar' => 'افصل تقويم جوجل',
     'update_changes_live' => 'احفظ وحدث آخر التغييرات على البث المباشر',
     'Save_update' => 'احفظ وحدث',
     'no_notification' => 'لا توجد إشعارات',

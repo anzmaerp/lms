@@ -6,7 +6,7 @@ return [
     'taxonomies' => 'التصنيفات',
     'languages' => 'اللغات',
     'amenities' => 'المرافق',
-    'subject_groups' => 'المراحل الدراسية',
+    'subject_groups' => 'مجموعات المواد',
     'subjects' => 'المواد',
     'email_templates' => 'أنماط البريد الإلكتروني',
     'menu_setting' => 'القوائم',
@@ -37,8 +37,9 @@ return [
     'users' => 'المستخدمين',
     'identity_verification' => 'التحقق من الهوية',
     'bookings' => 'الحجوزات',
-    'Invoices' => 'الفواتير',
     'invoices' => 'الفواتير',
-    'manage_courses' => 'إدارة الدورات',
-    'All_Courses' => 'جميع الدورات',
+    'Installed' => [
+        'Addons' => 'الإضافات المثبتة',
+    ],
+    'offline_payments' => 'احصائيات الإيرادات والمدفوعات',
 ];

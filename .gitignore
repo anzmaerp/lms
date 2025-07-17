@@ -75,8 +75,10 @@ lernen.zip
 lernenNew.zip
 
 # Ignore all lang directories
+lang/*
+/lang
+/lang/*
 Modules/*/Resources/lang/
 packages/**/lang/
 packages/*/lang/
 packages/*/*/lang/
-/lang

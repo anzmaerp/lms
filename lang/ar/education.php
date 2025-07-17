@@ -10,7 +10,7 @@ return [
     'education_message' => 'يرجى تقديم خلفيتك التعليمية لمساعدتنا في تقييم مؤهلاتك.',
     'add_new_education' => 'إضافة تعليم جديد',
     'update_new_education' => 'تعديل التعليم',
-    'degree' => 'درجة الشهادة/الدورة',
+    'degree' => 'عنوان الدرجة/الدورة',
     'degree_placeholder' => 'أدخل عنوان الدرجة/الدورة',
     'university' => 'عنوان الجامعة/المعهد',
     'university_placeholder' => 'أدخل عنوان الجامعة/المعهد',
@@ -28,5 +28,4 @@ return [
     'education_deleted_message' => 'تم حذف التعليم بنجاح.',
     'education_added_message' => 'تم إضافة التعليم بنجاح.',
     'education_edit_message' => 'تم تحديث التعليم بنجاح.',
-    'manage_courses' => 'إدارة الدورات',
 ];

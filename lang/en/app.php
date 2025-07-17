@@ -498,5 +498,4 @@ to view the full details.',
     'category_in_text' => 'in',
     'get_course' => 'Get Course',
     'get_session' => 'Get Session',
-    'Invoices' => 'Invoices',
 ];

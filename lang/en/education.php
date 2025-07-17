@@ -28,5 +28,4 @@ return [
     'education_deleted_message' => 'Education deleted successfully.',
     'education_added_message' => 'Education added successfully.',
     'education_edit_message' => 'Education update successfully.',
-    'manage_courses' => 'Manage Courses',
 ];

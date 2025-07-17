@@ -7,8 +7,7 @@ return [
     'add_notification' => 'أضف إشعارًا جديدًا',
     'update_notification' => 'تحديث الإشعار',
     'notification_title' => 'عنوان الإشعار',
-    'notification_setting_variable' => 'متغيرات إعدادات الإشعارات',
+    'notification_setting_variable' => 'متغيرات إعداد الإشعار',
     'notification_content' => 'محتوى الإشعار',
-    'notification_verification_title' => 'التحقق من الإشعار',
-    'view_booking' => 'عرض الحجز',
+    'notification_verification_title' => 'محتوى الإشعار',
 ];

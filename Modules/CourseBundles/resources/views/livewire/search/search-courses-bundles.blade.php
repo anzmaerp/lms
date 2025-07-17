@@ -10,7 +10,7 @@
             @if(!empty(setting('_coursebundle.course_bundle_description'))) <p>{{ setting('_coursebundle.course_bundle_description') }}</p> @endif
             <form class="fw-themeform cr-searchform">
                 <fieldset>
-                    <div class="form-group"
+                    <div class="form-group">
                         <i class="am-icon-search-02"></i>
                         <input type="text" class="form-control" placeholder="{{ __('coursebundles::bundles.search_by_keywords') }}" wire:model.live.debounce.250ms="filters.keyword">
                         <div class="cr-customdropdown">
