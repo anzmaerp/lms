@@ -1,10 +1,6 @@
 <?php
 
 return [
-    'gender' => 'الجنس',
-    'male' => 'ذكر',
-    'female' => 'أنثى',
-    'username_placeholder' => 'الهاتف أو البريد الإلكتروني',
     'failed' => 'بيانات الاعتماد هذه لا تتطابق مع سجلاتنا.',
     'password' => 'كلمة المرور المقدمة غير صحيحة.',
     'throttle' => 'عدد كبير جدًا من محاولات تسجيل الدخول. يرجى المحاولة مرة أخرى بعد :seconds ثانية.',
@@ -36,7 +32,7 @@ return [
     'login' => 'تسجيل الدخول',
     'logout' => 'تسجيل الخروج',
     'lost_password' => 'نسيت كلمة المرور؟',
-    'register_terms' => 'أوافق على </span><a href="https://app.ashal-edu.com/terms-condition">شروط الخدمة</a> و <a href="https://app.ashal-edu.com/privacy-policy">سياسة الخصوصية</a>',
+    'register_terms' => 'أوافق على </span><a href="https://arch-space.org/terms-condition">شروط الخدمة</a> و <a href="https://arch-space.org/privacy-policy">سياسة الخصوصية</a>',
     'verify_title' => 'تحقق من عنوان بريدك الإلكتروني',
     'verify_email_link' => 'تم إرسال رابط تحقق جديد إلى عنوان البريد الإلكتروني الذي قدمته أثناء التسجيل.',
     'verify_email_msg' => 'شكرًا لتسجيلك! قبل البدء، هل يمكنك التحقق من عنوان بريدك الإلكتروني بالنقر على الرابط الذي أرسلناه إليك؟',
@@ -57,8 +53,9 @@ return [
     'login_as' => 'تسجيل الدخول كـ',
     'admin' => 'مسؤول',
     'social_right_h2' => 'تقريبا هناك',
-    'social_right_h3' => 'بضع تفاصيل إضافية لإنشاء حسابك',
+    'social_right_h3' => 'فقط عدد قليل من التفاصيل لإنشاء حسابك.',
     'your_email_placeholder' => 'عنوان بريدك الإلكتروني',
     'sign_in_with_google' => 'تسجيل الدخول مع Google',
     'social_login_error' => 'غير قادر على تسجيل الدخول باستخدام :platform. من فضلك حاول مرة أخرى.',
+    'username_placeholder' => 'البريد الإلكتروني | رقم الهاتف',
 ];

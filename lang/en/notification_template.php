@@ -75,5 +75,4 @@ return [
     'session_request_student_variables' => '{studentName} - For Student Name <br> {studentEmail} - For Student Notifcation <br> {sessionType} - For Session Type <br> {message} - For Message',
     'dispute_resolve_student_variables' => '{tutorName} - For Tutor Name <br> {refundAmount} - For Refund Amount',
     'dispute_resolve_tutor_variables' => '{studentName} - For Student Name',
-    'view_booking' => 'View Booking',
 ];

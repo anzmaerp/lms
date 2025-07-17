@@ -1,11 +1,11 @@
 <?php
 
 return [
-    'title' => 'مثبت Ashal',
+    'title' => 'مثبت arch-space Acadmey',
     'next' => 'الخطوة التالية',
     'finish' => 'تثبيت',
     'welcome' => [
-        'title' => 'مرحبًا بك في مثبت Ashal',
+        'title' => 'مرحبًا بك في مثبت arch-space Acadmey',
         'message' => 'مرحبًا بك في معالج الإعداد.',
     ],
     'requirements' => [
@@ -14,12 +14,12 @@ return [
     ],
     'permissions' => [
         'title' => 'الأذونات',
-        'message' => 'يرجى التأكد من أن Ashal لديه الأذونات اللازمة <br /> للوصول إلى المجلدات التالية من أجل المتابعة.',
+        'message' => 'يرجى التأكد من أن arch space academy لديه الأذونات اللازمة <br /> للوصول إلى المجلدات التالية من أجل المتابعة.',
     ],
     'seeders' => [
         'title' => 'ترحيل واستيراد المحتوى التجريبي',
         'migrate_title' => 'ترحيل قاعدة البيانات',
-        'migrate_desc' => 'ترحيل مخطط وهيكل قاعدة البيانات لـ Ashal.',
+        'migrate_desc' => 'ترحيل مخطط وهيكل قاعدة البيانات لـ arch-space Acadmey.',
         'general_title' => 'استيراد إعدادات الموقع',
         'general_desc' => 'يستورد الإعدادات والتكوينات الأساسية لموقعك.',
         'pages_title' => 'استيراد الصفحات والتخطيطات',

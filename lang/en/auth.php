@@ -1,10 +1,6 @@
 <?php
 
 return [
-    'gender' => 'Gender',
-    'male' => 'Male',
-    'female' => 'Female',
-    'username_placeholder' => 'Phone or Email',
     'failed' => 'These credentials do not match our records.',
     'password' => 'The provided password is incorrect.',
     'throttle' => 'Too many login attempts. Please try again in :seconds seconds.',
@@ -40,7 +36,7 @@ return [
     'login' => 'Sign in',
     'logout' => 'Logout',
     'lost_password' => 'Forgot Password?',
-    'register_terms' => 'I accept </span><a href="https://app.ashal-edu.com/terms-condition">Terms of Service</a> & <a href="https://app.ashal-edu.com/privacy-policy">Privacy Policy</a>',
+    'register_terms' => 'I accept </span><a href="https://arch-space.org/terms-condition">Terms of Service</a> & <a href="https://arch-space.org/privacy-policy">Privacy Policy</a>',
     'verify_title' => 'Verify your Email Address',
     'verify_email_link' => 'A new verification link has been sent to the email address you provided during registration.',
     'verify_email_msg' => 'Thanks for signing up! Before getting started, could you verify your email address by clicking on the link we just emailed to you?',
@@ -62,4 +58,5 @@ return [
     'admin' => 'Admin',
     'sign_in_with_google' => 'Sign in with Google',
     'social_login_error' => 'Unable to login using :platform. Please try again.',
+    'username_placeholder' => 'Email | Phone',
 ];

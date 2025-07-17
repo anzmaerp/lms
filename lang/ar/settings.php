@@ -842,5 +842,5 @@ return [
     'enter_privacy_policy_en' => 'ادخل سياسية الخصوصية باللغة الانجليزية',
     'privacy_policy_url' => 'رابط سياسية الخصوصية',
     'enter_privacy_policy_url' => 'ادخل رابط سياسية الخصوصية',
-    'search_tutor_course' => 'ابحث عن الدورات او المعلمين '
+    'search_tutor_lec' => 'ابحث عن الدورات او المحاضرات '
 ];

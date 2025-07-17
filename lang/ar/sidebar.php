@@ -1,7 +1,6 @@
 <?php
 
 return [
-    'offline_payments' => 'طرق الدفع الأوفلاين',
     'tags' => 'العلامات',
     'skills' => 'المهارات',
     'payment_modes' => 'طرق الدفع',
@@ -56,7 +55,7 @@ return [
     'translation_settings' => 'ترجمات اللغة',
     'groups' => 'المجموعات',
     'subjects' => 'المواد',
-    'subject_groups' => 'المراحل الدراسية',
+    'subject_groups' => 'مجموعات المواد',
     'bookings' => 'حجوزاتي',
     'invoices' => 'فواتيري',
     'certificates' => 'الشهادات',
@@ -69,18 +68,20 @@ return [
     'discover_tutor_desc' => 'أتقن دراستك مع دروس خصوصية عبر الإنترنت مخصصة من معلمين خبراء. معلمونا المهرة هنا لمساعدتك في بناء أسس قوية وتحقيق أهدافك الأكاديمية.',
     'manage_packages' => 'إدارة الإضافات',
     'insights' => 'لوحة التحكم',
-    'notification_settings' => 'إعدادات الإشعار',
+    'notification_settings' => 'إعدادات الإشعارات',
     'add_new_package' => 'أضف جديد',
     'coupons' => 'الصفقات والكوبونات',
     'disputes_system' => 'نظام النزاعات',
     'manage-dispute' => 'إدارة النزاع',
     'manage_subscriptions' => 'إدارة الاشتراكات',
     'subscriptions_list' => 'قائمة الاشتراكات',
-    'user_subscriptions' => 'مستخدمين الاشتراكات',
+    'user_subscriptions' => 'اشتراكات المستخدم',
     'badges' => 'شارات',
     'purchased_subscriptions' => 'اشتراكات تم شراؤها',
-    'coursebundles' => 'باقات الدورة',
-    'find_coursebundles' => 'العثور على باقات الدورة',
-    'manage_courses' => 'إدارة الدورات',
+    'coursebundles' => 'باقة  الدورة',
+    'find_coursebundles' => 'العثور على باقة الدورة',
     'manage_admins' => 'إدارة المسؤولين',
+    'Installed' => [
+        'Addons' => 'الإضافات المثبتة',
+    ],
 ];

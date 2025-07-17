@@ -12,7 +12,7 @@ return [
     'enter_url' => 'أدخل الرابط',
     'add_label' => 'أضف تسمية',
     'menu_title' => 'عنوان القائمة',
-    'select_menu' => 'اختر القائمة للتحرير',
+    'select_menu' => 'اختر القائمة للتعديل',
     'select_all_menu' => 'اختر جميع القوائم',
     'remove_selected_menu' => 'إزالة القائمة المحددة',
     'delete_menu' => 'حذف القائمة',

@@ -2,7 +2,7 @@
 
 return [
     'text' => 'فئات المدونة',
-    'add_category' => 'إضافة قسم جديد',
+    'add_category' => 'إضافة فئة جديدة',
     'update_category' => 'تحديث الفئة',
     'title' => 'الاسم',
     'description' => 'الوصف',
@@ -16,6 +16,6 @@ return [
     'updated_msg' => 'تم تحديث الفئة بنجاح',
     'deleted_msg' => 'تم حذف الفئة بنجاح',
     'search' => 'بحث عن فئة',
-    'category_status' => 'تعيين حالة القسم كـ',
+    'category_status' => 'تعيين حالة الفئة كـ',
     'parent_category' => 'الفئة الرئيسية',
 ];

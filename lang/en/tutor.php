@@ -6,8 +6,6 @@ return [
     'group_sessions' => 'Group Sessions',
     'active_student' => 'Active student',
     'active_students' => 'Active students',
-    'booked_session' => 'Booked session',
-    'booked_sessions' => 'Booked sessions',
     'session' => 'Session',
     'per_session' => '/session',
     'sessions' => 'Sessions',
@@ -164,4 +162,5 @@ return [
     'achievements' => 'Achievements',
     'per_bundle' => '/bundle',
     'slot_not_available' => 'Slot not available',
+    'booked_sessions' => 'Booked Sessions',
 ];

@@ -1,7 +1,6 @@
 <?php
 
 return [
-    'offline_payments' => 'Offline Payments',
     'tags' => 'Tags',
     'skills' => 'Skills',
     'payment_modes' => 'Payment modes',
@@ -69,7 +68,7 @@ return [
     'discover_tutor_text' => 'Discover a skilled online tutor for your studies',
     'discover_tutor_desc' => 'Master your studies with personalized online tutoring from expert educators. Our skilled tutors are here to help you build strong foundations and achieve your academic goals.',
     'manage_packages' => 'Manage Addons',
-    'installed_packages' => 'الاضافات المثبتة',
+    'installed_packages' => 'Installed Addons',
     'add_new_package' => 'Add New',
     'insights' => 'Insights',
     'coupons' => 'Deals & Coupons',
@@ -83,6 +82,8 @@ return [
     'purchased_subscriptions' => 'Purchased subscriptions',
     'coursebundles' => 'Course Bundles',
     'find_coursebundles' => 'Find Course Bundles',
-    'manage_courses' => 'manage_courses',
     'manage_admins' => 'Manage Admins',
+    'Installed' => [
+        'Addons' => 'installedaddons',
+    ],
 ];

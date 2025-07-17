@@ -155,7 +155,8 @@
         fileExt = fileExt ? fileExt.toLowerCase() : '';
         let fileSize = files[0].size / 1024;
         let allowFileSize = Number("{{$allowImageSize}}") * 1024;
-        let allowFileExt = `${{!! !empty($allowImageExt) ? json_encode($allowImageExt) : '' !!}}`;
+        //{{--let allowFileExt = `${{!! !empty($allowImageExt) ? json_encode($allowImageExt) : '' !!}}`;--}}
+        let allowFileExt = {!! json_encode($allowImageExt ?? []) !!};
         allowFileExt = allowFileExt.split(',');
 
         if (allowFileExt.includes(fileExt) && fileSize <= allowFileSize) {

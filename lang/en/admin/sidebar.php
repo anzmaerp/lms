@@ -37,7 +37,9 @@ return [
     'users' => 'Users',
     'identity_verification' => 'Identity verification',
     'bookings' => 'Bookings',
-    'invoices' => 'invoices',
-    'Invoices' => 'Invoices',
-    'All_Courses' => 'All Courses',
+    'invoices' => 'Invoices',
+    'Installed' => [
+        'Addons' => 'installed addons',
+    ],
+    'offline_payments' => 'Offline Payments',
 ];
