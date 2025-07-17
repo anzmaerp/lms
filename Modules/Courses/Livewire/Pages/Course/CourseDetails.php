@@ -65,9 +65,9 @@ class CourseDetails extends Component
         $this->instructorAvgReviews     = Rating::where('ratingable_type', User::class)->where('ratingable_id', $this->course->instructor_id)->avg('rating');
         if ($this->role == 'admin' || $this->course->instructor_id == Auth::id()) {
             $this->viewCourse = true;
-        } elseif($this->role == 'student'){
+        } elseif ($this->role == 'student') {
             $courseAddedToStudent = (new CourseService())->getStudentCourse(
-                courseId: $this->course->id, 
+                courseId: $this->course->id,
                 studentId: Auth::id(),
                 tutorId: $this->course->instructor_id
             );
@@ -97,8 +97,8 @@ class CourseDetails extends Component
                 'thumbnail',
                 'promotionalVideo',
                 'pricing',
-                'sections' => function($query) {
-                    $query->withWhereHas('curriculums', function($subQuery) {
+                'sections' => function ($query) {
+                    $query->withWhereHas('curriculums', function ($subQuery) {
                         $subQuery->orderBy('sort_order', 'asc');
                         $subQuery->whereNotNull('media_path')->orWhereNotNull('article_content');
                     });
@@ -202,14 +202,29 @@ class CourseDetails extends Component
             $this->dispatch('showAlertMessage', type: 'error', title: __('general.demosite_res_title'), message: __('general.demosite_res_txt'));
             return;
         }
-        if (!auth()?->check()) {
+        // if (!auth()?->check()) {
+        //     $this->dispatch(
+        //         'showAlertMessage',
+        //         type: 'error',
+        //         message: __('courses::courses.login_required')
+
+        //     );
+        //     return;
+        // }
+
+        if (!auth()->check()) {
+            session()->put('url.intended', request()->fullUrl());
+
             $this->dispatch(
                 'showAlertMessage',
                 type: 'error',
                 message: __('courses::courses.login_required')
             );
-            return;
+
+        return redirect('/login');
         }
+
+
 
         if (!auth()?->user()?->hasRole('student')) {
             $this->dispatch(
@@ -219,6 +234,8 @@ class CourseDetails extends Component
             );
             return;
         }
+
+
 
         $isAdded = (new CourseService())->addStudentCourse(Auth::id(), $this->course->id);
 
@@ -237,14 +254,26 @@ class CourseDetails extends Component
 
     public function addToCart()
     {
-        if (!auth()?->check()) {
+        // if (!auth()?->check()) {
+        //     $this->dispatch(
+        //         'showAlertMessage',
+        //         type: 'error',
+        //         message: __('courses::courses.login_required')
+        //     );
+        //     return;
+        // }
+        if (!auth()->check()) {
+            session()->put('url.intended', request()->fullUrl());
+
             $this->dispatch(
                 'showAlertMessage',
                 type: 'error',
                 message: __('courses::courses.login_required')
             );
-            return;
+
+        return redirect('/login');
         }
+
 
         if (!auth()?->user()?->hasRole('student')) {
             $this->dispatch(
@@ -282,13 +311,24 @@ class CourseDetails extends Component
             $this->dispatch('showAlertMessage', type: 'error', title: __('general.demosite_res_title'), message: __('general.demosite_res_txt'));
             return;
         }
-        if (!auth()?->check()) {
+        // if (!auth()?->check()) {
+        //     $this->dispatch(
+        //         'showAlertMessage',
+        //         type: 'error',
+        //         message: __('courses::courses.login_required')
+        //     );
+        //     return;
+        // }
+        if (!auth()->check()) {
+            session()->put('url.intended', request()->fullUrl());
+
             $this->dispatch(
                 'showAlertMessage',
                 type: 'error',
                 message: __('courses::courses.login_required')
             );
-            return;
+
+        return redirect('/login');
         }
 
         if (!auth()?->user()?->hasRole('student')) {
@@ -301,15 +341,15 @@ class CourseDetails extends Component
         }
         $response = (new BookingService(Auth::user()))->enrollFreeCourse($this->course->id);
 
-        if(empty($response['success'])) {
+        if (empty($response['success'])) {
             return $this->dispatch(
                 'showAlertMessage',
                 type: 'error',
                 message: __($response['message'])
-            ); 
+            );
         }
 
-        
+
         return redirect()->route('courses.course-list');
     }
 

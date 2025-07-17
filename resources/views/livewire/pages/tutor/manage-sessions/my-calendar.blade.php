@@ -6,6 +6,9 @@
     <div class="am-section-load" wire:loading.flex wire:target="updatedCurrentMonth,jumpToDate,updatedCurrentYear,previousMonthCalendar,nextMonthCalendar">
         <p>{{ __('general.loading') }}</p>
     </div>
+    <a href="{{ route('tutor.google.redirect') }}" class="btn btn-primary">
+    ربط مع Google Calendar
+</a>
     <div class="am-booking-wrapper">
         <div class="am-booking-calander">
             <div class="am-booking-calander_header">

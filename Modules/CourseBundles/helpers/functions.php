@@ -39,7 +39,7 @@ if (!function_exists('bundleMenuOptions')) {
                     [
                         'title' =>  __('coursebundles::bundles.manage_bundles'),
                         'icon'  => 'icon-layers',
-                        'permission' => 'can-manage-course-bundles,can-create-course-bundle',
+                        'permission' => 'edit course bundles,create course bundles,manage course bundles',
                         'routes' => [
                             [
                                 'route' => 'coursebundles.admin.course-bundles-list',
@@ -47,6 +47,10 @@ if (!function_exists('bundleMenuOptions')) {
                             ],
                             [
                                 'route' => 'coursebundles.admin.create-course-bundle',
+                                'title' => __('coursebundles::bundles.all_bundles'),
+                            ],
+                            [
+                                'route' => 'coursebundles.admin.edit-course-bundle',
                                 'title' => __('coursebundles::bundles.all_bundles'),
                             ]
                         ],

@@ -26,6 +26,8 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\UserSubjectGroupSubject;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
+use Google_Client;
+
 
 class SiteController extends Controller
 {
@@ -50,8 +52,22 @@ class SiteController extends Controller
         $primaryCalendar = $this->googleCalenderService->getUserPrimaryCalendar($googleToken['access_token']);
         $primaryCalendar['data']['minutes'] = 30;
         $this->userService->setAccountSetting(['google_access_token', 'google_calendar_info'], [$googleToken, $primaryCalendar['data']]);
+        dd($googleToken);
         return redirect()->route(Auth::user()->role . '.profile.account-settings')->with('success', __('passwords.connect_calender'));
     }
+
+public function redirectToGoogleCalendar()
+{
+    $client = new Google_Client();
+    $client->setClientId(config('services.google.client_id'));
+    $client->setClientSecret(config('services.google.client_secret'));
+    $client->setRedirectUri(route('getGoogleToken'));
+    $client->addScope('https://www.googleapis.com/auth/calendar');
+    $client->setAccessType('offline');
+    $client->setPrompt('consent');
+
+    return redirect()->away($client->createAuthUrl());
+}
 
     public function completeBooking($id, BookingService $bookingService)
     {

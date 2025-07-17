@@ -72,7 +72,9 @@ Route::middleware(['locale', 'maintenance'])->group(function () {
         Route::post('favourite-tutor', [SearchController::class, 'favouriteTutor'])->name('favourite-tutor');
         Route::get('logout', [SiteController::class, 'logout'])->name('logout');
         Route::get('user/identity-confirmation/{id}', [PersonalDetails::class, 'confirmParentVerification'])->name('confirm-identity');
-        Route::get('google/callback', [SiteController::class, 'getGoogleToken']);
+        Route::get('google/callback', [SiteController::class, 'getGoogleToken'])->name('getGoogleToken');
+        Route::get('/google/redirect', [SiteController::class, 'redirectToGoogleCalendar'])->name('tutor.google.redirect');
+
         Route::middleware('role:tutor|student')->get('checkout', Checkout::class)->name('checkout');
         Route::middleware('role:tutor|student')->get('thank-you/{id}', ThankYou::class)->name('thank-you');
 

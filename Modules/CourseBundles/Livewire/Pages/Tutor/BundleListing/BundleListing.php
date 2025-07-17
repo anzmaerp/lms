@@ -33,8 +33,11 @@ class BundleListing extends Component
     {
         $bundles = [];
         $bundles = (new BundleService())->getBundles(
-            instructorId: $this->isAdmin() ? null : auth()->user()?->id,
-            with: ['thumbnail:mediable_id,mediable_type,type,path'],
+            instructorId: $this->isAdmin() ? null : auth()->id(),
+            with: [
+                'thumbnail:mediable_id,mediable_type,type,path',
+                'createdBy.profile:id,user_id,first_name,last_name'
+            ],
             withCount: ['courses'],
             withSum: ['courses' => 'content_length'],
             filters: $this->filters,
@@ -106,7 +109,21 @@ class BundleListing extends Component
             $this->dispatch('showAlertMessage', type: 'error', title: __('general.demosite_res_title'), message: __('general.demosite_res_txt'));
             return;
         }
+
+        $bundle = (new BundleService())->getBundle($params['id']);
+
+        if (!$bundle) {
+            $this->dispatch('showAlertMessage', type: 'error', title: __('coursebundles::bundles.no_bundles_found'), message: __('coursebundles::bundles.no_bundles_found'));
+            return;
+        }
+
+        if (!$this->isAdmin() && $bundle->created_by != auth()->id()) {
+            $this->dispatch('showAlertMessage', type: 'error', title: __('coursebundles::bundles.permission_denied'), message: __('coursebundles::bundles.permission_denied'));
+            return;
+        }
+
         $deleted = (new BundleService())->deleteBundle($params['id']);
+
         if ($deleted) {
             $this->resetFilters();
             $this->dispatch('showAlertMessage', type: 'success', title: __('coursebundles::bundles.bundle_deleted_successfully'), message: __('coursebundles::bundles.bundle_deleted_successfully'));
@@ -126,6 +143,11 @@ class BundleListing extends Component
 
         if (!$bundle) {
             $this->dispatch('showAlertMessage', type: 'error', title: __('coursebundles::bundles.no_bundles_found'), message: __('coursebundles::bundles.no_bundles_found'));
+            return;
+        }
+
+        if (!$this->isAdmin() && $bundle->created_by != auth()->id()) {
+            $this->dispatch('showAlertMessage', type: 'error', title: __('coursebundles::bundles.permission_denied'), message: __('coursebundles::bundles.permission_denied'));
             return;
         }
 
