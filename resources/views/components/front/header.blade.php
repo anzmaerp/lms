@@ -204,77 +204,75 @@
                     'privacy-policy',
                 ]),
         ])>
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-12">
-                        <div class="am-header_two_wrap">
-                            <strong class="am-logo">
-                                <x-application-logo />
-                            </strong>
+            <div class="row">
+                <div class="col-12">
+                    <div class="am-header_two_wrap">
+                        <strong class="am-logo">
+                            <x-application-logo />
+                        </strong>
 
 
-                            <nav class="am-navigation navbar-expand-xl">
-                                <div class="am-navbar-toggler">
-                                    <div class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#tenavbar"
-                                        aria-expanded="false" aria-label="Toggle navigation" role="button">
-                                    </div>
-                                    <input type="checkbox" id="checkbox">
-                                    <label for="checkbox" class="toggler-menu">
-                                        <span class="menu-bars" id="menu-bar1"></span>
-                                        <span class="menu-bars" id="menu-bar2"></span>
-                                        <span class="menu-bars" id="menu-bar3"></span>
-                                    </label>
+                        <nav class="am-navigation navbar-expand-xl">
+                            <div class="am-navbar-toggler">
+                                <div class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#tenavbar"
+                                    aria-expanded="false" aria-label="Toggle navigation" role="button">
                                 </div>
-                                <ul id="tenavbar" class="collapse navbar-collapse">
-                                    @if (!empty(getMenu('header')))
-                                        @foreach (getMenu('header') as $item)
-                                            <x-menu-item :menu="$item" />
-                                        @endforeach
-                                    @endif
-                                </ul>
-                            </nav>
-                            @if($searchBox)
-                            <div class="navbar-search-area" style="margin-inline-start: auto; max-width: 600px;">
-                                <form method="GET" action="{{  route('search')  }}">
-                                    <div
-                                        style="display: flex; align-items: center; border-radius: 28px; overflow: hidden; border: 1px solid #ddd; height: 44px; background: #fff; box-shadow: 0 2px 6px rgba(0,0,0,0.08);">
-                                        <input type="search" name="q"
-                                            placeholder="{{ __('settings')['search_tutor_course'] }}"
-                                            style="flex: 1; font-size: 15px; padding: 0 16px; border: none; outline: none; background: transparent; color: #333;">
-
-                                        <select name="type"
-                                            style="width: 100px; font-size: 13px; height: 100%; border: none; background: #f9f9f9; border-left: 1px solid #eee; padding: 0 10px; outline: none; color: {{ request('category') == 'courses' ? $theme_pri_color ?? '#007bff' : '#333' }}; cursor: pointer;">
-                                            <option value="tutors" style="color: {{ $theme_pri_color ?? '#007bff' }};">{{__('app')['tutors']}}</option>
-                                            <option value="courses" style="color: {{ $theme_pri_color ?? '#007bff' }};">{{__('app')['courses']}}</option>
-                                        </select>
-
-                                        <button type="submit"
-                                            style="background: {{ $theme_pri_color ?? '#007bff' }}; color: #fff; border: none; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: background 0.3s ease;"
-                                            title="Search">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
-                                                fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
-                                                <path
-                                                    d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85zm-5.242 1.656a5.5 5.5 0 1 1 0-11 5.5 5.5 0 0 1 0 11z" />
-                                            </svg>
-                                        </button>
-                                    </div>
-                                </form>
+                                <input type="checkbox" id="checkbox">
+                                <label for="checkbox" class="toggler-menu">
+                                    <span class="menu-bars" id="menu-bar1"></span>
+                                    <span class="menu-bars" id="menu-bar2"></span>
+                                    <span class="menu-bars" id="menu-bar3"></span>
+                                </label>
                             </div>
-                            @endif
+                            <ul id="tenavbar" class="collapse navbar-collapse">
+                                @if (!empty(getMenu('header')))
+                                    @foreach (getMenu('header') as $item)
+                                        <x-menu-item :menu="$item" />
+                                    @endforeach
+                                @endif
+                            </ul>
+                        </nav>
+                        @if($searchBox)
+                        <div class="navbar-search-area" style="margin-inline-start: auto; max-width: 600px;">
+                            <form method="GET" action="{{  route('search')  }}">
+                                <div
+                                    style="display: flex; align-items: center; border-radius: 28px; overflow: hidden; border: 1px solid #ddd; height: 44px; background: #fff; box-shadow: 0 2px 6px rgba(0,0,0,0.08);">
+                                    <input type="search" name="q"
+                                        placeholder="{{ __('settings')['search_tutor_course'] }}"
+                                        style="flex: 1; font-size: 15px; padding: 0 16px; border: none; outline: none; background: transparent; color: #333;">
 
-                            @auth
-                                <x-frontend.user-menu />
-                            @endauth
-                            @guest
-                                <div class="am-loginbtns">
-                                    <x-multi-currency />
-                                    <x-multi-lingual />
-                                    <a href="{{ route('login') }}" class="am-btn">{{ __('general.login') }}</a>
-                                    <a href="{{ route('register') }}"
-                                        class="am-white-btn">{{ __('general.get_started') }}</a>
+                                    <select name="type"
+                                        style="width: 100px; font-size: 13px; height: 100%; border: none; background: #f9f9f9; border-left: 1px solid #eee; padding: 0 10px; outline: none; color: {{ request('category') == 'courses' ? $theme_pri_color ?? '#007bff' : '#333' }}; cursor: pointer;">
+                                        <option value="tutors" style="color: {{ $theme_pri_color ?? '#007bff' }};">{{__('app')['tutors']}}</option>
+                                        <option value="courses" style="color: {{ $theme_pri_color ?? '#007bff' }};">{{__('app')['courses']}}</option>
+                                    </select>
+
+                                    <button type="submit"
+                                        style="background: {{ $theme_pri_color ?? '#007bff' }}; color: #fff; border: none; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: background 0.3s ease;"
+                                        title="Search">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
+                                            fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                                            <path
+                                                d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85zm-5.242 1.656a5.5 5.5 0 1 1 0-11 5.5 5.5 0 0 1 0 11z" />
+                                        </svg>
+                                    </button>
                                 </div>
-                            @endguest
+                            </form>
                         </div>
+                        @endif
+
+                        @auth
+                            <x-frontend.user-menu />
+                        @endauth
+                        @guest
+                            <div class="am-loginbtns">
+                                <x-multi-currency />
+                                <x-multi-lingual />
+                                <a href="{{ route('login') }}" class="am-btn">{{ __('general.login') }}</a>
+                                <a href="{{ route('register') }}"
+                                    class="am-white-btn">{{ __('general.get_started') }}</a>
+                            </div>
+                        @endguest
                     </div>
                 </div>
             </div>

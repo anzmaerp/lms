@@ -133,6 +133,7 @@ class PageBuilderController extends Controller {
     }
 
     public function setPageSettings(Request $request) {
+        dd($request,123);
         if (isDemoSite())
             return response()->json(['success' => false]);
         $settings = $sectionId = null;

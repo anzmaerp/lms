@@ -120,6 +120,7 @@ class PageSettings {
     }
 
     public function setPageSettings($pageId, $pageSettings) {
+        dd(123);
         if (!empty($pageSettings))
             $pageSettings = sanitizeArray($pageSettings);
         Page::find($pageId)->update(['settings' => $pageSettings ?? []]);
