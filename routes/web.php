@@ -1,6 +1,7 @@
 <?php
 
 use App\Livewire\Payouts;
+use function JmesPath\search;
 use App\Livewire\Frontend\Blogs;
 use App\Livewire\Frontend\Checkout;
 use App\Livewire\Frontend\ThankYou;
@@ -19,6 +20,7 @@ use App\Http\Controllers\Frontend\SearchController;
 use App\Livewire\Pages\Common\Bookings\UserBooking;
 use App\Livewire\Pages\Common\Dispute\ManageDispute;
 use App\Livewire\Pages\Student\Favourite\Favourites;
+use App\Http\Controllers\SearchDispatecherController;
 use App\Livewire\Pages\Common\ProfileSettings\Resume;
 use App\Http\Livewire\Admin\Settings\Payment\Fawaterk;
 use App\Livewire\Pages\Tutor\ManageSessions\MyCalendar;
@@ -27,9 +29,9 @@ use App\Livewire\Pages\Tutor\ManageSessions\SessionDetail;
 use App\Livewire\Pages\Student\BillingDetail\BillingDetail;
 use App\Livewire\Pages\Tutor\ManageSessions\ManageSubjects;
 use App\Livewire\Pages\Common\ProfileSettings\AccountSettings;
+use Illuminate\Http\Request;
 use App\Livewire\Pages\Common\ProfileSettings\PersonalDetails;
 use App\Livewire\Pages\Common\ProfileSettings\IdentityVerification;
-
 
 // // Clear Cache For Application
 Route::get('/clear', function () {
@@ -120,7 +122,6 @@ Route::middleware(['locale', 'maintenance'])->group(function () {
     });
 
     Route::post('/remove-cart', [SiteController::class, 'removeCart']);
-
     Route::get('tutor/{slug}', [SearchController::class, 'tutorDetail'])->name('tutor-detail');
     Route::get('{gateway}/process/payment', [SiteController::class, 'processPayment'])->name('payment.process');
     Route::get('/payment/hesabe/callback', [SiteController::class, 'hesabePaymentCallback'])->name('payment.hesabe.callback');
@@ -134,7 +135,21 @@ Route::middleware(['locale', 'maintenance'])->group(function () {
     Route::get('pay/{id}', [SiteController::class, 'preparePayment'])->name('pay');
     Route::get('session/{id}', [SiteController::class, 'sessionDetail'])->name('session-detail');
     Route::post('book-session', [SiteController::class, 'bookSession'])->name('book-session');
+    Route::get('/search', function (Request $request) {
+        $type = $request->input('type');
+        $q = $request->input('q');
 
+        if ($type === 'courses') {
+            return redirect()->route('courses.search-courses', ['q' => $q, 'type' => 'courses']);
+        }
+
+        if ($type === 'tutors') {
+            return redirect()->route('find-tutors', ['q' => $q, 'type' => 'tutors']);
+        }
+
+        // fallback (optional)
+        abort(404);
+    })->name('search');
 
     require __DIR__ . '/auth.php';
     require __DIR__ . '/admin.php';

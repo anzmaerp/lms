@@ -2,12 +2,13 @@
 
 namespace Modules\CourseBundles\Livewire\Pages\Admin;
 
-use Illuminate\Support\Facades\Auth;
-use Livewire\Attributes\Layout;
-use Livewire\Attributes\On;
 use Livewire\Component;
+use Livewire\Attributes\On;
 use Livewire\WithPagination;
+use Livewire\Attributes\Layout;
+use Illuminate\Support\Facades\Auth;
 use Modules\CourseBundles\Models\Bundle;
+use Modules\CourseBundles\Casts\BundleStatusCast;
 use Modules\CourseBundles\Services\BundleService;
 
 class CourseBundleListing extends Component
@@ -16,6 +17,7 @@ class CourseBundleListing extends Component
 
     public $user;
     public $perPage = 10;
+        public $statuses = [];
     protected $bundleService;
     public $filters = [
         'keyword'   => '',
@@ -29,11 +31,14 @@ class CourseBundleListing extends Component
         $this->bundleService = $bundleService;
         $this->user = Auth::user();
 
+
     }
 
     public function mount()
     {
         $this->perPage = setting('_general.per_page_record') ?? 10;
+        $this->statuses =  BundleStatusCast::$statusMap;
+
     }
 
     #[Layout('layouts.admin-app')]
@@ -47,7 +52,7 @@ class CourseBundleListing extends Component
             filters: $this->filters,
             perPage: $this->perPage
         );
-        return view('coursebundles::livewire.admin.course-bundle-listing',compact('bundles'));
+        return view('coursebundles::livewire.tutor.bundle-listing.bundle-listing', compact('bundles'));
     }
 
     #[On('delete-course-bundle')]

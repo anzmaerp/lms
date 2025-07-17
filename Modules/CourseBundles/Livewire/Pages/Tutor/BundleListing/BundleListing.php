@@ -17,9 +17,7 @@ class BundleListing extends Component
     public $isLoading = true;
     public $filters = [];
     public $bundleId = 0;
-    public $statuses = [
-        
-    ];
+    public $statuses = [];
     public $perPage = 10;
     public $parPageList = [10, 20, 30, 40, 50];
 
@@ -34,16 +32,22 @@ class BundleListing extends Component
     public function render()
     {
         $bundles = [];
-            $bundles = (new BundleService())->getBundles(
-                instructorId: auth()->user()?->id,
-                with: ['thumbnail:mediable_id,mediable_type,type,path'],
-                withCount: ['courses'],
-                withSum: ['courses' => 'content_length'],
-                filters: $this->filters,
-                perPage: $this->perPage
-            );
+        $bundles = (new BundleService())->getBundles(
+            instructorId: $this->isAdmin() ? null : auth()->user()?->id,
+            with: ['thumbnail:mediable_id,mediable_type,type,path'],
+            withCount: ['courses'],
+            withSum: ['courses' => 'content_length'],
+            filters: $this->filters,
+            perPage: $this->perPage
+        );
         return view('coursebundles::livewire.tutor.bundle-listing.bundle-listing', compact('bundles'));
     }
+    protected function isAdmin(): bool
+    {
+        return auth()->check() && auth()->user()?->role === 'admin';
+    }
+
+
 
     public function resetFilters()
     {

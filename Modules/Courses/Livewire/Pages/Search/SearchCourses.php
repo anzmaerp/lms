@@ -17,7 +17,11 @@ class SearchCourses extends Component
 
     public $isLoading = true;
     public $showClearFilters = false;
+    #[Url(as: 'q')]
+    public $q = '';
 
+    #[Url(as: 'type')]
+    public $type = 'courses';
     public $perPage;
     public $languages;
     public $levels;
@@ -53,9 +57,9 @@ class SearchCourses extends Component
     ];
 
 
-    public function mount()
+    public function mount($q = null, $type = null)
     {
-        if(!empty($this->tutor_id)){
+        if (!empty($this->tutor_id)) {
             $this->user = (new CourseService())->getUser($this->tutor_id);
         }
         $this->isLoading            = true;
@@ -63,10 +67,15 @@ class SearchCourses extends Component
         $this->perPage              = 9;
 
 
+
+        if ($this->type === 'courses' && $this->q) {
+            $this->filters['keyword'] = $this->q;
+        }
+
         $this->categories   = (new CourseService())->getCategories();
         $this->levels       = (new CourseService())->getLevels();
         $this->languages    = (new CourseService())->getLanguages();
-        
+
         $ratingCounts = (new CourseService())->getCourseByRating()
             ->pluck('average_rating')
             ->filter(function ($value) {
@@ -95,17 +104,17 @@ class SearchCourses extends Component
 
         $this->toggleShowClearFilters();
     }
-    
+
     public function closeTutorDetail()
     {
         $this->tutor_id = null;
         $this->dispatch('closeTutorDetail');
-
     }
 
     public function toggleShowClearFilters()
     {
-        if (!empty($this->filters['keyword']) || 
+        if (
+            !empty($this->filters['keyword']) ||
             !empty($this->filters['levels']) ||
             !empty($this->filters['languages']) ||
             !empty($this->filters['per_page']) ||
@@ -126,6 +135,13 @@ class SearchCourses extends Component
 
     public function render()
     {
+        // \Log::info('Livewire URL inputs: q=' . $this->q . ', type=' . $this->type);
+        $filters = array_merge($this->filters, [
+            'categories' => $this->searchCategories,
+            'languages' => $this->searchLanguages,
+            'status' => 'active',
+        ]);
+
         $courses = (new CourseService())->getCourses(
             instructorId: !empty($this->tutor_id) ? $this->tutor_id : null,
             with: [
@@ -139,10 +155,8 @@ class SearchCourses extends Component
                 'thumbnail',
             ],
             withCount: ['ratings', 'curriculums'],
-            withAvg: [
-                'ratings' => 'rating',
-            ],
-            filters: array_merge($this->filters, ['categories' => $this->searchCategories, 'languages' => $this->searchLanguages, 'status' => 'active',]),
+            withAvg: ['ratings' => 'rating'],
+            filters: $filters,
             perPage: $this->perPage
         );
 
@@ -153,14 +167,13 @@ class SearchCourses extends Component
         $this->totalCourses = (new CourseService())->getAllCourses(filters: ['status' => 'active'])->count();
         $this->paidCourses  = (new CourseService())->getPaidCourses()->count();
 
-
-
         return view('courses::livewire.search.search-courses', [
             'courses' => $courses,
         ])->extends('layouts.frontend-app', [
-            'pageTitle' => 'Search Courses'
+            'pageTitle' => 'Search Courses',
         ]);
     }
+
 
     public function updateFiltersAvgRating($rating)
     {
@@ -229,8 +242,8 @@ class SearchCourses extends Component
     public function isLiked($course)
     {
         $response = isDemoSite();
-        if( $response ){
-            $this->dispatch('showAlertMessage', type: 'error', title:  __('general.demosite_res_title') , message: __('general.demosite_res_txt'));
+        if ($response) {
+            $this->dispatch('showAlertMessage', type: 'error', title: __('general.demosite_res_title'), message: __('general.demosite_res_txt'));
             return;
         }
         return $course->likes()->where('user_id', Auth::id())->exists();
@@ -239,8 +252,8 @@ class SearchCourses extends Component
     public function likeCourse($courseId)
     {
         $response = isDemoSite();
-        if( $response ){
-            $this->dispatch('showAlertMessage', type: 'error', title:  __('general.demosite_res_title') , message: __('general.demosite_res_txt'));
+        if ($response) {
+            $this->dispatch('showAlertMessage', type: 'error', title: __('general.demosite_res_title'), message: __('general.demosite_res_txt'));
             return;
         }
         if (!Auth::check()) {
