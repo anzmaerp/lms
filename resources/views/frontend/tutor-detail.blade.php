@@ -227,7 +227,7 @@
     </div>
 </div>
 
-<div class="am-aboutuser_section">
+ {{-- <div class="am-aboutuser_section">
     <div class="container">
         <div class="row">
             <div class="col-12">
@@ -290,7 +290,7 @@
             </div>
         </div>
     </div>
-</div>
+</div> --}}
 <div class="am-tutor-detail">
     <div class="am-booking_section" id="availability">
         <div class="container">
@@ -527,7 +527,7 @@
         <livewire:components.students-reviews :user="$tutor" lazy />
     </div>
     <livewire:components.similar-tutors :user="$tutor" lazy />
-</div>
+</div> 
 @endsection
 
 

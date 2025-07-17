@@ -844,5 +844,5 @@ return [
     'enter_terms_conditions_url' => 'Enter Terms and Conditions Url',
     'enter_copy_right_ar' => 'Enter Copy Rights in Arabic',
     'enter_copy_right_en' => 'Enter Copy Rights in English',
-    'search_tutor_lec' => 'Search for courses or lectures',
+    'search_tutor_course' => 'Search for courses or lectures',
 ];

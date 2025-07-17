@@ -6,7 +6,7 @@
     x-init="if(!timezone) {
         $wire.set('timezone', defaultTimeZone, false);
     }">
-    @if(empty($pageLoaded))
+     @if(empty($pageLoaded))
         <div class="am-booking-skeleton">
             @include('skeletons.book-sessions')
         </div>
@@ -366,7 +366,7 @@
             </div>
         </div>
         <x-slot-detail-modal :cartItems="$cartItems" :timezone="$timezone" :currentSlot="$currentSlot" :user="$user" wire:key="{{ time() }}" />
-    @endif
+    @endif  
     <div wire:ignore.self class="modal fade am-requestsessionpopup" id="requestsession-popup" data-bs-backdrop="static" x-data="{requestSessionForm: @entangle('requestSessionForm')}">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
