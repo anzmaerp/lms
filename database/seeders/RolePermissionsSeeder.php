@@ -66,6 +66,7 @@ class RolePermissionsSeeder extends Seeder
             'can-manage-dispute',
             'can-manage-disputes-list',
             'can-create-course-bundle',
+            'edit-course-bundle',
             'can-manage-admin-users'
         ];
 

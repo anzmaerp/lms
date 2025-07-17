@@ -153,4 +153,5 @@ return [
     'bundle_not_found'                                  => 'لم يتم العثور على الحزمة',
     'select_instructor' => 'اختر المعلم',
     'select_instructor_placeholder' => 'اختر أحد المعلمين لإسناد الباقة إليه',
+    'created_by' => 'تم الإنشاء بواسطة'
 ];

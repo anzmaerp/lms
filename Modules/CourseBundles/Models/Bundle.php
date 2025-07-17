@@ -46,6 +46,7 @@ class Bundle extends Model
         'price',
         'discount_percentage',
         'status',
+        'created_by',
     ];
 
     protected $casts = [
@@ -85,7 +86,7 @@ class Bundle extends Model
         return $this->morphOne(Media::class, 'mediable');
     }
 
-    
+
     /**
      * Get the purchases for the bundle.
      *
@@ -96,7 +97,7 @@ class Bundle extends Model
         return $this->hasMany(BundlePurchase::class);
     }
 
-    
+
     /**
      * Get the courses for the bundle.
      *
@@ -106,8 +107,8 @@ class Bundle extends Model
     {
         return $this->belongsToMany(Course::class, (config('coursebundles.db_prefix') ?? 'courses_') . 'course_bundles', 'bundle_id', 'course_id');
     }
-    
-    
+
+
     /**
      * Get the course bundles for the bundle.
      *
@@ -117,12 +118,15 @@ class Bundle extends Model
     {
         return $this->hasMany(CourseBundle::class);
     }
-    
-     /**Get bundle media */
-     public function media(): MorphOne
-     {
-         return $this->morphOne(Media::class, 'mediable');
-     }
-    
-    
+
+    /**Get bundle media */
+    public function media(): MorphOne
+    {
+        return $this->morphOne(Media::class, 'mediable');
+    }
+
+    public function createdBy(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
 }

@@ -16,6 +16,8 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/amazeui@2.7.2/dist/css/amazeui.min.css">
+
 
     {{-- Vite CSS --}}
     {{-- {{ module_vite('build-ipmanager', 'resources/assets/sass/app.scss', storage_path('vite.hot')) }} --}}

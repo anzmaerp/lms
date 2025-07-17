@@ -19,7 +19,7 @@ class CreateBundle extends Component
 
     public $bundleId;
     public $bundle;
-    public $courses;
+    public $courses = [];
     public $selectedCourses = [];
     public $course_description;
     public $short_description;
@@ -51,32 +51,48 @@ class CreateBundle extends Component
         $this->isAdmin = auth()->user()->hasRole('admin');
 
         if (!empty($id) && !is_numeric($id)) {
-            return abort(404);
+            abort(404);
         }
-
         if ($this->isAdmin) {
-            $this->instructors = User::whereHas(
-                'roles',
-                fn($query) =>
-                $query->where('name', 'tutor')
-            )->with('profile:id,user_id,first_name,last_name')->get();
-            // $this->instructorId = request()->get('instructorId') ?? auth()->id();
+            $this->instructors = User::whereHas('roles', fn($q) => $q->where('name', 'tutor'))
+                ->with('profile:id,user_id,first_name,last_name')
+                ->get();
         } else {
             $this->instructorId = auth()->id();
         }
-
         if (!empty($id)) {
             $this->bundleId = $id;
             $this->getBundleDetails($this->bundleId);
+
+            if ($this->isAdmin && $this->bundle) {
+                $this->instructorId = $this->bundle->instructor_id;
+            }
+
+            if ($this->bundle && $this->bundle->courses) {
+                $this->selectedCourses = $this->bundle->courses->pluck('id')->toArray();
+                $this->selected_courses = $this->selectedCourses;
+
+                $this->bundle_courses = $this->bundle->courses->map(fn($c) => ['id' => $c->id, 'text' => $c->title]);
+            }
         }
 
-        $this->courses = (new CourseService())->getAllCourses(
-            instructorId: $this->instructorId,
-            filters: ['status' => 'active'],
-            with: ['pricing:id,course_id,price,discount,final_price']
-        );
+        if ($this->instructorId) {
+            $activeCourses = (new CourseService())->getAllCourses(
+                instructorId: $this->instructorId,
+                filters: ['status' => 'active'],
+                with: ['pricing:id,course_id,price,discount,final_price']
+            )->map(fn($course) => [
+                'id' => $course->id,
+                'text' => $course->title ?? 'Untitled Course #' . $course->id,
+            ]);
 
-
+            $this->courses = collect($this->bundle_courses ?? [])
+                ->merge($activeCourses)
+                ->unique('id')
+                ->values();
+        } else {
+            $this->courses = [];
+        }
 
         $image_file_ext = setting('_general.allowed_image_extensions') ?? 'jpg,png';
         $image_file_size = (int)(setting('_general.max_image_size') ?? '5');
@@ -84,6 +100,7 @@ class CreateBundle extends Component
         $this->allowImgFileExt = explode(',', $image_file_ext);
         $this->fileExt = fileValidationText($this->allowImgFileExt);
     }
+
 
     #[Layout('layouts.app')]
     public function render()
@@ -151,10 +168,8 @@ class CreateBundle extends Component
             $this->dispatch('showAlertMessage', type: 'error', title: __('general.demosite_res_title'), message: __('general.demosite_res_txt'));
             return;
         }
-
         $extensions = $this->allowImgFileExt ?: ['jpg', 'png'];
         $max_size = $this->allowImageSize;
-
         $file_extension = $this->image->getClientOriginalExtension();
         $file_size = $this->image->getSize() / 1024 / 1024;
 
@@ -190,6 +205,7 @@ class CreateBundle extends Component
                 'description' => $this->course_description ?? '',
                 'price' => $this->price ?? 0,
                 'discount_percentage' => $this->discount ?? 0,
+                'created_by' => auth()->id(),
             ];
 
             $bundle = (new BundleService())->createCourseBundle($data);
@@ -226,12 +242,11 @@ class CreateBundle extends Component
             $this->dispatch('showAlertMessage', type: 'error', title: __('general.demosite_res_title'), message: __('general.demosite_res_txt'));
             return;
         }
-
         $this->validate((new BundleRequest())->rules(), (new BundleRequest())->messages(), (new BundleRequest())->attributes());
 
         $bundle = (new BundleService())->getBundle(
             bundleId: $bundleId,
-            instructorId: auth()->id(),
+            instructorId: $this->isAdmin ? null : auth()->id(),
             status: 'draft'
         );
 
@@ -271,46 +286,43 @@ class CreateBundle extends Component
 
         return redirect()->route('coursebundles.tutor.bundles');
     }
+
     public function updatedInstructorId()
     {
-        logger('Updated instructorId to: ' . $this->instructorId);
-
         $courses = (new CourseService())->getAllCourses(
             instructorId: $this->instructorId,
             filters: ['status' => 'active'],
             with: ['pricing:id,course_id,price,discount,final_price']
         );
 
-        // فقط id و text علشان Select2
         $mappedCourses = $courses->map(fn($course) => [
             'id' => $course->id,
             'text' => $course->title,
         ]);
+        $allCourses = collect($this->bundle_courses ?? [])
+            ->merge($mappedCourses)
+            ->unique('id')
+            ->values();
 
-        $this->courses = $mappedCourses;
+        $this->courses = $allCourses;
 
         $this->dispatch('initSelect2', [
             'target' => '.am-select2',
-            'data' => $mappedCourses
+            'data' => $allCourses,
+            'selected' => $this->selected_courses
         ]);
     }
-
-
-
-
-
 
     public function getBundleDetails($id)
     {
         $this->bundle = (new BundleService())->getBundle(
             bundleId: $id,
-            instructorId: auth()->id(),
+            instructorId: $this->isAdmin ? null : auth()->id(),
             relations: [
                 'thumbnail:id,mediable_id,mediable_type,type,path',
                 'courses:id,title'
             ]
         );
-
         if (empty($this->bundle)) {
             abort(404);
         }
@@ -326,5 +338,10 @@ class CreateBundle extends Component
         $this->selected_courses = $this->bundle->courses->pluck('id')->toArray();
         $this->bundle_courses = $this->bundle->courses->map(fn($c) => ['id' => $c->id, 'text' => $c->title]);
         $this->image = $this->bundle->thumbnail;
+        $this->dispatch('initSelect2', [
+            'target' => '.am-select2',
+            'data' => $this->bundle_courses,
+            'selected' => $this->selected_courses
+        ]);
     }
 }

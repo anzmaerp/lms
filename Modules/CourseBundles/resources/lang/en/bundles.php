@@ -154,4 +154,6 @@ return [
     'bundle_not_found'                                  => 'Bundle not found',
     'select_instructor' => 'Select Instructor',
     'choose_instructor' => 'Choose Instructor',
+    'created_by' => 'Created By'
+
 ];

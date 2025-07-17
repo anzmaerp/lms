@@ -1,5 +1,7 @@
+{{-- @push('styles')
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+@endpush --}}
 <div class="am-cr-bundle">
-    <p><strong>Selected Instructor ID:</strong> {{ $instructorId }}</p>
 
     <div class="am-userperinfo">
         <div class="am-title_wrap">
@@ -12,7 +14,7 @@
             <div class="form-group @error('instructorId') am-invalid @enderror">
                 <label class="am-label am-important">{{ __('coursebundles::bundles.select_instructor') }}</label>
                 <div class="form-control_wrap">
-<select wire:model="instructorId" data-componentid="@this">
+                    <select wire:model="instructorId" data-componentid="@this">
                         <option value="">{{ __('coursebundles::bundles.select_instructor_placeholder') }}</option>
                         @foreach ($instructors as $instructor)
                             <option value="{{ $instructor->id }}">
@@ -279,112 +281,111 @@
 @endpush
 
 @push('scripts')
+    {{-- <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script> --}}
     <script defer src="{{ asset('summernote/summernote-lite.min.js') }}"></script>
 
-    
-<script type="text/javascript">
-    let courses = @json($courses);
 
-    document.addEventListener('livewire:initialized', function () {
-        setTimeout(() => {
-            populateLanguageList();
-            initInstructorSelect(); 
-        }, 500);
 
-        window.addEventListener('initSelect2', function (e) {
-            const { target, data } = e.detail;
+    <script type="text/javascript">
+        let courses = @json($courses);
 
-            courses = data; // ← تحديث الكورسات المستخدمة في حساب السعر وغيره
+        document.addEventListener('livewire:initialized', function() {
+            setTimeout(() => {
+                populateLanguageList();
+                initInstructorSelect();
+            }, 500);
 
-            $(target).empty(); // تفريغ الاختيارات السابقة
+            window.addEventListener('initSelect2', function(e) {
+                const {
+                    target,
+                    data,
+                    selected
+                } = e.detail;
 
-            $(target).select2({
-                data: data.map(item => ({
-                    id: item.id,
-                    text: item.text
-                })),
-                placeholder: "اختر دورة"
+                $(target).empty().select2({
+                    data: data.map(item => ({
+                        id: item.id,
+                        text: item.text
+                    })),
+                    placeholder: "اختر دورة"
+                });
+
+                if (selected) {
+                    $(target).val(selected).trigger('change');
+                }
+
+                populateLanguageList();
+                calculateTotalPrice();
             });
 
-            $(target).trigger('change'); // ← لتحديث القيمة
-            populateLanguageList();
-            calculateTotalPrice();
-        });
-
-        // ✅ لما المستخدم يغير الدورات المختارة
-        $(document).on("change", ".languages", function (e) {
-            let componentId = $(this).attr('data-componentid');
-            let component = Livewire.find(componentId);
-
-            if (component) {
-                component.set('selected_courses', $(this).val(), false);
-            }
-
-            populateLanguageList();
-            calculateTotalPrice();
-        });
-
-        // ✅ كود ربط instructorId بـ Livewire
-        function initInstructorSelect() {
-            const $select = $('select[wire\\:model="instructorId"]');
-
-            if (!$select.hasClass("select2-hidden-accessible")) {
-                $select.select2();
-            }
-
-            $(document).on('change', 'select[wire\\:model="instructorId"]', function () {
-                let val = $(this).val();
-                let componentId = $(this).closest('[wire\\:id]').attr('wire:id');
+            $(document).on("change", ".languages", function(e) {
+                let componentId = $(this).attr('data-componentid');
                 let component = Livewire.find(componentId);
 
                 if (component) {
-                    component.set('instructorId', val);
+                    component.set('selected_courses', $(this).val(), false);
                 }
-            });
-        }
 
-        // ✅ عرض قائمة الدورات المختارة
-        function populateLanguageList() {
-            let languages = $('.languages').select2('data');
-
-            var lang_html = '<ul class="tu-labels">';
-            $.each(languages, function (index, elem) {
-                lang_html += `<li><span>${elem.text} <a href="javascript:void(0);" class="removeCourse" data-id="${elem.id}"><i class="am-icon-multiply-02"></i></a></span></li>`;
-            });
-            lang_html += '</ul>';
-
-            $('.languageList').html(lang_html);
-        }
-
-        // ✅ حذف دورة من القائمة المختارة
-        $("body").on("click", ".removeCourse", function () {
-            let id = $(this).attr('data-id');
-            var newArray = [];
-
-            $('.languages').select2('data').forEach((value) => {
-                if (value['id'] != id) newArray.push(value['id']);
+                populateLanguageList();
+                calculateTotalPrice();
             });
 
-            $('.languages').val(newArray).trigger('change');
-            populateLanguageList();
+            function initInstructorSelect() {
+                const $select = $('select[wire\\:model="instructorId"]');
+
+                if (!$select.hasClass("select2-hidden-accessible")) {
+                    $select.select2();
+                }
+
+                $(document).on('change', 'select[wire\\:model="instructorId"]', function() {
+                    let val = $(this).val();
+                    let componentId = $(this).closest('[wire\\:id]').attr('wire:id');
+                    let component = Livewire.find(componentId);
+
+                    if (component) {
+                        component.set('instructorId', val);
+                    }
+                });
+            }
+
+            function populateLanguageList() {
+                let languages = $('.languages').select2('data');
+
+                var lang_html = '<ul class="tu-labels">';
+                $.each(languages, function(index, elem) {
+                    lang_html +=
+                        `<li><span>${elem.text} <a href="javascript:void(0);" class="removeCourse" data-id="${elem.id}"><i class="am-icon-multiply-02"></i></a></span></li>`;
+                });
+                lang_html += '</ul>';
+
+                $('.languageList').html(lang_html);
+            }
+
+            $("body").on("click", ".removeCourse", function() {
+                let id = $(this).attr('data-id');
+                var newArray = [];
+
+                $('.languages').select2('data').forEach((value) => {
+                    if (value['id'] != id) newArray.push(value['id']);
+                });
+
+                $('.languages').val(newArray).trigger('change');
+                populateLanguageList();
+            });
+
+            function calculateTotalPrice() {
+                let selectedIds = $('.languages').val();
+                let totalPrice = 0;
+
+                selectedIds.forEach(id => {
+                    let course = courses.find(c => c.id == id);
+                    if (course && course.price) {
+                        totalPrice += parseFloat(course.price);
+                    }
+                });
+
+                $('.regular-price-input').val(totalPrice ? totalPrice.toFixed(2).replace(/\.00$/, '') : null);
+            }
         });
-
-        // ✅ حساب السعر الإجمالي
-        function calculateTotalPrice() {
-            let selectedIds = $('.languages').val();
-            let totalPrice = 0;
-
-            selectedIds.forEach(id => {
-                let course = courses.find(c => c.id == id);
-                if (course && course.price) {
-                    totalPrice += parseFloat(course.price);
-                }
-            });
-
-            $('.regular-price-input').val(totalPrice ? totalPrice.toFixed(2).replace(/\.00$/, '') : null);
-        }
-    });
-</script>
-
-
+    </script>
 @endpush
