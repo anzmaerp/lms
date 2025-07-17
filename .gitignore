@@ -73,3 +73,10 @@ bgshape.png
 # Local development files
 lernen.zip
 lernenNew.zip
+
+# Ignore all lang directories
+Modules/*/Resources/lang/
+packages/**/lang/
+packages/*/lang/
+packages/*/*/lang/
+/lang
