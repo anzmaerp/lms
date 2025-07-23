@@ -10,6 +10,13 @@ class CouponService
 
     public function updateOrCreateCoupon($data)
     {
+        if (isset($data['couponable_id']) && is_array($data['couponable_id'])) {
+            $data['couponable_id'] = json_encode($data['couponable_id']);
+        }
+
+        if (isset($data['conditions']) && is_array($data['conditions'])) {
+            $data['conditions'] = json_encode($data['conditions']);
+        }
         $coupon = Coupon::updateOrCreate(['id' => $data['id']], $data);
         return $coupon;
     }
@@ -17,7 +24,7 @@ class CouponService
     public function deleteCoupon($id)
     {
         $coupon = Coupon::find($id);
-        if($coupon) {
+        if ($coupon) {
             $coupon->delete();
             return true;
         }
@@ -28,21 +35,29 @@ class CouponService
     {
         $query = Coupon::where('user_id', $userId);
 
-        if($status == 'active') {
+        if ($status == 'active') {
             $query->whereDate('expiry_date', '>=', now()->toDateString());
         } else {
             $query->whereDate('expiry_date', '<', now()->toDateString());
         }
 
-        if(!empty($where)) {
-            $query->where($where);
+        if (!empty($where['couponable_type'])) {
+            $query->where('couponable_type', $where['couponable_type']);
+        }
+        if (!empty($where['couponable_ids']) && is_array($where['couponable_ids'])) {
+            $query->where(function ($q) use ($where) {
+                foreach ($where['couponable_ids'] as $id) {
+                    $q->orWhereRaw('JSON_CONTAINS(couponable_id, ?)', [json_encode((string)$id)]);
+                }
+            });
         }
 
-        if($keyword) {
-            $query->where('code', 'like', '%'.$keyword.'%');
+        if ($keyword) {
+            $query->where('code', 'like', '%' . $keyword . '%');
         }
 
-        $query->withWhereHas('couponable');
+$query->with('couponable');
+     logger()->info('Final Coupon Query', ['sql' => $query->toSql(), 'bindings' => $query->getBindings()]);
 
         return $query->orderBy('id', 'desc')->paginate(setting('_general.per_page_opt') ?? 10);
     }

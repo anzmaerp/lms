@@ -149,7 +149,7 @@ class KuponDeal
         if ($coupon->couponable_type == UserSubjectGroupSubject::class) {
             $cartItems = CartItem::whereHasMorph('cartable', SlotBooking::class, function($query) use ($coupon){
                 $query->whereHas('slot.subjectGroupSubjects', function($query) use ($coupon){
-                    $query->where('id', $coupon->couponable_id);
+                    $query->whereIn('id', $coupon->couponable_id);
                 });
             })->when($appliedDiscount, function($query){
                 $query->where('discount_amount', '>', 0);
@@ -157,7 +157,7 @@ class KuponDeal
         } else {
             $cartItems = CartItem::where('user_id', auth()->id())
                 ->where('cartable_type', $coupon->couponable_type)
-                ->where('cartable_id', $coupon->couponable_id)
+                ->whereIn('cartable_id', $coupon->couponable_id)
                 ->when($appliedDiscount, function($query){
                     $query->where('discount_amount', '>', 0);
                 })->get();
