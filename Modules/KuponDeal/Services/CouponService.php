@@ -33,9 +33,14 @@ class CouponService
 
     public function getCoupons($userId, $status = 'active', $keyword = '', $where = [])
     {
-        $query = Coupon::where('user_id', $userId);
+        $query = Coupon::query();
 
-        if ($status == 'active') {
+        if (!auth()->user()?->hasRole('admin')) {
+            $finalUserId = $where['instructor_id'] ?? $userId;
+            $query->where('instructor_id', $finalUserId);
+        }
+
+        if ($status === 'active') {
             $query->whereDate('expiry_date', '>=', now()->toDateString());
         } else {
             $query->whereDate('expiry_date', '<', now()->toDateString());
@@ -44,6 +49,7 @@ class CouponService
         if (!empty($where['couponable_type'])) {
             $query->where('couponable_type', $where['couponable_type']);
         }
+
         if (!empty($where['couponable_ids']) && is_array($where['couponable_ids'])) {
             $query->where(function ($q) use ($where) {
                 foreach ($where['couponable_ids'] as $id) {
@@ -56,11 +62,11 @@ class CouponService
             $query->where('code', 'like', '%' . $keyword . '%');
         }
 
-$query->with('couponable');
-     logger()->info('Final Coupon Query', ['sql' => $query->toSql(), 'bindings' => $query->getBindings()]);
+$query->with(['couponable', 'user.profile']);
 
-        return $query->orderBy('id', 'desc')->paginate(setting('_general.per_page_opt') ?? 10);
+        return $query->orderByDesc('id')->paginate(setting('_general.per_page_opt') ?? 10);
     }
+
 
     public function getCoupon($id)
     {

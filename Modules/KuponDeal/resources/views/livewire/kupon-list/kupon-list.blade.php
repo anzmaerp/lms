@@ -58,7 +58,7 @@
                                         @else
                                             <em>{{ __('kupondeal::kupondeal.subject') }}:</em>
                                             <div class="kd-coupon_item_title_content">
-                                                <em>{{ $coupon->couponable->subject?->name ?? ' ' }}</em>
+                                                <em>{{ $coupon->couponable->subject?->name ?? '' }}</em>
                                                 <span class="am-tooltip-text">
                                                     <span>{{ $coupon->couponable->subject?->name ?? '' }}</span>
                                                 </span>
@@ -106,6 +106,8 @@
                                     </h3>
                                     <span>{{ __('kupondeal::kupondeal.valid_until') }}:
                                         {{ date('d M Y', strtotime($coupon->expiry_date)) }}</span>
+
+
                                 </div>
                             </div>
                         </li>

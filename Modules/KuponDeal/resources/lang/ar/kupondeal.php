@@ -74,5 +74,9 @@ return [
     'minimum_order_field_error' => 'مطلوب الحد الأدنى لمبلغ الطلب',
     'coupon_apply_failed' => 'لا يمكن تطبيق القسيمة لأن الشروط لم يتم تحقيقها.',
     'description' => 'الوصف',
-'enter_description' => 'اكتب وصف الكوبون هنا',
+    'enter_description' => 'اكتب وصف الكوبون هنا',
+    'select_instructor' => 'اختر معلم',
+    'select_instructor_placeholder' => 'اختر أحد المعلمين',
+    'created_by' => 'تم الإنشاء بواسطة'
+
 ];

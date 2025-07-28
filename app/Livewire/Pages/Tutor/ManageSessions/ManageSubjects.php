@@ -48,7 +48,6 @@ class ManageSubjects extends Component
         $image_file_size          = setting('_general.max_image_size');
         $this->allowImgFileExt   = !empty( $image_file_ext ) ?  explode(',', $image_file_ext) : ['jpg', 'png'];
         $this->allowImageSize    = (int) (!empty( $image_file_size ) ? $image_file_size : '3');
-
         $this->subjects = $this->subjectService->getSubjects()?->pluck('name','id')?->toArray() ?? [];
 
     }

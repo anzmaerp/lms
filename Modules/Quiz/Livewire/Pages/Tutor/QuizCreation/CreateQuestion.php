@@ -350,7 +350,7 @@ class CreateQuestion extends Component
 
         (new QuestionService())->deleteQuestionMedia($question);
 
-        if ($question && $questionMedia['path']) {
+        if ($question && is_array($questionMedia) && $questionMedia['path']) {
             (new QuestionService)->createQuestionMedia([
                 'mediable_id' => $question->id,
                 'mediable_type' => Question::class,

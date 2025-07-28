@@ -75,4 +75,8 @@ return [
     'coupon_apply_failed' => 'The coupon cannot be applied as the conditions have not been met.',
     'description' => 'Description',
     'enter_description' => 'Enter the coupon description here',
+    'select_instructor' => 'Select Instructor',
+    'select_instructor_placeholder' => 'choose one of instructors',
+    'created_by' => 'Created By'
+
 ];

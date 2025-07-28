@@ -16,12 +16,16 @@ class Coupon extends Model
         'auto_apply'            => 'boolean',
         'conditions'            => 'array'
     ];
-    
+
     public const CONDITION_FIRST_ORDER = 'first_purchase';
     public const CONDITION_MINIMUM_ORDER = 'minimum_order';
 
     public function couponable()
     {
         return $this->morphTo();
+    }
+    public function user()
+    {
+        return $this->belongsTo(\App\Models\User::class, 'user_id');
     }
 }
