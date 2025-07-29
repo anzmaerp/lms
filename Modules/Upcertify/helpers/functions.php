@@ -29,6 +29,7 @@ if (!function_exists('get_certificates')) {
 
 if (!function_exists('generate_certificate')) {
     function generate_certificate($template_id, $generated_for_type, $generated_for_id, $wildcard_data = []) {
+            \Log::info('📜 Running generate_certificate() for user ID: ' . $generated_for_id);
 
         if (empty($template_id) || !is_string($generated_for_type) || empty($generated_for_id) || !is_array($wildcard_data)) {
             throw new InvalidArgumentException('Invalid input parameters');

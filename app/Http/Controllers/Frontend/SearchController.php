@@ -44,7 +44,6 @@ class SearchController extends Controller
         $filters['sort_by']      = $request->get('sort_by') ?? null;
         $filters['type']   = $type ?? null;     
 
-
         return view('frontend.find-tutors', compact('subjectGroups', 'subjects', 'helpContent', 'countries', 'languages', 'filters', 'searchOnlyCities', 'selectedCountry'));
     }
 

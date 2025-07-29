@@ -1003,7 +1003,6 @@
                 }
             });
         }
-
         document.addEventListener("DOMContentLoaded", (event) => {
             jQuery(document).on('click', '.cr-sidebar_toggle', function() {
             jQuery('.cr-sidebar').toggleClass('cr-togglesidebar');

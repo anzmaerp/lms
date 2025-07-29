@@ -305,6 +305,7 @@ class CourseTaking extends Component
         }
 
         if ($this->progress >= 100) {
+            \Log::info('🎯 Progress reached 100%. Initiating certificate logic.');
 
             if (isActiveModule('upcertify')  && !empty($this->course?->certificate_id)) {
                 $metaData = $this->course->meta_data ?? null;
@@ -377,26 +378,26 @@ class CourseTaking extends Component
 
                 foreach ($assignments as $assignment) {
                     $isAlreadyAssigned = (new \Modules\Assignments\Services\AssignemntsService())->getAssignedAssignment($assignment->id, auth()->user()->id);
-                   
+
                     if (!$isAlreadyAssigned && $assignment->status == 'published') {
                         $isAssigned = true;
                         $assignmentDetail = (new \Modules\Assignments\Services\AssignemntsService())->assignAssignment($assignment->id, [auth()->user()->id]);
                         $assignmentData   = Assignment::with('tutor.profile')->whereStatus(Assignment::STATUS_PUBLISHED)->find($assignmentDetail->assignment_id);
-                       
+
                         $emailData = [
                             'assignmentTitle'       => $assignment->title,
                             'studentName'           => $student?->profile?->full_name,
                             'tutorName'             => $assignmentData?->instructor?->profile?->full_name,
                             'assignedAssignmentUrl' => route('assignments.student.attempt-assignment', ['id' => $assignmentDetail?->id])
                         ];
-       
+
                         $notifyData = [
                             'assignmentTitle'       => $assignment->title,
                             'studentName'           => $student?->profile?->full_name,
                             'tutorName'             => $assignmentData?->instructor?->profile?->full_name,
                             'assignedAssignmentUrl' => route('assignments.student.attempt-assignment', ['id' => $assignmentDetail?->id])
                         ];
-                    
+
                         dispatch(new SendNotificationJob('assignedAssignment', $student, $emailData));
                         dispatch(new SendDbNotificationJob('assignedassignment', $student, $notifyData));
                     }
@@ -405,10 +406,8 @@ class CourseTaking extends Component
         }
         return $isAssigned;
     }
-
     public function generateCertificate()
     {
-
         $wildcard_data = [
             'tutor_name'         => $this->course?->instructor?->profile?->full_name ?? '',
             'student_name'       => auth()->user()->profile?->full_name ?? '',
@@ -433,7 +432,20 @@ class CourseTaking extends Component
             'tutor_email'        => $this->course?->instructor?->email ?? '',
         ];
 
-        generate_certificate(template_id: $this->course?->certificate_id, generated_for_type: 'App\Models\User', generated_for_id: auth()->user()->id, wildcard_data: $wildcard_data);
+        $certificate = generate_certificate(
+            template_id: $this->course?->certificate_id,
+            generated_for_type: 'App\Models\User',
+            generated_for_id: auth()->user()->id,
+            wildcard_data: $wildcard_data
+        );
+
+        $url = route('upcertify.certificate', $certificate->hash_id);
+
+        $this->dispatch('showAlertMessage', [
+            'type' => 'success',
+            'title' => __('courses::courses.certificate_success_title'),
+            'message' => __('courses::courses.certificate_awarded', ['url' => $url]),
+        ]);
     }
 
     public function submitRating()
@@ -463,19 +475,20 @@ class CourseTaking extends Component
         $this->studentRating = $courseRatings->ratings->where('student_id', auth()->id())->first();
     }
 
-    private function getCourseSingedUrl($path) {
+    private function getCourseSingedUrl($path)
+    {
         return URL::signedRoute('courses.secure.video', ['path' => Str::replace('courses/', '', $path)]);
     }
 
     private function setActiveCurriculmPath()
     {
-        if(!empty($this->activeCurriculum['media_path'])) {
-            if(getStorageDisk() !== 's3') {
+        if (!empty($this->activeCurriculum['media_path'])) {
+            if (getStorageDisk() !== 's3') {
                 $this->activeCurriculum['media_path'] = Storage::url($this->activeCurriculum['media_path']);
-            }else {
+            } else {
                 $this->activeCurriculum['media_path'] = Storage::url($this->activeCurriculum['media_path']);
             }
-        } else{
+        } else {
             $this->activeCurriculum['media_path'] = null;
         }
     }
