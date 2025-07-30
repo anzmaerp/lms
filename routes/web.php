@@ -142,11 +142,12 @@ Route::middleware(['locale', 'maintenance'])->group(function () {
         $q = $request->input('q');
 
         if ($type === 'courses') {
-            return redirect()->route('courses.search-courses', ['q' => $q, 'type' => 'courses']);
+            // return redirect()->route('courses.search-courses', ['q' => $q, 'type' => 'courses']);
+                    return redirect()->route('courses.search-courses', $request->query());
         }
-
         if ($type === 'tutors') {
-            return redirect()->route('find-tutors', ['q' => $q, 'type' => 'tutors']);
+            // return redirect()->route('find-tutors', ['q' => $q, 'type' => 'tutors']);
+            return redirect()->route('find-tutors', $request->query());
         }
 
         // fallback (optional)
@@ -160,5 +161,5 @@ Route::middleware(['locale', 'maintenance'])->group(function () {
         require __DIR__ . '/pagebuilder.php';
     }
 
-    route::get('home-four',[HomefourController::class,'index','index'])->name('home4');
+    // route::get('home-four',[HomefourController::class,'index','index'])->name('home4');
 });

@@ -58,6 +58,7 @@ return [
     'intermediate'                                  => 'متوسط',
     'expert'                                        => 'خبير',
     'course'                                        => 'دورة',
+    'courses'                                        => 'دورات مسجلة',
     'courses_available'                             => 'الدورات المتاحة',
     'course_available'                              => 'الدورة متاحة',
     // وسائط الدورة

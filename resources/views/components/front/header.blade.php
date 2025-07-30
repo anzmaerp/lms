@@ -237,14 +237,14 @@
                             <form method="GET" action="{{  route('search')  }}">
                                 <div
                                     style="display: flex; align-items: center; border-radius: 28px; overflow: hidden; border: 1px solid #ddd; height: 44px; background: #fff; box-shadow: 0 2px 6px rgba(0,0,0,0.08);">
-                                    <input type="search" name="q"
+                                    <input type="search" name="filters[keyword]"
                                         placeholder="{{ __('settings')['search_tutor_course'] }}"
                                         style="flex: 1; font-size: 15px; padding: 0 16px; border: none; outline: none; background: transparent; color: #333;">
 
                                     <select name="type"
                                         style="width: 100px; font-size: 13px; height: 100%; border: none; background: #f9f9f9; border-left: 1px solid #eee; padding: 0 10px; outline: none; color: {{ request('category') == 'courses' ? $theme_pri_color ?? '#007bff' : '#333' }}; cursor: pointer;">
-                                        <option value="tutors" style="color: {{ $theme_pri_color ?? '#007bff' }};">{{__('app')['tutors']}}</option>
-                                        <option value="courses" style="color: {{ $theme_pri_color ?? '#007bff' }};">{{__('app')['courses']}}</option>
+                                        <option value="tutors" style="color: {{ $theme_pri_color ?? '#007bff' }};">{{__('courses::courses.lecture')}}</option>
+                                        <option value="courses" style="color: {{ $theme_pri_color ?? '#007bff' }};">{{__('courses::courses.courses')}}</option>
                                     </select>
 
                                     <button type="submit"
