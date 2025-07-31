@@ -35,8 +35,7 @@ use App\Livewire\Pages\Common\ProfileSettings\IdentityVerification;
 
 
 Route::get('/dbNew', function () {
-    DB::statement('alter table orders add column  fawaterk_status longtext DEFAULT null;');
-    DB::statement('ALTER TABLE coupons ADD COLUMN instructor_id BIGINT(20) UNSIGNED NULL,ADD CONSTRAINT coupons_instructor_id_fk FOREIGN KEY (instructor_id) REFERENCES users(id);');
+    return 'No thing to do!';
 });
 
 // // Clear Cache For Application
