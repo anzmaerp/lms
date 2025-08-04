@@ -14,7 +14,8 @@ jobs:
       - name: 📂 Sync files
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with:
-          server: www.arch-space.org
+          # server: www.arch-space.org
+          server: 176.9.99.19
           username: "arch-space@arch-space.org"
           password: "Lhxcf2fUAacf"
           server-dir: /
