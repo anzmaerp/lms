@@ -18,7 +18,7 @@ class AdminUserRequest extends FormRequest {
             'first_name'         => 'required|string|min:3|max:255',
             'last_name'          => 'required|string|min:3|max:255',
             'gender'             => 'nullable|string|in:male,female',
-            'phone'              => 'required|string|min:10|max:15|unique:users,phone,' . $adminId . '|regex:/^01[\d\s\-]{7,13}$/',
+            'phone'              => 'required|string|min:3|max:255',
             'email'              => 'required|string|email|max:255|unique:users,email,' . $adminId,
             'permissions'        => 'required|array|min:1',
             'password'           => empty($adminId) ? ['required',Rules\Password::defaults()] : ['nullable',Rules\Password::defaults()],

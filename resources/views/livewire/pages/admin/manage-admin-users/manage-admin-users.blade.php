@@ -163,6 +163,32 @@
                                         @enderror
                                     </div>
                                     <div class="form-group">
+                                        <label class="tb-label">{{__('general.phone')}}</label>
+                                        <input type="text" class="form-control @error('form.phone') tk-invalid @enderror"
+                                            wire:model="form.phone" placeholder="{{__('general.phone_placeholder')}}">
+                                        @error('form.phone')
+                                        <div class="tk-errormsg">
+                                            <span>{{$message}}</span>
+                                        </div>
+                                        @enderror
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="tb-label">{{__('auth.gender')}}</label>
+                                        <div class="tk-error @error('form.gender') tk-invalid @enderror">
+                                            <select data-componentid="@this" class="am-select2 form-control"
+                                                data-searchable="true" data-parent="#tb-add-user" data-live='true'
+                                                id="gender" data-wiremodel="form.gender">
+                                                <option value="male">{{__('auth.male')}}</option>
+                                                <option value="female">{{__('auth.female')}}</option>
+                                            </select>
+                                        </div>
+                                        @error('form.gender')
+                                        <div class="tk-errormsg">
+                                            <span>{{$message}}</span>
+                                        </div>
+                                        @enderror
+                                    </div>
+                                    <div class="form-group">
                                         <label class="tb-label @if(empty($form->adminId)) tb-important @endif">{{__('general.password')}}</label>
                                         <input type="password" wire:model="form.password"
                                             class="form-control @error('form.password') tk-invalid @enderror"
