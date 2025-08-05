@@ -167,4 +167,5 @@ Route::middleware(['locale', 'maintenance'])->group(function () {
     }
 
     // route::get('home-four',[HomefourController::class,'index','index'])->name('home4');
+    
 });
