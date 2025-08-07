@@ -69,7 +69,7 @@
         <header class="am-header_four">
 
             <div class="container">
-                <div class="row">
+                <div class="row m-2">
                     <div class="col-12">
                         <div class="am-header_two_wrap am-header-bg">
                             <strong class="am-logo">
@@ -115,7 +115,7 @@
     @elseif ($headerVariation == 'am-header_seven')
         <header class="am-header-six">
             <div class="container">
-                <div class="row">
+                <div class="row m-2">
                     <div class="col-12">
                         <div class="am-header_two_wrap">
                             <strong class="am-logo">
@@ -204,7 +204,7 @@
                     'privacy-policy',
                 ]),
         ])>
-            <div class="row">
+            <div class="row m-2">
                 <div class="col-12">
                     <div class="am-header_two_wrap">
                         <strong class="am-logo">

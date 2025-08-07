@@ -1872,7 +1872,7 @@ blockquote, address {
 }
 .am-primary-btn-white {
   border-radius: 9999px;
-  background: black;
+  background: rgb(255, 255, 255);
   border-color: #1464b5;
   border: 1px solid #1464b5;
   color: black;
@@ -4293,7 +4293,7 @@ form p span i {
   margin: 0;
   top: 70px;
   opacity: 0;
-  width: 200px;
+  width: fit-content;
   visibility: hidden;
   padding: 8px;
   margin-top: 15px;
@@ -4532,7 +4532,8 @@ form p span i {
   margin: 0 0 24px;
 }
 .am-flogo a {
-  width: 50%;
+  width: 50% !important;
+
   margin: 0;
   display: inline-block;
 }
