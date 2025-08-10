@@ -21247,6 +21247,7 @@ body:has(.am-dragfile):before {
 .am-banner_section {
   padding: 100px 0;
   position: relative;
+  top: 21%;
 }
 .am-banner_section::before {
   content: "";
@@ -21328,6 +21329,9 @@ body:has(.am-dragfile):before {
 }
 .am-banner_section .am-banner_images {
   max-width: 573px;
+}
+.page-home-nine{
+  overflow: hidden;
 }
 .page-home-nine .am-section_title_center {
   margin: 0 auto;
@@ -26867,6 +26871,7 @@ body:has(.am-dragfile):before {
   .am-header_two {
     padding-left: 0;
     padding-right: 0;
+    top: 1px;
   }
   .am-howtobook {
     right: 10px;
@@ -27283,6 +27288,7 @@ body:has(.am-dragfile):before {
   }
   .am-header_two {
     padding: 20px 0;
+    top: 1px;
   }
   .am-header_two_wrap .am-navigation {
     margin-left: auto;
