@@ -4424,13 +4424,13 @@ form p span i {
   stroke: white;
 }
 .am-footer {
-  padding: 80px 0 0;
+  padding: 20px 0 0;
   background: #10538f;
 }
 .am-footer_wrap {
   gap: 50px;
   display: flex;
-  padding-bottom: 40px;
+  padding-bottom: 5px;
 }
 .am-footer_logoarea {
   width: 100%;
@@ -4532,7 +4532,7 @@ form p span i {
   margin: 0 0 24px;
 }
 .am-flogo a {
-  width: 50% !important;
+  width: 30% !important;
 
   margin: 0;
   display: inline-block;
@@ -9850,7 +9850,7 @@ body:has(.am-dragfile):before {
 .am-mobile-logo {
   display: none;
   width: 150px;
-  height: 34px;
+  height: 20%;
 }
 .am-mobile-logo a {
   display: block;
@@ -25036,7 +25036,7 @@ body:has(.am-dragfile):before {
   }
   .am-mobile-logo {
     display: block;
-    margin-bottom: 30px;
+    /* margin-bottom: 30px; */
   }
   .am-fnavigation {
     max-width: 50%;
