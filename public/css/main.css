@@ -20442,6 +20442,7 @@ body:has(.am-dragfile):before {
   background: rgba(255, 255, 255, 0.1);
 }
 .am-sidebar-menu .navbar-nav .page-item-has-children > a {
+  background-color: white !important;
   position: relative;
 }
 .am-sidebar-menu .navbar-nav .page-item-has-children > a > i {
@@ -20451,7 +20452,7 @@ body:has(.am-dragfile):before {
   transform: translateY(-50%);
 }
 .am-sidebar-menu .navbar-nav .page-item-has-children > a > i::before {
-  color: #fff;
+  color: #0c4f9a;
 }
 .am-sidebar-menu .navbar-nav .page-item-has-children:hover > .sub-menu {
   top: 0;
