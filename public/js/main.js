@@ -540,26 +540,16 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 });
-// $('#searchInput').on('blur',function(){
-//     console.log('ff');
-    
-// })
-$('#searchInput').focus(function() {
-    $("#containerSearch").animate({ width: "900%" }, 300); // 300ms duration
+
+
+$('#searchInput').focus(function () {
+    if ($(window).width() >= 576){
+        $("#containerSearch").animate({ width: "70%" }, 300); // Expand on focus
+    }
 });
-// change  
-$('#searchInput').blur(function() {
-    checkMobile()
-     
+
+$('#searchInput').blur(function () {
+    if ($(window).width() >= 576) {
+        $("#containerSearch").animate({ width: "30%" }, 300); // Expand on focus
+    }
 });
-// dicted mobile screen 
-function checkMobile() {
-    if ($(window).width() <= 768) {
-
-        $("#containerSearch").animate({ width: "70%" }, 300);
-
-
-        console.log('Mobile screen detected!');
-
-}
-}
