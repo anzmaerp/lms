@@ -18837,6 +18837,7 @@ body:has(.am-dragfile):before {
 }
 /* FAQ Section style End */
 .am-banner-potential.am-banner-content-three {
+  overflow: hidden;
   position: relative;
 }
 .am-banner-potential.am-banner-content-three::before {
@@ -19743,7 +19744,7 @@ body:has(.am-dragfile):before {
 }
 .am-getstarted-btn {
   display: flex;
-  color: #fdfdfd;
+  color: #2d2b2b;
   padding: 14px 30px;
   align-items: center;
   border-radius: 50px;
