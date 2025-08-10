@@ -1,3 +1,4 @@
+
 <div class="am-profile-setting" wire:init="loadData">
     @include('livewire.pages.tutor.manage-sessions.tabs')
     @if($isLoading)
@@ -205,7 +206,7 @@
                                                                                                 sessionData.spaces        = @js($slot->spaces);
                                                                                                 sessionData.session_fee   = @js($slot->session_fee);
                                                                                                 sessionData.description   = @js($slot->description);
-                                                                                                sessionData.meeting_link  = @js($slot->meta_data['meeting_link'] ?? '');
+                                                                                                sessionData.meeting_link  = @js($slot->meta_data['meeting_link'] ?? 'ZOOOOOOOOOOOOM LINNK');
                                                                                                 sessionData.youtube_url   = @js($slot->meta_data['youtube_url'] ?? '');
                                                                                                 totalBooking              = @js($slot->total_booked);
                                                                                                 sessionData.action        = 'edit';
@@ -237,6 +238,7 @@
                                                                             <a href="#" @click=" sessionInfo = @js($sessionInfo);
                                                                                                 slotId                    = @js($slot->id);
                                                                                                 sessionData.youtube_url   = @js($slot->meta_data['youtube_url'] ?? '');
+                                                                                                 sessionData.meeting_link = @js($slot->meta_data['meeting_link'] ?? '');
                                                                                                 totalBooking              = @js($slot->total_booked);
                                                                                                 $nextTick(() => {
                                                                                                     $wire.dispatch('toggleModel' ,{ id: 'youtube-url-modal', action:'show'});

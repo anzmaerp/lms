@@ -8,6 +8,29 @@
         <fieldset>
             <div class="am-themeform__wrap">
                 <div class="form-group-wrap">
+                    @if(auth()->user()->hasRole('admin'))
+                        <div class="form-group @error('tutor_id') cr-invalid @enderror">
+                            <x-input-label class="am-important" for="tutor-select">{{ __('kupondeal::kupondeal.select_instructor') }}</x-input-label>
+                            <span class="am-select" wire:ignore>
+                                <select class="form-control am-select2" 
+                                        id="tutor-select" 
+                                        data-placeholder="{{ __('kupondeal::kupondeal.select_instructor_placeholder') }}" 
+                                        data-componentid="@this" 
+                                        data-live="true" 
+                                        data-searchable="true" 
+                                        data-wiremodel="tutor_id">
+                                    <option value="">{{ __('kupondeal::kupondeal.select_instructor_placeholder') }}</option>
+                                    @if (!empty($tutors))
+                                        @foreach($tutors as $tutor)
+                                            <option value="{{ $tutor->id }}" @if($tutor_id == $tutor->id) selected @endif>{{ $tutor->name }}</option>
+                                        @endforeach
+                                    @endif
+                                </select>
+                            </span>
+                            <x-input-error field_name='tutor_id' />
+                        </div>
+                    @endif
+
                     <div class="form-group @error('title') cr-invalid @enderror">
                         <x-input-label class="am-important" for="course-title">{{ __('courses::courses.course_title') }}</x-input-label>
                         <x-text-input class="form-control" type="text" wire:model='title' id="course-title" placeholder="{{ __('courses::courses.enter_course_title') }}" />

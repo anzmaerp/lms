@@ -34,7 +34,10 @@ class TutorSessions extends Component
     public $user;
     public $currentSlot = null;
     public $cartItems = [];
+    public $meetingLink = null;
+    public $currentBooking = null;
     public $selectedDate = null;
+
     private $bookingService, $subjectService;
 
     public RequestSessionForm $requestSessionForm;
@@ -58,7 +61,6 @@ class TutorSessions extends Component
     public function boot()
     {
         $this->bookingService = new BookingService($this->user);
-
     }
 
     public function mount($user)
@@ -69,7 +71,11 @@ class TutorSessions extends Component
         $this->currentDate = parseToUserTz(Carbon::now());
         $this->startOfWeek = (int) (setting('_lernen.start_of_week') ?? Carbon::SUNDAY);
         $this->subjectService = new SubjectService($user);
+        $this->timezone = getUserTimezone();
         $this->subjectGroups = $this->subjectService->getSubjectsByUserRole();
+            if (!empty($this->currentBooking)) {
+        $this->meetingLink = $this->bookingService->createSessionMeetingLink($this->currentBooking);
+    }
         if(Auth::check()){
             $this->timezone = getUserTimezone();
         }
@@ -85,7 +91,15 @@ class TutorSessions extends Component
     public function showSlotDetail($id) {
         $this->currentSlot =  $this->bookingService->getSlotDetail($id);
         $this->dispatch('toggleModel', id: 'slot-detail', action: 'show');
+            if ($this->currentSlot && !empty($this->currentSlot->booking)) {
+        $this->meetingLink = $this->bookingService->createSessionMeetingLink($this->currentSlot->booking);
+    } else {
+        $this->meetingLink = null;
     }
+
+    $this->dispatch('toggleModel', id: 'slot-detail', action: 'show');
+    }
+
 
     public function bookSession($id)
     {

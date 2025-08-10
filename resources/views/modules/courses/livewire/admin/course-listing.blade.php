@@ -1,12 +1,27 @@
 <main class="tb-main am-dispute-system am-courses-system">
+
     <div class="row">
         <div class="col-lg-12 col-md-12">
+
             <div class="tb-dhb-mainheading">
                 <h4>{{ __('courses::courses.all_courses') . ' (' . $courses->total() . ')' }}</h4>
-                <div class="tb-sortby">
+
+                <div class="tb-sortby" style="display: flex; flex-direction: column; gap: 1rem;">
+                    <div style="text-align: left;">
+                        <a class="am-btn cr-btn" href="{{ route('courses.tutor.create-course') }}">
+                            {{ __('courses::courses.create_course') }}
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18"
+                                fill="none">
+                                <path d="M3.75 9H9M14.25 9H9M9 9V3.75M9 9V14.25" stroke="white" stroke-width="1.5"
+                                    stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                        </a>
+                    </div>
+
                     <form class="tb-themeform tb-displistform">
                         <fieldset>
                             <div class="tb-themeform__wrap">
+
                                 <div class="tb-actionselect" wire:ignore>
                                     <div class="tb-select" wire:ignore>
                                         <select data-componentid="@this" class="am-select2 form-control"
@@ -16,11 +31,13 @@
                                             @foreach ($statuses as $filter_status)
                                                 <option value="{{ $filter_status }}"
                                                     {{ $status == $filter_status ? 'selected' : '' }}>
-                                                    {{ __('courses::courses.' . $filter_status) }}</option>
+                                                    {{ __('courses::courses.' . $filter_status) }}
+                                                </option>
                                             @endforeach
                                         </select>
                                     </div>
                                 </div>
+
                                 <div class="form-group tb-inputicon tb-inputheight">
                                     <i class="icon-search"></i>
                                     <input type="text" class="form-control"
@@ -31,7 +48,9 @@
                         </fieldset>
                     </form>
                 </div>
+
             </div>
+
             <div class="am-disputelist_wrap">
                 <div class="am-disputelist am-custom-scrollbar-y">
                     @if (!$courses->isEmpty())
