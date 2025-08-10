@@ -540,3 +540,26 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 });
+// $('#searchInput').on('blur',function(){
+//     console.log('ff');
+    
+// })
+$('#searchInput').focus(function() {
+    $("#containerSearch").animate({ width: "900%" }, 300); // 300ms duration
+});
+// change  
+$('#searchInput').blur(function() {
+    checkMobile()
+     
+});
+// dicted mobile screen 
+function checkMobile() {
+    if ($(window).width() <= 768) {
+
+        $("#containerSearch").animate({ width: "70%" }, 300);
+
+
+        console.log('Mobile screen detected!');
+
+}
+}

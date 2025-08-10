@@ -18956,6 +18956,7 @@ body:has(.am-dragfile):before {
   align-items: center;
   flex-direction: column;
   gap: 375px;
+  margin-top: 220px;
 }
 .am-banner-potential .am-banner-tutor .am-enhance {
   display: block;
@@ -20350,7 +20351,7 @@ body:has(.am-dragfile):before {
 .am-limitless-features-content .am-btn {
   color: #fff;
   border-radius: 30px;
-  background: #fdfdfd;
+  background: #1464b5;
 }
 .am-limitless-features-content .am-btn:hover {
   background: #1464b5;

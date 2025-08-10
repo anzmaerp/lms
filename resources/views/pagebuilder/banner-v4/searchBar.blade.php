@@ -23,8 +23,8 @@ $languages = $courseService->getLanguages();
                     <option value="courses">{{__('courses::courses.courses')}}</option>
                     <option value="tutors">{{ __('courses::courses.lecture')}}</option>
                 </select>
-                <div class="text-center">
-                    <input type="text" name="filters[keyword]" class="form-control border-0 rounded-pill px-4 py-2 w-100 w-md-75 mx-auto" placeholder="{{__('general.search_by_keyword')}}">
+                <div id="containerSearch"  class="text-center" style=" border: 1px solid #6712c7; border-radius: 20px;">
+                    <input type="text" id="searchInput" name="filters[keyword]" class="form-control border-0 rounded-pill px-4 py-2 w-100 w-md-75 mx-auto" placeholder="{{__('general.search_by_keyword')}}">
                 </div>
                 <button type="submit" class="btn btn-primary rounded-pill px-5">
                     🔍{{ __('general.search') }}
@@ -33,7 +33,7 @@ $languages = $courseService->getLanguages();
 
 
             <div id="courseFields" class="row g-3 d-none">
-                <!-- الفلتر 1 -->
+
                 <div class="col-12 col-md-4">
                     <div class="am-searchfilter_item">
                         <div class="dropdown w-100 d-flex justify-content-center align-items-center">
@@ -52,7 +52,7 @@ $languages = $courseService->getLanguages();
                     </div>
                 </div>
 
-                <!-- الفلتر 2 -->
+
                 <div class="col-12 col-md-4">
                     <div class="am-searchfilter_item">
                         <div class="dropdown w-100 d-flex justify-content-center align-items-center">
@@ -71,7 +71,7 @@ $languages = $courseService->getLanguages();
                     </div>
                 </div>
 
-                <!-- الفلتر 3 -->
+
                 <div class="col-12 col-md-4">
                     <div class="am-searchfilter_item">
                         <div class="dropdown w-100 d-flex justify-content-center align-items-center">
@@ -262,18 +262,18 @@ $(document).ready(function () {
     $('.dropdown-item3').on('click', function (e) {
         e.preventDefault();
 
-        let languageName = $(this).text();           // اسم اللغة
-        let languageId = $(this).data('value');      // ID الخاص باللغة
+        let languageName = $(this).text();          
+        let languageId = $(this).data('value');      
 
         // تحديث input المخفي
         $('#selectedLanguage').val(languageId);
 
-        // تحديث نص الزر مع الحفاظ على الأيقونات
+
         $('#selectedLanguage')
             .siblings('button')
             .contents()
             .filter(function () {
-                return this.nodeType === 3; // يعني النص فقط
+                return this.nodeType === 3; 
             })
             .first()
             .replaceWith(languageName + ' ');
