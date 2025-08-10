@@ -15607,6 +15607,9 @@ body:has(.am-dragfile):before {
 .page-home-page .am-works_info + .am-works_info {
   margin-top: 100px;
 }
+.page-home-page{
+  overflow: hidden;
+}
 .am-tutor-feature {
   gap: 20px;
   height: 100%;
@@ -18984,7 +18987,7 @@ body:has(.am-dragfile):before {
 .am-banner-potential .am-explore-banner-button .am-explore-btn {
   gap: 6px;
   display: flex;
-  color: #fff;
+  color: #1464b5;
   padding: 15px 34px;
   align-items: center;
   border-radius: 50px;
@@ -18995,12 +18998,13 @@ body:has(.am-dragfile):before {
 }
 .am-banner-potential .am-explore-banner-button .am-explore-btn:hover {
   background: #1464b5;
+  color: white;
 }
 .am-banner-potential .am-explore-banner-button .am-demo-btn {
   box-shadow: none;
   padding: 15px 41px;
   background: black;
-  color: black;
+  color: white;
   border: 1px solid #eaeaea;
 }
 .am-banner-potential .am-explore-banner-button .am-demo-btn:before {
@@ -19012,6 +19016,9 @@ body:has(.am-dragfile):before {
 }
 .am-banner-potential .am-explore-banner-button .am-demo-btn:hover i::before {
   color: #1464b5;
+}
+.am-banner-potential .am-explore-banner-button .am-demo-btn i::before{
+  color: white;
 }
 .easy-steps-variation-one.am-easysetup, .easy-steps-variation-two.am-easysetup, .easy-steps-variation-three.am-easysetup {
   position: relative;
