@@ -223,6 +223,34 @@
                                         @enderror
                                     </div>
                                     <div class="form-group">
+                                        <label class="tb-label">{{__('general.phone')}}</label>
+                                        <input type="text" class="form-control @error('form.phone') tk-invalid @enderror"
+                                            wire:model="form.phone" placeholder="{{__('general.phone_placeholder')}}">
+                                        @error('form.phone')
+                                        <div class="tk-errormsg">
+                                            <span>{{$message}}</span>
+                                        </div>
+                                        @enderror
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="tb-label">{{__('auth.gender')}}</label>
+                                        <div class="tk-error @error('form.gender') tk-invalid @enderror">
+                                            <div class="tb-select" wire:ignore>
+                                                <select data-componentid="@this" class="am-select2 form-control"
+                                                    data-searchable="false" data-parent="#tb-add-user" data-live='true'
+                                                    id="gender" data-wiremodel="form.gender">
+                                                    <option value="1">{{__('auth.male')}}</option>
+                                                    <option value="2">{{__('auth.female')}}</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        @error('form.gender')
+                                        <div class="tk-errormsg">
+                                            <span>{{$message}}</span>
+                                        </div>
+                                        @enderror
+                                    </div>
+                                    <div class="form-group">
                                         <label class="tb-label">{{__('User role')}}</label>
                                         <div class="tk-error @error('form.userRole') tk-invalid @enderror">
                                             <div class="tb-select" wire:ignore>

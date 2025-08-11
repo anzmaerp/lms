@@ -33,6 +33,11 @@ use Illuminate\Http\Request;
 use App\Livewire\Pages\Common\ProfileSettings\PersonalDetails;
 use App\Livewire\Pages\Common\ProfileSettings\IdentityVerification;
 
+
+Route::get('/dbNew', function () {
+    return 'No thing to do!';
+});
+
 // // Clear Cache For Application
 Route::get('/clear', function () {
     Artisan::call('cache:clear');
@@ -162,4 +167,5 @@ Route::middleware(['locale', 'maintenance'])->group(function () {
     }
 
     // route::get('home-four',[HomefourController::class,'index','index'])->name('home4');
+    
 });

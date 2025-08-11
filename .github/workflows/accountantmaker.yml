@@ -14,7 +14,8 @@ jobs:
       - name: 📂 Sync files
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with:
-          server: www.accountantmaker.com
+          # server: www.accountantmaker.com
+          server: 176.9.99.19
           username: "accounta@accountantmaker.com"
           password: "WP5748LOW9n"
           server-dir: /
