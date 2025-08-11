@@ -116,7 +116,7 @@
   display: inline-flex;
   justify-content: center;
   border-radius: 10px;
-  background-color: #1464b5;
+  background-color: #f704ed;
   font: 600 0.875rem/1.4285714286em "Roboto", serif;
 }
 .am-btn:before, .am-btn-light:before, .am-white-btn:before, .am-btnvtwo:before {
@@ -860,8 +860,8 @@
 }
 .am-tutordetail-btns .am-white-btn:hover {
   color: #fff;
-  background: #1464b5;
-  border-color: #1464b5;
+  background: #f704ed;
+  border-color: #f704ed;
 }
 .am-tutordetail-btns .am-white-btn:hover i::before {
   color: #fff;
@@ -1775,8 +1775,8 @@
 }
 .am-similar-user:hover .am-sendmessage-btn .am-btn {
   color: #fff;
-  background: #1464b5;
-  border: 1px solid #1464b5;
+  background: #f704ed;
+  border: 1px solid #f704ed;
 }
 .am-similar-user:hover .am-sendmessage-btn .am-btn i::before {
   color: #fff;
@@ -1911,8 +1911,8 @@
 }
 .am-similaruser-btns .am-sendmessage-btn .am-btn:hover {
   color: #fff;
-  background: #1464b5;
-  border: 1px solid #1464b5;
+  background: #f704ed;
+  border: 1px solid #f704ed;
 }
 .am-similaruser-btns .am-sendmessage-btn .am-btn:hover i::before {
   color: #fff;
@@ -1987,7 +1987,7 @@
   padding: 12px 16px;
   border-radius: 8px;
   align-items: center;
-  background: #1464b5;
+  background: #f704ed;
   justify-content: center;
 }
 .am-howtobook > a i::before {
@@ -4405,7 +4405,7 @@
   border-radius: 10px;
   align-items: center;
   justify-content: center;
-  background: rgba(20, 100, 181, 0.1);
+  background: rgba(247, 4, 237, 0.1);
   font: 400 0.875rem / 1.4285714286em "Roboto", serif;
 }
 .cr-course-body .cr-addbtn .am-border-svg {
@@ -5866,8 +5866,8 @@
   width: auto;
 }
 .cr-pagination .am-pagination ul li a:hover, .cr-pagination .am-pagination ul li span:hover, .cr-pagination .am-pagination ul li.active a, .cr-pagination .am-pagination ul li.active span {
-  background: #1464b5;
-  border-color: #1464b5;
+  background: #f704ed;
+  border-color: #f704ed;
 }
 .cr-avatar-group {
   display: flex;
@@ -7655,8 +7655,8 @@
 }
 .cr-search-list-container .am-pagination ul li a:hover, .cr-search-list-container .am-pagination ul li span:hover, .cr-search-list-container .am-pagination ul li.active a, .cr-search-list-container .am-pagination ul li.active span {
   color: #fff;
-  background: #1464b5;
-  border-color: #1464b5;
+  background: #f704ed;
+  border-color: #f704ed;
 }
 .cr-search-list-container .cr-image-wrapper figcaption button {
   top: auto;
@@ -8301,7 +8301,7 @@
   content: "";
   bottom: 0;
   position: absolute;
-  background: #1464b5;
+  background: #f704ed;
   border-radius: 50px 50px 0 0;
   transition: all 0.3s ease-in-out;
 }
@@ -8960,8 +8960,8 @@
 .cr-allcourses_list .cr-card .cr-course-card .cr-start-course:hover, .cr-allcourses_list .cr-card-skeleton .cr-course-card .cr-start-course:hover, .cr-allcourses_list .cr-card .cr-course-card .cr-start-course:focus, .cr-allcourses_list .cr-card-skeleton .cr-course-card .cr-start-course:focus {
   outline: none;
   color: #fff;
-  background: #1464b5;
-  border-color: #1464b5;
+  background: #f704ed;
+  border-color: #f704ed;
 }
 .cr-allcourses_list .cr-card.cr-card-skeleton .cr-image-wrapper, .cr-allcourses_list .cr-card-skeleton .cr-image-wrapper {
   border-radius: 10px 10px 0 0;
@@ -9076,7 +9076,7 @@
   display: inline-flex;
   align-items: center;
   border-radius: 10px;
-  background: #1464b5;
+  background: #f704ed;
   font: 500 0.875rem / 1.4285714286em "Roboto", serif;
 }
 .cr-next-curriculum_btn i:before {
