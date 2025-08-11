@@ -1,0 +1,239 @@
+/* Custom CSS overrides */
+/* These styles will not be overwritten by the theme panel */
+/* Add your custom CSS here */
+
+.am-getstarted-btn{
+    color: #252525;
+}
+.am-getstarted-btn:hover{
+    color: #fff;
+    background-color: #252525;
+}
+ .dropdown-item2{
+    display: block;
+    width: 100%;
+}
+.dropdown-item3{
+    display: block;
+    width: 100%;
+
+}
+.dropdown-item-group{
+    display: block;
+    width: 100%;
+}
+.dropdown-item-subject{
+    display: block;
+    width: 100%;
+}
+.am-primary-btn-white{
+    background-color: #eaeaea;
+}
+.am-banner_section{
+    top: 117px;
+}
+.page-home-nine{
+    overflow: hidden;
+}
+.am-header_nine{
+    top: 1px;
+}
+.am-banner-vfive .am-learning_search_btn {
+     background-color: rgb(49, 49, 49);
+}
+.am-footer_wrap {
+    padding-bottom: 7px;
+}
+
+
+.am-footer{
+    padding: 20px 0 0;
+}
+.am-banner-potential .am-explore-banner-button .am-explore-btn{
+color: rgb(0, 0, 0);
+}
+.am-banner-potential .am-explore-banner-button .am-explore-btn:hover{
+    color: rgb(255, 255, 255);
+}
+
+.am-banner-potential .am-explore-banner-button .am-demo-btn {
+    color: #f4f4f4;
+}
+.am-banner-potential .am-explore-banner-button .am-demo-btn:hover {
+    color: #1464b5;
+}
+.am-icon-play-filled:before {
+    color: #f4f4f4;
+}
+.pb-themesection:has(.am-easysetup) .container-fluid > .row > .col-12 {
+    overflow: hidden;
+}
+.sub-menu{
+    width: fit-content;
+}
+.page-home-three{
+    overflow: hidden;
+}
+.page-home-page{
+    overflow: hidden;
+}
+
+/* .am-mobile-logo a img{
+    height: fit-content !important;
+    margin-bottom: unset !important;
+} */
+ .am-mobile-logo{
+    height: fit-content;
+ }
+#contentType {
+    border: 1px solid #590cb3 !important;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background: none; 
+}
+
+    /* === Custom Classes === */
+
+.am-searchfilter_item {
+    flex: auto;
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    padding: 11px 15px;
+    border-radius: 10px;
+    background: #fff;
+    border: 1px solid #eaeaea;
+    max-width: unset;
+    box-shadow: 0px 1px 2px 0px rgba(16, 24, 40, 0.05);
+
+}
+
+.am-searchfilter_title {
+  display: block;
+  color: black;
+  font: 400 0.75rem/1.5em "Roboto", serif;
+}
+
+.am-banner-potential .am-banner-tutor span {
+  text-align: center;
+  color: black;
+  font: 400 18px/28px "Roboto", serif;
+}
+
+.am-banner-potential.am-banner-content-four .am-banner-tutor span {
+  margin: 0;
+  text-align: center;
+  color: black;
+  font: 400 1.25rem/1.6em "Inter", sans-serif;
+}
+
+.dropdownc-item3 {
+  padding: 7px;
+}
+
+.dropdownc-item3:hover {
+  background-color: #6b0fd6;
+}
+
+.dropdown-item-group5 {
+  padding: 7px;
+}
+
+.dropdown-item-group5:hover {
+  background-color: #600cc1;
+}
+
+.dropdown-item-subject5 {
+  padding: 7px;
+}
+
+.dropdown-item-subject5:hover {
+  background-color: #600cc1;
+}
+
+/* === Custom IDs === */
+
+#contentType {
+  border: 1px solid #590cb3 !important;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background: none;
+}
+
+#dropdownButton {
+  overflow: hidden;
+  border: 1px solid #6b0fd6;
+  color: white;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background: #6b0fd6;
+}
+
+/* === Custom Overrides on Form Controls === */
+
+.form-control,
+input[type="text"],
+input[type="number"],
+select {
+  -webkit-transition: all 0.3s ease-in-out;
+  -moz-transition: all 0.3s ease-in-out;
+  -ms-transition: all 0.3s ease-in-out;
+  -o-transition: all 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
+  width: 100%;
+  height: 40px;
+  outline: none;
+  padding: 0 12px;
+  background: #f7f7f8;
+  border-radius: 10px;
+  background-clip: unset;
+  color: black;
+  caret-color: black;
+  border: 1px solid transparent;
+  font: 400 0.875rem/1.4285714286em "Roboto", serif;
+}
+
+.form-control:hover,
+input[type="text"]:hover,
+input[type="number"]:hover,
+select:hover {
+  background: #fff;
+  border-color: #eaeaea;
+  box-shadow: 0px 1px 2px 0px rgba(16, 24, 40, 0.05);
+}
+
+.form-control:focus,
+input[type="text"]:focus,
+input[type="number"]:focus,
+select:focus {
+  background: #fff;
+  border-color: #0c448e;
+  box-shadow: 0px 4px 8px -2px rgba(16, 24, 40, 0.1),
+    0px 2px 4px -2px rgba(16, 24, 40, 0.06);
+}
+
+.form-control::placeholder,
+input[type="text"]::placeholder,
+input[type="number"]::placeholder,
+select::placeholder {
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.form-control:disabled {
+  background-color: #f7f7f7;
+}
+
+.form-control:disabled:hover {
+  background: #f7f7f7;
+  border-color: #f7f7f7;
+}
+
+/* === Dropdown Item Hover === */
+
+.dropdown-item:hover {
+  color: white;
+  background-color: #6b0fd6;
+}

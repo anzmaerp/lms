@@ -13,7 +13,8 @@ $levels = $courseService->getLevels();
 $languages = $courseService->getLanguages();
 @endphp
 
-<div class="container my-5">
+<div id="cmcs" class="container my-5">
+
     <form action="{{ route('search') }}" method="GET" class="w-100">
         <div class="bg-white rounded-4 shadow p-4 d-flex flex-column gap-4">
 

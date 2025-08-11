@@ -75,6 +75,7 @@ new #[Layout('layouts.guest')] class extends Component {
                 }
             </style>
         @endif
+         <link rel="stylesheet" type="text/css" href="{{ asset('css/custom.css') }}">
     </head>
 
     <!-- Session Status -->
