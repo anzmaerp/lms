@@ -3,7 +3,6 @@
         <h1>{{ __('courses::courses.basic_details') }}</h1>
         <p>{{ __('courses::courses.course_info') }}</p>
     </div>
-
     <form class="am-themeform">
         <fieldset>
             <div class="am-themeform__wrap">
@@ -22,7 +21,7 @@
                                     <option value="">{{ __('kupondeal::kupondeal.select_instructor_placeholder') }}</option>
                                     @if (!empty($tutors))
                                         @foreach($tutors as $tutor)
-                                            <option value="{{ $tutor->id }}" @if($tutor_id == $tutor->id) selected @endif>{{ $tutor->name }}</option>
+                                            <option value="{{ $tutor->id }}" @if($tutor_id == $tutor->id) selected @endif>{{ $tutor->profile->first_name . ' ' . $tutor->profile->last_name }}</option>
                                         @endforeach
                                     @endif
                                 </select>
