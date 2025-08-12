@@ -573,7 +573,7 @@
     position: relative;
     align-items: center;
     border-radius: 24px;
-    background: #FEFEFE;
+    background: $body-color;
     box-shadow: 0px 1px 2px 0px rgba($dark_black, 0.05);
     &::before{
         top: 0;

@@ -476,6 +476,7 @@ ul ul {
         transform: rotate(180deg);
 }
 .am-coming-soon > figure{
+        width: 25%;
         right: auto;
         left: 71.09px;
 }
@@ -1006,6 +1007,7 @@ ul ul {
         .am-guidesteps_btns .am-demo-btn{flex-direction: row-reverse;}
 }
 .am-coming-soon > figure{
+        width: 25%;
         left: 0;
         right: auto !important;
 }
@@ -1224,6 +1226,7 @@ table>tbody>tr>td{
 }
 
 .am-coming-section.get-app-varient-two .am-coming-soon_wrap .am-coming-soon > figure{
+        width: 30% !important;
         left: 0;
         right: auto;
 }

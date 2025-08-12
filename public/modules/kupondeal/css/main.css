@@ -119,7 +119,7 @@ h1 a, h2 a, h3 a, h4 a, h5 a, h6 a {
   display: inline-flex;
   justify-content: center;
   border-radius: 10px;
-  background-color: #f704ed;
+  background-color: #ff4c00;
   font: 600 0.875rem/1.4285714286em "Roboto", serif;
 }
 .kd-btn:before, .kd-btn-light:before, .kd-white-btn:before, .kd-btnvtwo:before {
@@ -549,7 +549,7 @@ h1 a, h2 a, h3 a, h4 a, h5 a, h6 a {
 }
 .kd-coupon-modal .am-switchbtn-box .am-switchbtn input:checked {
   border: 0;
-  background: #0c448e;
+  background: #8f0;
 }
 .kd-coupon-modal .am-switchbtn-box .am-switchbtn input:checked::before {
   left: 20px;
@@ -598,7 +598,7 @@ h1 a, h2 a, h3 a, h4 a, h5 a, h6 a {
   color: #F04438;
 }
 .kd-coupon-modal .am-switchbtn-box .kd-coupon-order_btns span.am-order-edit {
-  background: #0c448e;
+  background: #8f0;
 }
 .kd-coupon-modal .am-switchbtn-box .kd-coupon-order_btns span.am-order-edit i::before {
   color: #fff;
@@ -651,7 +651,7 @@ h1 a, h2 a, h3 a, h4 a, h5 a, h6 a {
   background-image: none;
   justify-content: center;
   border-radius: 10px;
-  background-color: #0c448e;
+  background-color: #8f0;
   font: 500 0.875rem/1.4285714286em "Roboto", serif;
 }
 .kd-colorpicker_wrap .cpBG .cp-buttons .btn-none {
@@ -786,11 +786,11 @@ h1 a, h2 a, h3 a, h4 a, h5 a, h6 a {
 .kd-switchbtn label span {
   margin: 0 !important;
   line-height: 20px !important;
-  color: #0c448e !important;
+  color: #8f0 !important;
   font-family: "Roboto", serif !important;
 }
 .kd-switchbtn input:checked {
-  background: #0c448e;
+  background: #8f0;
   border: 1.5px solid transparent;
 }
 .kd-switchbtn input::before {

@@ -1,7 +1,9 @@
 /* Custom CSS overrides */
 /* These styles will not be overwritten by the theme panel */
 /* Add your custom CSS here */
-
+/* .am-banner-content-seven .am-explore-banner-button .am-explore-btn{
+  background-color: var(--btn-color);
+} */
 .am-getstarted-btn{
     color: #252525;
 }
@@ -49,22 +51,22 @@
 .am-footer{
     padding: 20px 0 0;
 }
-.am-banner-potential .am-explore-banner-button .am-explore-btn{
+/* .am-banner-potential .am-explore-banner-button .am-explore-btn{
 color: rgb(0, 0, 0);
-}
-.am-banner-potential .am-explore-banner-button .am-explore-btn:hover{
+} */
+/* .am-banner-potential .am-explore-banner-button .am-explore-btn:hover{
     color: rgb(255, 255, 255);
-}
+} */
 
-.am-banner-potential .am-explore-banner-button .am-demo-btn {
+/* .am-banner-potential .am-explore-banner-button .am-demo-btn {
     color: #f4f4f4;
 }
 .am-banner-potential .am-explore-banner-button .am-demo-btn:hover {
     color: #1464b5;
-}
-.am-icon-play-filled:before {
+} */
+/* .am-icon-play-filled:before {
     color: #f4f4f4;
-}
+} */
 .pb-themesection:has(.am-easysetup) .container-fluid > .row > .col-12 {
     overflow: hidden;
 }
@@ -115,11 +117,11 @@ color: rgb(0, 0, 0);
   font: 400 0.75rem/1.5em "Roboto", serif;
 }
 
-.am-banner-potential .am-banner-tutor span {
+/* .am-banner-potential .am-banner-tutor span {
   text-align: center;
   color: black;
   font: 400 18px/28px "Roboto", serif;
-}
+} */
 
 .am-banner-potential.am-banner-content-four .am-banner-tutor span {
   margin: 0;

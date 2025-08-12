@@ -544,7 +544,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 $('#searchInput').focus(function () {
     if ($(window).width() >= 576){
-        $("#containerSearch").animate({ width: "70%" }, 300); // Expand on focus
+        $("#containerSearch").animate({ width: "60%" }, 300); // Expand on focus
     }
 });
 
