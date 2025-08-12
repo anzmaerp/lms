@@ -2,13 +2,14 @@
 
 namespace Modules\Courses\Livewire\Pages\Tutor\CourseListing;
 
-use Modules\Courses\Models\Category;
-use Modules\Courses\Models\Course;
+use App\Models\User;
 use Livewire\Component;
-use Modules\Courses\Services\CourseService;
-use Livewire\Attributes\Layout;
 use Livewire\Attributes\On;
 use Livewire\WithPagination;
+use Livewire\Attributes\Layout;
+use Modules\Courses\Models\Course;
+use Modules\Courses\Models\Category;
+use Modules\Courses\Services\CourseService;
 
 class CourseListing extends Component
 {
@@ -17,10 +18,12 @@ class CourseListing extends Component
     public $isLoading = false;
     public $showClearFilters        = false;
     public $categories;
+    public $tutors;
     public $counts                  = [];
     public $statuses                = [];
     public $parPageList             = [10, 20, 30, 50, 100, 200];
     public $perPage;
+    public $tutor_id;
     public $filters                 = [
         'keyword'          => null,
         'category_id'      => null,
@@ -32,10 +35,12 @@ class CourseListing extends Component
 
     public function mount()
     {
+        $this->tutor_id = null;
         $this->showClearFilters = false;
         $this->perPage = setting('_general.per_page_record') ?? 10;
         $this->isLoading = true;
         $this->categories = Category::whereParentId(null)->get();
+
         $this->statuses     = Course::STATUSES;
         $allCourses  = (new CourseService())->getAllCourses(auth()->user()?->id);
         $this->counts = [
@@ -55,7 +60,7 @@ class CourseListing extends Component
         $courses = [];
         if (!$this->isLoading) {
             $courses = (new CourseService())->getCourses(
-                instructorId: auth()->user()?->id,
+                instructorId: $this->tutor_id ? $this->tutor_id : auth()->user()?->id,
                 with: ['category', 'pricing', 'thumbnail','enrollments.student:id,user_id,first_name,last_name,slug,image'],
                 withCount: ['enrollments'],
                 filters: $this->filters,

@@ -1,3 +1,4 @@
+
 <div class="am-profile-setting" wire:init="loadData" wire:key="@this">
     @slot('title')
         {{ __('subject.subject_title') }}

@@ -11,7 +11,13 @@
         <p>{{ __('courses::courses.course_live_ready') }}</p>
         <p>{{ __('courses::courses.thank_you_contributing') }}</p>
     </div>
-    <a href="{{ route('courses.tutor.courses') }}" class="am-btn">{{ __('courses::courses.go_to_dashboard') }}</a>
+    @if(auth()->user()->hasRole('admin'))
+        <a href="{{ route('courses.admin.courses') }}" class="am-btn">{{ __('courses::courses.go_to_dashboard') }}</a>
+    @else
+        <a href="{{ route('courses.tutor.courses') }}" class="am-btn">{{ __('courses::courses.go_to_dashboard') }}</a>
+    @endif
+
+
 </div>
 
 @push('styles')

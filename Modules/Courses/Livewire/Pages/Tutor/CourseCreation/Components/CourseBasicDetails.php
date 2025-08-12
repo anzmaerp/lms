@@ -2,15 +2,17 @@
 
 namespace Modules\Courses\Livewire\Pages\Tutor\CourseCreation\Components;
 
+use App\Models\User;
+use Livewire\Component;
 use App\Models\Language;
+use Modules\Courses\Models\Course;
+use App\Jobs\GenerateCertificateJob;
 use App\Traits\PrepareForValidation;
 use Illuminate\Support\Facades\Auth;
-use Modules\Courses\Http\Requests\CourseBasicDetailRequest;
 use Modules\Courses\Models\Category;
-use Modules\Courses\Models\Course;
 use Modules\Courses\Services\CourseService;
-use Livewire\Component;
-use App\Jobs\GenerateCertificateJob;
+use Modules\Courses\Http\Requests\CourseBasicDetailRequest;
+
 class CourseBasicDetails extends Component
 {
     use PrepareForValidation;
@@ -26,6 +28,9 @@ class CourseBasicDetails extends Component
     public $level;
     public $language_id;
     public $categories;
+    public $tutors;
+    
+    public $tutor_id;
     public $languages;
     public $levels;
     public $types;
@@ -37,8 +42,13 @@ class CourseBasicDetails extends Component
     public function mount()
     {
         $this->courseId = request()->route('id');
-   
+
         $this->categories   = Category::whereParentId(null)->whereNull('deleted_at')->get();
+        $this->tutors = User::whereHas('roles', function ($query) {
+            $query->where('name', 'tutor');
+        })->with('profile:id,user_id,first_name,last_name')->get();
+
+        $this->tutor_id = $this->tutors->first()?->id;
         $this->languages    = Language::all();
         $this->levels       = Course::LEVEL;
         $this->types        = [
@@ -52,7 +62,7 @@ class CourseBasicDetails extends Component
             $this->loadCourseData();
         }
 
-        if(\Nwidart\Modules\Facades\Module::has('upcertify') && \Nwidart\Modules\Facades\Module::isEnabled('upcertify')){
+        if (\Nwidart\Modules\Facades\Module::has('upcertify') && \Nwidart\Modules\Facades\Module::isEnabled('upcertify')) {
             $this->templates = get_templates();
         }
         $this->dispatch('initSelect2', target: '.am-select2');
@@ -64,13 +74,18 @@ class CourseBasicDetails extends Component
     }
 
     public function loadCourseData()
+    
     {
-        $course = (new CourseService())->getCourse(courseId: $this->courseId, instructorId: Auth::id());
+       $instructorId = auth()->user()->hasRole('admin') && !empty($this->tutor_id) ? $this->tutor_id : Auth::id();
+
+       $course = (new CourseService())->getCourse(courseId: $this->courseId, instructorId: $instructorId);
 
         if (!$course) {
             abort(404);
         }
-
+        if (auth()->user()->hasRole('admin')) {
+            $this->tutor_id = $course->instructor_id;
+        }
         $this->sub_categories           = Category::whereParentId($course->category_id)->get();
         $this->title                    = $course->title;
         $this->description              = $course->description;
@@ -84,7 +99,6 @@ class CourseBasicDetails extends Component
         $this->template_id              = $course?->certificate_id ?? '';
         $this->assign_quiz_certificate  = !empty($course?->meta_data['assign_quiz_certificate']) ? $course?->meta_data['assign_quiz_certificate'] : 'any';
         $this->learning_objectives      = !empty($course->learning_objectives) ?  $course->learning_objectives : [''];
-        
     }
 
     private function rules()
@@ -95,8 +109,8 @@ class CourseBasicDetails extends Component
     public function createOrUpdateCourse()
     {
         $response = isDemoSite();
-        if( $response ){
-            $this->dispatch('showAlertMessage', type: 'error', title:  __('general.demosite_res_title') , message: __('general.demosite_res_txt'));
+        if ($response) {
+            $this->dispatch('showAlertMessage', type: 'error', title: __('general.demosite_res_title'), message: __('general.demosite_res_txt'));
             return;
         }
         try {
@@ -106,7 +120,7 @@ class CourseBasicDetails extends Component
             if (!empty($this->template_id)) {
                 $validatedData['certificate_id'] = $this->template_id;
             }
-            if(isActiveModule('upcertify') && isActiveModule('quiz')){
+            if (isActiveModule('upcertify') && isActiveModule('quiz')) {
                 $validatedData['meta_data'] =  array('assign_quiz_certificate' => $this->assign_quiz_certificate);
             }
             // Sanitize learning objectives
@@ -117,7 +131,11 @@ class CourseBasicDetails extends Component
             $this->tags             = SanitizeArray($this->tags);
             $validatedData['tags']  = array_filter($this->tags, fn($tag) => !empty($tag));
 
-            $validatedData['instructor_id'] = Auth::id();
+                if (auth()->user()->hasRole('admin')) {
+                    $validatedData['instructor_id'] = $this->tutor_id;
+                } else {
+                    $validatedData['instructor_id'] = Auth::id();
+                }
 
             $course = (new CourseService())->updateOrCreateCourse($this->courseId, $validatedData);
             return redirect()->route('courses.tutor.edit-course', ['tab' => 'media', 'id' => $course->id]);
@@ -152,8 +170,8 @@ class CourseBasicDetails extends Component
     public function removeLearningObjective($index)
     {
         $response = isDemoSite();
-        if( $response ){
-            $this->dispatch('showAlertMessage', type: 'error', title:  __('general.demosite_res_title') , message: __('general.demosite_res_txt'));
+        if ($response) {
+            $this->dispatch('showAlertMessage', type: 'error', title: __('general.demosite_res_title'), message: __('general.demosite_res_txt'));
             return;
         }
         unset($this->learning_objectives[$index]);
@@ -165,8 +183,8 @@ class CourseBasicDetails extends Component
     public function updateLearningObjectivePosition($list)
     {
         $response = isDemoSite();
-        if( $response ){
-            $this->dispatch('showAlertMessage', type: 'error', title:  __('general.demosite_res_title') , message: __('general.demosite_res_txt'));
+        if ($response) {
+            $this->dispatch('showAlertMessage', type: 'error', title: __('general.demosite_res_title'), message: __('general.demosite_res_txt'));
             return;
         }
         $sortedLearningObjectives = [];
@@ -179,6 +197,4 @@ class CourseBasicDetails extends Component
             $this->learning_objectives = $sortedLearningObjectives;
         }
     }
-
-    
 }

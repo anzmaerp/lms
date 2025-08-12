@@ -1,5 +1,5 @@
 <?php
-
+ 
 use Modules\MeetFusion\Facades\MeetFusion;
 use Amentotech\LaraGuppy\Services\MessagesService;
 use Amentotech\LaraGuppy\Services\ThreadsService;

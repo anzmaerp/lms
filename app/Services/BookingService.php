@@ -776,7 +776,7 @@ class BookingService {
         }
     }
 
-    protected function createSessionMeetingLink($booking, $meeingLink = null) {
+    public function createSessionMeetingLink($booking, $meeingLink = null) {
         $meetingData = [
             // 'host_email'    => $booking->bookee->email,
             'topic'         => $booking->orderItem->title . '(' . $booking->tutor->full_name . ')',
