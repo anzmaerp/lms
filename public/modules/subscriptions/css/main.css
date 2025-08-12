@@ -98,7 +98,7 @@
   display: inline-flex;
   justify-content: center;
   border-radius: 10px;
-  background-color: #8c2c2c;
+  background-color: #0e0808;
   font: 600 0.875rem/1.4285714286em "Roboto", serif;
 }
 .am-btn:before, .am-btn-light:before, .am-white-btn:before, .am-btnvtwo:before {
@@ -449,7 +449,7 @@
 }
 .am-subcription-banner .am-learning_details h1 span {
   display: block;
-  color: #8c2c2c;
+  color: #0e0808;
   font-style: italic !important;
   font: 500 4.125rem / 1.3333333333em "Playfair Display";
 }
@@ -469,14 +469,14 @@
   font: 600 1rem / 1.5em "Roboto", serif;
 }
 .am-subcription-banner .am-btns .am-primary-btn {
-  border-color: red;
-  background-color: red;
+  border-color: black;
+  background-color: black;
 }
 .am-subcription-banner .am-btns .am-primary-btn:hover {
   opacity: 0.8;
 }
 .am-subcription-banner .am-btns .am-primary-btn-white {
-  border-color: red;
+  border-color: black;
 }
 .am-subcription-banner .am-btns .am-primary-btn-white:hover {
   border-color: #ff4c00;
@@ -591,7 +591,7 @@
   align-items: center;
   border-radius: 159px;
   justify-content: center;
-  border: 1px solid #8c2c2c;
+  border: 1px solid #0e0808;
 }
 .am-plan-icon {
   width: 44px;
@@ -601,7 +601,7 @@
   align-items: center;
   border-radius: 100px;
   justify-content: center;
-  background-color: #8c2c2c;
+  background-color: #0e0808;
 }
 .am-plan-icon i {
   font-size: 20px;
@@ -715,7 +715,7 @@
   border: 0;
 }
 .am-active {
-  border-color: #8c2c2c;
+  border-color: #0e0808;
 }
 .am-active .am-buy-button {
   background-color: #F55C2B;
@@ -831,7 +831,7 @@
 }
 .am-faqtab-content .accordion-header span i:before {
   font-size: 18px;
-  color: #8c2c2c;
+  color: #0e0808;
 }
 /* FAQ Section style End */
 @media (max-width: 991px) {

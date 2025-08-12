@@ -204,7 +204,7 @@ class DefaultSettingSeeder extends Seeder
                     ['page_id' => 5,  'footer_variation'  => 'am-footer_three'],
                     ['page_id' => 6,  'footer_variation'  => 'am-footer_three'],
                     ['page_id' => 7,  'footer_variation'  => 'am-footer_three'],
-                    ['page_id' => 8,  'footer_variation'  => 'am-footer_three'],
+                    ['page_id' => 8,  'footer_variation'  => 'am-footer_five'],
                 ],
                 '_dispute_setting' => [
                     'dispute_reasons' => [
