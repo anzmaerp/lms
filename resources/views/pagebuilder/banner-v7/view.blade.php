@@ -20,7 +20,7 @@
                                 || !empty(pagesetting('primary_btn_txt')) 
                                 || !empty(pagesetting('secondary_btn_url')) 
                                 || !empty(pagesetting('secondary_btn_txt')))
-                                <div class="am-banner-tutor">
+                                <div id="seven" class="am-banner-tutor">
                                     @if(!empty(pagesetting('heading')))<h2 data-aos="fade-up" data-aos-easing="ease" data-aos-delay="200">{!! pagesetting('heading') !!}</h2>@endif
                                     @if(!empty(pagesetting('paragraph')))<p data-aos="fade-up" data-aos-easing="ease" data-aos-delay="400">{!! pagesetting('paragraph') !!}</p>@endif
                                     @if(!empty(pagesetting('primary_btn_txt'))  || !empty(pagesetting('secondary_btn_txt')))

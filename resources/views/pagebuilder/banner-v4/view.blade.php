@@ -10,7 +10,7 @@
                         !empty(pagesetting('secondary_btn_url')) ||
                         !empty(pagesetting('secondary_btn_txt')))
                     <div class="am-banner-main">
-                        <div class="am-banner-tutor">
+                        <div id="four" class="am-banner-tutor">
                             {{-- @if (!empty(pagesetting('heading')))
                                 <h2 data-aos="fade-up" data-aos-easing="ease" data-aos-delay="200">{!! pagesetting('heading') !!}
                                 </h2>

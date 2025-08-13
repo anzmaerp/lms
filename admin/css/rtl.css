@@ -536,7 +536,7 @@ li.menu-has-children > a:after {
 
 .tb-dropdoenwrap {
   margin-left: 0;
-  margin-right: auto;
+  margin-inline-start: auto;
 }
 
 .am-header {

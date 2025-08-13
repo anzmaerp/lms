@@ -35,60 +35,104 @@ $locale = app()->getLocale();
     </head>
     @if ($footerVariation == 'am-footer_five')
     <footer class="am-footer_five">
-        <div class="container">
-            <footer class="bg-dark text-light pt-5 pb-4">
-                <div class="container">
-                    <div class="row">
-
-                        <!-- Column 1: Logo + description -->
-                        <div class="col-md-4 mb-4">
-                            <h4 class="mb-3">test</h4>
-                            <p>نقدم أفضل الخدمات التعليمية والدعم المستمر لجميع عملائنا الكرام.</p>
-                            <p>© 2025 جميع الحقوق محفوظة</p>
-                        </div>
-
-                        <!-- Column 2: Quick Links -->
-                        <div class="col-md-2 mb-4">
-                            <h5>روابط سريعة</h5>
-                            <ul class="list-unstyled">
-                                <li><a href="#" class="text-light text-decoration-none">الرئيسية</a></li>
-                                <li><a href="#" class="text-light text-decoration-none">الدورات</a></li>
-                                <li><a href="#" class="text-light text-decoration-none">من نحن</a></li>
-                                <li><a href="#" class="text-light text-decoration-none">تواصل معنا</a></li>
-                            </ul>
-                        </div>
-
-                        <!-- Column 3: خدماتنا -->
-                        <div class="col-md-3 mb-4">
-                            <h5>خدماتنا</h5>
-                            <ul class="list-unstyled">
-                                <li><a href="#" class="text-light text-decoration-none">تدريب فردي</a></li>
-                                <li><a href="#" class="text-light text-decoration-none">دورات جماعية</a></li>
-                                <li><a href="#" class="text-light text-decoration-none">ورش عمل</a></li>
-                                <li><a href="#" class="text-light text-decoration-none">استشارات</a></li>
-                            </ul>
-                        </div>
-
-                        <!-- Column 4: تواصل معنا -->
-                        <div class="col-md-3 mb-4">
-                            <h5>تواصل معنا</h5>
-                            <p><i class="bi bi-telephone-fill"></i> +20 123 456 7890</p>
-                            <p><i class="bi bi-envelope-fill"></i> info@sebesi.com</p>
-                            <p><i class="bi bi-geo-alt-fill"></i> القاهرة، مصر</p>
-
-                            <!-- Social media icons -->
-                            <div>
-                                <a href="#" class="text-light me-3 fs-4"><i class="bi bi-facebook"></i></a>
-                                <a href="#" class="text-light me-3 fs-4"><i class="bi bi-instagram"></i></a>
-                                <a href="#" class="text-light me-3 fs-4"><i class="bi bi-twitter"></i></a>
-                                <a href="#" class="text-light fs-4"><i class="bi bi-linkedin"></i></a>
-                            </div>
-                        </div>
-
+        <div class="partTop text-center overflow-hidden">
+            <div class="row">
+                <div class="col-6">
+                    <div class="d-flex justify-content-center ">
+                        <ul class="am-socialmedia">
+                            <li>
+                                <a href="https://www.facebook.com/profile.php?id=61556760023628">
+                                    <i class="am-icon-facebook"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="https://www.instagram.com/arch.space2024">
+                                    <i class="am-icon-instagram"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <i class="am-icon-linkedin"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <i class="am-icon-youtube"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <i class="am-icon-tiktok"></i>
+                                </a>
+                            </li>
+                        </ul>
                     </div>
                 </div>
-            </footer>
+                <div class="col-6">
+                    <div class="">
+                        <h1 class="m-0">Get hands on the Great Courses you like</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="partBottom">
+            <div class="container">
+                <footer class="text-light">
+                    <div class="container">
+                        <div class="row">
+                            <!-- Column 1: Logo + description -->
+                            <div class="col-md-4 mb-4">
+                                <div class="">
+                                    <strong class="am-flogo">
+                                        <x-application-logo :variation="'white'" />
+                                    </strong>
+                                </div>
+                                <p>نقدم أفضل الخدمات التعليمية والدعم المستمر لجميع عملائنا الكرام.</p>
+                                <p>© 2025 جميع الحقوق محفوظة</p>
+                            </div>
+                            <!-- Column 2: Quick Links -->
+                            <div class="col-md-2 mb-4">
+                                <h5 class="title-footer-five">روابط سريعة</h5>
+                                <ul class="list-unstyled">
+                                    <li><a href="#" class="text-light text-decoration-none">الرئيسية</a></li>
+                                    <li><a href="#" class="text-light text-decoration-none">الدورات</a></li>
+                                    <li><a href="#" class="text-light text-decoration-none">من نحن</a></li>
+                                    <li><a href="#" class="text-light text-decoration-none">تواصل معنا</a></li>
+                                </ul>
+                            </div>
+                            <!-- Column 3: خدماتنا -->
+                            <div class="col-md-3 mb-4">
+                                <h5 class="title-footer-five">خدماتنا</h5>
+                                <ul class="list-unstyled">
+                                    <li><a href="#" class="text-light text-decoration-none">تدريب فردي</a></li>
+                                    <li><a href="#" class="text-light text-decoration-none">دورات جماعية</a></li>
+                                    <li><a href="#" class="text-light text-decoration-none">ورش عمل</a></li>
+                                    <li><a href="#" class="text-light text-decoration-none">استشارات</a></li>
+                                </ul>
+                            </div>
+                            <!-- Column 4: تواصل معنا -->
+                            <div class="col-md-3 mb-4">
+                                <h5 class="title-footer-five">تواصل معنا</h5>
+                                <p><i class="bi bi-telephone-fill"></i> +20 123 456 7890</p>
+                                <p><i class="bi bi-envelope-fill"></i> info@sebesi.com</p>
+                                <p><i class="bi bi-geo-alt-fill"></i> القاهرة، مصر</p>
 
+                                <!-- Social media icons -->
+                                <div>
+                                    <a href="#" class="text-light me-3 fs-4"><i class="bi bi-facebook"></i></a>
+                                    <a href="#" class="text-light me-3 fs-4"><i class="bi bi-instagram"></i></a>
+                                    <a href="#" class="text-light me-3 fs-4"><i class="bi bi-twitter"></i></a>
+                                    <a href="#" class="text-light fs-4"><i class="bi bi-linkedin"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </footer>
+
+            </div>
+        </div>
+        <div class="copy-right text-center">
+            <span class="copyright">Copyright Design By Reacthemes -2022</span>
         </div>
     </footer>
     @elseif ($footerVariation != 'am-footer_three')

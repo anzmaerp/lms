@@ -92,13 +92,13 @@
 }
 .cr-norecord_content h5 {
   margin: 20px 0 0;
-  color: rgba(12, 79, 154, 0.7);
+  color: rgba(0, 0, 0, 0.7);
   font: 600 1.25rem / 1.5em "Roboto", serif;
 }
 .cr-norecord_content span {
   display: block;
   margin-top: 5px;
-  color: black;
+  color: #585858;
   font: 400 0.875rem / 1.4285714286em "Roboto", serif;
 }
 /** ====== button components ====== **/
@@ -116,7 +116,7 @@
   display: inline-flex;
   justify-content: center;
   border-radius: 10px;
-  background-color: #ff4c00;
+  background-color: #295C51;
   font: 600 0.875rem/1.4285714286em "Roboto", serif;
 }
 .am-btn:before, .am-btn-light:before, .am-white-btn:before, .am-btnvtwo:before {
@@ -141,40 +141,40 @@
   color: #fff;
 }
 .am-btnvtwo {
-  color: rgba(12, 79, 154, 0.7);
+  color: rgba(0, 0, 0, 0.7);
 }
 .am-btnvtwo:hover, .am-btnvtwo:focus {
-  color: rgba(12, 79, 154, 0.7);
+  color: rgba(0, 0, 0, 0.7);
 }
 .am-btnsmall {
   height: 36px;
   padding: 8px 14px;
 }
 .am-btn-light {
-  color: black;
+  color: #585858;
   background: transparent;
 }
 .am-btn-light:hover {
   background: #f7f7f8;
-  color: black;
+  color: #585858;
 }
 .am-white-btn {
-  background: white;
+  background: #fff;
   border: 1px solid #eaeaea;
-  color: rgba(0, 0, 0, 0.8);
+  color: rgba(88, 88, 88, 0.8);
 }
 .am-white-btn:hover, .am-white-btn:focus {
   background: #fff;
-  color: rgba(0, 0, 0, 0.8);
+  color: rgba(88, 88, 88, 0.8);
 }
 .am-white-btn i::before {
-  color: black;
+  color: #585858;
 }
 /* theme Global Button style end */
 .am-btn_disable {
   pointer-events: none;
-  background: rgba(165, 164, 160, 0.015);
-  color: rgba(0, 0, 0, 0.5) !important;
+  background: #f7f7f8;
+  color: rgba(88, 88, 88, 0.5) !important;
 }
 .am-btn_disable:after {
   content: "";
@@ -182,8 +182,8 @@
   height: 16px;
   border-radius: 50%;
   animation: 0.5s btnloader infinite linear;
-  border: 2px solid rgba(12, 98, 149, 0.5);
-  border-top-color: rgba(12, 98, 149, 0.1);
+  border: 2px solid rgba(88, 88, 88, 0.5);
+  border-top-color: rgba(88, 88, 88, 0.1);
 }
 @keyframes btnloader {
   to {
@@ -364,7 +364,7 @@
   content: "";
   height: 100%;
   position: absolute;
-  background: #0c6295;
+  background: #585858;
 }
 .cr-sidebar_accordion_content_item:after {
   top: 0;
@@ -375,7 +375,7 @@
   content: "";
   height: 1px;
   position: absolute;
-  background: #0c6295;
+  background: #585858;
 }
 .cr-sidebar_accordion_content_item:first-child {
   margin-top: 6px;
@@ -458,10 +458,10 @@
   display: -webkit-box;
   -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
-  color: rgba(12, 79, 154, 0.9);
+  color: rgba(0, 0, 0, 0.9);
 }
 .cr-course-details-page .am-searchhead_title .cr-title-box p {
-  color: rgba(0, 0, 0, 0.9);
+  color: rgba(88, 88, 88, 0.9);
 }
 .am-searchdetail {
   gap: 60px;
@@ -494,7 +494,7 @@
   display: flex;
   margin-bottom: 0;
   align-items: center;
-  color: #0c4f9a;
+  color: #000;
   font: 500 1.875rem/1.2666666667em "Roboto", serif;
 }
 .am-tutordetail_user_name h3 a {
@@ -503,10 +503,10 @@
   display: -webkit-box;
   -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
-  color: #0c4f9a;
+  color: #000;
 }
 .am-tutordetail_user_name h3 a:hover {
-  color: #0c4f9a;
+  color: #000;
 }
 .am-tutordetail_user_name h3 .flag {
   height: 13px;
@@ -542,12 +542,12 @@
   -webkit-box-orient: vertical;
 }
 .am-tutordetail_user_name > ul li > span {
-  color: black;
+  color: #585858;
   font: 400 0.8125rem/1.2307692308em "Roboto", serif;
 }
 .am-tutordetail_user_name > ul li > a {
   display: inline-block;
-  color: black;
+  color: #585858;
   font: 500 0.75rem/1.5em "Roboto", serif;
 }
 .am-search-userdetail {
@@ -595,7 +595,7 @@
 }
 .am-tutordetail_fee strong {
   position: relative;
-  color: #0c4f9a;
+  color: #000;
   font: 600 1.875rem/1.2666666667em "Roboto", serif;
 }
 .am-tutordetail_fee strong sup {
@@ -611,12 +611,12 @@
 .am-tutordetail_fee strong em {
   margin-left: 2px;
   font-style: normal;
-  color: black;
+  color: #585858;
   font: 400 1rem/1.5em "Roboto", serif;
 }
 .am-tutordetail_fee span {
   display: block;
-  color: black;
+  color: #585858;
   font: 400 0.875rem/1.4285714286em "Roboto", serif;
 }
 .am-tutordetail-reviews {
@@ -651,13 +651,13 @@
   gap: 6px;
   display: flex;
   align-items: center;
-  color: black;
+  color: #585858;
   font: 500 0.875rem/1.4285714286em "Roboto", serif;
 }
 .am-tutorreview-item span em {
   font-weight: 400;
   font-style: normal;
-  color: black;
+  color: #585858;
 }
 .am-tutorreview-item .wa-tags-list {
   gap: 4px;
@@ -670,7 +670,7 @@
   display: flex;
   margin: 0 !important;
   align-items: center;
-  color: rgba(0, 0, 0, 0.7);
+  color: rgba(88, 88, 88, 0.7);
   font: 400 0.8125rem/1.2307692308em "Roboto", serif;
 }
 .am-tutorreview-item .wa-tags-list p span {
@@ -678,7 +678,7 @@
   padding: 2px 6px;
   border-radius: 6px;
   align-items: center;
-  color: black;
+  color: #585858;
   justify-content: center;
   background-color: #EFF8FF;
   font: 500 0.75rem/1.5em "Roboto", serif;
@@ -703,7 +703,7 @@
 }
 .am-tutorreview-item .wa-tags-list ul li > span {
   display: inline-block;
-  color: rgba(0, 0, 0, 0.7);
+  color: rgba(88, 88, 88, 0.7);
   font: 400 0.8125rem/1.2307692308em "Roboto", serif;
 }
 .am-tutorreview-item_icon {
@@ -740,22 +740,22 @@
 }
 .am-tutorskills-list li > ul li > span {
   display: block;
-  color: black;
+  color: #585858;
   font: 500 0.875rem/1.4285714286em "Roboto", serif;
 }
 .am-tutorskills-list li > ul li a {
   display: block;
-  color: black;
+  color: #585858;
   text-decoration: underline;
   font: 500 0.75rem/1.5em "Roboto", serif;
 }
 .am-tutorskills-list li p {
   margin: 6px 0 0 22px;
-  color: black;
+  color: #585858;
   font: 500 0.875rem/1.4285714286em "Roboto", serif;
 }
 .am-tutorskills-list li p a {
-  color: black;
+  color: #585858;
   font: 500 0.75rem/1.5em "Roboto", serif;
 }
 .am-tooltip-text span:not(:last-child):after {
@@ -768,7 +768,7 @@
 }
 .am-tutorskills-item span {
   display: block;
-  color: black;
+  color: #585858;
   font: 400 0.875rem/1.4285714286em "Roboto", serif;
 }
 .wa-tags-list {
@@ -781,7 +781,7 @@
   display: flex;
   margin: 0 !important;
   align-items: center;
-  color: black;
+  color: #585858;
   font: 500 0.875rem/1.4285714286em "Roboto", serif;
 }
 .wa-tags-list p span {
@@ -789,7 +789,7 @@
   padding: 2px 6px;
   border-radius: 6px;
   align-items: center;
-  color: black;
+  color: #585858;
   justify-content: center;
   background-color: #EFF8FF;
   font: 500 0.75rem/1.5em "Roboto", serif;
@@ -815,12 +815,12 @@
 }
 .wa-tags-list ul li > span {
   display: block;
-  color: black;
+  color: #585858;
   font: 500 0.875rem/1.4285714286em "Roboto", serif;
 }
 .wa-tags-list ul li > a {
   display: block;
-  color: black;
+  color: #585858;
   font: 500 0.75rem/1.5em "Roboto", serif;
 }
 .am-tutordetail-btns {
@@ -860,8 +860,8 @@
 }
 .am-tutordetail-btns .am-white-btn:hover {
   color: #fff;
-  background: #ff4c00;
-  border-color: #ff4c00;
+  background: #295C51;
+  border-color: #295C51;
 }
 .am-tutordetail-btns .am-white-btn:hover i::before {
   color: #fff;
@@ -917,7 +917,7 @@
   padding: 16px 20px;
   position: relative;
   align-items: center;
-  color: black;
+  color: #585858;
   justify-content: center;
   font: 500 0.9375rem/1.6em "Roboto", serif;
 }
@@ -936,7 +936,7 @@
   opacity: 0;
   bottom: -3px;
   position: absolute;
-  background: #0e0808;
+  background: #717171;
   border-radius: 50px 50px 0 0;
 }
 .am-booking_section {
@@ -983,7 +983,7 @@
 }
 .am-booking_section.am-featured-courses h1 {
   margin: 0;
-  color: #0c4f9a;
+  color: #000;
   font: 600 1.5rem/1.3333333333em "Roboto", serif;
 }
 .am-booking_section.am-featured-courses .am-handpick-tutor {
@@ -1078,12 +1078,12 @@
   border-radius: 8px;
   flex-direction: column;
   background: #FBF9F4;
-  color: rgba(12, 79, 154, 0.4);
+  color: rgba(0, 0, 0, 0.4);
 }
 .am-emptyslot {
   padding: 12px 22px;
   border-radius: 8px;
-  color: rgba(12, 79, 154, 0.4);
+  color: rgba(0, 0, 0, 0.4);
   font: 400 0.75rem/1.1666666667em "Roboto", serif;
 }
 .am-bookingbtns {
@@ -1103,7 +1103,7 @@
   display: flex;
   padding: 5px 12px;
   border-radius: 6px;
-  color: #0e0808;
+  color: #717171;
   align-items: center;
   justify-content: center;
   background: rgba(41, 92, 81, 0.1);
@@ -1117,7 +1117,7 @@
   padding: 4px 11px;
   border-radius: 6px;
   justify-content: center;
-  color: black;
+  color: #585858;
   border: 1px solid #eaeaea;
   font: 500 0.75rem/1.5em "Roboto", serif;
 }
@@ -1172,16 +1172,16 @@
 }
 .am-userinfo_content .am-booking-filter-wrapper .select2-container .select2-selection--single .select2-selection__rendered {
   padding: 9px 30px 9px 12px;
-  color: rgba(0, 0, 0, 0.6);
+  color: rgba(88, 88, 88, 0.6);
 }
 .am-userinfo_content h3 {
   margin: 0 0 10px;
-  color: #0c4f9a;
+  color: #000;
   font: 600 1.5rem/1.3333333333em "Roboto", serif;
 }
 .am-userinfo_content p {
   margin: 0;
-  color: black;
+  color: #585858;
   font: 400 1rem/1.5em "Roboto", serif;
 }
 .am-userinfo_content p + p, .am-userinfo_content p p {
@@ -1190,7 +1190,7 @@
 .am-userinfo_content a {
   display: block;
   margin: 10px 0 0;
-  color: black;
+  color: #585858;
   text-decoration: underline;
   font: 600 0.875rem/1.4285714286em "Roboto", serif;
 }
@@ -1234,7 +1234,7 @@
 .am-userinfo_content .am-booking-calander .am-booking-calander-day a, .am-userinfo_content .am-booking-calander .am-booking-calander-date a {
   margin: 0;
   text-decoration: none;
-  color: black;
+  color: #585858;
   font: 600 0.875rem/1.4285714286em "Roboto", serif;
 }
 .am-userinfo_content .am-booking-calander .am-booking-calander-day input, .am-userinfo_content .am-booking-calander .am-booking-calander-date input {
@@ -1274,7 +1274,7 @@
   pointer-events: none;
 }
 .am-userinfo_content .tab-pane_leftarrow[disabled] svg > path {
-  stroke: rgba(12, 98, 149, 0.4);
+  stroke: rgba(88, 88, 88, 0.4);
 }
 .am-userinfo_content .tab-pane_rightarrow {
   top: 16px;
@@ -1324,7 +1324,7 @@
   margin: 0;
   display: flex;
   align-items: center;
-  color: rgba(0, 0, 0, 0.9);
+  color: rgba(88, 88, 88, 0.9);
   font: 400 0.6875rem/1.1818181818em "Roboto", serif;
 }
 .am-userinfo_content .tab-pane .am-booking-weekly-clander .am-weekly-slots_card h6 .am-closepopup {
@@ -1334,7 +1334,7 @@
 }
 .am-userinfo_content .tab-pane .am-booking-weekly-clander .am-weekly-slots_card h5 {
   margin: 2px 0 0 0;
-  color: rgba(12, 79, 154, 0.7);
+  color: rgba(0, 0, 0, 0.7);
   font: 500 0.75rem/1.5em "Roboto", serif;
 }
 .am-userinfo_content .tab-pane .am-booking-weekly-clander .am-weekly-slots_card::before {
@@ -1359,11 +1359,11 @@
   display: flex;
   padding: 5px 0;
   align-items: center;
-  color: rgba(12, 79, 154, 0.8);
+  color: rgba(0, 0, 0, 0.8);
   font: 400 0.75rem/1.1666666667em "Roboto", serif;
 }
 .am-userinfo_content .tab-pane .am-booking-weekly-clander .am-weekly-slots_info span em {
-  color: rgba(12, 79, 154, 0.8);
+  color: rgba(0, 0, 0, 0.8);
   font: normal 400 0.75rem/1.1666666667em "Roboto", serif;
 }
 .am-userinfomore_wrap {
@@ -1380,11 +1380,11 @@
   border: 0;
   padding: 10px 20px;
   border-radius: 10px;
-  color: black;
+  color: #585858;
   font: 500 0.9375rem/1.6em "Roboto", serif;
 }
 .am-userinfomore_tab .nav-link.active {
-  color: black;
+  color: #585858;
   background: rgba(219, 132, 1, 0.05);
 }
 .am-userinfomore_title {
@@ -1392,7 +1392,7 @@
 }
 .am-userinfomore_title h3 {
   margin: 0;
-  color: #0c4f9a;
+  color: #000;
   font: 600 1.5rem/1.3333333333em "Roboto", serif;
 }
 .am-userinfomore_cards {
@@ -1439,7 +1439,7 @@
 }
 .am-userinfomore_card_info h4 {
   margin: 0 0 4px;
-  color: black;
+  color: #585858;
   font: 500 1.125rem/1.5555555556em "Roboto", serif;
 }
 .am-userinfomore_card_info ul {
@@ -1467,7 +1467,7 @@
 .am-userinfomore_card_info a {
   display: block;
   margin: 10px 0 0 0;
-  color: black;
+  color: #585858;
   text-decoration: underline;
   font: 600 0.875rem/1.4285714286em "Roboto", serif;
 }
@@ -1494,7 +1494,7 @@
 }
 .am-reviews_title h3 {
   margin: 0;
-  color: #0c4f9a;
+  color: #000;
   font: 600 1.5rem/1.3333333333em "Roboto", serif;
 }
 .am-reviews_wrap {
@@ -1535,7 +1535,7 @@
   border-top: 1px solid #F5E2C8;
 }
 .am-reviews_sidebar_head strong {
-  color: #0c4f9a;
+  color: #000;
   font: 600 3rem/1.25em "Roboto", serif;
 }
 .am-reviews_sidebar_stars > span {
@@ -1549,12 +1549,12 @@
 .am-reviews_sidebar_stars > em {
   margin-top: 6px;
   display: block;
-  color: rgba(12, 79, 154, 0.7);
+  color: rgba(0, 0, 0, 0.7);
   font: normal 400 0.875rem/1.4285714286em "Roboto", serif;
 }
 .am-reviews_sidebar_stars > em em {
   font: normal 500 0.875rem/1.4285714286em "Roboto", serif;
-  color: rgba(12, 79, 154, 0.8);
+  color: rgba(0, 0, 0, 0.8);
 }
 .am-reviews_ratio {
   margin: 0;
@@ -1577,12 +1577,12 @@
 }
 .am-reviews_ratio_title span {
   display: block;
-  color: black;
+  color: #585858;
   font: 500 0.875rem/1.4285714286em "Roboto", serif;
 }
 .am-reviews_ratio_title em {
   margin-left: auto;
-  color: rgba(12, 79, 154, 0.7);
+  color: rgba(0, 0, 0, 0.7);
   font: 400 0.75rem/1.4285714286em "Roboto", serif;
 }
 .am-progressbar {
@@ -1634,7 +1634,7 @@
   margin: 0;
   display: flex;
   align-items: center;
-  color: #0c4f9a;
+  color: #000;
   font: 500 1rem/1.5em "Roboto", serif;
 }
 .am-comments_user_name h4 img {
@@ -1680,12 +1680,12 @@
   height: 14px;
 }
 .am-comment_rate span {
-  color: rgba(12, 79, 154, 0.8);
+  color: rgba(0, 0, 0, 0.8);
   font: normal 500 0.875rem/1.4285714286em "Roboto", serif;
 }
 .am-comment_rate span em {
   font-weight: 400;
-  color: rgba(12, 79, 154, 0.7);
+  color: rgba(0, 0, 0, 0.7);
 }
 .am-comment p {
   margin: 0;
@@ -1694,7 +1694,7 @@
 .am-comment p a {
   margin: 0;
   display: inline-block;
-  color: black;
+  color: #585858;
   text-decoration: underline;
   font: 600 0.875rem/1.4285714286em "Roboto", serif;
 }
@@ -1721,7 +1721,7 @@
   padding: 10px 16px;
   border-radius: 8px;
   background: #FBF9F4;
-  color: black;
+  color: #585858;
   font: 600 0.875rem/1.25em "Roboto", serif;
 }
 .am-similar-tutor {
@@ -1755,7 +1755,7 @@
   justify-content: center;
 }
 .am-similaruser-btn .am-white-btn {
-  background: white;
+  background: #fff;
   border-color: #E9BB71;
 }
 .am-similaruser-btn .am-white-btn::before {
@@ -1775,8 +1775,8 @@
 }
 .am-similar-user:hover .am-sendmessage-btn .am-btn {
   color: #fff;
-  background: #ff4c00;
-  border: 1px solid #ff4c00;
+  background: #295C51;
+  border: 1px solid #295C51;
 }
 .am-similar-user:hover .am-sendmessage-btn .am-btn i::before {
   color: #fff;
@@ -1825,7 +1825,7 @@
 .am-similar-user .am-tutorreview-item span em {
   font-size: 14px;
   line-height: 20px;
-  color: rgba(0, 0, 0, 0.7);
+  color: rgba(88, 88, 88, 0.7);
   font: 400 0.8125rem/1.2307692308em "Roboto", serif;
 }
 .am-similar-user .am-tutorreview-item .am-more {
@@ -1845,7 +1845,7 @@
   color: #fff;
   position: relative;
   transition: all 0.2s;
-  color: black;
+  color: #585858;
   font: 400 0.8125rem/1.2307692308em "Roboto", serif;
 }
 .am-custom-tooltip:hover .am-tooltip-text {
@@ -1903,16 +1903,16 @@
   padding: 9px 15px;
   background: #fff;
   border: 1px solid #eaeaea;
-  color: rgba(0, 0, 0, 0.8);
+  color: rgba(88, 88, 88, 0.8);
 }
 .am-similaruser-btns .am-sendmessage-btn .am-btn i::before {
   font-size: 16px;
-  color: black;
+  color: #585858;
 }
 .am-similaruser-btns .am-sendmessage-btn .am-btn:hover {
   color: #fff;
-  background: #ff4c00;
-  border: 1px solid #ff4c00;
+  background: #295C51;
+  border: 1px solid #295C51;
 }
 .am-similaruser-btns .am-sendmessage-btn .am-btn:hover i::before {
   color: #fff;
@@ -1987,7 +1987,7 @@
   padding: 12px 16px;
   border-radius: 8px;
   align-items: center;
-  background: #ff4c00;
+  background: #295C51;
   justify-content: center;
 }
 .am-howtobook > a i::before {
@@ -2028,7 +2028,7 @@
 }
 .am-howtobook_info h3 {
   margin: 0 0 8px;
-  color: #0c4f9a;
+  color: #000;
   font: 400 0.8125rem/1.3846153846em "Roboto", serif;
 }
 .am-howtobook_info ol {
@@ -2049,7 +2049,7 @@
 }
 .am-howtobook_info ol li span a {
   font-style: italic;
-  color: black;
+  color: #585858;
   text-decoration: underline;
 }
 .am-howtobook_close {
@@ -2122,7 +2122,7 @@
   justify-content: space-between !important;
 }
 .cr-curriculum-list .accordion-header .cr-contentbox span {
-  color: black;
+  color: #585858;
   font: 500 14px/16px "Roboto", serif;
 }
 .cr-curriculum-list .accordion-header ul {
@@ -2149,7 +2149,7 @@
   height: 4px;
   position: absolute;
   border-radius: 50%;
-  background: #0c6295;
+  background: #585858;
   transform: translateY(-50%);
 }
 .cr-curriculum-list .accordion-header ul li span {
@@ -2160,7 +2160,7 @@
   line-height: 18px;
   font-style: normal;
   align-items: center;
-  color: black;
+  color: #585858;
 }
 .cr-curriculum-list .accordion-header ul li span strong {
   font-weight: 500;
@@ -2292,7 +2292,7 @@
   font-style: normal;
   line-height: 24px;
   /* 150% */
-  color: black;
+  color: #585858;
   font-family: "Roboto", serif;
   margin: 0;
 }
@@ -2307,7 +2307,7 @@
   display: flex;
   font-size: 16px;
   font-weight: 400;
-  color: black;
+  color: #585858;
   line-height: 24px;
   /* 150% */
   font-style: normal;
@@ -2371,10 +2371,10 @@
   margin-bottom: 4px;
 }
 .cr-course-details-info .am-breadcrumb li a {
-  color: rgba(12, 79, 154, 0.7);
+  color: rgba(0, 0, 0, 0.7);
 }
 .cr-course-details-info .am-breadcrumb li span {
-  color: rgba(12, 79, 154, 0.5);
+  color: rgba(0, 0, 0, 0.5);
 }
 .cr-course-shap-image {
   top: -70px;
@@ -2412,7 +2412,7 @@
   padding: 3px 10px;
   border-radius: 8px;
   font: 400 12px/18px "Roboto", serif;
-  border: 1px solid rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(88, 88, 88, 0.2);
 }
 .cr-title-box .cr-course-category span {
   font-weight: 500;
@@ -2444,13 +2444,13 @@
   font: 500 14px/20px "Roboto", serif;
 }
 .cr-review-count {
-  color: black;
+  color: #585858;
   font: 400 12px/18px "Roboto", serif;
 }
 .cr-last-updated {
   gap: 7px;
   display: flex;
-  color: black;
+  color: #585858;
   align-items: center;
   justify-content: start;
   font: 400 14px/1 "Roboto", serif;
@@ -2517,12 +2517,12 @@
   border: 0;
 }
 .cr-stat-label {
-  color: black;
+  color: #585858;
   font: 400 12px/18px "Roboto", serif;
 }
 .cr-stat-value {
   font: 500 14px/20px "Roboto", serif;
-  color: rgba(12, 79, 154, 0.7);
+  color: rgba(0, 0, 0, 0.7);
 }
 .cr-topics {
   gap: 6px;
@@ -2544,12 +2544,12 @@
   color: #666;
 }
 .cr-curriculum-stats em {
-  color: black;
+  color: #585858;
   font: 500 14px/20px "Roboto", serif;
 }
 .cr-curriculum-stats span {
   font: 400 14px/20px "Roboto", serif;
-  color: rgba(0, 0, 0, 0.8);
+  color: rgba(88, 88, 88, 0.8);
 }
 .cr-expand-all {
   color: #754FFE;
@@ -2719,7 +2719,7 @@
   display: flex;
   flex-direction: column;
   font-family: SF Pro Text, sans-serif;
-  color: black;
+  color: #585858;
   justify-content: center;
   width: 226px;
 }
@@ -2782,7 +2782,7 @@
   align-self: stretch;
   padding: 10px 12px !important;
   background-color: transparent;
-  color: rgba(0, 0, 0, 0.6);
+  color: rgba(88, 88, 88, 0.6);
   font-family: SF Pro Text, sans-serif;
 }
 .cr-input-text:hover, .cr-input-text:focus {
@@ -2794,7 +2794,7 @@
   font: 700 18px/28px "Roboto", serif;
 }
 .am-tutordetail_user_name span {
-  color: black;
+  color: #585858;
   font: 400 12px/18px "Roboto", serif !important;
 }
 .instructor-bio {
@@ -2850,7 +2850,7 @@
   padding: 2px 6px;
   border-radius: 6px;
   background: #EFF8FF;
-  color: black;
+  color: #585858;
 }
 .cr-profile-footer {
   gap: 14px;
@@ -2874,7 +2874,7 @@
   text-decoration: none;
   justify-content: center;
   border-radius: 25.714px;
-  color: black;
+  color: #585858;
   font-size: 14px;
 }
 .cr-profile-footer .cr-social-icons li a .am-tooltip-text {
@@ -2886,8 +2886,8 @@
 }
 .cr-view-profile-btn {
   border-radius: 10px;
-  background-color: rgba(14, 8, 8, 0.1);
-  color: #0e0808;
+  background-color: rgba(113, 113, 113, 0.1);
+  color: #717171;
   padding: 8px 16px;
   font: 500 14px/1 "Roboto", serif;
 }
@@ -2904,7 +2904,7 @@
   opacity: 0.8;
   margin: auto 0;
   align-self: stretch;
-  color: #0c4f9a;
+  color: #000;
   font: 600 16px "Roboto", serif;
 }
 .share-icons-container {
@@ -2966,7 +2966,7 @@
 }
 .more-options {
   border-radius: 30px;
-  background-color: rgba(14, 8, 8, 0.1);
+  background-color: rgba(113, 113, 113, 0.1);
   align-self: stretch;
   display: flex;
   min-height: 30px;
@@ -2978,7 +2978,7 @@
   padding: 0 8px 0 7px;
 }
 .more-options i:before {
-  color: #0e0808;
+  color: #717171;
 }
 .cr-facebook i:before {
   color: #3b5999;
@@ -3033,7 +3033,7 @@
 .tags-title {
   font-size: 16px;
   font-weight: 600;
-  color: rgba(12, 79, 154, 0.8);
+  color: rgba(0, 0, 0, 0.8);
 }
 .tags-list {
   gap: 10px;
@@ -3046,7 +3046,7 @@
   text-align: center;
   align-items: center;
   justify-content: start;
-  color: black;
+  color: #585858;
 }
 .tag {
   align-self: stretch;
@@ -3107,7 +3107,7 @@
   font-size: 16px;
   font-weight: 500;
   line-height: 24px;
-  color: rgba(12, 79, 154, 0.8);
+  color: rgba(0, 0, 0, 0.8);
 }
 .cr-includes-list {
   gap: 10px;
@@ -3117,7 +3117,7 @@
   line-height: 1;
   font-size: 14px;
   margin-top: 12px;
-  color: black;
+  color: #585858;
   list-style-type: none;
   flex-direction: column;
 }
@@ -3150,12 +3150,12 @@
 }
 .cr-course-sidebar .am-similar-user .am-tutorreviews-list span em {
   font: 400 14px/20px "Roboto", serif;
-  color: rgba(0, 0, 0, 0.8);
+  color: rgba(88, 88, 88, 0.8);
 }
 .cr-course-sidebar .am-similar-user .cr-instructor-bio {
   margin: 0;
   font: 400 14px/20px "Roboto", serif;
-  color: rgba(0, 0, 0, 0.9);
+  color: rgba(88, 88, 88, 0.9);
 }
 .cr-course-sidebar .am-similar-user .cr-view-profile-btn {
   font: 500 14px/20px "Roboto", serif;
@@ -3164,7 +3164,7 @@
   padding-left: 26px;
 }
 .cr-course-sidebar .am-similar-user .wa-tags-list li span {
-  color: black;
+  color: #585858;
   font: 500 14px/20px "Roboto", serif;
 }
 .cr-course-sidebar .am-similar-user .wa-tags-list li .cr-native {
@@ -3177,10 +3177,10 @@
 }
 .cr-overview .cr-faq-accordion .accordion .accordion-item .accordion-header .cr-contentbox span {
   display: block;
-  color: black;
+  color: #585858;
 }
 .cr-overview .cr-faq-accordion .accordion .accordion-item .accordion-content p {
-  color: rgba(0, 0, 0, 0.8);
+  color: rgba(88, 88, 88, 0.8);
 }
 .cr-overview.tab-content {
   padding-top: 60px;
@@ -3195,14 +3195,14 @@
 .cr-overview .cr-overview-course h3 {
   margin-bottom: 20px;
   font: 500 20px/30px "Roboto", serif;
-  color: rgba(12, 79, 154, 0.9);
+  color: rgba(0, 0, 0, 0.9);
 }
 .cr-overview .cr-overview-course h3 + .cr-faq-accordion {
   margin-top: 0;
 }
 .cr-overview .cr-overview-course p {
   margin: 0;
-  color: black;
+  color: #585858;
   font: 400 16px/24px "Roboto", serif;
 }
 .cr-overview .cr-overview-course p ~ ul, .cr-overview .cr-overview-course p ~ p {
@@ -3216,7 +3216,7 @@
 .cr-overview .cr-overview-course .cr-show {
   display: block;
   margin-top: 10px;
-  color: black;
+  color: #585858;
   text-decoration: underline;
   font: 400 14px/20px "Roboto", serif;
 }
@@ -3250,7 +3250,7 @@
 }
 .cr-overview .cr-overview-course .cr-learn-content .cr-checked-contnet em {
   font: 400 16px/24px "Roboto", serif;
-  color: rgba(0, 0, 0, 0.9);
+  color: rgba(88, 88, 88, 0.9);
 }
 .cr-overview .cr-detail-faq-accordion .accordion-item + .accordion-item {
   margin-top: 16px !important;
@@ -3286,7 +3286,7 @@
 }
 .cr-overview .cr-overview-curriculm .accordion-content p {
   margin-bottom: 0 !important;
-  color: rgba(0, 0, 0, 0.9);
+  color: rgba(88, 88, 88, 0.9);
 }
 .cr-overview .cr-overview-curriculm .accordion-content p + ul {
   margin: 12px 0 0;
@@ -3297,7 +3297,7 @@
 .cr-overview .cr-overview-curriculm .accordion-content .cr-frame-wrapper span {
   display: flex;
   align-items: center;
-  color: black;
+  color: #585858;
   font: 400 12px/18px "Roboto", serif;
 }
 .cr-overview .cr-overview-curriculm .accordion-content .cr-frame-wrapper span strong {
@@ -3323,7 +3323,7 @@
   height: 100%;
   position: absolute;
   border-radius: 8px;
-  background-color: #0c4f9a;
+  background-color: #000;
 }
 .cr-overview .cr-overview-curriculm .accordion-content .cr-frame-wrapper span .cr-label-preview:hover, .cr-overview .cr-overview-curriculm .accordion-content .cr-frame-wrapper span .cr-label-preview:focus {
   outline: none;
@@ -3399,7 +3399,7 @@
 }
 .cr-overview-rating .cr-review .cr-review-content .cr-review-rating-main .cr-review-star .cr-review-name h4 {
   margin: 0;
-  color: #0c4f9a;
+  color: #000;
   font: 500 16px/24px "Roboto", serif;
 }
 .cr-overview-rating .cr-review .cr-review-content .cr-review-rating-main .cr-review-star .cr-review-name img {
@@ -3411,7 +3411,7 @@
   max-width: fit-content;
 }
 .cr-overview-rating .cr-review .cr-review-content .cr-review-rating-main .cr-review-star span {
-  color: black;
+  color: #585858;
   font: 400 12px/18px "Roboto", serif;
 }
 .cr-overview-rating .cr-review .cr-review-content .cr-review-rating-main .cr-review-star span.flag {
@@ -3436,7 +3436,7 @@
 }
 .cr-overview-rating .cr-review .cr-review-content .cr-review-rating-main .cr-reviews-content .cr-review-rating span {
   font: 500 14px/20px "Roboto", serif;
-  color: rgba(12, 79, 154, 0.8);
+  color: rgba(0, 0, 0, 0.8);
 }
 .cr-overview-rating .cr-review .cr-review-content .cr-review-rating-main .cr-reviews-content .cr-review-rating span em {
   opacity: 0.7;
@@ -3446,7 +3446,7 @@
 }
 .cr-overview-rating .cr-review p {
   margin: 0;
-  color: black;
+  color: #585858;
   font: 400 16px/24px "Roboto", serif;
 }
 .cr-overview-rating .cr-review-button {
@@ -3455,7 +3455,7 @@
   text-align: center;
   padding: 10px 16px;
   background: #f7f7f8;
-  color: black;
+  color: #585858;
   font: 400 14px/20px "Roboto", serif;
 }
 .cr-course-like-main {
@@ -3472,7 +3472,7 @@
 }
 .cr-course-like-main .cr-course-like-area h5 {
   margin: 0;
-  color: rgba(12, 79, 154, 0.9);
+  color: rgba(0, 0, 0, 0.9);
   font: 500 20px/30px "Roboto", serif;
 }
 .cr-course-like-main .cr-course-like-area .cr-course-card {
@@ -3535,7 +3535,7 @@
   height: 185px;
 }
 .cr-bookmark-button svg path {
-  stroke: rgba(12, 98, 149, 0.5);
+  stroke: rgba(88, 88, 88, 0.5);
 }
 .cr-bookmark-button.cr-likedcard svg, .cr-bookmark-button:hover svg {
   fill: #F63C3C;
@@ -3563,13 +3563,13 @@
   position: relative;
   background: transparent;
   font: 500 15px/24px "Roboto", serif;
-  color: rgba(0, 0, 0, 0.7);
+  color: rgba(88, 88, 88, 0.7);
 }
 .cr-detail-tabs .am-aboutuser_tab li a::before {
   bottom: -1px;
 }
 .cr-detail-tabs .am-aboutuser_tab li.active a {
-  color: black;
+  color: #585858;
 }
 .cr-course-details-sections > .cr-course-details-area {
   z-index: unset;
@@ -3764,7 +3764,7 @@
 }
 .cr-course.cr-create-course .cr-course-box .cr-course-body .cr-formarea .cr-curriculum-content .cr-btns .cr-allow-discount label {
   opacity: 1;
-  color: #0c6295;
+  color: #585858;
   font: 400 0.875rem / 1.4285714286em "Roboto", serif;
 }
 .cr-course.cr-create-course .cr-course-box .cr-course-body .cr-formarea .cr-curriculum-content .am-custom-editor.am-custom-textarea .note-editor.note-frame {
@@ -3804,7 +3804,7 @@
   font: 500 0.75rem / 1.5em "Roboto", serif;
 }
 .cr-course.cr-create-course .cr-course-box .cr-no-record-container .am-btn.am-btn_disable svg path {
-  stroke: rgba(12, 98, 149, 0.5);
+  stroke: rgba(88, 88, 88, 0.5);
 }
 .cr-course.cr-create-course .cr-course-box .cr-pre-requisites {
   margin-bottom: 0;
@@ -3830,7 +3830,7 @@
   letter-spacing: normal;
 }
 .cr-course.cr-create-course .cr-course-box .cr-content-box.cr-discussion-forum .cr-free_course > span em {
-  color: rgba(0, 0, 0, 0.9);
+  color: rgba(88, 88, 88, 0.9);
   font: normal 400 1rem / 1.5em "Roboto", serif;
 }
 .cr-course.cr-create-course .cr-course-box .cr-content-box.cr-discussion-forum p {
@@ -3852,7 +3852,7 @@
   margin: 0 0 10px;
 }
 .cr-noticeboard_title h3 {
-  color: #0c4f9a;
+  color: #000;
   font: normal 500 0.875rem / 1.4285714286em "Roboto", serif;
 }
 .cr-noticeboard .am-promoslist {
@@ -3863,7 +3863,7 @@
   padding: 10px 16px;
   border-radius: 10px;
   background: #fff;
-  color: black;
+  color: #585858;
   border: 0.767px solid #eaeaea;
   font: 400 0.875rem / 1.4285714286em "Roboto", serif;
   box-shadow: 0px 1px 2px 0px rgba(16, 24, 40, 0.05);
@@ -3887,7 +3887,7 @@
   margin-right: auto;
   opacity: 0.6;
   font-style: normal;
-  color: black;
+  color: #585858;
   font: 400 0.75rem / 1.5em "Roboto", serif;
 }
 .cr-noticeboard .am-promoowrap_date .am-editpromo, .cr-noticeboard .am-promoowrap_date .am-deletepromo {
@@ -3902,13 +3902,13 @@
 }
 .cr-course-creation h2 {
   margin-bottom: 5px;
-  color: #0e0808;
+  color: #717171;
   font: 600 0.75rem / 1.5em "Roboto", serif;
 }
 .cr-course-creation p {
   margin-top: 0;
   font-size: 14px;
-  color: black;
+  color: #585858;
   font: 400 0.75rem / 1.5em "Roboto", serif;
 }
 .cr-steps {
@@ -3948,7 +3948,7 @@
 }
 .cr-steps > li .cr-icon i {
   font-size: 16px;
-  color: #0c6295;
+  color: #585858;
 }
 .cr-steps > li .cr-icon .cr-checked {
   opacity: 0;
@@ -3960,7 +3960,7 @@
 }
 .cr-steps > li.cr-active .cr-icon {
   background: #fff;
-  border: 1.7px solid #0e0808;
+  border: 1.7px solid #717171;
 }
 .cr-steps > li.cr-active .cr-icon i {
   display: none;
@@ -3973,17 +3973,17 @@
   opacity: 0.8;
   display: flex;
   align-items: center;
-  color: #0c4f9a;
+  color: #000;
   font: 500 0.875rem / 1.4285714286em "Roboto", serif;
 }
 .cr-steps .cr-steps_info strong > svg path {
   opacity: 0.7;
-  fill: #0c4f9a;
+  fill: #000;
 }
 .cr-steps .cr-steps_info > span {
   display: block;
   margin-top: 4px;
-  color: black;
+  color: #585858;
   font: 400 0.75rem / 1.5em "Roboto", serif;
 }
 .cr-steps .cr-steps_info > em {
@@ -3993,7 +3993,7 @@
   margin-top: 4px;
   align-items: center;
   font: 400 0.75rem / 1.5em "Roboto", serif;
-  color: rgba(0, 0, 0, 0.7);
+  color: rgba(88, 88, 88, 0.7);
 }
 .cr-steps .cr-active .cr-steps_info strong {
   opacity: 1;
@@ -4010,14 +4010,14 @@
   content: "";
   height: 8px;
   border-radius: 50%;
-  background: #0e0808;
+  background: #717171;
 }
 .cr-steps .cr-active .cr-icon svg {
   display: none;
 }
 .cr-steps .cr-completed .cr-icon {
-  background: rgba(14, 8, 8, 0.1) !important;
-  border-color: rgba(14, 8, 8, 0.1) !important;
+  background: rgba(113, 113, 113, 0.1) !important;
+  border-color: rgba(113, 113, 113, 0.1) !important;
 }
 .cr-steps .cr-completed .cr-icon svg:not(.cr-checked) {
   opacity: 0;
@@ -4025,13 +4025,13 @@
   visibility: hidden;
 }
 .cr-steps .cr-completed .cr-icon > .cr-checked path {
-  stroke: #0e0808;
+  stroke: #717171;
 }
 .cr-steps .cr-completed .cr-icon i {
   display: none;
 }
 .cr-steps .cr-completed::after {
-  background: #0e0808 !important;
+  background: #717171 !important;
 }
 .cr-steps .cr-completed .cr-checked {
   opacity: 1 !important;
@@ -4084,12 +4084,12 @@
 }
 .cr-content-box h1 {
   word-spacing: 0.5px;
-  color: #0c4f9a;
+  color: #000;
   font: 500 1.25rem / 1.5em "Roboto", serif;
 }
 .cr-content-box p {
   margin-top: 6px;
-  color: black;
+  color: #585858;
   font: 400 0.875rem / 1.4285714286em "Roboto", serif;
 }
 .cr-media-upload > p {
@@ -4164,7 +4164,7 @@
   cursor: pointer;
 }
 .cr-add-more {
-  color: #0e0808;
+  color: #717171;
   text-decoration: none;
   float: right;
 }
@@ -4218,7 +4218,7 @@
 }
 .cr-remove_file:hover svg path {
   opacity: 1;
-  stroke: #0c6295;
+  stroke: #585858;
 }
 .cr-remove_file.cr-trash:hover {
   background: #fee4e2;
@@ -4235,13 +4235,13 @@
 }
 .cr-file_name {
   flex-grow: 1;
-  color: black;
+  color: #585858;
   font: 500 0.875rem / 1.4285714286em "Roboto", serif;
 }
 .cr-file_size {
   display: block;
   margin-right: 10px;
-  color: black;
+  color: #585858;
   font: 400 0.75rem / 0.8333333333em "Roboto", serif;
 }
 .cr-spinner {
@@ -4332,7 +4332,7 @@
 .cr-labels li span {
   display: block;
   word-break: break-word;
-  color: black;
+  color: #585858;
   font: 500 0.75rem / 1.5em "Roboto", serif;
 }
 .cr-card, .cr-card-skeleton {
@@ -4381,7 +4381,7 @@
   position: absolute;
 }
 .cr-course-box .cr-content-box h2 {
-  color: #0c4f9a;
+  color: #000;
   font: 500 1.25rem / 1.5em "Roboto", serif;
 }
 .cr-course-body {
@@ -4401,22 +4401,22 @@
   min-height: 36px;
   padding: 8px 12px;
   position: relative;
-  color: #0e0808;
+  color: #717171;
   border-radius: 10px;
   align-items: center;
   justify-content: center;
-  background: rgba(255, 76, 0, 0.1);
+  background: rgba(41, 92, 81, 0.1);
   font: 400 0.875rem / 1.4285714286em "Roboto", serif;
 }
 .cr-course-body .cr-addbtn .am-border-svg {
-  stroke: rgba(14, 8, 8, 0.4);
+  stroke: rgba(113, 113, 113, 0.4);
 }
 .cr-course-body .cr-addbtn .am-border-svg rect {
   stroke-width: 1px;
 }
 .cr-course-body .cr-addbtn i::before {
   font-weight: 600;
-  color: #0e0808;
+  color: #717171;
 }
 .cr-course-body .cr-formarea {
   gap: 16px;
@@ -4461,7 +4461,7 @@
   display: flex;
   min-height: 32px;
   padding: 7px 12px;
-  color: #0c6295;
+  color: #585858;
   border-radius: 10px;
   align-items: center;
   justify-content: center;
@@ -4508,7 +4508,7 @@
   flex: none;
 }
 .cr-course-body .cr-course-item .cr-contentbox span {
-  color: black;
+  color: #585858;
   font: 400 0.875rem / 1.4285714286em "Roboto", serif;
 }
 .cr-course-body .cr-course-item .am-itemdropdown > a {
@@ -4543,7 +4543,7 @@
   gap: 5px;
   display: flex;
   align-items: center;
-  color: black;
+  color: #585858;
   font: 400 0.875rem / 1.4285714286em "Roboto", serif;
 }
 .cr-course-body .cr-curriculum-item .cr-contentbox span.cr-drag {
@@ -4572,7 +4572,7 @@
 }
 .cr-course-body .cr-curriculum-content p {
   margin: 0 0 10px;
-  color: black;
+  color: #585858;
   font: 400 0.75rem / 1.5em "Roboto", serif;
 }
 .cr-course-body .cr-curriculum-content ul {
@@ -4596,8 +4596,8 @@
   border: 1px dashed #eaeaea;
 }
 .cr-course-body .cr-curriculum-content ul li.cr-active {
-  border: 1px solid #0e0808;
-  outline: 1px solid #0e0808;
+  border: 1px solid #717171;
+  outline: 1px solid #717171;
 }
 .cr-course-body .cr-curriculum-content .am-upload-options {
   gap: 16px;
@@ -4607,7 +4607,7 @@
 .cr-course-body .cr-curriculum-content .am-upload-options h6 {
   padding: 5px 0;
   min-width: 150px;
-  color: black;
+  color: #585858;
   font: 500 0.875rem / 1.4285714286em "Roboto", serif;
 }
 .cr-course-body .cr-curriculum-content .am-upload-options .am-radio label {
@@ -4635,7 +4635,7 @@
   display: block;
 }
 .cr-course-body .cr-curriculum-content .cr-curriculum-btnconten span {
-  color: black;
+  color: #585858;
   font: 400 0.875rem / 1.4285714286em "Roboto", serif;
 }
 .cr-course-body .cr-curriculum-content .cr-tag {
@@ -4665,7 +4665,7 @@
 }
 .cr-course-body .cr-curriculum-content .am-uploadfile span {
   text-align: center;
-  color: black;
+  color: #585858;
 }
 .cr-course-body .cr-curriculum-content .am-uploadfile span em {
   display: block;
@@ -4712,14 +4712,14 @@
 }
 .cr-course-body .cr-file-preview .cr-file-preview-info h4 {
   margin: 0;
-  color: black;
+  color: #585858;
   font: 600 0.875rem / 1.4285714286em "Roboto", serif;
 }
 .cr-course-body .cr-file-preview .cr-file-preview-info .cr-edit-content {
   gap: 4px;
   display: flex;
   cursor: pointer;
-  color: #0e0808;
+  color: #717171;
   align-items: center;
   font: 400 0.75rem / 1.5em "Roboto", serif;
 }
@@ -4814,13 +4814,13 @@
 .cr-free_course strong {
   display: block;
   text-align: right;
-  color: #0c4f9a;
+  color: #000;
   font: 700 1.25rem / 1.5em "Roboto", serif;
 }
 .cr-free_course strong span {
   display: block;
   font: 400 0.625rem / 1.2em "Roboto", serif;
-  color: rgba(0, 0, 0, 0.9);
+  color: rgba(88, 88, 88, 0.9);
 }
 .cr-free_course > input {
   flex: none;
@@ -4828,12 +4828,12 @@
 .cr-free_discription > label {
   display: block;
   margin-bottom: 0;
-  color: #0c4f9a;
+  color: #000;
   font: 500 0.875rem / 1.4285714286em "Roboto", serif;
 }
 .cr-free_discription > p {
   display: block;
-  color: black;
+  color: #585858;
   font: 400 0.875rem / 1.4285714286em "Roboto", serif;
 }
 .cr-toggle {
@@ -4848,7 +4848,7 @@
   transition: background 0.3s;
 }
 .cr-toggle:checked {
-  background: #0e0808;
+  background: #717171;
 }
 .cr-toggle:before {
   content: "";
@@ -4873,7 +4873,7 @@
   align-items: center;
   border-radius: 10px;
   justify-content: space-between;
-  background: rgba(14, 8, 8, 0.1);
+  background: rgba(113, 113, 113, 0.1);
 }
 .cr-allow-discount label {
   gap: 4px;
@@ -4887,7 +4887,7 @@
 .cr-allow-discount label > span {
   display: block;
   font: 400 0.625rem / 1.2em "Roboto", serif;
-  color: rgba(0, 0, 0, 0.9);
+  color: rgba(88, 88, 88, 0.9);
 }
 .cr-allow-discount .cr-toggle {
   height: 20px;
@@ -4939,7 +4939,7 @@
   padding-left: 20px;
 }
 .cr-discount-wrap .at-form-group input:focus ~ i {
-  color: #0c6295;
+  color: #585858;
 }
 .cr-discount-table {
   padding: 6px;
@@ -4949,7 +4949,7 @@
 }
 .cr-discount-table table thead tr th {
   width: calc(100% / 3);
-  color: black;
+  color: #585858;
   font: 500 0.875rem / 1.4285714286em "Roboto", serif;
 }
 .cr-discount-table table tbody tr td {
@@ -4957,7 +4957,7 @@
 }
 .cr-discount-table table tbody tr td span {
   display: block;
-  color: black;
+  color: #585858;
   font: 400 0.875rem / 1.4285714286em "Roboto", serif;
 }
 .cr-discount-table table tbody tr td input {
@@ -4968,8 +4968,8 @@
   border: 1px solid #eaeaea;
 }
 .cr-discount-table table tbody tr td input[type="checkbox"]:checked + label::before, .cr-discount-table table tbody tr td input[type="radio"]:checked + label::before {
-  background: #0e0808;
-  border: 1px solid #0e0808;
+  background: #717171;
+  border: 1px solid #717171;
 }
 .cr-input-wrap {
   display: flex;
@@ -4993,7 +4993,7 @@
 .cr-titlewrap > span {
   flex: none;
   cursor: pointer;
-  color: #0e0808;
+  color: #717171;
   position: relative;
   font: 500 0.75rem / 1.5em "Roboto", serif;
 }
@@ -5035,7 +5035,7 @@
   font-style: normal;
   font-weight: 400;
   line-height: 20px;
-  color: black;
+  color: #585858;
   cursor: pointer;
   outline: none;
   transition: background 0.3s ease;
@@ -5065,7 +5065,7 @@
   transition: max-height 0.3s ease, padding 0.3s ease;
 }
 .cr-faq-accordion .accordion .accordion-item .accordion-content p {
-  color: rgba(0, 0, 0, 0.9);
+  color: rgba(88, 88, 88, 0.9);
   font: 400 0.875rem / 1.4285714286em "Roboto", serif;
   margin: 0;
 }
@@ -5098,7 +5098,7 @@
   width: 100%;
 }
 .cr-count-charleft {
-  color: rgba(12, 79, 154, 0.3);
+  color: rgba(0, 0, 0, 0.3);
   font: 400 0.75rem / 1.5em "Roboto", serif;
 }
 .cr-count-charleft > .tu-input-counter {
@@ -5236,13 +5236,13 @@
 .am-promodinfo h6 {
   margin: 0;
   word-break: break-word;
-  color: black;
+  color: #585858;
   font: 400 12px/18px "Roboto", serif;
 }
 .am-promodinfo span {
   display: block;
   word-break: break-word;
-  color: black;
+  color: #585858;
   font: 500 14px/20px "Roboto", serif;
 }
 .am-promodetail {
@@ -5269,7 +5269,7 @@
 .am-promoinfowrap > span {
   display: inline-block;
   font: 400 12px/18px "Roboto", serif;
-  color: rgba(0, 0, 0, 0.8);
+  color: rgba(88, 88, 88, 0.8);
 }
 .cr-publish_success {
   max-width: 700px;
@@ -5322,7 +5322,7 @@
   padding: 10px 20px;
 }
 .cr-course-modal .modal-header h5 {
-  color: #0c4f9a;
+  color: #000;
   font: 500 16px/24px "Roboto", serif;
 }
 .cr-course-modal .modal-body {
@@ -5420,13 +5420,13 @@
   text-align: center;
 }
 .cr-delete-content h3 {
-  color: black;
+  color: #585858;
   font: 500 16px/24px "Roboto", serif;
 }
 .cr-delete-content p {
   margin-top: 10px;
   font: 400 14px/20px "Roboto", serif;
-  color: rgba(0, 0, 0, 0.7);
+  color: rgba(88, 88, 88, 0.7);
 }
 .cr-course-del-modal .modal-dialog {
   max-width: 424px;
@@ -5485,11 +5485,11 @@
 }
 .cr-page-heading .cr-headingbox h2 {
   margin-bottom: 0;
-  color: rgba(12, 79, 154, 0.7);
+  color: rgba(0, 0, 0, 0.7);
   font: 500 1.25rem / 1.5em "Roboto", serif;
 }
 .cr-page-heading .cr-headingbox p {
-  color: black;
+  color: #585858;
   font: 400 0.875rem / 1.4285714286em "Roboto", serif;
 }
 .cr-page-heading .cr-btn {
@@ -5548,12 +5548,12 @@
   flex-direction: column;
 }
 .cr-stats-arae .cr-stat-card .cr-contentbox span {
-  color: #0c4f9a;
+  color: #000;
   font: 600 1.375rem / 1.3636363636em "Roboto", serif;
 }
 .cr-stats-arae .cr-stat-card .cr-contentbox p {
   margin: 0;
-  color: black;
+  color: #585858;
   font: 400 0.875rem / 1.4285714286em "Roboto", serif;
 }
 .cr-stats-arae .cr-stat-card .cr-iconbox {
@@ -5615,7 +5615,7 @@
   padding-bottom: 9px;
 }
 .cr-filter-area .at-form-group.cr-price-dropdown > span {
-  color: black;
+  color: #585858;
 }
 .cr-filter-area .at-form-group .at-form-control {
   height: 40px;
@@ -5627,7 +5627,7 @@
   font: 400 0.875rem / 1.4285714286em "Roboto", serif;
 }
 .cr-filter-area .at-form-group .at-form-control::placeholder {
-  color: black;
+  color: #585858;
 }
 .cr-filter-area .at-form-group svg {
   top: 50%;
@@ -5841,7 +5841,7 @@
   cursor: pointer;
   padding: 7px 12px;
   border-radius: 8px;
-  color: black;
+  color: #585858;
   border: 1px solid #eaeaea;
   font: 600 0.75rem / 1.5em "Roboto", serif;
 }
@@ -5866,8 +5866,8 @@
   width: auto;
 }
 .cr-pagination .am-pagination ul li a:hover, .cr-pagination .am-pagination ul li span:hover, .cr-pagination .am-pagination ul li.active a, .cr-pagination .am-pagination ul li.active span {
-  background: #ff4c00;
-  border-color: #ff4c00;
+  background: #295C51;
+  border-color: #295C51;
 }
 .cr-avatar-group {
   display: flex;
@@ -5911,13 +5911,13 @@
 .cr-no-record-container > h6 {
   margin: 0 0 8px;
   text-align: center;
-  color: #0c4f9a;
+  color: #000;
   font: 500 1rem / 1.5em "Roboto", serif;
 }
 .cr-no-record-container > p {
   margin-top: 0;
   text-align: center;
-  color: black;
+  color: #585858;
   font: 400 0.875rem / 1.4285714286em "Roboto", serif;
 }
 .cr-no-record-container button {
@@ -5977,10 +5977,10 @@
   background-color: #fff;
   padding: 9px 30px 9px 12px;
   border: 1px solid transparent;
-  color: rgba(0, 0, 0, 0.6);
+  color: rgba(88, 88, 88, 0.6);
 }
 .cr-price-dropdown > span:hover {
-  color: black;
+  color: #585858;
   border-color: #eaeaea;
   box-shadow: 0px 1px 2px 0px rgba(16, 24, 40, 0.05);
 }
@@ -6032,7 +6032,7 @@
   cursor: pointer;
   border-radius: 50%;
   background: #faf8ff;
-  border: 1.5px solid #0e0808;
+  border: 1.5px solid #717171;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.04), 0px 8px 16px rgba(0, 0, 0, 0.08);
 }
 .cr-price-range .noUi-connect, .cr-price-range .noUi-origin {
@@ -6056,7 +6056,7 @@
   position: relative;
 }
 .cr-price-range .noUi-connect {
-  background: #0e0808;
+  background: #717171;
 }
 .cr-price-range .noUi-connects {
   background: #eaeaea !important;
@@ -6078,13 +6078,13 @@
   font-style: normal;
   align-items: center;
   font-family: "SF Pro Text";
-  color: black;
+  color: #585858;
 }
 .cr-clear-filter:hover {
   opacity: 1;
 }
 .cr-clear-filter:hover svg path {
-  fill: black;
+  fill: #585858;
 }
 .cr-cours-underreview .am-itemdropdown {
   pointer-events: none;
@@ -6357,13 +6357,13 @@
 }
 .cr-noticeboard-tab > .cr-forum-item-wrapper > h3 {
   margin: 0 0 10px;
-  color: rgba(12, 79, 154, 0.9);
+  color: rgba(0, 0, 0, 0.9);
   font: 500 1.125rem / 1.5555555556em "Roboto", serif;
 }
 .cr-noticeboard_date {
   display: block;
   margin: 0 0 2px;
-  color: rgba(0, 0, 0, 0.6);
+  color: rgba(88, 88, 88, 0.6);
   font: 400 0.875rem / 1.4285714286em "Roboto", serif;
 }
 .cr-course.cr-create-course .cr-course-box .cr-course-body .cr-formarea .cr-course-modal .modal-footer {
@@ -6458,7 +6458,7 @@
   display: flex;
   margin-top: 10px;
   align-items: center;
-  color: black;
+  color: #585858;
   justify-content: center;
   font: 400 12px/18px "Roboto", serif;
 }
@@ -6472,7 +6472,7 @@
 }
 .cr-filter-title {
   margin: 0;
-  color: #0c4f9a;
+  color: #000;
   font: 500 1.125rem/1.1111111111em "Roboto", serif;
 }
 .cr-clear-filters {
@@ -6480,7 +6480,7 @@
   display: flex;
   cursor: pointer;
   align-items: center;
-  color: black;
+  color: #585858;
   font: 400 12px/18px "Roboto", serif;
 }
 .cr-filter-sidebar {
@@ -6533,7 +6533,7 @@
 .cr-search-courses-area .accordion-item .accordion-header .accordion-button {
   padding: 0;
   background: none;
-  color: #0c4f9a;
+  color: #000;
   font: 400 14px/20px "Roboto", serif;
 }
 .cr-search-courses-area .accordion-item .accordion-header .accordion-button:focus {
@@ -6548,7 +6548,7 @@
   padding-right: 8px;
 }
 .cr-search-courses-area .accordion-item .accordion-body .cr-filter-options .cr-option-details {
-  color: black;
+  color: #585858;
   font: 400 14px/20px "Roboto", serif;
 }
 .cr-search-courses-area .accordion-item .accordion-body .cr-filter-options .cr-radio-options {
@@ -6596,7 +6596,7 @@
   margin-top: 12px;
   overflow-y: auto;
   max-height: 140px;
-  color: #0c6295;
+  color: #585858;
   flex-direction: column;
   scrollbar-gutter: stable;
   margin-left: -10px;
@@ -6623,8 +6623,8 @@
   justify-content: space-between;
 }
 .cr-filter-option .am-radio input[type=radio]:checked + label:before {
-  background-color: #0e0808;
-  border-color: #0e0808;
+  background-color: #717171;
+  border-color: #717171;
 }
 .cr-filter-option:first-child {
   margin-top: 0;
@@ -6640,7 +6640,7 @@
 .cr-level-count, .cr-option-count, .cr-rating-count {
   text-align: right;
   font: 400 12px/18px "Roboto", serif;
-  color: rgba(0, 0, 0, 0.7);
+  color: rgba(88, 88, 88, 0.7);
 }
 .cr-checkbox {
   width: 16px;
@@ -6654,7 +6654,7 @@
   position: relative;
   -moz-appearance: none;
   -webkit-appearance: none;
-  border: 1px solid #0c6295;
+  border: 1px solid #585858;
 }
 .cr-checkbox:checked {
   opacity: 1;
@@ -6692,7 +6692,7 @@
   border-radius: 50%;
   position: relative;
   display: inline-block;
-  border: 1px solid #0c6295;
+  border: 1px solid #585858;
 }
 .cr-radio-input:checked + .cr-radio-custom::after {
   top: 50%;
@@ -6703,7 +6703,7 @@
   position: absolute;
   border-radius: 50%;
   transform: translate(-50%, -50%);
-  background-color: #0e0808;
+  background-color: #717171;
 }
 .cr-radio-input:focus + .cr-radio-custom {
   box-shadow: 0 0 0 2px rgba(117, 79, 254, 0.3);
@@ -6718,7 +6718,7 @@
 .cr-option-text {
   flex: 1;
   font-size: 14px;
-  color: #0c6295;
+  color: #585858;
 }
 .cr-pricerange {
   margin-top: 10px;
@@ -6753,7 +6753,7 @@
   align-items: center;
 }
 .cr-price-inputs .cr-option-count {
-  color: black;
+  color: #585858;
 }
 .cr-price-inputs input {
   gap: 8px;
@@ -6785,11 +6785,11 @@
   border: none;
   outline: none;
   font-size: 14px;
-  color: #0c6295;
+  color: #585858;
 }
 .cr-separator {
   font-size: 16px;
-  color: #0c6295;
+  color: #585858;
 }
 .cr-visually-hidden {
   width: 1px;
@@ -6837,7 +6837,7 @@
   display: inline-block;
   vertical-align: middle;
   background-color: transparent;
-  border: 1px solid rgba(12, 98, 149, 0.5);
+  border: 1px solid rgba(88, 88, 88, 0.5);
 }
 .cr-filter-options input:checked + label:after {
   top: 4px;
@@ -6860,7 +6860,7 @@
   border-color: #295c51;
 }
 .cr-price-rangeoption .am-radio label:before {
-  border-color: #0c6295;
+  border-color: #585858;
 }
 .cr-filter-sidebar .cr-filter-options input:checked + label:before {
   background: #295C51;
@@ -6898,7 +6898,7 @@
   font-size: 16px !important;
 }
 .cr-search-courses .cr-card h2 a, .cr-search-courses .cr-card-skeleton h2 a {
-  color: rgba(12, 79, 154, 0.8);
+  color: rgba(0, 0, 0, 0.8);
 }
 .cr-search-courses .cr-card h2 a:hover, .cr-search-courses .cr-card-skeleton h2 a:hover {
   color: #2e90fa;
@@ -6913,7 +6913,7 @@
   flex-wrap: wrap;
   min-width: 240px;
   align-items: center;
-  color: #0c4f9a;
+  color: #000;
   justify-content: start;
   font: 400 18px/28px "Roboto", serif;
 }
@@ -6947,7 +6947,7 @@
   z-index: 1;
   position: absolute;
   pointer-events: none;
-  color: black;
+  color: #585858;
   transform: translateY(-50%);
   font: 400 14px/20px "Roboto", serif;
 }
@@ -7132,7 +7132,7 @@
   display: flex;
   align-items: center;
   gap: 7px;
-  color: black;
+  color: #585858;
   flex: 1;
   font: 500 14px/1 "Roboto", serif;
 }
@@ -7145,7 +7145,7 @@
 }
 .cr-instructor-name {
   flex: 1;
-  color: black;
+  color: #585858;
 }
 .cr-bookmark-button {
   display: flex;
@@ -7169,7 +7169,7 @@
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   font: 500 16px/24px "Roboto", serif;
-  color: rgba(12, 79, 154, 0.8);
+  color: rgba(0, 0, 0, 0.8);
 }
 .am-itemdropdown_list li a i {
   min-width: 20px;
@@ -7178,15 +7178,15 @@
 .cr-course-category {
   gap: 3px;
   display: flex;
-  color: #0c6295;
+  color: #585858;
   align-items: baseline;
   font: 400 14px/1 "Roboto", serif;
 }
 .cr-course-category > a {
-  color: black;
+  color: #585858;
 }
 .cr-category-link {
-  color: #0c6295;
+  color: #585858;
   text-decoration: underline;
   font: 400 14px/20px "Roboto", serif;
 }
@@ -7227,7 +7227,7 @@
   margin-top: 10px;
   position: relative;
   border-radius: 8px;
-  background-color: rgba(14, 8, 8, 0.04);
+  background-color: rgba(113, 113, 113, 0.04);
 }
 .cr-radio-options .cr-price-range .cr-slider-range {
   border: 0;
@@ -7271,14 +7271,14 @@
   font: 500 14px/20px "Roboto", serif;
 }
 .cr-review-count {
-  color: black;
+  color: #585858;
   font: 400 12px/18px "Roboto", serif;
 }
 .cr-course-info {
   display: flex;
   margin-top: 12px;
   width: 100%;
-  color: black;
+  color: #585858;
   font: 400 14px/1 "Roboto", serif;
 }
 .cr-lesson-count, .cr-info-item {
@@ -7288,7 +7288,7 @@
   align-items: center;
 }
 .cr-lesson-count span, .cr-info-item span {
-  color: black;
+  color: #585858;
   font: 400 14px/20px "Roboto", serif;
 }
 .cr-info-icon {
@@ -7301,7 +7301,7 @@
   width: 100%;
   align-items: center;
   gap: 7px;
-  color: #0c6295;
+  color: #585858;
   font: 400 14px/1 "Roboto", serif;
 }
 .cr-price-container {
@@ -7325,7 +7325,7 @@
   padding: 7px 14px;
 }
 .cr-original-price {
-  color: #0c6295;
+  color: #585858;
   font-size: 14px;
   font-weight: 400;
   opacity: 0.9;
@@ -7348,7 +7348,7 @@
 .cr-discounted-price {
   display: flex;
   align-items: flex-start;
-  color: #0e0808;
+  color: #717171;
 }
 .cr-discounted-price .cr-price-amount {
   font: 500 1.25rem/1.5em "Roboto", serif;
@@ -7372,13 +7372,13 @@
   font-weight: 400;
   padding: 10px 14px;
   align-items: center;
-  color: black;
+  color: #585858;
 }
 .cr-duration-info i {
   font-size: 16px;
 }
 .cr-duration-info i:before {
-  color: #0e0808;
+  color: #717171;
 }
 .cr-includes-text {
   gap: 4px;
@@ -7445,7 +7445,7 @@
   align-items: center;
   justify-content: center;
   padding: 10px 16px;
-  color: #0c6295;
+  color: #585858;
   cursor: pointer;
   position: relative;
 }
@@ -7462,7 +7462,7 @@
 }
 .cr-save-for-later:hover, .cr-save-for-later:focus {
   outline: none;
-  color: #0c6295;
+  color: #585858;
 }
 .cr-save-for-later:hover:before {
   opacity: 0.1;
@@ -7470,7 +7470,7 @@
 .cr-add-to-cart_disable {
   background: #f7f7f8;
   pointer-events: none;
-  color: rgba(12, 98, 149, 0.5) !important;
+  color: rgba(88, 88, 88, 0.5) !important;
 }
 .cr-add-to-cart_disable:after {
   content: "";
@@ -7478,8 +7478,8 @@
   height: 16px;
   border-radius: 50%;
   animation: 0.5s btnloader infinite linear;
-  border: 2px solid rgba(12, 98, 149, 0.5);
-  border-top-color: rgba(12, 98, 149, 0.1);
+  border: 2px solid rgba(88, 88, 88, 0.5);
+  border-top-color: rgba(88, 88, 88, 0.1);
 }
 @keyframes btnloader {
   to {
@@ -7655,8 +7655,8 @@
 }
 .cr-search-list-container .am-pagination ul li a:hover, .cr-search-list-container .am-pagination ul li span:hover, .cr-search-list-container .am-pagination ul li.active a, .cr-search-list-container .am-pagination ul li.active span {
   color: #fff;
-  background: #ff4c00;
-  border-color: #ff4c00;
+  background: #295C51;
+  border-color: #295C51;
 }
 .cr-search-list-container .cr-image-wrapper figcaption button {
   top: auto;
@@ -7689,7 +7689,7 @@
 .cr-btn_disable {
   background: #f7f7f8;
   pointer-events: none;
-  color: rgba(12, 98, 149, 0.5) !important;
+  color: rgba(88, 88, 88, 0.5) !important;
 }
 .cr-btn_disable:after {
   content: "";
@@ -7697,8 +7697,8 @@
   height: 16px;
   border-radius: 50%;
   animation: 0.5s btnloader infinite linear;
-  border: 2px solid rgba(12, 98, 149, 0.5);
-  border-top-color: rgba(12, 98, 149, 0.1);
+  border: 2px solid rgba(88, 88, 88, 0.5);
+  border-top-color: rgba(88, 88, 88, 0.1);
 }
 @keyframes btnloader {
   to {
@@ -8205,7 +8205,7 @@
 .cr-coursecontent_sidebar .cr-course-card .cr-course-includes.cr-course-rating-wrap .cr-course-rating h2, .cr-coursecontent_sidebar .am-similar-user .cr-course-includes.cr-course-rating-wrap .cr-course-rating h2 {
   margin: 0;
   opacity: 0.8;
-  color: #0c4f9a;
+  color: #000;
   font: 500 1rem / 1.5em "Roboto", serif;
 }
 .cr-coursecontent_sidebar .cr-course-card .cr-course-includes.cr-course-rating-wrap .cr-course-rating .cr-rating-container span i, .cr-coursecontent_sidebar .am-similar-user .cr-course-includes.cr-course-rating-wrap .cr-course-rating .cr-rating-container span i {
@@ -8255,7 +8255,7 @@
   width: 36px;
   height: 36px;
   font-size: 15px;
-  color: #0c6295;
+  color: #585858;
   border-radius: 50%;
   align-items: center;
   text-decoration: none;
@@ -8291,7 +8291,7 @@
   align-items: center;
   justify-content: center;
   border: none !important;
-  color: rgba(0, 0, 0, 0.7);
+  color: rgba(88, 88, 88, 0.7);
   font: 500 0.9375rem / 1.6em "Roboto", serif;
 }
 .cr-coursecontent_tabs > li button::before {
@@ -8301,15 +8301,15 @@
   content: "";
   bottom: 0;
   position: absolute;
-  background: #ff4c00;
+  background: #295C51;
   border-radius: 50px 50px 0 0;
   transition: all 0.3s ease-in-out;
 }
 .cr-coursecontent_tabs > li button.active {
-  color: black !important;
+  color: #585858 !important;
 }
 .cr-coursecontent_tabs > li.active button, .cr-coursecontent_tabs > li:hover button {
-  color: black !important;
+  color: #585858 !important;
 }
 .cr-coursecontent_tabs > li.active button::before, .cr-coursecontent_tabs > li:hover button::before {
   height: 5px;
@@ -8331,14 +8331,14 @@
   margin: 0;
   letter-spacing: normal;
   letter-spacing: 0.5px;
-  color: rgba(12, 79, 154, 0.9);
+  color: rgba(0, 0, 0, 0.9);
   font: 500 1.5rem / 1.3333333333em "Roboto", serif;
 }
 .cr-coursecontent_tabs_content .cr-course-details-banner .cr-course-details-area .cr-course-details-info .am-searchhead_title .cr-title-box span {
   padding: 3px 9px;
   border-radius: 8px;
-  color: black;
-  border: 1px solid rgba(0, 0, 0, 0.2);
+  color: #585858;
+  border: 1px solid rgba(88, 88, 88, 0.2);
   font: 500 0.75rem / 1.5em "Roboto", serif;
 }
 .cr-coursecontent_tabs_content .cr-course-details-banner .cr-course-details-area .cr-course-details-info .am-searchhead_title .cr-title-box span em {
@@ -8360,19 +8360,19 @@
 .cr-coursecontent_tabs_content .cr-overview-course h3 {
   margin: 0;
   letter-spacing: normal;
-  color: rgba(12, 79, 154, 0.9);
+  color: rgba(0, 0, 0, 0.9);
   font: 500 1.125rem / 1.5555555556em "Roboto", serif;
 }
 .cr-coursecontent_tabs_content .cr-overview-course > p {
   margin: 10px 0 0;
   letter-spacing: normal;
   font: 400 1rem / 1.5em "Roboto", serif;
-  color: rgba(0, 0, 0, 0.9);
+  color: rgba(88, 88, 88, 0.9);
 }
 .cr-coursecontent_tabs_content .cr-overview-course > a {
   display: block;
   margin: 10px 0 0;
-  color: black;
+  color: #585858;
   text-decoration-line: underline;
   font: 400 0.875rem / 1.4285714286em "Roboto", serif;
 }
@@ -8398,7 +8398,7 @@
 }
 .cr-coursecontent_tabs_content .cr-overview-course.cr-desc-section .cr-desc-content p {
   font: 400 1rem / 1.5em "Roboto", serif;
-  color: rgba(0, 0, 0, 0.9);
+  color: rgba(88, 88, 88, 0.9);
 }
 .cr-coursecontent_tabs_content .cr-overview-course.cr-desc-section .cr-desc-content p + p {
   margin-top: 10px;
@@ -8423,7 +8423,7 @@
 }
 .cr-coursecontent_tabs_content .cr-forum-item-wrapper .cr-noticeboard-item p {
   margin: 0;
-  color: black;
+  color: #585858;
   font: 400 1rem / 1.5em "Roboto", serif;
 }
 .cr-david-list {
@@ -8495,7 +8495,7 @@
   width: 36px;
   height: 36px;
   display: flex;
-  color: #0c6295;
+  color: #585858;
   margin-left: auto;
   position: absolute;
   align-items: center;
@@ -8515,7 +8515,7 @@
   justify-content: center;
 }
 .cr-david-list > li .cr-loadmore-btn .cr-bookmark {
-  color: #0c6295;
+  color: #585858;
   background: #fff;
   border-color: #eaeaea;
   font: 500 14px/20px "Roboto", serif;
@@ -8567,22 +8567,22 @@
   color: #ea0c0c;
 }
 .cr-villy-about-content .cr-villy-stats_info > a {
-  color: black;
+  color: #585858;
 }
 .cr-villy-about-content .cr-villy-stats_info > a.cr-stats_info-like:hover i::before, .cr-villy-about-content .cr-villy-stats_info > a.cr-stats_info-like.cr-active i::before {
   content: "";
   color: #ea0c0c !important;
 }
 .cr-villy-about-content .cr-villy-stats_info > a i.am-icon-heart-01::before {
-  color: black;
+  color: #585858;
 }
 .cr-villy-about-content .cr-villy-stats_info span {
-  color: black;
+  color: #585858;
   font: 500 14px/20px "Roboto", serif;
 }
 .cr-villy-about-content .cr-villy-stats_info em {
   font-style: normal;
-  color: black;
+  color: #585858;
   font: 400 14px/20px "Roboto", serif;
 }
 .cr-stats_info-reply, .cr-stats_info-like {
@@ -8622,22 +8622,22 @@
   align-items: center;
 }
 .cr-david-villy span {
-  color: black;
+  color: #585858;
   font: 600 16px/24px "Roboto", serif;
 }
 .cr-david-villy .cr-villy-one {
-  color: black;
+  color: #585858;
   font: 500 14px/20px "Roboto", serif;
 }
 .cr-david-villy em {
   opacity: 0.8;
-  color: black;
+  color: #585858;
   font: 400 14px/20px "Roboto", serif;
 }
 .cr-villy-paragraph {
   display: flex;
   margin: 10px 0 0;
-  color: black;
+  color: #585858;
   flex-direction: column;
   font: 400 1rem / 1.5em "Roboto", serif;
 }
@@ -8646,7 +8646,7 @@
 }
 .cr-villy-paragraph span, .cr-villy-paragraph p {
   margin: 0;
-  color: black;
+  color: #585858;
   font: 400 1rem / 1.5em "Roboto", serif;
 }
 .cr-villy-paragraph > ul, .cr-villy-paragraph > ol {
@@ -8681,7 +8681,7 @@
 }
 .cr-topic-content-reply h3.cr-forum-tag-title {
   margin-bottom: 16px;
-  color: rgba(12, 79, 154, 0.8);
+  color: rgba(0, 0, 0, 0.8);
   font: 500 1.25rem / 1.5em "Roboto", serif;
 }
 .cr-topic-content-reply .cr-forum-topic-description {
@@ -8722,7 +8722,7 @@
   height: 100%;
   position: absolute;
   border-radius: 10px;
-  background-color: black;
+  background-color: #000;
 }
 .cr-submit-main .cr-submit:hover, .cr-submit-main .cr-submit:focus {
   outline: none;
@@ -8859,12 +8859,12 @@
 .cr-allcourses_title h2 {
   margin: 0;
   opacity: 0.9;
-  color: #0c4f9a;
+  color: #000;
   font: 600 1.5rem / 1.3333333333em "Roboto", serif;
 }
 .cr-allcourses_title p {
   margin: 2px 0 0;
-  color: black;
+  color: #585858;
   font: 400 0.875rem / 1.4285714286em "Roboto", serif;
 }
 .cr-allcourses_title .am-searchinput {
@@ -8915,7 +8915,7 @@
 .cr-allcourses_list .cr-card .cr-course-card .cr-course-header .cr-course-title, .cr-allcourses_list .cr-card-skeleton .cr-course-card .cr-course-header .cr-course-title {
   opacity: 0.8;
   overflow: hidden;
-  color: #0c4f9a;
+  color: #000;
   letter-spacing: normal;
   font: 500 0.875rem / 1.4285714286em "Roboto", serif;
 }
@@ -8933,11 +8933,11 @@
 .cr-allcourses_list .cr-card .cr-course-card .cr-usercourse_header_progress span, .cr-allcourses_list .cr-card-skeleton .cr-course-card .cr-usercourse_header_progress span {
   letter-spacing: normal;
   font: 400 0.75rem / 1.5em "Roboto", serif;
-  color: rgba(0, 0, 0, 0.7);
+  color: rgba(88, 88, 88, 0.7);
 }
 .cr-allcourses_list .cr-card .cr-course-card .cr-usercourse_header_progress span em, .cr-allcourses_list .cr-card-skeleton .cr-course-card .cr-usercourse_header_progress span em {
   font-weight: 500;
-  color: rgba(0, 0, 0, 0.8);
+  color: rgba(88, 88, 88, 0.8);
 }
 .cr-allcourses_list .cr-card .cr-course-card .cr-usercourse_header_progress .cr-usercourse_header_progress_bar, .cr-allcourses_list .cr-card-skeleton .cr-course-card .cr-usercourse_header_progress .cr-usercourse_header_progress_bar {
   background: #eaeaea;
@@ -8951,17 +8951,17 @@
   border-radius: 8px;
   position: relative;
   align-items: center;
-  color: black;
+  color: #585858;
   justify-content: center;
-  background-color: white;
+  background-color: #fff;
   border: 1px solid #eaeaea;
   font: 500 0.875rem / 1.4285714286em "Roboto", serif;
 }
 .cr-allcourses_list .cr-card .cr-course-card .cr-start-course:hover, .cr-allcourses_list .cr-card-skeleton .cr-course-card .cr-start-course:hover, .cr-allcourses_list .cr-card .cr-course-card .cr-start-course:focus, .cr-allcourses_list .cr-card-skeleton .cr-course-card .cr-start-course:focus {
   outline: none;
   color: #fff;
-  background: #ff4c00;
-  border-color: #ff4c00;
+  background: #295C51;
+  border-color: #295C51;
 }
 .cr-allcourses_list .cr-card.cr-card-skeleton .cr-image-wrapper, .cr-allcourses_list .cr-card-skeleton .cr-image-wrapper {
   border-radius: 10px 10px 0 0;
@@ -9072,15 +9072,15 @@
 .cr-next-curriculum_btn {
   gap: 8px;
   padding: 10px 16px;
-  color: white;
+  color: #fff;
   display: inline-flex;
   align-items: center;
   border-radius: 10px;
-  background: #ff4c00;
+  background: #295C51;
   font: 500 0.875rem / 1.4285714286em "Roboto", serif;
 }
 .cr-next-curriculum_btn i:before {
-  color: white;
+  color: #fff;
 }
 .cr-coursetasking-video {
   position: relative;

@@ -82,7 +82,7 @@ header * {
                         </div>
                     </div>
                 </div>
-                <div class="gap-4 tb-dropdoenwrap d-flex align-items-center justify-content-end">
+                <div style="margin-inline-start: auto !important;" class="gap-4 tb-dropdoenwrap d-flex align-items-center justify-content-end">
                     <div class="px-3 tb-dropdoenwrap d-flex align-items-center justify-content-between w-100">
                         <div class="tb-logowrapper tb-icontoggler">
                             @if (!empty($info))
