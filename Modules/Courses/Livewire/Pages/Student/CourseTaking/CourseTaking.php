@@ -87,7 +87,7 @@ class CourseTaking extends Component
             $this->setActiveCurriculmPath();
         }
 
-        $this->studentRating = $this->course->ratings->where('student_id', Auth::id())->first();
+        $this->studentRating = $this->course->ratings?->where('student_id', Auth::id())->first();
 
         if ($this->role == 'student') {
             $this->backRoute = $this->redirect == 'courses-list' ? route('courses.course-list') : route('courses.course-detail', ['slug' => $this->course->slug]);
@@ -472,7 +472,7 @@ class CourseTaking extends Component
             relations: ['ratings']
         );
 
-        $this->studentRating = $courseRatings->ratings->where('student_id', auth()->id())->first();
+        $this->studentRating = $courseRatings->ratings?->where('student_id', auth()->id())->first();
     }
 
     private function getCourseSingedUrl($path)
