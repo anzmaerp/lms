@@ -1872,7 +1872,7 @@ blockquote, address {
 }
 .am-primary-btn-white {
   border-radius: 9999px;
-  background: black;
+  background: rgb(255, 255, 255);
   border-color: #1464b5;
   border: 1px solid #1464b5;
   color: black;
@@ -4293,7 +4293,7 @@ form p span i {
   margin: 0;
   top: 70px;
   opacity: 0;
-  width: 200px;
+  width: fit-content;
   visibility: hidden;
   padding: 8px;
   margin-top: 15px;
@@ -4532,8 +4532,13 @@ form p span i {
   margin: 0 0 24px;
 }
 .am-flogo a {
+  width: 50% !important;
+
   margin: 0;
   display: inline-block;
+}
+.am-flogo a img{
+  width: 100%;
 }
 .am-flogo a figure {
   margin: 0;
@@ -10638,7 +10643,7 @@ body:has(.am-dragfile):before {
   padding: 11px 15px;
   border-radius: 10px;
   background: #fff;
-  max-width: calc(25% - 7.5px);
+  /* max-width: calc(25% - 7.5px); */
   border: 1px solid #eaeaea;
   box-shadow: 0px 1px 2px 0px rgba(16, 24, 40, 0.05);
 }
@@ -15602,6 +15607,9 @@ body:has(.am-dragfile):before {
 .page-home-page .am-works_info + .am-works_info {
   margin-top: 100px;
 }
+.page-home-page{
+  overflow: hidden;
+}
 .am-tutor-feature {
   gap: 20px;
   height: 100%;
@@ -18937,11 +18945,17 @@ body:has(.am-dragfile):before {
     transform: translate(20px, -50px);
   }
 }
+.form-select:focus{
+    border-color: unset !important;
+    outline: 0 !important;
+    box-shadow: 0 0 0 .25rem #590cb3 !important;
+}
 .am-banner-potential .am-banner-tutor {
   display: flex;
   max-width: 100%;
   align-items: center;
   flex-direction: column;
+  gap: 375px;
 }
 .am-banner-potential .am-banner-tutor .am-enhance {
   display: block;
@@ -18973,7 +18987,7 @@ body:has(.am-dragfile):before {
 .am-banner-potential .am-explore-banner-button .am-explore-btn {
   gap: 6px;
   display: flex;
-  color: #fff;
+  color: #1464b5;
   padding: 15px 34px;
   align-items: center;
   border-radius: 50px;
@@ -18984,12 +18998,13 @@ body:has(.am-dragfile):before {
 }
 .am-banner-potential .am-explore-banner-button .am-explore-btn:hover {
   background: #1464b5;
+  color: white;
 }
 .am-banner-potential .am-explore-banner-button .am-demo-btn {
   box-shadow: none;
   padding: 15px 41px;
   background: black;
-  color: black;
+  color: white;
   border: 1px solid #eaeaea;
 }
 .am-banner-potential .am-explore-banner-button .am-demo-btn:before {
@@ -19001,6 +19016,9 @@ body:has(.am-dragfile):before {
 }
 .am-banner-potential .am-explore-banner-button .am-demo-btn:hover i::before {
   color: #1464b5;
+}
+.am-banner-potential .am-explore-banner-button .am-demo-btn i::before{
+  color: white;
 }
 .easy-steps-variation-one.am-easysetup, .easy-steps-variation-two.am-easysetup, .easy-steps-variation-three.am-easysetup {
   position: relative;
@@ -19147,8 +19165,16 @@ body:has(.am-dragfile):before {
   background: #27B1FF;
 }
 .pb-themesection:has(.easy-steps-variation-one), .pb-themesection:has(.easy-steps-variation-two) {
+  overflow: hidden;
   position: relative;
   background: linear-gradient(180deg, #FAFAFA 0%, #FFF 100%);
+}
+#contentType {
+  border: 1px solid #590cb3 !important;
+  appearance: none;        /* للمتصفحات الحديثة */
+  -webkit-appearance: none; /* كروم وسفاري */
+  -moz-appearance: none;    /* فايرفوكس */
+  background: none;  
 }
 .pb-themesection:has(.easy-steps-variation-one) .am-guide-pattranimg, .pb-themesection:has(.easy-steps-variation-two) .am-guide-pattranimg {
   bottom: 0;
@@ -19518,7 +19544,7 @@ body:has(.am-dragfile):before {
   margin: 0 -12px;
   overflow: hidden;
   position: relative;
-  padding: 270px 0 150px;
+  padding: 0px 0px 200px 0px;
   background: #0c448e;
 }
 .am-banner-potential.am-banner-content-four:after {
@@ -19566,7 +19592,7 @@ body:has(.am-dragfile):before {
   z-index: 1;
   width: 100%;
   margin: 0 auto;
-  max-width: 990px;
+  max-width: 1300px;
   position: relative;
 }
 .am-banner-potential.am-banner-content-four .am-banner-tutor h2 {
@@ -19577,7 +19603,7 @@ body:has(.am-dragfile):before {
 .am-banner-potential.am-banner-content-four .am-banner-tutor span, .am-banner-potential.am-banner-content-four .am-banner-tutor p {
   margin: 0;
   text-align: center;
-  color: rgba(247, 247, 248, 0.9);
+  color: black;
   font: 400 1.25rem/1.6em "Inter", sans-serif;
 }
 .am-banner-potential.am-banner-content-four .am-banner-tutor p {
@@ -25237,7 +25263,7 @@ body:has(.am-dragfile):before {
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   }
   .am-banner-content-four.am-banner-potential {
-    padding: 230px 0 130px;
+    /* padding: 230px 0 130px; */
   }
   .am-banner-vfive .am-banner {
     padding: 50px 72px;
@@ -25622,7 +25648,7 @@ body:has(.am-dragfile):before {
     padding: 40px 0 100px;
   }
   .am-searchfilter_item {
-    max-width: calc(50% - 7.5px);
+    /* max-width: calc(50% - 7.5px); */
   }
   .am-besttutor {
     margin-top: 24px;
@@ -26519,7 +26545,7 @@ body:has(.am-dragfile):before {
     padding: 50px 0;
   }
   .am-banner-potential.am-banner-content-four {
-    padding: 180px 0 80px;
+    /* padding: 180px 0 80px; */
   }
   .am-footer-v4 .am-footer-content {
     padding: 50px 0;
@@ -27822,4 +27848,52 @@ body:has(.am-dragfile):before {
     right: -120px !important;
   }
 }
+  #dropdownButton{
+    overflow: hidden;
+      border: 1px solid #6b0fd6;
+      color: white;
+      appearance: none;        /* للمتصفحات الحديثة */
+      -webkit-appearance: none; /* كروم وسفاري */
+      -moz-appearance: none;    /* فايرفوكس */
+      background: #6b0fd6;
+  }
+  .dropdown-item:hover{
+    color: white;
+    background-color: #6b0fd6;
+  } 
+  .dropdownc-item3:hover{
+      a {
+        color: white !important;
+      }
+    background-color: #6b0fd6;
+  } 
+  .dropdownc-item3{
+    padding: 7px;
+  }
+  .dropdown-item-group5:hover{
+    padding: 7px;
+    a {
+      color: white;
+    }
+    background-color: #600cc1;
+  }
+  .dropdown-item-group5{
+    padding: 7px;
+    a {
+      color: black !important;
+    }
+  }
+  .dropdown-item-subject5{  
+      padding: 7px;
+      a {
+        color: black !important;
+      }
+    }
+  .dropdown-item-subject5:hover{  
+    padding: 7px;
+    a {
+      color: white;
+    }
+      background-color: #600cc1;
+    }
 /*# sourceMappingURL=main.css.map */

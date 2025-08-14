@@ -116,7 +116,7 @@
   display: inline-flex;
   justify-content: center;
   border-radius: 10px;
-  background-color: #1464b5;
+  background-color: #ff4c00;
   font: 600 0.875rem/1.4285714286em "Roboto", serif;
 }
 .am-btn:before, .am-btn-light:before, .am-white-btn:before, .am-btnvtwo:before {
@@ -159,7 +159,7 @@
   color: black;
 }
 .am-white-btn {
-  background: black;
+  background: white;
   border: 1px solid #eaeaea;
   color: rgba(0, 0, 0, 0.8);
 }
@@ -173,7 +173,7 @@
 /* theme Global Button style end */
 .am-btn_disable {
   pointer-events: none;
-  background: rgba(255, 24, 8, 0.015);
+  background: rgba(165, 164, 160, 0.015);
   color: rgba(0, 0, 0, 0.5) !important;
 }
 .am-btn_disable:after {
@@ -860,8 +860,8 @@
 }
 .am-tutordetail-btns .am-white-btn:hover {
   color: #fff;
-  background: #1464b5;
-  border-color: #1464b5;
+  background: #ff4c00;
+  border-color: #ff4c00;
 }
 .am-tutordetail-btns .am-white-btn:hover i::before {
   color: #fff;
@@ -892,7 +892,7 @@
   z-index: 99;
   margin-top: 40px;
   position: static;
-  background: #f4f4f4;
+  background: #f9f9f9;
   border-bottom: 3px solid #eaeaea;
 }
 .am-aboutuser_tab {
@@ -936,7 +936,7 @@
   opacity: 0;
   bottom: -3px;
   position: absolute;
-  background: #0c448e;
+  background: #0e0808;
   border-radius: 50px 50px 0 0;
 }
 .am-booking_section {
@@ -1103,7 +1103,7 @@
   display: flex;
   padding: 5px 12px;
   border-radius: 6px;
-  color: #0c448e;
+  color: #0e0808;
   align-items: center;
   justify-content: center;
   background: rgba(41, 92, 81, 0.1);
@@ -1755,7 +1755,7 @@
   justify-content: center;
 }
 .am-similaruser-btn .am-white-btn {
-  background: black;
+  background: white;
   border-color: #E9BB71;
 }
 .am-similaruser-btn .am-white-btn::before {
@@ -1775,8 +1775,8 @@
 }
 .am-similar-user:hover .am-sendmessage-btn .am-btn {
   color: #fff;
-  background: #1464b5;
-  border: 1px solid #1464b5;
+  background: #ff4c00;
+  border: 1px solid #ff4c00;
 }
 .am-similar-user:hover .am-sendmessage-btn .am-btn i::before {
   color: #fff;
@@ -1911,8 +1911,8 @@
 }
 .am-similaruser-btns .am-sendmessage-btn .am-btn:hover {
   color: #fff;
-  background: #1464b5;
-  border: 1px solid #1464b5;
+  background: #ff4c00;
+  border: 1px solid #ff4c00;
 }
 .am-similaruser-btns .am-sendmessage-btn .am-btn:hover i::before {
   color: #fff;
@@ -1987,7 +1987,7 @@
   padding: 12px 16px;
   border-radius: 8px;
   align-items: center;
-  background: #1464b5;
+  background: #ff4c00;
   justify-content: center;
 }
 .am-howtobook > a i::before {
@@ -2886,8 +2886,8 @@
 }
 .cr-view-profile-btn {
   border-radius: 10px;
-  background-color: rgba(12, 68, 142, 0.1);
-  color: #0c448e;
+  background-color: rgba(14, 8, 8, 0.1);
+  color: #0e0808;
   padding: 8px 16px;
   font: 500 14px/1 "Roboto", serif;
 }
@@ -2966,7 +2966,7 @@
 }
 .more-options {
   border-radius: 30px;
-  background-color: rgba(12, 68, 142, 0.1);
+  background-color: rgba(14, 8, 8, 0.1);
   align-self: stretch;
   display: flex;
   min-height: 30px;
@@ -2978,7 +2978,7 @@
   padding: 0 8px 0 7px;
 }
 .more-options i:before {
-  color: #0c448e;
+  color: #0e0808;
 }
 .cr-facebook i:before {
   color: #3b5999;
@@ -3902,7 +3902,7 @@
 }
 .cr-course-creation h2 {
   margin-bottom: 5px;
-  color: #0c448e;
+  color: #0e0808;
   font: 600 0.75rem / 1.5em "Roboto", serif;
 }
 .cr-course-creation p {
@@ -3960,7 +3960,7 @@
 }
 .cr-steps > li.cr-active .cr-icon {
   background: #fff;
-  border: 1.7px solid #0c448e;
+  border: 1.7px solid #0e0808;
 }
 .cr-steps > li.cr-active .cr-icon i {
   display: none;
@@ -4010,14 +4010,14 @@
   content: "";
   height: 8px;
   border-radius: 50%;
-  background: #0c448e;
+  background: #0e0808;
 }
 .cr-steps .cr-active .cr-icon svg {
   display: none;
 }
 .cr-steps .cr-completed .cr-icon {
-  background: rgba(12, 68, 142, 0.1) !important;
-  border-color: rgba(12, 68, 142, 0.1) !important;
+  background: rgba(14, 8, 8, 0.1) !important;
+  border-color: rgba(14, 8, 8, 0.1) !important;
 }
 .cr-steps .cr-completed .cr-icon svg:not(.cr-checked) {
   opacity: 0;
@@ -4025,13 +4025,13 @@
   visibility: hidden;
 }
 .cr-steps .cr-completed .cr-icon > .cr-checked path {
-  stroke: #0c448e;
+  stroke: #0e0808;
 }
 .cr-steps .cr-completed .cr-icon i {
   display: none;
 }
 .cr-steps .cr-completed::after {
-  background: #0c448e !important;
+  background: #0e0808 !important;
 }
 .cr-steps .cr-completed .cr-checked {
   opacity: 1 !important;
@@ -4164,7 +4164,7 @@
   cursor: pointer;
 }
 .cr-add-more {
-  color: #0c448e;
+  color: #0e0808;
   text-decoration: none;
   float: right;
 }
@@ -4401,22 +4401,22 @@
   min-height: 36px;
   padding: 8px 12px;
   position: relative;
-  color: #0c448e;
+  color: #0e0808;
   border-radius: 10px;
   align-items: center;
   justify-content: center;
-  background: rgba(20, 100, 181, 0.1);
+  background: rgba(255, 76, 0, 0.1);
   font: 400 0.875rem / 1.4285714286em "Roboto", serif;
 }
 .cr-course-body .cr-addbtn .am-border-svg {
-  stroke: rgba(12, 68, 142, 0.4);
+  stroke: rgba(14, 8, 8, 0.4);
 }
 .cr-course-body .cr-addbtn .am-border-svg rect {
   stroke-width: 1px;
 }
 .cr-course-body .cr-addbtn i::before {
   font-weight: 600;
-  color: #0c448e;
+  color: #0e0808;
 }
 .cr-course-body .cr-formarea {
   gap: 16px;
@@ -4469,7 +4469,7 @@
   font: 600 0.75rem / 1.5em "Roboto", serif;
 }
 .cr-course-body .cr-formarea .am-cancel-btn:hover {
-  background: rgba(253, 253, 253, 0.1);
+  background: rgba(0, 0, 0, 0.1);
 }
 .cr-course-body .cr-formarea .am-custom-editor .note-editor {
   background: #fff;
@@ -4596,8 +4596,8 @@
   border: 1px dashed #eaeaea;
 }
 .cr-course-body .cr-curriculum-content ul li.cr-active {
-  border: 1px solid #0c448e;
-  outline: 1px solid #0c448e;
+  border: 1px solid #0e0808;
+  outline: 1px solid #0e0808;
 }
 .cr-course-body .cr-curriculum-content .am-upload-options {
   gap: 16px;
@@ -4719,7 +4719,7 @@
   gap: 4px;
   display: flex;
   cursor: pointer;
-  color: #0c448e;
+  color: #0e0808;
   align-items: center;
   font: 400 0.75rem / 1.5em "Roboto", serif;
 }
@@ -4848,7 +4848,7 @@
   transition: background 0.3s;
 }
 .cr-toggle:checked {
-  background: #0c448e;
+  background: #0e0808;
 }
 .cr-toggle:before {
   content: "";
@@ -4873,7 +4873,7 @@
   align-items: center;
   border-radius: 10px;
   justify-content: space-between;
-  background: rgba(12, 68, 142, 0.1);
+  background: rgba(14, 8, 8, 0.1);
 }
 .cr-allow-discount label {
   gap: 4px;
@@ -4968,8 +4968,8 @@
   border: 1px solid #eaeaea;
 }
 .cr-discount-table table tbody tr td input[type="checkbox"]:checked + label::before, .cr-discount-table table tbody tr td input[type="radio"]:checked + label::before {
-  background: #0c448e;
-  border: 1px solid #0c448e;
+  background: #0e0808;
+  border: 1px solid #0e0808;
 }
 .cr-input-wrap {
   display: flex;
@@ -4993,7 +4993,7 @@
 .cr-titlewrap > span {
   flex: none;
   cursor: pointer;
-  color: #0c448e;
+  color: #0e0808;
   position: relative;
   font: 500 0.75rem / 1.5em "Roboto", serif;
 }
@@ -5866,8 +5866,8 @@
   width: auto;
 }
 .cr-pagination .am-pagination ul li a:hover, .cr-pagination .am-pagination ul li span:hover, .cr-pagination .am-pagination ul li.active a, .cr-pagination .am-pagination ul li.active span {
-  background: #1464b5;
-  border-color: #1464b5;
+  background: #ff4c00;
+  border-color: #ff4c00;
 }
 .cr-avatar-group {
   display: flex;
@@ -6032,7 +6032,7 @@
   cursor: pointer;
   border-radius: 50%;
   background: #faf8ff;
-  border: 1.5px solid #0c448e;
+  border: 1.5px solid #0e0808;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.04), 0px 8px 16px rgba(0, 0, 0, 0.08);
 }
 .cr-price-range .noUi-connect, .cr-price-range .noUi-origin {
@@ -6056,7 +6056,7 @@
   position: relative;
 }
 .cr-price-range .noUi-connect {
-  background: #0c448e;
+  background: #0e0808;
 }
 .cr-price-range .noUi-connects {
   background: #eaeaea !important;
@@ -6423,7 +6423,7 @@
   border-radius: 6px;
   align-items: center;
   justify-content: center;
-  background: rgba(253, 253, 253, 0.05);
+  background: rgba(0, 0, 0, 0.05);
 }
 .cr-search-courses .cr-searchhead {
   width: 100%;
@@ -6623,8 +6623,8 @@
   justify-content: space-between;
 }
 .cr-filter-option .am-radio input[type=radio]:checked + label:before {
-  background-color: #0c448e;
-  border-color: #0c448e;
+  background-color: #0e0808;
+  border-color: #0e0808;
 }
 .cr-filter-option:first-child {
   margin-top: 0;
@@ -6703,7 +6703,7 @@
   position: absolute;
   border-radius: 50%;
   transform: translate(-50%, -50%);
-  background-color: #0c448e;
+  background-color: #0e0808;
 }
 .cr-radio-input:focus + .cr-radio-custom {
   box-shadow: 0 0 0 2px rgba(117, 79, 254, 0.3);
@@ -7227,7 +7227,7 @@
   margin-top: 10px;
   position: relative;
   border-radius: 8px;
-  background-color: rgba(12, 68, 142, 0.04);
+  background-color: rgba(14, 8, 8, 0.04);
 }
 .cr-radio-options .cr-price-range .cr-slider-range {
   border: 0;
@@ -7348,7 +7348,7 @@
 .cr-discounted-price {
   display: flex;
   align-items: flex-start;
-  color: #0c448e;
+  color: #0e0808;
 }
 .cr-discounted-price .cr-price-amount {
   font: 500 1.25rem/1.5em "Roboto", serif;
@@ -7378,7 +7378,7 @@
   font-size: 16px;
 }
 .cr-duration-info i:before {
-  color: #0c448e;
+  color: #0e0808;
 }
 .cr-includes-text {
   gap: 4px;
@@ -7655,8 +7655,8 @@
 }
 .cr-search-list-container .am-pagination ul li a:hover, .cr-search-list-container .am-pagination ul li span:hover, .cr-search-list-container .am-pagination ul li.active a, .cr-search-list-container .am-pagination ul li.active span {
   color: #fff;
-  background: #1464b5;
-  border-color: #1464b5;
+  background: #ff4c00;
+  border-color: #ff4c00;
 }
 .cr-search-list-container .cr-image-wrapper figcaption button {
   top: auto;
@@ -8114,7 +8114,7 @@
   align-items: center;
   border-radius: 10px;
   font: 600 0.875rem / 1.4285714286em "Roboto", serif;
-  background: rgba(253, 253, 253, 0.25);
+  background: rgba(0, 0, 0, 0.25);
 }
 .cr-usercourse_header_actions .cr-btn:hover {
   color: #fff;
@@ -8137,7 +8137,7 @@
   align-items: center;
   border-radius: 10px;
   justify-content: center;
-  background: rgba(253, 253, 253, 0.25);
+  background: rgba(0, 0, 0, 0.25);
   font: 600 0.875rem / 1.4285714286em "Roboto", serif;
 }
 .cr-dropdownbtn > img {
@@ -8301,7 +8301,7 @@
   content: "";
   bottom: 0;
   position: absolute;
-  background: #1464b5;
+  background: #ff4c00;
   border-radius: 50px 50px 0 0;
   transition: all 0.3s ease-in-out;
 }
@@ -8722,7 +8722,7 @@
   height: 100%;
   position: absolute;
   border-radius: 10px;
-  background-color: #fdfdfd;
+  background-color: black;
 }
 .cr-submit-main .cr-submit:hover, .cr-submit-main .cr-submit:focus {
   outline: none;
@@ -8953,15 +8953,15 @@
   align-items: center;
   color: black;
   justify-content: center;
-  background-color: black;
+  background-color: white;
   border: 1px solid #eaeaea;
   font: 500 0.875rem / 1.4285714286em "Roboto", serif;
 }
 .cr-allcourses_list .cr-card .cr-course-card .cr-start-course:hover, .cr-allcourses_list .cr-card-skeleton .cr-course-card .cr-start-course:hover, .cr-allcourses_list .cr-card .cr-course-card .cr-start-course:focus, .cr-allcourses_list .cr-card-skeleton .cr-course-card .cr-start-course:focus {
   outline: none;
   color: #fff;
-  background: #1464b5;
-  border-color: #1464b5;
+  background: #ff4c00;
+  border-color: #ff4c00;
 }
 .cr-allcourses_list .cr-card.cr-card-skeleton .cr-image-wrapper, .cr-allcourses_list .cr-card-skeleton .cr-image-wrapper {
   border-radius: 10px 10px 0 0;
@@ -9072,15 +9072,15 @@
 .cr-next-curriculum_btn {
   gap: 8px;
   padding: 10px 16px;
-  color: black;
+  color: white;
   display: inline-flex;
   align-items: center;
   border-radius: 10px;
-  background: #1464b5;
+  background: #ff4c00;
   font: 500 0.875rem / 1.4285714286em "Roboto", serif;
 }
 .cr-next-curriculum_btn i:before {
-  color: black;
+  color: white;
 }
 .cr-coursetasking-video {
   position: relative;

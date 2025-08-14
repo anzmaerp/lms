@@ -104,6 +104,7 @@ return [
                         'am-footer'         => 'Footer V1',
                         'am-footer_two'     => 'Footer V2',
                         'am-footer_three'   => 'Footer V3',
+                        'am-footer_five'    => 'Footer V5',
                     ],
                     'default'       => 'am-footer',
                     'placeholder'   => __('settings.select_option'),

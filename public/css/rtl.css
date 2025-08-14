@@ -1660,7 +1660,7 @@ table > tbody > tr > td {
 .am-revolutionize > img {
   right: auto;
   left: 0px;
-  transform: rotate(180deg);
+  /* transform: rotate(180deg); */
 }
 
 .am-tracklearning::before {

@@ -540,3 +540,16 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 });
+
+
+$('#searchInput').focus(function () {
+    if ($(window).width() >= 576){
+        $("#containerSearch").animate({ width: "60%" }, 300); // Expand on focus
+    }
+});
+
+$('#searchInput').blur(function () {
+    if ($(window).width() >= 576) {
+        $("#containerSearch").animate({ width: "30%" }, 300); // Expand on focus
+    }
+});

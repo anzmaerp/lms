@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title> {{ env('APP_NAME') }} </title>
     <link rel="icon" href="#" type="image/x-icon">
+        <link rel="stylesheet" type="text/css" href="{{ asset('css/custom.css') }}">
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 

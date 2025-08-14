@@ -12,9 +12,11 @@
     <x-favicon />
     @vite(['public/css/bootstrap.min.css', 'public/css/fonts.css', 'public/css/icomoon/style.css', 'public/css/select2.min.css'])
     <link rel="stylesheet" type="text/css" href="{{ asset('css/main.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/custom.css') }}">
     @stack('styles')
     @if (!empty(setting('_general.enable_rtl')) || !empty(session()->get('rtl')))
         <link rel="stylesheet" type="text/css" href="{{ asset('css/rtl.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ asset('css/custom.css') }}">
     @endif
     @livewire('livewire-ui-spotlight')
     @livewireStyles()

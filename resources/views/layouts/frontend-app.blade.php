@@ -53,7 +53,8 @@
         <link rel="stylesheet" type="text/css" href="{{ asset('css/colors-variation/home-nine.css') }}">
     @endif
     <x-favicon />
-
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/custom.css') }}">
+    
     @stack('styles')
     @if (!empty(setting('_general.enable_rtl')) || !empty(session()->get('rtl')))
         <link rel="stylesheet" type="text/css" href="{{ asset('css/rtl.css') }}">
