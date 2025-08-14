@@ -307,6 +307,15 @@ $settings =  [
             'field_desc'    => __('settings.show_search_box'),
             'value'         => '1',
         ],
+         [
+            'id'            => 'technical_support_whatsapp_number',
+            'type'          => 'text',
+            'tab_id'        => 'general_tab',
+            'tab_title'     => __('settings.technical_support_whatsapp_number'),
+            'class'         => '',
+            'label_title'   => __('settings.technical_support_whatsapp_number'),
+            'placeholder'   => __('settings.enter_technical_support_whatsapp_number'),
+        ],
         [
             'id'            => 'allowed_file_extensions',
             'type'          => 'text',
