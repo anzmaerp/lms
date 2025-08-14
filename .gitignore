@@ -36,7 +36,7 @@ bootstrap/cache/*
 # User uploaded content
 /public/storage
 /public/uploads
-#/public/css/main.css
+/public/css/main.css
 
 # Large files
 *.zip
