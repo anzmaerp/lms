@@ -27818,6 +27818,7 @@ body:has(.am-dragfile):before {
     right: -75px;
   }
 }
+
 @media (max-width: 360px) {
   .am-notifywrap .am-allnotifications {
     width: 284px;
