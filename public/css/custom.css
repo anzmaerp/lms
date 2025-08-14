@@ -180,7 +180,9 @@ color: rgb(0, 0, 0);
   color: black;
   font: 400 1.25rem/1.6em "Inter", sans-serif;
 }
-
+.am-banner-potential.am-banner-content-four{
+  padding-bottom: 20px !important;
+}
 .dropdownc-item3 {
   padding: 7px;
 }
