@@ -1,6 +1,3 @@
-@php
-    $phone = setting('_general.technical_support_whatsapp_number');
-@endphp
 <a href="https://wa.me/{{ setting('_general.technical_support_whatsapp_number') }}" 
     class="whatsapp-float" 
     target="_blank" 
