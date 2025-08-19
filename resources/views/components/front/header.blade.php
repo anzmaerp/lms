@@ -19,6 +19,8 @@
     $theme_sec_color = setting('_theme.theme_sec_color');
 @endphp
 <div>
+    
+</div>
 
 
 
@@ -279,4 +281,4 @@
 
         </header>
     @endif
-</div>
+
