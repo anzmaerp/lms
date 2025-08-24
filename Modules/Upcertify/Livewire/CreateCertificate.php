@@ -3,17 +3,18 @@
 
 namespace Modules\Upcertify\Livewire;
 
+use App\Models\User;
 use Livewire\Component;
 use Illuminate\Support\Str;
 use Livewire\Attributes\Url;
 use Livewire\WithFileUploads;
 use Livewire\Attributes\Layout;
 use Illuminate\Support\Facades\Log;
+use Modules\Upcertify\Models\Media;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
-use Modules\Upcertify\Models\Media;
-use Illuminate\Support\Facades\Storage;
 use Modules\Upcertify\Models\Template;
+use Illuminate\Support\Facades\Storage;
 
 class CreateCertificate extends Component
 {
@@ -54,12 +55,22 @@ class CreateCertificate extends Component
     public $certificate;
     public $wildcards = [];
     public $userId;
+  public $selectedTutors = []; // multiple tutors from form
+    public $tutors = [];
 
     private function resolveUserId()
     {
-        return (Auth::user()->is_admin && !empty($this->userId))
-            ? $this->userId
-            : Auth::id();
+        if ($this->isAdmin()) {
+            return !empty($this->selectedTutors) ? $this->selectedTutors : [];
+        }
+        return [Auth::id()];
+    }
+
+        private function isAdmin()
+    {
+        return method_exists(Auth::user(), 'hasRole')
+            ? Auth::user()->hasRole('admin')
+            : (property_exists(Auth::user(), 'is_admin') && Auth::user()->is_admin);
     }
 
 
@@ -68,13 +79,17 @@ class CreateCertificate extends Component
         $this->wildcards = config('upcertify.wildcards') ?? [];
         $this->wildcards[] = 'custom_message';
 
+        $this->tutors = User::whereHas('roles', function ($q) {
+            $q->where('name', 'tutor');
+        })->get();
+
         if (!in_array($this->tab, ['general', 'media', 'templates', 'elements', 'library', 'background'])) {
             $this->tab = 'general';
         }
 
         if (!empty($record_id)) {
-            $certificate = Template::whereKey($record_id)->whereNotNull('user_id')->first();
-            if ($certificate && ($certificate->user_id == $this->resolveUserId() || empty($certificate->user_id))) {
+            $certificate = Template::whereKey($record_id)->first();
+            if ($certificate) {
                 $this->id = $certificate->id;
                 $this->title = $certificate->title;
                 $this->body = $certificate->body;
@@ -83,14 +98,11 @@ class CreateCertificate extends Component
             } else {
                 abort(404);
             }
-        } else {
-            abort(404);
         }
 
         if ($this->tab == 'media') {
             $this->getBackgrounds();
         }
-
         if ($this->tab == 'templates') {
             $this->getTemplates();
         }
@@ -99,6 +111,7 @@ class CreateCertificate extends Component
         }
         $this->fonts = $this->getGoogleFonts();
     }
+
 
 
     public function activeTab($tab)
@@ -112,11 +125,12 @@ class CreateCertificate extends Component
             'title' => 'required|string|max:255',
         ]);
 
-        $userId = $this->resolveUserId();
+        $userIds = $this->resolveUserId();
+        $createdBy = Auth::id();
 
         $whare = [
             'id' => empty($this->as_template) ? $this->id : null,
-            'user_id' => $userId,
+            'created_by' => $createdBy,
         ];
 
         $response = isDemoSite();
@@ -133,7 +147,8 @@ class CreateCertificate extends Component
             $whare,
             [
                 'title' => $this->title,
-                'user_id' => $userId,
+                'user_id' => json_encode($userIds),
+                'created_by' => $createdBy,
                 'status' => 'publish',
                 'thumbnail_url' => $this->thumbnail_url,
                 'body' => $this->body,
@@ -147,6 +162,7 @@ class CreateCertificate extends Component
             return redirect($url);
         }
     }
+
 
 
     public function resetErrors($field = null)
@@ -408,7 +424,10 @@ class CreateCertificate extends Component
         $this->useAsBadeIcons();
         $this->useAsFrames();
         $this->useAsAttachments();
-        return view('upcertify::livewire.create-certificate.create-certificate');
+
+        return view('upcertify::livewire.create-certificate.create-certificate', [
+            'tutors' => $this->tutors
+        ]);
     }
     public function uploadMedia()
     {

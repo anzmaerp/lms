@@ -29,7 +29,10 @@
                                 @endif
                             </figure>
                             <div class="uc-certificates_item_content">
-                                <h3>{{ $template->title }}</h3>
+                                <h3>{{ $template->title }}</h3><br>
+                                    <p class="uc-certificates_creator">
+                                        {{ __('Created by') }}: {{ $template->user?->name ?? __('Unknown') }}
+                                    </p>
                                 <div class="uc-certificates_item_actions">
                                     <a href="javascript:void(0);" class="uc-certificates_item_actions_btn"><i><x-upcertify::icons.ellipsis-horizontal /></i></a>
                                     <ul class="uc-certificates_item_actions_dropdown">
@@ -74,24 +77,7 @@
             <div class="uc-modal_body">
                 <form class="uc-themeform">
                     <fieldset>
-                        @if(Auth::user()->is_admin)
-                            <div class="form-group">
-                                <label for="form_user_id" class="uc-important">
-                                    {{ __('upcertify::upcertify.select_tutor') }}
-                                </label>
-                                <div class="form-group-wrap">
-                                    <select class="form-control" id="form_user_id" wire:model="form_user_id">
-                                        <option value="">{{ __('general.select') }}</option>
-                                        @foreach($tutors as $tutor)
-                                            <option value="{{ $tutor->id }}">{{ $tutor->name }}</option>
-                                        @endforeach
-                                    </select>
-                                    @error('form_user_id')
-                                        <span class="uc-error-msg">{{ $message }}</span>
-                                    @enderror
-                                </div>
-                            </div>
-                        @endif
+
 
                         <div class="form-group">
                             <label for="title" class="uc-important">{{ __('upcertify::upcertify.title') }}</label>
@@ -105,6 +91,25 @@
                                 @enderror
                             </div>
                         </div>
+                    @if(Auth::user()->hasRole('admin'))
+                        <div class="form-group">
+                            <label for="selectedTutors" class="uc-important">
+                                {{ __('upcertify::upcertify.select_tutor') }}
+                            </label>
+                            <div class="form-group-wrap">
+                                <select class="form-control" id="selectedTutors" wire:model="selectedTutors" multiple>
+                                    @foreach($tutors as $tutor)
+                                        <option value="{{ $tutor->id }}">
+                                            {{ $tutor->profile?->first_name }} {{ $tutor->profile?->last_name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                @error('selectedTutors')
+                                    <span class="uc-error-msg">{{ $message }}</span>
+                                @enderror
+                            </div>
+                        </div>
+                    @endif
 
                         <div class="form-group form-group-btns">
                             <button type="button" class="uc-white-btn close-modal" @click="closeModal">
