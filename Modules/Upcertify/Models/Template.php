@@ -4,8 +4,8 @@ namespace Modules\Upcertify\Models;
 
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;   // ✅ Missing import
-use App\Models\User;                                    // ✅ Import User
+use Illuminate\Database\Eloquent\Relations\BelongsTo;   
+use App\Models\User;                                    
 use Illuminate\Support\Arr;
 
 class Template extends Model

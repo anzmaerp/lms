@@ -1,4 +1,3 @@
-{{-- @dd($templates) --}}
 <div class="uc-certificates" wire:init="loadData">
     <div class="uc-certificates_header">
         <div class="uc-certificates_title">

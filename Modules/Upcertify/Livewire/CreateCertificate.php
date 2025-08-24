@@ -55,7 +55,7 @@ class CreateCertificate extends Component
     public $certificate;
     public $wildcards = [];
     public $userId;
-  public $selectedTutors = []; // multiple tutors from form
+    public $selectedTutors = []; 
     public $tutors = [];
 
     private function resolveUserId()

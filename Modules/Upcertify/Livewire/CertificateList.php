@@ -48,10 +48,10 @@ class CertificateList extends Component
         if ($this->isAdmin()) {
             $templates = Template::orderBy('id', 'desc')->paginate(15);
         } else {
-$userId = Auth::id(); // integer
-$templates = Template::whereJsonContains('user_id', $userId)
-    ->orderBy('id', 'desc')
-    ->paginate(15);
+            $userId = Auth::id(); 
+            $templates = Template::whereJsonContains('user_id', $userId)
+                ->orderBy('id', 'desc')
+                ->paginate(15);
         }
 
 
@@ -85,9 +85,9 @@ $templates = Template::whereJsonContains('user_id', $userId)
         $certificate = Template::updateOrCreate(
             ['title' => $this->title],
             [
-'user_id' => $this->isAdmin()
-    ? array_map('intval', $this->selectedTutors) // ensure numeric IDs
-    : [(int) Auth::id()],       
+                'user_id' => $this->isAdmin()
+                    ? array_map('intval', $this->selectedTutors) 
+                    : [(int) Auth::id()],
 
                 'created_by' => $createdBy,
                 'status'     => 'draft',
