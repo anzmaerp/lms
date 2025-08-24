@@ -71,7 +71,6 @@ class CreateBundle extends Component
             if ($this->bundle && $this->bundle->courses) {
                 $this->selectedCourses = $this->bundle->courses->pluck('id')->toArray();
                 $this->selected_courses = $this->selectedCourses;
-
                 $this->bundle_courses = $this->bundle->courses->map(fn($c) => ['id' => $c->id, 'text' => $c->title]);
             }
         }

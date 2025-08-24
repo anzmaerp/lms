@@ -1,3 +1,4 @@
+
 <div class="am-profile-setting am-managesessions_wrap">
     @slot('title')
         {{ __('calendar.title') }}

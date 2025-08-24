@@ -194,6 +194,20 @@ new class extends Component {
                     ],
                 ],
             ],
+
+             [
+                'title' => __('sidebar.certificates'),
+                'icon' => 'icon-award',
+
+                // this just to make it show because copons does not have any permission and yet u check on it
+                'permission' => 'can-manage-certificates',
+                'routes' => [
+                    [
+                        'route' => 'upcertify.certificate-list',
+                        'title' => __('sidebar.certificates'),
+                    ],
+                ],
+    ],
         ];
 
         if (\Nwidart\Modules\Facades\Module::has('subscriptions') && \Nwidart\Modules\Facades\Module::isEnabled('subscriptions')) {
@@ -253,6 +267,10 @@ new class extends Component {
             // Add debugging to verify menu item is added
             echo '<!-- KuponDeal menu item added -->';
         }
+    
+
+            // Add debugging to verify menu item is added
+            echo '<!-- KuponDeal menu item added -->';
 
         if (\Nwidart\Modules\Facades\Module::has('forumwise') && \Nwidart\Modules\Facades\Module::isEnabled('forumwise')) {
             $this->menuItems[] = [

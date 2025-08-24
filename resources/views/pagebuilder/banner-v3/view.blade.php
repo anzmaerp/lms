@@ -1,4 +1,3 @@
-
 <div class="am-banner-potential am-banner-content-three">
     <a href="https://wa.me/{{ setting('_general.technical_support_whatsapp_number') }}" 
         class="whatsapp-float" 

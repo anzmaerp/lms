@@ -41,17 +41,21 @@ class BookingService {
 
     public function getAvailableSlots($subjectGroupIds, $date) {
         $myData = array();
-        $slots = UserSubjectSlot::select('id','start_time','spaces','total_booked')
-            ->whereHas('subjectGroupSubjects', function($groupSubjects) use($subjectGroupIds) {
-                $groupSubjects->select('id','user_subject_group_id');
-                $groupSubjects->whereHas('userSubjectGroup', fn($query)=>$query->select('id','user_id')->whereUserId($this->user->id));
-                if ($subjectGroupIds) {
-                    $groupSubjects->whereIn('id', $subjectGroupIds);
-                }
-            })
-            ->where('start_time', '>=', $date->copy()->firstOfMonth()->toDateString())
-            ->where('end_time', '<=', $date->copy()->lastOfMonth()->toDateString())
-            ->orderBy('start_time')->get();
+    $slots = UserSubjectSlot::select('id','start_time','spaces','total_booked')
+    ->whereHas('subjectGroupSubjects', function($groupSubjects) use($subjectGroupIds) {
+        $groupSubjects->select('id','user_subject_group_id');
+        $groupSubjects->whereHas('userSubjectGroup', fn($query)=>$query->whereUserId($this->user->id));
+        if ($subjectGroupIds) {
+            $groupSubjects->whereIn('id', $subjectGroupIds);
+        }
+    })
+    ->whereDate('start_time', '>=', $date->copy()->firstOfMonth())
+    ->whereDate('end_time', '<=', $date->copy()->lastOfMonth())
+    ->orderBy('start_time')
+    ->get();
+    
+
+
         if ($slots->isNotEmpty()) {
             foreach ($slots as $slot) {
                 $date = parseToUserTz($slot->start_time)->toDateString();

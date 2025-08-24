@@ -62,38 +62,72 @@
         @endif
     </div>
 
-    <div id="uc-create-certificate-popup" class="uc-modal uc-addmediapopup" wire:ignore.self>
-        <div class="uc-modaldialog">
-            <div class="uc-modal_wrap">
-                <div class="uc-modal_title">
-                    <h2>{{ __('upcertify::upcertify.create_certificate') }}</h2>
-                    <a href="javascript:void(0);" class="uc-removemodal" @click="closeModal"><x-upcertify::icons.close /></a>
-                </div>
-                <div class="uc-modal_body">
-                    <form class="uc-themeform">
-                        <fieldset>
+<div id="uc-create-certificate-popup" class="uc-modal uc-addmediapopup" wire:ignore.self>
+    <div class="uc-modaldialog">
+        <div class="uc-modal_wrap">
+            <div class="uc-modal_title">
+                <h2>{{ __('upcertify::upcertify.create_certificate') }}</h2>
+                <a href="javascript:void(0);" class="uc-removemodal" @click="closeModal">
+                    <x-upcertify::icons.close />
+                </a>
+            </div>
+            <div class="uc-modal_body">
+                <form class="uc-themeform">
+                    <fieldset>
+                        @if(Auth::user()->is_admin)
                             <div class="form-group">
-                                <label for="title" class="uc-important">{{ __('upcertify::upcertify.title') }}</label>
-                                <div class="form-group-wrap @error('title') uc-invalid @enderror">
-                                    <input class="form-control" type="text" placeholder="{{ __('upcertify::upcertify.enter_title') }}" wire:model="title" wire:keydown.enter="createNow">
-                                    @error('title')
+                                <label for="form_user_id" class="uc-important">
+                                    {{ __('upcertify::upcertify.select_tutor') }}
+                                </label>
+                                <div class="form-group-wrap">
+                                    <select class="form-control" id="form_user_id" wire:model="form_user_id">
+                                        <option value="">{{ __('general.select') }}</option>
+                                        @foreach($tutors as $tutor)
+                                            <option value="{{ $tutor->id }}">{{ $tutor->name }}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('form_user_id')
                                         <span class="uc-error-msg">{{ $message }}</span>
                                     @enderror
                                 </div>
                             </div>
-                            <div class="form-group form-group-btns">
-                                <button type="button" class="uc-white-btn close-modal" @click="closeModal">{{ __('upcertify::upcertify.cancel') }}</button>
-                                <button type="button" class="uc-btn" wire:loading.class="uc-btn_disable" wire:click.prevent="createNow">
-                                    <span wire:loading.remove wire:target="createNow">{{ __('upcertify::upcertify.create') }}</span>
-                                    <span wire:loading wire:target="createNow">{{ __('upcertify::upcertify.creating') }}</span>
-                                </button>
+                        @endif
+
+                        <div class="form-group">
+                            <label for="title" class="uc-important">{{ __('upcertify::upcertify.title') }}</label>
+                            <div class="form-group-wrap @error('title') uc-invalid @enderror">
+                                <input class="form-control" type="text" 
+                                       placeholder="{{ __('upcertify::upcertify.enter_title') }}" 
+                                       wire:model="title" 
+                                       wire:keydown.enter="createNow">
+                                @error('title')
+                                    <span class="uc-error-msg">{{ $message }}</span>
+                                @enderror
                             </div>
+                        </div>
+
+                        <div class="form-group form-group-btns">
+                            <button type="button" class="uc-white-btn close-modal" @click="closeModal">
+                                {{ __('upcertify::upcertify.cancel') }}
+                            </button>
+                            <button type="button" class="uc-btn" 
+                                    wire:loading.class="uc-btn_disable" 
+                                    wire:click.prevent="createNow">
+                                <span wire:loading.remove wire:target="createNow">
+                                    {{ __('upcertify::upcertify.create') }}
+                                </span>
+                                <span wire:loading wire:target="createNow">
+                                    {{ __('upcertify::upcertify.creating') }}
+                                </span>
+                            </button>
                         </div>
                     </fieldset>
                 </form>
             </div>
         </div>
     </div>
+</div>
+
     <!-- Delete Alert Popup -->
     <div id="uc-deletepopup" class="uc-modal uc-deletepopup" wire:ignore.self>
         <div class="uc-modaldialog">
