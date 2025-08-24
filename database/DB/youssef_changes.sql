@@ -11,8 +11,9 @@ ADD created_by BIGINT UNSIGNED NULL;
 ALTER TABLE courses_bundles 
 ADD CONSTRAINT courses_bundles_created_by_fk FOREIGN KEY (created_by) REFERENCES users(id);
 
-ALTER TABLE `uc__templates`
-MODIFY `user_id` JSON NULL;
+ALTER TABLE uc__templates 
+MODIFY COLUMN user_id JSON DEFAULT NULL;
+
 
 ALTER TABLE `uc__templates`
 ADD COLUMN `created_by` BIGINT(20) UNSIGNED NULL ,
