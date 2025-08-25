@@ -54,7 +54,11 @@ class MyCalendar extends Component
         $this->makeCalendar($this->currentDate);
         $this->availableSlots = $this->bookingService->getAvailableSlots($this->subjectGroupIds, $this->currentDate);
         $this->dispatch('initCalendarJs', currentDate: parseToUserTz($this->currentDate->copy())->format('F, Y'));
-        return view('livewire.pages.tutor.manage-sessions.my-calendar');
+        return view('livewire.pages.tutor.manage-sessions.my-calendar',[
+        'availableSlots'  => $this->availableSlots,
+
+        ]);
+
     }
 
     public function loadData() {

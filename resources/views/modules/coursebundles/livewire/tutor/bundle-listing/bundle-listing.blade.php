@@ -1,3 +1,4 @@
+
 <div class="cr-bundles" wire:init="loadData">
     <div class="am-title_wrap">
         <div class="am-title">
@@ -124,6 +125,18 @@
                                             </span>
                                             <em>{{\Carbon\Carbon::parse($bundle?->created_at)->format('M d, Y')}}</em>
                                         </li>
+                                            @if ($bundle?->createdBy?->profile)
+                                            <li>
+                                                <span>
+                                                    <i class="am-icon-book-1"></i>
+                                                    {{ __('coursebundles::bundles.created_by') }}
+                                                </span>
+                                                <em>
+                                                    {{ $bundle->createdBy->profile->first_name }}
+                                                    {{ $bundle->createdBy->profile->last_name }}
+                                                </em>
+                                            </li>
+                                        @endif
                                     </ul>
                                 </div>
                                 <div class="cr-bundle-price-container">

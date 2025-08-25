@@ -3,22 +3,24 @@
 
 namespace Modules\Upcertify\Livewire;
 
+use App\Models\User;
 use Livewire\Component;
 use Illuminate\Support\Str;
 use Livewire\Attributes\Url;
 use Livewire\WithFileUploads;
 use Livewire\Attributes\Layout;
 use Illuminate\Support\Facades\Log;
+use Modules\Upcertify\Models\Media;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
-use Modules\Upcertify\Models\Media;
-use Illuminate\Support\Facades\Storage;
 use Modules\Upcertify\Models\Template;
+use Illuminate\Support\Facades\Storage;
 
-class CreateCertificate extends Component {
+class CreateCertificate extends Component
+{
     use WithFileUploads;
-    
-    #[Url] 
+
+    #[Url]
     public $tab = 'general';
 
     #[Url]
@@ -29,6 +31,7 @@ class CreateCertificate extends Component {
     public $thumbnail_url;
     public $templates;
     public $title;
+
     public $attachments;
     public $backgrounds;
     public $shapeIcons;
@@ -39,7 +42,7 @@ class CreateCertificate extends Component {
     public $media_type = 'media';
     public $media_title;
     public $search = '';
-    public $allowFileExt=['jpg','jpeg','png','gif'];
+    public $allowFileExt = ['jpg', 'jpeg', 'png', 'gif'];
     public $fileSize = 10240;
     public $loadingBackgrounds = false;
     public $loadingPattern = false;
@@ -51,18 +54,42 @@ class CreateCertificate extends Component {
     public $body;
     public $certificate;
     public $wildcards = [];
+    public $userId;
+    public $selectedTutors = []; 
+    public $tutors = [];
 
-    public function mount($record_id = null) {
+    private function resolveUserId()
+    {
+        if ($this->isAdmin()) {
+            return !empty($this->selectedTutors) ? $this->selectedTutors : [];
+        }
+        return [Auth::id()];
+    }
+
+        private function isAdmin()
+    {
+        return method_exists(Auth::user(), 'hasRole')
+            ? Auth::user()->hasRole('admin')
+            : (property_exists(Auth::user(), 'is_admin') && Auth::user()->is_admin);
+    }
+
+
+    public function mount($record_id = null)
+    {
         $this->wildcards = config('upcertify.wildcards') ?? [];
         $this->wildcards[] = 'custom_message';
 
-        if(!in_array($this->tab, ['general', 'media', 'templates', 'elements','library','background'])){
+        $this->tutors = User::whereHas('roles', function ($q) {
+            $q->where('name', 'tutor');
+        })->get();
+
+        if (!in_array($this->tab, ['general', 'media', 'templates', 'elements', 'library', 'background'])) {
             $this->tab = 'general';
         }
 
-        if(!empty($record_id)) {
-            $certificate = Template::whereKey($record_id)->whereNotNull('user_id')->first();
-            if($certificate && ($certificate->user_id == Auth::id() || empty($certificate->user_id))) {
+        if (!empty($record_id)) {
+            $certificate = Template::whereKey($record_id)->first();
+            if ($certificate) {
                 $this->id = $certificate->id;
                 $this->title = $certificate->title;
                 $this->body = $certificate->body;
@@ -70,44 +97,48 @@ class CreateCertificate extends Component {
                 $this->isEdit = true;
             } else {
                 abort(404);
-            } 
-        } else {
-            abort(404);
+            }
         }
-        
+
         if ($this->tab == 'media') {
             $this->getBackgrounds();
         }
-        
-        if($this->tab == 'templates') {
+        if ($this->tab == 'templates') {
             $this->getTemplates();
         }
-        if($this->tab == 'background') {
+        if ($this->tab == 'background') {
             $this->getPattern();
         }
-        // if($this->tab == 'library') {
-        //     $this->getAttachment();
-        // }
         $this->fonts = $this->getGoogleFonts();
     }
 
-    public function activeTab($tab) {
+
+
+    public function activeTab($tab)
+    {
         $this->media_type = $tab;
     }
 
-    public function createNow() {
-       
+    public function createNow()
+    {
         $this->validate([
             'title' => 'required|string|max:255',
         ]);
 
-        $whare = ['id' => empty($this->as_template) ? $this->id : null,  'user_id' => Auth::id()];
+        $userIds = $this->resolveUserId();
+        $createdBy = Auth::id();
+
+        $whare = [
+            'id' => empty($this->as_template) ? $this->id : null,
+            'created_by' => $createdBy,
+        ];
 
         $response = isDemoSite();
         if ($response) {
-            $this->dispatch('showToast', 
-               type: 'error',
-               message: __('general.demosite_res_txt')
+            $this->dispatch(
+                'showToast',
+                type: 'error',
+                message: __('general.demosite_res_txt')
             );
             return;
         }
@@ -115,55 +146,60 @@ class CreateCertificate extends Component {
         $certificate = Template::updateOrCreate(
             $whare,
             [
-                'title' => $this->title, 
-                'user_id' => Auth::id(), 
+                'title' => $this->title,
+                'user_id' => json_encode($userIds),
+                'created_by' => $createdBy,
                 'status' => 'publish',
                 'thumbnail_url' => $this->thumbnail_url,
                 'body' => $this->body,
             ]
         );
 
-
-        if($certificate){
+        if ($certificate) {
             $this->dispatch('showToast', type: 'success', message: __('upcertify::upcertify.certificate_title_updated'));
             sleep(1);
             $url = route('upcertify.certificate-list');
             return redirect($url);
         }
     }
+
+
+
     public function resetErrors($field = null)
     {
         $this->reset('media');
-        $this->reset('media_title');     
+        $this->reset('media_title');
         $this->resetErrorBag($field);
-
     }
 
-    public function updatedMedia() {
+    public function updatedMedia()
+    {
         $this->validate([
             'media' => 'mimes:' . implode(',', $this->allowFileExt) . '|max:' . $this->fileSize, // Max size in KB
         ]);
     }
 
-    public function removeMedia() {
+    public function removeMedia()
+    {
         $this->media = null;
     }
-    
-    public function updateTab($tab){
+
+    public function updateTab($tab)
+    {
 
         $this->search = '';
-        if($this->id && in_array($tab, ['general', 'media', 'templates', 'elements','library','background'])) {
+        if ($this->id && in_array($tab, ['general', 'media', 'templates', 'elements', 'library', 'background'])) {
             $this->tab = $tab;
-            if($tab == 'templates' && (empty($this->templates) || $this->templates->isEmpty())) {
+            if ($tab == 'templates' && (empty($this->templates) || $this->templates->isEmpty())) {
                 $this->getTemplates();
             }
-            if($tab == 'media' && (empty($this->backgrounds) || $this->backgrounds->isEmpty())) {
+            if ($tab == 'media' && (empty($this->backgrounds) || $this->backgrounds->isEmpty())) {
                 $this->getBackgrounds();
             }
             // if($tab == 'library' && empty($this->attachments)) {
             //     $this->getAttachment();
             // }
-            if($tab == 'background' && empty($this->patterns)) {
+            if ($tab == 'background' && empty($this->patterns)) {
                 $this->getPattern();
             }
         }
@@ -175,92 +211,100 @@ class CreateCertificate extends Component {
     //     $this->loadingAttachments = false;
     // }
 
-    public function updatedSearch(){
-        if($this->tab == 'templates'){
+    public function updatedSearch()
+    {
+        if ($this->tab == 'templates') {
 
             $this->getTemplates();
-        } elseif($this->tab == 'media') {
+        } elseif ($this->tab == 'media') {
             $this->getBackgrounds();
         }
     }
 
-    public function getTemplates() {
+    public function getTemplates()
+    {
 
         $this->loadingTemplates = true;
-        $this->templates = Template::select('id','title','thumbnail_url')->whereNull('user_id')->when($this->search, function($query, $search){
-            return $query->where('title', 'like', '%'.$search.'%');
+        $this->templates = Template::select('id', 'title', 'thumbnail_url')->whereNull('user_id')->when($this->search, function ($query, $search) {
+            return $query->where('title', 'like', '%' . $search . '%');
         })
-        ->orderBy('id', 'desc')->get();
+            ->orderBy('id', 'desc')->get();
         $this->loadingTemplates = false;
     }
 
-    public function getBackgrounds() {
+    public function getBackgrounds()
+    {
         $this->loadingBackgrounds = true;
-        $this->backgrounds = Media::where('type', Media::TYPE['media'])->when($this->search, function($query, $search){
-            return $query->where('title', 'like', '%'.$search.'%');
+        $this->backgrounds = Media::where('type', Media::TYPE['media'])->when($this->search, function ($query, $search) {
+            return $query->where('title', 'like', '%' . $search . '%');
         })
-        ->orderBy('id', 'desc')->get();
+            ->orderBy('id', 'desc')->get();
         $this->loadingBackgrounds = false;
     }
-    public function getPattern() {
+    public function getPattern()
+    {
         $this->loadingPattern = true;
         $this->patterns = Media::where('type', Media::TYPE['pattern'])->orderBy('id', 'desc')->get();
         $this->loadingPattern = false;
     }
-    
-    public function deleteTemplate($id) {
+
+    public function deleteTemplate($id)
+    {
         $certificate = Template::find($id);
-        
+
         $response = isDemoSite();
         if ($response) {
-            $this->dispatch('showToast', 
-               type: 'error',
-               message: __('general.demosite_res_txt')
+            $this->dispatch(
+                'showToast',
+                type: 'error',
+                message: __('general.demosite_res_txt')
             );
             return;
         }
 
-        if($certificate) {
+        if ($certificate) {
             $certificate->delete();
-            $this->templates = $this->templates->reject(function($item) use ($id) {
+            $this->templates = $this->templates->reject(function ($item) use ($id) {
                 return $item->id == $id;
             });
             $this->dispatch('showToast', type: 'success', message: 'Template deleted successfully');
         }
     }
 
-    public function useAsTemplate($id) {
+    public function useAsTemplate($id)
+    {
 
         $certificate = Template::find($id);
-        if($certificate) {
+        if ($certificate) {
             $body = $certificate->body;
             $renderedHtml = view('upcertify::components.body', ['body' => $body])->render();
             $this->dispatch('embedTemplate', template: $renderedHtml);
-
         }
     }
 
-    public function useAsShapeIcons() {
+    public function useAsShapeIcons()
+    {
 
-            $shapeIcons = [
-                'ellipse',
-                'hexagon',
-                'octagon',
-                'parallelogram',
-                'rectangle',
-                'star',
-                'triangle',
-                'vector',
-            ];
-            foreach ($shapeIcons as $shape) {
-                $componentClass = 'upcertify::components.shaps.' . Str::kebab($shape); 
-                $this->shapeIcons[$shape] = view($componentClass)->render();
-            }
+        $shapeIcons = [
+            'ellipse',
+            'hexagon',
+            'octagon',
+            'parallelogram',
+            'rectangle',
+            'star',
+            'triangle',
+            'vector',
+        ];
+        foreach ($shapeIcons as $shape) {
+            $componentClass = 'upcertify::components.shaps.' . Str::kebab($shape);
             $this->shapeIcons[$shape] = view($componentClass)->render();
+        }
+        $this->shapeIcons[$shape] = view($componentClass)->render();
     }
 
-    public function useAsBadeIcons() {
-       $badeIcons = [
+    public function useAsBadeIcons()
+    {
+        $badeIcons = [
             'artboard01',
             'artboard02',
             'artboard03',
@@ -273,28 +317,30 @@ class CreateCertificate extends Component {
             'artboard10',
         ];
         foreach ($badeIcons as $shape) {
-            $componentClass = 'upcertify::components.badges.' . Str::kebab($shape); 
+            $componentClass = 'upcertify::components.badges.' . Str::kebab($shape);
             $this->badeIcons[$shape] = view($componentClass)->render();
         }
         $this->badeIcons[$shape] = view($componentClass)->render();
     }
 
-    public function useAsAttachments() {
+    public function useAsAttachments()
+    {
         $attachments = [
-             'attachment-1',
-             'attachment-2',
-             'attachment-3',
-             'attachment-4',
-             'attachment-5',
-         ];
-         foreach ($attachments as $attachment) {
-             $componentClass = 'upcertify::components.attachments.' . Str::kebab($attachment); 
-             $this->attachments[$attachment] = view($componentClass)->render();
-         }
-         $this->attachments[$attachment] = view($componentClass)->render();
-     }
+            'attachment-1',
+            'attachment-2',
+            'attachment-3',
+            'attachment-4',
+            'attachment-5',
+        ];
+        foreach ($attachments as $attachment) {
+            $componentClass = 'upcertify::components.attachments.' . Str::kebab($attachment);
+            $this->attachments[$attachment] = view($componentClass)->render();
+        }
+        $this->attachments[$attachment] = view($componentClass)->render();
+    }
 
-     public function useAsFrames() {
+    public function useAsFrames()
+    {
         $frames = [
             'frame-1' => [
                 'icon',
@@ -329,25 +375,27 @@ class CreateCertificate extends Component {
             }
         }
     }
-     
-    public function deleteMedia($id) {
+
+    public function deleteMedia($id)
+    {
         $response = isDemoSite();
         if ($response) {
-            $this->dispatch('showToast', 
-               type: 'error',
-               message: __('general.demosite_res_txt')
+            $this->dispatch(
+                'showToast',
+                type: 'error',
+                message: __('general.demosite_res_txt')
             );
             return;
         }
         $media = Media::find($id);
-        if($media) {
+        if ($media) {
             $media->delete();
-            if($media->type == 'media') {
-                $this->backgrounds = $this->backgrounds->reject(function($item) use ($id) {
+            if ($media->type == 'media') {
+                $this->backgrounds = $this->backgrounds->reject(function ($item) use ($id) {
                     return $item->id == $id;
                 });
-            } else if($media->type == 'pattern') {
-                $this->patterns = $this->patterns->reject(function($item) use ($id) {
+            } else if ($media->type == 'pattern') {
+                $this->patterns = $this->patterns->reject(function ($item) use ($id) {
                     return $item->id == $id;
                 });
             }
@@ -356,28 +404,33 @@ class CreateCertificate extends Component {
             //         return $item->id == $id;
             //     });
             // }
-           
-            $this->dispatch('showToast', 
-            type: 'success', 
-            message: $media->type == 'media' 
-                ? __('upcertify::upcertify.background_deleted') 
-                : ($media->type == 'pattern' 
-                    ? __('upcertify::upcertify.pattern_deleted') 
-                    : __('upcertify::upcertify.attachment_deleted'))
-        );
+
+            $this->dispatch(
+                'showToast',
+                type: 'success',
+                message: $media->type == 'media'
+                    ? __('upcertify::upcertify.background_deleted')
+                    : ($media->type == 'pattern'
+                        ? __('upcertify::upcertify.pattern_deleted')
+                        : __('upcertify::upcertify.attachment_deleted'))
+            );
         }
     }
 
     #[Layout('upcertify::layouts.app')]
-    public function render() {
+    public function render()
+    {
         $this->useAsShapeIcons();
         $this->useAsBadeIcons();
         $this->useAsFrames();
         $this->useAsAttachments();
-        return view('upcertify::livewire.create-certificate.create-certificate');
-    }
 
-    public function uploadMedia() {
+        return view('upcertify::livewire.create-certificate.create-certificate', [
+            'tutors' => $this->tutors
+        ]);
+    }
+    public function uploadMedia()
+    {
         $this->validate([
             'media'      => 'required|mimes:' . implode(',', $this->allowFileExt) . '|max:' . $this->fileSize, // Max size in KB
             'media_title' => 'required|string|max:255|min:3',
@@ -385,15 +438,16 @@ class CreateCertificate extends Component {
 
         $response = isDemoSite();
         if ($response) {
-            $this->dispatch('showToast', 
-               type: 'error',
-               message: __('general.demosite_res_txt')
+            $this->dispatch(
+                'showToast',
+                type: 'error',
+                message: __('general.demosite_res_txt')
             );
             $this->dispatch('closeModal');
             return;
         }
 
-        if(!empty($this->media)) {
+        if (!empty($this->media)) {
             $originalName = $this->media->getClientOriginalName();
             $slugifiedName = Str::slug($this->media_title) . '.' . pathinfo($originalName, PATHINFO_EXTENSION);
             $counter = 1;
@@ -402,19 +456,19 @@ class CreateCertificate extends Component {
                 $newSlugifiedName = Str::slug($this->media_title) . '-' . $counter . '.' . pathinfo($slugifiedName, PATHINFO_EXTENSION);
                 $counter++;
             }
-            $this->media->storeAs('upcertify/'.$this->media_type, $newSlugifiedName, getStorageDisk());
+            $this->media->storeAs('upcertify/' . $this->media_type, $newSlugifiedName, getStorageDisk());
             $newMedia = Media::create([
                 'title' => $this->media_title,
                 'type' =>  Media::TYPE[$this->media_type],
                 'path' => 'upcertify/' . $this->media_type . '/' . $newSlugifiedName,
             ]);
-            if($newMedia) {
+            if ($newMedia) {
                 $this->dispatch('closeModal');
-                if($this->media_type == 'media') {
+                if ($this->media_type == 'media') {
                     $this->backgrounds = $this->backgrounds->prepend($newMedia);
-                }elseif($this->media_type == 'pattern') {
+                } elseif ($this->media_type == 'pattern') {
                     $this->patterns = $this->patterns->prepend($newMedia);
-                }  
+                }
                 // else {
                 //     $this->attachments = $this->attachments->prepend($newMedia);
                 // }
@@ -423,83 +477,92 @@ class CreateCertificate extends Component {
         }
     }
 
-    function saveCertificateCanvas($dirName, $name, $imageUrl) {
+    function saveCertificateCanvas($dirName, $name, $imageUrl)
+    {
         $file_ext = ".png";
         $imageName = $name;
-    
+
         // Get the storage disk dynamically
         $disk = getStorageDisk();
-    
+
         // Check if the file already exists and generate a unique name if necessary
         $i = 0;
         while (Storage::disk($disk)->exists($dirName . '/' . $imageName . $file_ext)) {
             $i++;
             $imageName = preg_replace('/\(\d+\)$/', '', $name) . '(' . $i . ')';
         }
-    
+
         $fileName = $imageName . $file_ext;
         $filePath = $dirName . '/' . $fileName;
-    
+
         // Decode the base64 image
         $image = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $imageUrl));
         if ($image === false) {
             throw new \Exception("Failed to decode base64 image");
         }
-    
+
         // Save the image file to the specified disk
         $storeFile = Storage::disk($disk)->put($filePath, $image);
         if ($storeFile === false) {
             throw new \Exception("Failed to save image file to disk: $filePath");
         }
-    
+
         if ($storeFile) {
             return $filePath; // Return the full path to the saved file
         }
-    
+
         return '';
     }
 
-    public function publishCertificate() {
+    public function publishCertificate()
+    {
         $response = isDemoSite();
         if ($response) {
-            $this->dispatch('showToast', 
-               type: 'error',
-               message: __('general.demosite_res_txt')
+            $this->dispatch(
+                'showToast',
+                type: 'error',
+                message: __('general.demosite_res_txt')
             );
             return;
         }
+
         $slug = Str::slug($this->title);
         $this->thumbnail_url = $this->saveCertificateCanvas('upcertify/templates', $slug, $this->body['thumbnail']);
-        $certificate = Template::where('id', $this->id)->where('user_id', Auth::id())->first();
+        $userId = $this->resolveUserId();
+        $certificate = Template::where('id', $this->id)->where('user_id', $userId)->first();
 
         if (isset($this->body['thumbnail'])) {
             unset($this->body['thumbnail']);
         }
 
-        if( empty($this->body['elementsInfo']) ) {
+        if (empty($this->body['elementsInfo'])) {
             $this->dispatch('showToast', type: 'error', message: __('upcertify::upcertify.elements_not_found'));
             return;
         }
 
-        if( empty($this->title) ) {
+        if (empty($this->title)) {
             $this->dispatch('showToast', type: 'error', message: __('upcertify::upcertify.title_not_found'));
             $this->tab = 'general';
             return;
         }
-        $whare = ['id' => empty($this->as_template) ? $this->id : null,  'user_id' => Auth::id()];
+
+        $whare = [
+            'id' => empty($this->as_template) ? $this->id : null,
+            'user_id' => $userId,
+        ];
+
         $certificate = Template::updateOrCreate(
             $whare,
             [
-                'title' => $this->title, 
-                'user_id' => Auth::id(), 
+                'title' => $this->title,
+                'user_id' => $userId,
                 'thumbnail_url' => $this->thumbnail_url,
                 'status' => 'publish',
                 'body' => $this->body,
             ]
         );
 
-
-        if($certificate) {
+        if ($certificate) {
             $this->dispatch('showToast', type: 'success', message: __('upcertify::upcertify.certificate_published'));
             sleep(1);
             $url = route('upcertify.certificate-list');
@@ -507,7 +570,9 @@ class CreateCertificate extends Component {
         }
     }
 
-    public function getGoogleFonts() {
+
+    public function getGoogleFonts()
+    {
         $timeout = 30;
         try {
             $response = Http::timeout($timeout)->get('https://www.googleapis.com/webfonts/v1/webfonts?key=' . config('upcertify.google_font_api'));

@@ -71,6 +71,8 @@ return [
     'meeting_url' => "Meeting url",
     'booking_price' => "Booking price",
     'title' => "Title",
+    "select_tutor" => "Select tutor",
+
     'separation_horizontal' => "Separation horizontal",
     'separation_vertical' =>"Separation vertical",
     "enter_title" => "Enter title",

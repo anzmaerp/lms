@@ -1,5 +1,4 @@
 <div class="am-cr-bundle">
-    <p><strong>Selected Instructor ID:</strong> {{ $instructorId }}</p>
 
     <div class="am-userperinfo">
         <div class="am-title_wrap">
@@ -12,7 +11,7 @@
             <div class="form-group @error('instructorId') am-invalid @enderror">
                 <label class="am-label am-important">{{ __('coursebundles::bundles.select_instructor') }}</label>
                 <div class="form-control_wrap">
-<select wire:model="instructorId" data-componentid="@this">
+                     <select wire:model="instructorId" data-componentid="@this">
                         <option value="">{{ __('coursebundles::bundles.select_instructor_placeholder') }}</option>
                         @foreach ($instructors as $instructor)
                             <option value="{{ $instructor->id }}">

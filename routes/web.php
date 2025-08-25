@@ -40,9 +40,7 @@ Route::get('/dbNew', function () {
 
 // // Clear Cache For Application
 Route::get('/clear', function () {
-    Artisan::call('cache:clear');
     Artisan::call('optimize:clear');
-    //Artisan::call('responsecache:clear');
     return response()->json([
         'status' => 'success',
         'message' => 'All Cleared!'
