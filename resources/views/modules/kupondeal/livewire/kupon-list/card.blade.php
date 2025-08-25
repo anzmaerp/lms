@@ -25,7 +25,7 @@
                                     <label
                                         class="am-label am-important">{{ __('kupondeal::kupondeal.select_instructor') }}</label>
                                     <div class="form-control_wrap">
-                                        <select wire:model="instructorId" data-componentid="@this">
+                                        <select wire:model="instructorId" data-componentid="@this" multiple>
                                             <option value="">
                                                 {{ __('kupondeal::kupondeal.select_instructor_placeholder') }}
                                             </option>
