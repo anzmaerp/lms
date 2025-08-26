@@ -29,14 +29,16 @@ class KuponList extends Component
         'expiry_date' => '',
         'couponable_type' => '',
         'couponable_id' => [],
+        'couponable_ids' => [],
         'auto_apply' => 0,
         'color' => '',
         'conditions' => [],
         'status' => 1,
         'description' => '',
-        'instructor_ids' => [],
+        'instructor_id' => '',
     ];
     public $conditions;
+    public $lines = [];
     public $use_conditions = false;
     public $keyword = '';
     public $isLoading = true;
@@ -49,6 +51,8 @@ class KuponList extends Component
     public $instructorId = null;
 
     protected $couponService, $subjectService;
+
+    public $hideLines = false;
 
 
     public function boot()
@@ -63,21 +67,50 @@ class KuponList extends Component
         $this->active_tab = $tab;
         $this->isLoading = false;
     }
+    public function selectAllInstructors()
+    {
+        foreach ($this->lines as $index => $line) {
+            $instructorId = $line['instructorId'];
+            if ($instructorId) {
+                $this->lines[$index]['couponable_ids'] = $this->initOptions($line['couponable_type'], $instructorId);
+                $this->lines[$index]['couponable_id'] = collect($this->lines[$index]['couponable_ids'])->pluck('id')->toArray();
+            }
+        }
+    }
+
+    public function addLine()
+    {
+        $this->lines[] = [
+            'instructorId' => null,
+            'couponable_type' => '',
+            'couponable_ids' => [],
+            'couponable_id' => [],
+        ];
+    }
+
+
+    public function selectAll($index)
+    {
+        $ids = collect($this->lines[$index]['couponable_ids'])->pluck('id')->toArray();
+        $this->lines[$index]['couponable_id'] = $ids;
+    }
 
     public function mount()
     {
         $this->isAdmin = auth()->user()->hasRole('admin');
+
         if ($this->isAdmin) {
-            $this->instructors = User::whereHas('roles', function ($query) {
-                $query->where('name', 'tutor');
-            })->with('profile:id,user_id,first_name,last_name')->get();
+            $this->instructors = User::whereHas('roles', fn($q) => $q->where('name', 'tutor'))->get();
+            $this->lines[] = [
+                'instructorId' => null,
+                'couponable_type' => '',
+                'couponable_ids' => [],
+                'couponable_id' => [],
+            ];
+        } else {
+            $this->form['instructor_id'] = Auth::id();
+            $this->couponable_ids = $this->initOptions($this->form['couponable_type'], Auth::id());
         }
-        $this->couponable_types = [
-            [
-                'label' => 'Subject',
-                'value' => UserSubjectGroupSubject::class,
-            ],
-        ];
 
         $this->conditions = [
             Coupon::CONDITION_FIRST_ORDER => [
@@ -92,14 +125,19 @@ class KuponList extends Component
             ],
         ];
 
+        $this->couponable_types = [];
+
         if (\Nwidart\Modules\Facades\Module::has('courses') && \Nwidart\Modules\Facades\Module::isEnabled('courses')) {
             $this->couponable_types[] = [
                 'label' => 'Course',
                 'value' => \Modules\Courses\Models\Course::class,
             ];
-        } else {
-            $this->form['couponable_type'] = UserSubjectGroupSubject::class;
         }
+
+        $this->couponable_types[] = [
+            'label' => 'Subject',
+            'value' => UserSubjectGroupSubject::class,
+        ];
 
         if (!$this->isAdmin) {
             $this->form['instructor_id'] = Auth::id();
@@ -162,32 +200,51 @@ class KuponList extends Component
         }
     }
 
-    // public function updatedFormCouponableType($value)
-    // {
-    //     $instructorId = $this->isAdmin
-    //         ? ($this->instructorId ?? Auth::id())
-    //         : Auth::id();
-    //     $user = User::find($instructorId);
-    //     $this->subjectService = new SubjectService($user);
-    //     $this->couponable_ids = $this->initOptions($value);
-    //     $this->form['couponable_id'] = [];
-    //     $this->dispatch('couponableValuesUpdated', options: array_values($this->couponable_ids), reset: true);
-    // }
-
-    public function initOptions($type)
+    public function updatedFormCouponableType($value)
     {
+        $instructorId = $this->isAdmin
+            ? ($this->instructorId ?? Auth::id())
+            : Auth::id();
+        $user = User::find($instructorId);
+        $this->subjectService = new SubjectService($user);
+        $this->couponable_ids = $this->initOptions($value);
+        $this->form['couponable_id'] = [];
+        $this->dispatch('couponableValuesUpdated', options: array_values($this->couponable_ids), reset: true);
+    }
+    public function initOptions($type, $userId = null)
+    {
+        $userId = $userId ?: ($this->isAdmin ? $this->instructorId : Auth::id());
+
+        if (!$userId) return [];
+
         if ($type == \Modules\Courses\Models\Course::class) {
-            $courses = \Modules\Courses\Models\Course::select('id', 'title')->get();
-            return $courses->map(fn($c) => ['id' => $c->id, 'title' => $c->title])->toArray();
+            $courses = (new \Modules\Courses\Services\CourseService())->getInstructorCourses($userId, [], ['title', 'id']);
+            return $courses->map(fn($course) => [
+                'title' => $course->title,
+                'id' => $course->id
+            ])->toArray();
         }
 
         if ($type == UserSubjectGroupSubject::class) {
-            $subjects = UserSubjectGroupSubject::select('id', 'name')->get();
-            return $subjects->map(fn($s) => ['id' => $s->id, 'title' => $s->name])->toArray();
+            $this->subjectService = new SubjectService(User::find($userId));
+            $subjectGroups = $this->subjectService->getUserSubjectGroups(['subjects:,name']);
+
+            $formattedData = [];
+            foreach ($subjectGroups as $sbjGroup) {
+                if ($sbjGroup->subjects->isEmpty()) continue;
+
+                foreach ($sbjGroup->subjects as $sbj) {
+                    $formattedData[] = [
+                        'id' => $sbj->pivot->id,
+                        'title' => $sbj->name
+                    ];
+                }
+            }
+            return $formattedData;
         }
+
+        return [];
     }
-
-
 
     public function editCoupon($id)
     {
@@ -220,21 +277,26 @@ class KuponList extends Component
     {
         $isDeleted = $this->couponService->deleteCoupon($params['id']);
         if ($isDeleted) {
-            $this->dispatch('showAlertMessage', type: 'success', title: __('kupondeal::kupondeal.coupon_deleted'), message: __('kupondeal::kupondeal.coupon_deleted_success'));
+            $this->dispatch('showAlertMessage', type: 'success', title: _('kupondeal::kupondeal.coupon_deleted'), message: _('kupondeal::kupondeal.coupon_deleted_success'));
         } else {
-            $this->dispatch('showAlertMessage', type: 'error', title: __('kupondeal::kupondeal.coupon_delete_failed'), message: __('kupondeal::kupondeal.coupon_delete_failed_desc'));
+            $this->dispatch('showAlertMessage', type: 'error', title: _('kupondeal::kupondeal.coupon_delete_failed'), message: _('kupondeal::kupondeal.coupon_delete_failed_desc'));
         }
     }
 
+
+
+
     public function addCoupon()
     {
-        $request = new CouponRequest();
 
+        \Log::info('Form Data:', $this->form);
+        $request = new CouponRequest();
         $this->form['expiry_date'] = !empty($this->form['expiry_date'])
             ? Carbon::parse($this->form['expiry_date'])->format('Y-m-d')
             : null;
 
-        if (!(\Nwidart\Modules\Facades\Module::has('courses') && \Nwidart\Modules\Facades\Module::isEnabled('courses'))) {
+        if (!(\Nwidart\Modules\Facades\Module::has('courses')
+            && \Nwidart\Modules\Facades\Module::isEnabled('courses'))) {
             $this->form['couponable_type'] = UserSubjectGroupSubject::class;
         }
 
@@ -269,66 +331,48 @@ class KuponList extends Component
             }
         }
 
-        // التحقق من المواد والكورسات بناء على المعلمين المختارين
-        $selectedInstructorIds = $this->isAdmin ? $this->instructorId : [Auth::id()];
-        $selectedItems = $this->form['couponable_id'];
-
-        if ($this->form['couponable_type'] === \Modules\Courses\Models\Course::class && !empty($selectedItems)) {
-            $validCourseIds = \Modules\Courses\Models\Course::whereIn('instructor_id', $selectedInstructorIds)
-                ->pluck('id')
-                ->toArray();
-
-            foreach ($selectedItems as $courseId) {
-                if (!in_array($courseId, $validCourseIds)) {
-                    $this->addError('form.couponable_id', 'Some selected courses do not belong to the selected instructors.');
-                    return;
-                }
-            }
-        }
-
-        if ($this->form['couponable_type'] === UserSubjectGroupSubject::class && !empty($selectedItems)) {
-            $validSubjectIds = UserSubjectGroupSubject::whereIn('user_id', $selectedInstructorIds)
-                ->pluck('id')
-                ->toArray();
-
-            foreach ($selectedItems as $subjectId) {
-                if (!in_array($subjectId, $validSubjectIds)) {
-                    $this->addError('form.couponable_id', 'Some selected subjects do not belong to the selected instructors.');
-                    return;
-                }
-            }
-        }
-
         $this->validate($rules, $messages);
 
-        if ($this->isAdmin) {
-            $this->form['instructor_id'] = $this->instructorId;
-        } else {
-            $this->form['instructor_id'] = Auth::id();
-        }
         $this->form['user_id'] = Auth::id();
 
-        $isAdded = $this->couponService->updateOrCreateCoupon($this->form);
+
+        if ($this->isAdmin && count($this->lines) > 0) {
+            foreach ($this->lines as $line) {
+                $instructorId = $line['instructorId'];
+                $type = $line['couponable_type'];
+                $ids = $line['couponable_id'] ?? [];
+
+                if ($instructorId && $type && !empty($ids)) {
+                    foreach ($ids as $couponableId) {
+                        $data = $this->form;
+                        $data['instructor_id'] = $instructorId;
+                        $data['couponable_type'] = $type;
+                        $data['couponable_id'] = $couponableId;
+                        $this->couponService->updateOrCreateCoupon($data);
+                    }
+                }
+            }
+        } else {
+
+            $this->form['instructor_id'] = Auth::id();
+
+            foreach ($this->form['couponable_id'] as $couponableId) {
+                $data = $this->form;
+                $data['couponable_id'] = $couponableId;
+                $this->couponService->updateOrCreateCoupon($data);
+            }
+        }
 
         $this->resetForm();
         $this->use_conditions = false;
 
-        if ($isAdded) {
-            $this->dispatch(
-                'showAlertMessage',
-                type: 'success',
-                title: $this->form['id'] ? __('kupondeal::kupondeal.coupon_updated') : __('kupondeal::kupondeal.coupon_added'),
-                message: $this->form['id'] ? __('kupondeal::kupondeal.coupon_updated_success') : __('kupondeal::kupondeal.coupon_added_success')
-            );
-            $this->dispatch('toggleModel', id: 'kd-create-coupon', action: 'hide');
-        } else {
-            $this->dispatch(
-                'showAlertMessage',
-                type: 'error',
-                title: __('courses::courses.error'),
-                message: __('courses::courses.noticeboard_delete_failed')
-            );
-        }
+        $this->dispatch(
+            'showAlertMessage',
+            type: 'success',
+            title: $this->form['id'] ? _('kupondeal::kupondeal.coupon_updated') : _('kupondeal::kupondeal.coupon_added'),
+            message: $this->form['id'] ? _('kupondeal::kupondeal.coupon_updated_success') : _('kupondeal::kupondeal.coupon_added_success')
+        );
+        $this->dispatch('toggleModel', id: 'kd-create-coupon', action: 'hide');
     }
 
 
@@ -343,28 +387,55 @@ class KuponList extends Component
         }
         $this->dispatch('couponableValuesUpdated', options: array_values($this->couponable_ids), reset: true);
     }
-
     public function resetForm()
     {
-        $this->reset('form');
+        $this->form = [
+            'id' => null,
+            'user_id' => '',
+            'code' => '',
+            'discount_type' => '',
+            'discount_value' => '',
+            'expiry_date' => '',
+            'couponable_type' => '',
+            'couponable_id' => [],
+            'couponable_ids' => [],
+            'auto_apply' => 0,
+            'color' => '',
+            'conditions' => [],
+            'status' => 1,
+            'description' => '',
+            'instructor_id' => '',
+        ];
         $this->resetErrorBag();
     }
+
     public function updatedInstructorId($value)
     {
-        $selectedInstructorIds = is_array($value) ? $value : [$value];
-
-        if ($this->form['couponable_type'] === \Modules\Courses\Models\Course::class) {
-            $courses = \Modules\Courses\Models\Course::select('id', 'title')->get();
-            $this->couponable_ids = $courses->map(fn($c) => ['id' => $c->id, 'title' => $c->title])->toArray();
+        if ($this->form['couponable_type']) {
+            $user = \App\Models\User::find($value);
+            $this->subjectService = new SubjectService($user);
+            $this->couponable_ids = $this->initOptions($this->form['couponable_type']);
+            $this->form['couponable_id'] = [];
         }
+    }
 
-        if ($this->form['couponable_type'] === UserSubjectGroupSubject::class) {
-            $subjects = UserSubjectGroupSubject::select('id', 'name')->get();
-            $this->couponable_ids = $subjects->map(fn($s) => ['id' => $s->id, 'title' => $s->name])->toArray();
+    public function updatedLines($value, $key)
+    {
+        [$index, $field] = explode('.', $key);
+
+        $type = $this->lines[$index]['couponable_type'] ?? null;
+        $instructorId = $this->lines[$index]['instructorId'] ?? null;
+
+        if ($field === 'couponable_type' || $field === 'instructorId') {
+            if ($type && $instructorId) {
+                $options = $this->initOptions($type, $instructorId);
+                $this->lines[$index]['couponable_ids'] = $options;
+
+                $this->lines[$index]['couponable_id'] = collect($options)->pluck('id')->toArray();
+            } else {
+                $this->lines[$index]['couponable_ids'] = [];
+                $this->lines[$index]['couponable_id'] = [];
+            }
         }
-
-        $this->form['couponable_id'] = [];
-
-        $this->dispatch('couponableValuesUpdated', options: array_values($this->couponable_ids), reset: true);
     }
 }

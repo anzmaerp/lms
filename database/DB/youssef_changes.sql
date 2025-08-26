@@ -14,9 +14,14 @@ ADD CONSTRAINT courses_bundles_created_by_fk FOREIGN KEY (created_by) REFERENCES
 ALTER TABLE uc__templates 
 MODIFY COLUMN user_id JSON DEFAULT NULL;
 
-
 ALTER TABLE `uc__templates`
 ADD COLUMN `created_by` BIGINT(20) UNSIGNED NULL ,
 ADD CONSTRAINT `uc_templates_created_by_fk`
-    FOREIGN KEY (`created_by`) REFERENCES `users`(`id`)
-    ON DELETE SET NULL ON UPDATE CASCADE;
+FOREIGN KEY (`created_by`) REFERENCES `users`(`id`)
+ON DELETE SET NULL ON UPDATE CASCADE;
+
+ALTER TABLE `coupons` 
+ADD COLUMN `created_by` BIGINT(20) UNSIGNED NULL,
+ADD CONSTRAINT `coupons_created_by_fk` FOREIGN KEY (`created_by`) REFERENCES `users` (`id`);
+
+
