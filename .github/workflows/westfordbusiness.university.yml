@@ -14,8 +14,7 @@ jobs:
       - name: 📂 Sync files
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with:
-          # server: www.kemittedu.com
           server: 176.9.99.19
-          username: "kemitted@kemittedu.com"
-          password: "USklhErFqVP2"
-          server-dir: /
+          username: "main@westfordbusiness.university"
+          password: "VdYQxQkBrAl0"
+          server-dir: /app.westfordbusiness.university/
