@@ -23,85 +23,81 @@
                             </div>
                             <div style="width: 100%">
                                 @if ($isAdmin)
+                                    @foreach ($lines as $index => $line)
+                                        <div class="form-group @error('instructorId') am-invalid @enderror">
+                                            <x-input-label class="am-important"
+                                                for="instructorId">{{ __('kupondeal::kupondeal.select_instructor') }}</x-input-label>
+                                            <span class="am-select">
+                                                <select wire:model="lines.{{ $index }}.instructorId"
+                                                    @if ($isLocked) disabled @endif>
 
-                                        @foreach ($lines as $index => $line)
-                                            <div class="form-group @error('instructorId') am-invalid @enderror">
-                                                <x-input-label class="am-important"
-                                                    for="instructorId">{{ __('kupondeal::kupondeal.select_instructor') }}</x-input-label>
-                                                <span class="am-select">
-                                                    <select wire:model="lines.{{ $index }}.instructorId"
-                                                        @if ($isLocked) disabled @endif>
-
-                                                        <option value="">
-                                                            {{ __('kupondeal::kupondeal.select_instructor_placeholder') }}
+                                                    <option value="">
+                                                        {{ __('kupondeal::kupondeal.select_instructor_placeholder') }}
+                                                    </option>
+                                                    @foreach ($instructors as $instructor)
+                                                        <option value="{{ $instructor->id }}">
+                                                            {{ $instructor->profile?->first_name }}
+                                                            {{ $instructor->profile?->last_name }}
                                                         </option>
-                                                        @foreach ($instructors as $instructor)
-                                                            <option value="{{ $instructor->id }}">
-                                                                {{ $instructor->profile?->first_name }}
-                                                                {{ $instructor->profile?->last_name }}
-                                                            </option>
+                                                    @endforeach
+                                                </select>
+                                            </span>
+                                            <x-kupondeal::input-error
+                                                field_name="lines.{{ $index }}.instructorId" />
+                                            <label for="select-all-instructors">
+                                                <input type="checkbox" wire:model="selectAllInstructors"
+                                                    wire:change="toggleSelectAllInstructors($event.target.checked)">
+                                                {{ __('kupondeal::kupondeal.Select All Instructors') }}
+                                            </label>
+                                        </div>
+                                        @if (\Nwidart\Modules\Facades\Module::has('courses') && \Nwidart\Modules\Facades\Module::isEnabled('courses'))
+                                            <div class="form-group ">
+                                                <x-input-label class="am-important"
+                                                    for="couponable_type">{{ __('kupondeal::kupondeal.couponable_type') }}</x-input-label>
+                                                <span class="am-select">
+                                                    <select wire:model="lines.{{ $index }}.couponable_type"
+                                                        data-componentid="@this" class="am-select2"
+                                                        data-placeholder="{{ __('kupondeal::kupondeal.select_couponable_type') }}">
+                                                        <option value="">
+                                                            {{ __('kupondeal::kupondeal.select_couponable_type') }}
+                                                        </option>
+                                                        <option value="__ALL__">Select All</option>
+                                                        @foreach ($couponable_types as $type)
+                                                            <option value="{{ $type['value'] }}">
+                                                                {{ $type['label'] }}</option>
                                                         @endforeach
                                                     </select>
                                                 </span>
                                                 <x-kupondeal::input-error
-                                                    field_name="lines.{{ $index }}.instructorId" />
-                                                                                        <label for="select-all-instructors">
-                            <input type="checkbox"
-                                wire:model="selectAllInstructors"
-                                wire:change="toggleSelectAllInstructors($event.target.checked)">
-                                        {{ __('kupondeal::kupondeal.Select All Instructors') }}
-                                    </label>
-
+                                                    field_name="lines.{{ $index }}.couponable_type" />
                                             </div>
-                                            @if (\Nwidart\Modules\Facades\Module::has('courses') && \Nwidart\Modules\Facades\Module::isEnabled('courses'))
-                                                <div class="form-group ">
-                                                    <x-input-label class="am-important"
-                                                        for="couponable_type">{{ __('kupondeal::kupondeal.couponable_type') }}</x-input-label>
-                                                    <span class="am-select">
-                                                        <select wire:model="lines.{{ $index }}.couponable_type"
-                                                            data-componentid="@this" class="am-select2"
-                                                            data-placeholder="{{ __('kupondeal::kupondeal.select_couponable_type') }}">
-                                                            <option value="">
-                                                                {{ __('kupondeal::kupondeal.select_couponable_type') }}
-                                                            </option>
-                                                            @foreach ($couponable_types as $type)
-                                                                <option value="{{ $type['value'] }}">
-                                                                    {{ $type['label'] }}</option>
-                                                            @endforeach
-                                                        </select>
-                                                    </span>
-                                                    <x-kupondeal::input-error
-                                                        field_name="lines.{{ $index }}.couponable_type" />
-                                                </div>
-                                            @endif
-                                            <div class="form-group @error('form.couponable_id') am-invalid @enderror"
-                                                wire:loading.class="am-disabled"
-                                                wire:loading.target="form.couponable_type">
-                                                <x-input-label class="am-important"
-                                                    for="couponable_id">{{ Module::has('courses') && Module::isEnabled('courses') ? __('kupondeal::kupondeal.couponable_id') : __('kupondeal::kupondeal.subject') }}</x-input-label>
-                                                    <select multiple
-                                                        wire:model="lines.{{ $index }}.couponable_id"
-                                                        data-disable_onchange="true" class="am-select2"
-                                                        @if (!Module::has('courses') || !Module::isEnabled('courses')) disabled @endif
-                                                        @if ($isLocked) disabled @endif>
-                                                        @foreach ($line['couponable_ids'] as $c)
-                                                            <option value="{{ $c['id'] }}">{{ $c['title'] }}
-                                                            </option>
-                                                        @endforeach
-                                                    </select>
-                                                <x-kupondeal::input-error
-                                                    field_name="lines.{{ $index }}.couponable_id" />
-                                                 @if(!$isLocked)
+                                        @endif
+                                        <div class="form-group @error('form.couponable_id') am-invalid @enderror"
+                                            wire:loading.class="am-disabled" wire:loading.target="form.couponable_type">
+                                            <x-input-label class="am-important"
+                                                for="couponable_id">{{ Module::has('courses') && Module::isEnabled('courses') ? __('kupondeal::kupondeal.couponable_id') : __('kupondeal::kupondeal.subject') }}</x-input-label>
+                                            <select multiple wire:model="lines.{{ $index }}.couponable_id"
+                                                data-disable_onchange="true" class="am-select2"
+                                                @if (!Module::has('courses') || !Module::isEnabled('courses')) disabled @endif
+                                                @if ($isLocked) disabled @endif>
+                                                @foreach ($line['couponable_ids'] as $c)
+                                                    <option value="{{ $c['id'] }}">{{ $c['title'] }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                            <x-kupondeal::input-error
+                                                field_name="lines.{{ $index }}.couponable_id" />
+                                            @if (!$isLocked)
                                                 <label>
                                                     <input type="checkbox" wire:click="selectAll({{ $index }})">
                                                     {{ __('Select All') }}
                                                 </label>
-                                                @endif
-                                            </div>
-                                        @endforeach
+                                            @endif
+                                        </div>
+                                    @endforeach
                             </div>
                             @if (!$isLocked)
-                            <button type="button" wire:click="addLine">{{ __('Add Line') }}</button>
+                                <button type="button" wire:click="addLine">{{ __('Add Line') }}</button>
                             @endif
                         @else
                             @if (\Nwidart\Modules\Facades\Module::has('courses') && \Nwidart\Modules\Facades\Module::isEnabled('courses'))

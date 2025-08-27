@@ -27,7 +27,6 @@ class BundleService
     public function addBundleCourses($bundle, $coursesIds)
     {
         return $bundle->courses()->sync($coursesIds);
-        
     }
 
     public function addBundleMedia(Bundle $bundle, array $condition = [], array $media)
@@ -36,8 +35,6 @@ class BundleService
         $bundle->media()->updateOrCreate($condition, $media);
         return $bundle;
     }
-
-
     public function getBundleCourses(string $slug, array $relations = [], int $perPage = 8)
     {
         $bundle = $this->getBundle(slug: $slug, relations: []);
@@ -45,8 +42,8 @@ class BundleService
         if (!$bundle) {
             return null;
         }
-    
-        return $bundle->courses()->withCount('ratings', 'curriculums') ->withAvg('ratings', 'rating')->paginate($perPage);
+
+        return $bundle->courses()->withCount('ratings', 'curriculums')->withAvg('ratings', 'rating')->paginate($perPage);
     }
 
     /**
@@ -65,7 +62,7 @@ class BundleService
             return null;
         }
 
-       
+
         $query =  Bundle::with($relations)
 
             ->when($instructorId, function ($query, $instructorId) {
@@ -146,7 +143,7 @@ class BundleService
      * @param array $withAvg
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    protected function buildBundleQuery($instructorId=null, $studentId=null, $with=[], $filters=[], $withCount=[], $withAvg=[], $withSum=[],$excluded = [])
+    protected function buildBundleQuery($instructorId = null, $studentId = null, $with = [], $filters = [], $withCount = [], $withAvg = [], $withSum = [], $excluded = [])
     {
         $query = Bundle::query()
             // Filter by instructor ID if provided
@@ -160,13 +157,12 @@ class BundleService
                 fn($query) =>
                 $query->whereIn('status', $filters['statuses'])
             )
-            // Filter by student ID if provided
             ->when($studentId, fn($query) => $query->whereHas('courseBundles', fn($q) => $q->where('student_id', $studentId)))
-            
-            ->when(!empty($filters['min_price']),fn($query) => $query->where('final_price', '>=', $filters['min_price']))
-            ->when(!empty($filters['max_price']),fn($query) => $query->where('final_price', '<=', $filters['max_price']))
-            
-           
+
+            ->when(!empty($filters['min_price']), fn($query) => $query->where('final_price', '>=', $filters['min_price']))
+            ->when(!empty($filters['max_price']), fn($query) => $query->where('final_price', '<=', $filters['max_price']))
+
+
             // Eager load relationships
             ->with($with)
             ->withCount($withCount)
@@ -206,9 +202,9 @@ class BundleService
      * @param array $withAvg
      * @return \Illuminate\Database\Eloquent\Collection
      */
-    public function getAllBundles($instructorId=null, $studentId=null, $with = [], $filters = [], $withCount = [], $withAvg = [],$withSum=[],$perPage = null, $excluded = [])
+    public function getAllBundles($instructorId = null, $studentId = null, $with = [], $filters = [], $withCount = [], $withAvg = [], $withSum = [], $perPage = null, $excluded = [])
     {
-        return $this->buildBundleQuery($instructorId, $studentId, $with, $filters, $withCount, $withAvg,$withSum,$excluded)->take($perPage)->get();
+        return $this->buildBundleQuery($instructorId, $studentId, $with, $filters, $withCount, $withAvg, $withSum, $excluded)->take($perPage)->get();
     }
 
     /**
@@ -223,7 +219,7 @@ class BundleService
      * @param string|null $searchKeyword
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
-    public function getBundles(int $instructorId = null, $studentId = null, $with = [], array $filters = [], $withCount = [], $withAvg = [], $withSum=[],  $perPage = null)
+    public function getBundles(int $instructorId = null, $studentId = null, $with = [], array $filters = [], $withCount = [], $withAvg = [], $withSum = [],  $perPage = null)
     {
         return $this->buildBundleQuery($instructorId, $studentId, $with, $filters, $withCount, $withAvg, $withSum)->paginate($perPage ?? 10);
     }
@@ -245,7 +241,7 @@ class BundleService
         if (! array_key_exists($status, BundleStatusCast::$statusMap)) {
             return false;
         }
-    
+
         $bundle->status = $status;
         $bundle->save();
         return true;

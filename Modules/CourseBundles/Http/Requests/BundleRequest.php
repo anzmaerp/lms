@@ -17,7 +17,6 @@ class BundleRequest extends FormRequest
         return [
             'title'                 => 'required|string|max:255|min:3',
             'short_description'     => 'required|string|max:255|min:3',
-            'selected_courses'      => 'required|array|min:1',
             'image'                 => 'required',
             'price'                 => isPaidSystem() ? 'required|numeric' : 'nullable',
         ];

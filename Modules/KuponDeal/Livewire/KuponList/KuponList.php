@@ -54,7 +54,6 @@ class KuponList extends Component
     public $isLocked = false;
 
 
-
     public function toggleSelectAllInstructors($value)
     {
         $this->selectAllInstructors = $value;
@@ -67,7 +66,7 @@ class KuponList extends Component
                 [
                     'selectedInstructors' => $allInstructors,
                     'instructorId' => $allInstructors,
-                    'couponable_type' => '', // سيتم تحديده بعد اختيار النوع
+                    'couponable_type' => '',
                     'couponable_ids' => [],
                     'couponable_id' => [],
                 ]
@@ -75,7 +74,6 @@ class KuponList extends Component
 
             $this->isLocked = true;
         } else {
-            // استرجاع الوضع الطبيعي للسطر الواحد الفارغ
             $this->lines = [
                 [
                     'instructorId' => null,
@@ -88,31 +86,6 @@ class KuponList extends Component
         }
     }
 
-    public function initOptionsForAll($type)
-    {
-        if ($type == \Modules\Courses\Models\Course::class) {
-            return \Modules\Courses\Models\Course::select('id', 'title')->get()
-                ->map(fn($c) => ['id' => $c->id, 'title' => $c->title])
-                ->toArray();
-        }
-
-        if ($type == UserSubjectGroupSubject::class) {
-            $subjectGroups = \App\Models\UserSubjectGroup::with('subjects')->get();
-
-            $formattedData = [];
-            foreach ($subjectGroups as $sbjGroup) {
-                foreach ($sbjGroup->subjects as $sbj) {
-                    $formattedData[] = [
-                        'id' => $sbj->pivot->id,
-                        'title' => $sbj->name
-                    ];
-                }
-            }
-            return $formattedData;
-        }
-
-        return [];
-    }
 
     public function boot()
     {
@@ -126,17 +99,7 @@ class KuponList extends Component
         $this->active_tab = $tab;
         $this->isLoading = false;
     }
-    public function applySelectAllInstructors()
-    {
-        if (auth()->user()->hasRole('admin')) {
-            $allInstructors = User::role('tutor')->pluck('id')->toArray();
 
-            foreach ($this->lines as $index => $line) {
-                $this->lines[$index]['instructorId']   = $allInstructors;
-                $this->lines[$index]['couponable_id']  = [];
-            }
-        }
-    }
     public function addLine()
     {
         $this->lines[] = [
@@ -353,11 +316,11 @@ class KuponList extends Component
     public function addCoupon()
     {
         $request = new CouponRequest();
+
         $this->form['expiry_date'] = !empty($this->form['expiry_date'])
             ? Carbon::parse($this->form['expiry_date'])->format('Y-m-d')
             : null;
 
-        // Validation rules
         $rules = $request->rules();
         $rules['form.description'] = ['nullable', 'string', 'max:500'];
         $rules['form.code'] = [
@@ -392,7 +355,11 @@ class KuponList extends Component
 
             foreach ($this->lines as $index => $line) {
                 $rules["lines.$index.instructorId"]    = 'required|exists:users,id';
-                $rules["lines.$index.couponable_type"] = 'required|string';
+                $rules["lines.$index.couponable_type"] = [
+                    'required',
+                    'string',
+                    Rule::in(array_merge(collect($this->couponable_types)->pluck('value')->toArray(), ['__ALL__']))
+                ];
                 $rules["lines.$index.couponable_id"]   = 'required|array|min:1';
             }
         } else {
@@ -407,59 +374,68 @@ class KuponList extends Component
         if (Auth::user()->hasRole('admin')) {
 
             if ($this->selectAllInstructors) {
-                $allInstructors = User::whereHas('roles', function ($q) {
-                    $q->where('name', 'tutor');
-                })->pluck('id')->toArray();
+                $allInstructors = User::whereHas('roles', fn($q) => $q->where('name', 'tutor'))
+                    ->pluck('id')->toArray();
 
                 foreach ($allInstructors as $instructorId) {
-                    foreach ($this->lines as $lineIndex => $line) {
-                        $type  = $line['couponable_type'] ?? null;
-                        if (!$type) continue;
-
+                    foreach (collect($this->couponable_types)->pluck('value') as $type) {
                         $items = $this->initOptions($type, $instructorId);
-
                         $allItemIds = collect($items)->pluck('id')->toArray();
 
+                        if (empty($allItemIds)) continue;
+
                         $data = $this->form;
-                        $data['instructor_id']   = $instructorId;
+                        $data['instructor_id'] = $instructorId;
                         $data['couponable_type'] = $type;
-                        $data['couponable_id']   = $allItemIds;
+                        $data['couponable_id'] = $allItemIds;
                         $data['code'] = $this->generateUniqueCode($data['code']);
 
-                        \Log::info('Final Data Before Save (Admin, SelectAll, One Record per Instructor):', $data);
                         $this->couponService->updateOrCreateCoupon($data);
                     }
                 }
             } else {
-                foreach ($this->lines as $lineIndex => $line) {
+                foreach ($this->lines as $line) {
                     $instructorId = $line['instructorId'] ?? null;
-                    $type         = $line['couponable_type'] ?? null;
-                    if (empty($instructorId) || empty($type)) continue;
+                    $type = $line['couponable_type'] ?? null;
+                    if (!$type || !$instructorId) continue;
 
-                    $items = $this->initOptions($type, $instructorId);
-                    $allItemIds = collect($items)->pluck('id')->toArray();
+                    if ($type === '__ALL__') {
+                        foreach (collect($this->couponable_types)->pluck('value') as $realType) {
+                            $items = $this->initOptions($realType, $instructorId);
+                            $allItemIds = collect($items)->pluck('id')->toArray();
+                            if (empty($allItemIds)) continue;
 
-                    $data = $this->form;
-                    $data['instructor_id']   = $instructorId;
-                    $data['couponable_type'] = $type;
-                    $data['couponable_id']   = $allItemIds;
-                    $data['code'] = $this->generateUniqueCode($data['code']);
+                            $data = $this->form;
+                            $data['instructor_id'] = $instructorId;
+                            $data['couponable_type'] = $realType;
+                            $data['couponable_id'] = $allItemIds;
+                            $data['code'] = $this->generateUniqueCode($data['code']);
 
-                    $this->couponService->updateOrCreateCoupon($data);
+                            $this->couponService->updateOrCreateCoupon($data);
+                        }
+                    } else {
+                        $items = $this->initOptions($type, $instructorId);
+                        $allItemIds = collect($items)->pluck('id')->toArray();
+                        if (empty($allItemIds)) continue;
+
+                        $data = $this->form;
+                        $data['instructor_id'] = $instructorId;
+                        $data['couponable_type'] = $type;
+                        $data['couponable_id'] = $allItemIds;
+                        $data['code'] = $this->generateUniqueCode($data['code']);
+
+                        $this->couponService->updateOrCreateCoupon($data);
+                    }
                 }
             }
         } else {
+            $data = $this->form;
+            $data['instructor_id'] = Auth::id();
+            $data['couponable_type'] = $this->form['couponable_type'];
+            $data['couponable_id'] = $this->form['couponable_id'];
 
-            foreach ($this->form['couponable_id'] as $itemId) {
-                $data = $this->form;
-                $data['instructor_id']   = Auth::id();
-                $data['couponable_type'] = $this->form['couponable_type'];
-                $data['couponable_id']   = $itemId;
-
-                $this->couponService->updateOrCreateCoupon($data);
-            }
+            $this->couponService->updateOrCreateCoupon($data);
         }
-
 
         $this->resetForm();
         $this->use_conditions = false;
@@ -473,6 +449,7 @@ class KuponList extends Component
 
         $this->dispatch('toggleModel', id: 'kd-create-coupon', action: 'hide');
     }
+
 
 
     public function openModal()
@@ -522,18 +499,34 @@ class KuponList extends Component
         [$index, $field] = explode('.', $key);
         $line = $this->lines[$index];
 
-        if ($field === 'couponable_type' && !empty($line['selectedInstructors'])) {
+        if ($field === 'couponable_type') {
             $type = $line['couponable_type'];
-            $allItems = [];
 
-            foreach ($line['selectedInstructors'] as $instructorId) {
-                $items = $this->initOptions($type, $instructorId);
-                foreach ($items as $item) {
-                    $allItems[] = [
-                        'instructor_id' => $instructorId,
-                        'id' => $item['id'],
-                        'title' => $item['title'],
-                    ];
+            $allItems = [];
+            $instructors = $line['selectedInstructors'] ?? $line['instructorId'] ?? [];
+
+            if (!is_array($instructors)) {
+                $instructors = [$instructors];
+            }
+
+            if ($type === '__ALL__') {
+                $types = collect($this->couponable_types)->pluck('value')->toArray();
+            } else {
+                $types = [$type];
+            }
+
+            foreach ($instructors as $instructorId) {
+                foreach ($types as $t) {
+                    $items = $this->initOptions($t, $instructorId);
+
+                    foreach ($items as $item) {
+                        $allItems[] = [
+                            'instructor_id' => $instructorId,
+                            'id' => $item['id'],
+                            'title' => $item['title'],
+                            'type' => $t
+                        ];
+                    }
                 }
             }
 
