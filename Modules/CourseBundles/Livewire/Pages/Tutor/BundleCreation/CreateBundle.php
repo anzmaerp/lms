@@ -526,7 +526,6 @@ class CreateBundle extends Component
                 }
             }
 
-            // 🔹 Tuto  
             else {
                 if (empty($this->selected_courses)) {
                     Log::error('No courses selected (tutor)');
