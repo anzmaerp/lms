@@ -31,7 +31,6 @@
         "livewire/livewire": "^3.5",
         "livewire/volt": "^1.0",
         "mews/purifier": "^3.4",
-        "mpdf/mpdf": "*",
         "nwidart/laravel-modules": "^11.1",
         "openai-php/laravel": "^0.10.2",
         "paytm/paytmchecksum": "*",

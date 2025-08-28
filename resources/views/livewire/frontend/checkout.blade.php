@@ -257,7 +257,7 @@
                                                     <x-text-input name="file" type="file" id="at_upload_photo"
                                                         x-ref="file_upload_image"
                                                         accept="{{ !empty($allowImgFileExt)? join(',',array_map(function ($ex) {return '.' . $ex;}, $allowImgFileExt)): '*' }}"
-                                                        x-on:change="isUploading = true; $wire.upload('form.image', $refs.file_upload_image.files[0])" />
+                                                        x-on:change="isUploading = true; $wire.upload('form.image', $refs.file_upload_image.files[0])"  />
 
                                                     <label for="at_upload_photo" class="am-uploadfile">
                                                         <span class="am-dropfileshadow">
