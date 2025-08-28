@@ -62,7 +62,7 @@ class CouponService
             $query->where('code', 'like', '%' . $keyword . '%');
         }
 
-$query->with(['couponable', 'user.profile']);
+        $query->with(['couponable', 'user.profile']);
 
         return $query->orderByDesc('id')->paginate(setting('_general.per_page_opt') ?? 10);
     }

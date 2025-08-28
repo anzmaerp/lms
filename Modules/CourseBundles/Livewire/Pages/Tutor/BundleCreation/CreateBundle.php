@@ -49,81 +49,82 @@ class CreateBundle extends Component
 
     public $isLocked = false;
 
-public function toggleSelectAllInstructors($value)
-{
-    Log::info('toggleSelectAllInstructors called', ['value' => $value]);
-    $this->selectAllInstructors = $value;
-    $this->isLocked = $value;
+    public function toggleSelectAllInstructors($value)
+    {
+        Log::info('toggleSelectAllInstructors called', ['value' => $value]);
+        $this->selectAllInstructors = $value;
+        $this->isLocked = $value;
 
-    if ($value) {
-        $allInstructors = User::whereHas('roles', fn($q) => $q->where('name', 'tutor'))
-            ->pluck('id')
-            ->toArray();
+        if ($value) {
+            $allInstructors = User::whereHas('roles', fn($q) => $q->where('name', 'tutor'))
+                ->pluck('id')
+                ->toArray();
 
-        $courses = (new CourseService())->getAllCourses(
-            instructorId: null,
-            filters: ['status' => 'active', 'instructor_ids' => $allInstructors],
-            with: ['pricing:id,course_id,price,discount,final_price']
-        )->map(fn($course) => [
-            'id' => $course->id,
-            'title' => $course->title ?? 'Untitled Course #' . $course->id,
-        ])->values()->toArray();
+            $courses = (new CourseService())->getAllCourses(
+                instructorId: null,
+                filters: ['status' => 'active', 'instructor_ids' => $allInstructors],
+                with: ['pricing:id,course_id,price,discount,final_price']
+            )->map(fn($course) => [
+                'id' => $course->id,
+                'title' => $course->title ?? 'Untitled Course #' . $course->id,
+            ])->values()->toArray();
 
-$this->lines = [];
+            $this->lines = [];
 
-foreach ($allInstructors as $instructorId) {
-    $courses = (new CourseService())->getAllCourses(
-        instructorId: $instructorId,
-        filters: ['status' => 'active'],
-        with: ['pricing:id,course_id,price,discount,final_price']
-    )->map(fn($course) => [
-        'id'    => $course->id,
-        'title' => $course->title ?? 'Untitled Course #' . $course->id,
-    ]);
+            foreach ($allInstructors as $instructorId) {
+                $courses = (new CourseService())->getAllCourses(
+                    instructorId: $instructorId,
+                    filters: ['status' => 'active'],
+                    with: ['pricing:id,course_id,price,discount,final_price']
+                )->map(fn($course) => [
+                    'id'    => $course->id,
+                    'title' => $course->title ?? 'Untitled Course #' . $course->id,
+                ]);
 
-    $this->lines[] = [
-        'instructorId'        => $instructorId,
-        'selectedInstructors' => [$instructorId],
-        'courses'             => $courses->values()->toArray(),
-        'selected_courses'    => $courses->pluck('id')->toArray(),
-    ];
-}
+                $this->lines[] = [
+                    'instructorId'        => $instructorId,
+                    'selectedInstructors' => [$instructorId],
+                    'courses'             => $courses->values()->toArray(),
+                    'selected_courses'    => $courses->pluck('id')->toArray(),
+                ];
+            }
 
-        $this->selected_courses = collect($courses)->pluck('id')->toArray();
+            $this->selected_courses = collect($courses)->pluck('id')->toArray();
 
-        Log::info('toggleSelectAllInstructors: All courses fetched', [
-            'instructors' => $allInstructors,
-            'courses' => $courses,
-            'selected_courses' => $this->selected_courses,
-        ]);
+            Log::info('toggleSelectAllInstructors: All courses fetched', [
+                'instructors' => $allInstructors,
+                'courses' => $courses,
+                'selected_courses' => $this->selected_courses,
+            ]);
 
-        $this->dispatch('initSelect2Line', [
-            'index' => 0,
-            'data' => $courses,
-            'selected' => $this->selected_courses,
-        ]);
+            $this->dispatch('initSelect2Line', [
+                'index' => 0,
+                'data' => $courses,
+                'selected' => $this->selected_courses,
+            ]);
+        } else {
+            $this->lines = [
+                [
+                    'instructorId' => null,
+                    'selectedInstructors' => [],
+                    'courses' => [],
+                    'selected_courses' => [],
+                ]
+            ];
+            $this->selected_courses = [];
 
-    } else {
-        $this->lines = [
-            [
-                'instructorId' => null,
-                'selectedInstructors' => [],
-                'courses' => [],
-                'selected_courses' => [],
-            ]
-        ];
-        $this->selected_courses = []; 
+            Log::info('toggleSelectAllInstructors: Reset lines', ['lines' => $this->lines]);
 
-        Log::info('toggleSelectAllInstructors: Reset lines', ['lines' => $this->lines]);
-
-        $this->dispatch('initSelect2Line', [
-            'index' => 0,
-            'data' => [],
-            'selected' => [],
-        ]);
+            $this->dispatch('initSelect2Line', [
+                'index' => 0,
+                'data' => [],
+                'selected' => [],
+            ]);
+        }
     }
 
-}
+
+
 
 
 
@@ -180,6 +181,43 @@ foreach ($allInstructors as $instructorId) {
             $index = (int) $parts[0];
             $instructorId = $value;
 
+            if ($instructorId === 'alltutors') {
+                $this->lines[$index]['isLocked'] = true;
+                $this->selectAllInstructors = true;
+
+                $allCourses = collect();
+                foreach ($this->instructors as $instructor) {
+                    $courses = (new CourseService())->getAllCourses(
+                        instructorId: $instructor->id,
+                        filters: ['status' => 'active'],
+                        with: ['pricing:id,course_id,price,discount,final_price']
+                    )->map(fn($course) => [
+                        'id'    => $course->id,
+                        'title' => $course->title ?? 'Untitled Course #' . $course->id,
+                    ]);
+
+                    $allCourses = $allCourses->merge($courses);
+                }
+
+                $allCourses = $allCourses->unique('id')->values()->toArray();
+
+                $this->lines[$index]['courses'] = $allCourses;
+                $this->lines[$index]['selected_courses'] = collect($allCourses)->pluck('id')->toArray();
+
+                Log::info('All tutors selected', [
+                    'index' => $index,
+                    'courses_count' => count($allCourses)
+                ]);
+
+                $this->dispatch('initSelect2Line', [
+                    'index'    => $index,
+                    'data'     => $this->lines[$index]['courses'],
+                    'selected' => $this->lines[$index]['selected_courses'],
+                ]);
+
+                return;
+            }
+
             if ($instructorId) {
                 $courses = (new CourseService())->getAllCourses(
                     instructorId: $instructorId,
@@ -187,7 +225,7 @@ foreach ($allInstructors as $instructorId) {
                     with: ['pricing:id,course_id,price,discount,final_price']
                 )
                     ->map(fn($course) => [
-                        'id'   => $course->id,
+                        'id'    => $course->id,
                         'title' => $course->title ?? 'Untitled Course #' . $course->id,
                     ])
                     ->values()
@@ -207,11 +245,14 @@ foreach ($allInstructors as $instructorId) {
             $this->lines[$index]['selected_courses'] = [];
 
             $this->dispatch('initSelect2Line', [
-                'index' => $index,
-                'data' => $this->lines[$index]['courses'],
+                'index'    => $index,
+                'data'     => $this->lines[$index]['courses'],
                 'selected' => $this->lines[$index]['selected_courses'],
             ]);
-        } elseif (count($parts) === 2 && $parts[1] === 'selected_courses') {
+        }
+
+        // Selected courses change
+        elseif (count($parts) === 2 && $parts[1] === 'selected_courses') {
             $index = (int) $parts[0];
             $selectedCourses = $value;
 
@@ -227,12 +268,13 @@ foreach ($allInstructors as $instructorId) {
             ]);
 
             $this->dispatch('initSelect2Line', [
-                'index' => $index,
-                'data' => $this->lines[$index]['courses'],
+                'index'    => $index,
+                'data'     => $this->lines[$index]['courses'],
                 'selected' => $this->lines[$index]['selected_courses'],
             ]);
         }
     }
+
 
     public function getCoursesByInstructor($instructorId, $index)
     {
@@ -398,156 +440,199 @@ foreach ($allInstructors as $instructorId) {
         }
     }
 
-public function saveCourseBundle()
-{
-    Log::info('saveCourseBundle called', [
-        'isAdmin' => $this->isAdmin,
-        'selectAllInstructors' => $this->selectAllInstructors,
-        'lines' => $this->lines,
-        'selected_courses' => $this->selected_courses,
-        'title' => $this->title,
-        'short_description' => $this->short_description,
-        'price' => $this->price,
-        'image' => $this->image ? 'File present' : 'No file',
-    ]);
-
-    if (isDemoSite()) {
-        $this->dispatch('showAlertMessage', [
-            'type' => 'error',
-            'title' => __('general.demosite_res_title'),
-            'message' => __('general.demosite_res_txt')
+    public function saveCourseBundle()
+    {
+        Log::info('saveCourseBundle called', [
+            'isAdmin' => $this->isAdmin,
+            'selectAllInstructors' => $this->selectAllInstructors,
+            'lines' => $this->lines,
+            'selected_courses' => $this->selected_courses,
+            'title' => $this->title,
+            'short_description' => $this->short_description,
+            'price' => $this->price,
+            'image' => $this->image ? 'File present' : 'No file',
         ]);
-        return;
-    }
 
-    $rules = (new BundleRequest())->rules();
-    try {
-        $this->validate($rules, (new BundleRequest())->messages(), (new BundleRequest())->attributes());
-    } catch (\Illuminate\Validation\ValidationException $e) {
-        Log::error('Validation failed', ['errors' => $e->errors()]);
-        $this->dispatch('showAlertMessage', [
-            'type' => 'error',
-            'title' => __('coursebundles::bundles.error_title'),
-            'message' => implode(' ', array_merge(...array_values($e->errors())))
-        ]);
-        return;
-    }
-
-    try {
-        DB::beginTransaction();
-
-if ($this->isAdmin && $this->selectAllInstructors) {
-    foreach ($this->lines as $line) {
-        $instructorId = $line['instructorId'] ?? null;
-        $courses      = $line['selected_courses'] ?? [];
-
-        if (empty($instructorId) || empty($courses)) {
-            Log::warning("Skipping instructor {$instructorId} - no courses");
-            continue;
+        if (isDemoSite()) {
+            $this->dispatch('showAlertMessage', [
+                'type' => 'error',
+                'title' => __('general.demosite_res_title'),
+                'message' => __('general.demosite_res_txt')
+            ]);
+            return;
         }
 
-        $data = [
-            'instructor_id'       => $instructorId,
-            'title'               => $this->title,
-            'short_description'   => $this->short_description,
-            'description'         => $this->course_description ?? '',
-            'price'               => $this->price ?? 0,
-            'discount_percentage' => $this->discount ?? 0,
-            'created_by'          => auth()->id(),
-        ];
-
-        Log::info("Creating bundle for instructor {$instructorId}", $data);
-
-        $bundle = (new BundleService())->createCourseBundle($data);
-        (new BundleService())->addBundleCourses($bundle, $courses);
-
-        if (!empty($this->image)) {
-            $imageName = setMediaPath($this->image);
-            if ($imageName) {
-                (new BundleService())->addBundleMedia($bundle, [
-                    'mediable_id'   => $bundle->id,
-                    'mediable_type' => 'bundle',
-                    'type'          => 'thumbnail',
-                ], [
-                    'path' => $imageName,
-                ]);
-            }
+        $rules = (new BundleRequest())->rules();
+        try {
+            $this->validate($rules, (new BundleRequest())->messages(), (new BundleRequest())->attributes());
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            Log::error('Validation failed', ['errors' => $e->errors()]);
+            $this->dispatch('showAlertMessage', [
+                'type' => 'error',
+                'title' => __('coursebundles::bundles.error_title'),
+                'message' => implode(' ', array_merge(...array_values($e->errors())))
+            ]);
+            return;
         }
-    }
-}
- else {
-            // Admin manual or tutor
-            $hasCourses = false;
 
-            foreach ($this->lines as $line) {
-                $instructorId = $line['instructorId'] ?? auth()->id();
-                $courses = $line['selected_courses'] ?? $this->selected_courses ?? [];
+        try {
+            DB::beginTransaction();
 
-                if (!empty($courses)) {
-                    $hasCourses = true;
+            if ($this->isAdmin && $this->selectAllInstructors) {
+                foreach ($this->lines as $line) {
+                    $instructorId = $line['instructorId'] ?? null;
+                    $courses      = $line['selected_courses'] ?? [];
 
-                    $data = [
-                        'instructor_id' => $instructorId,
-                        'title' => $this->title,
-                        'short_description' => $this->short_description,
-                        'description' => $this->course_description ?? '',
-                        'price' => $this->price ?? 0,
-                        'discount_percentage' => $this->discount ?? 0,
-                        'created_by' => auth()->id(),
-                    ];
+                    // ⛔ لو الـ instructorId = alltutors، نتخطاها ونمشي على كل الـ instructors
+                    if ($instructorId === 'alltutors') {
+                        foreach ($this->instructors as $instructor) {
+                            $coursesForInstructor = (new CourseService())->getAllCourses(
+                                instructorId: $instructor->id,
+                                filters: ['status' => 'active'],
+                                with: ['pricing:id,course_id,price,discount,final_price']
+                            )->pluck('id')->toArray();
 
-                    Log::info("Creating bundle for instructor {$instructorId}", $data);
+                            if (empty($coursesForInstructor)) {
+                                Log::warning("Skipping instructor {$instructor->id} - no courses");
+                                continue;
+                            }
 
-                    $bundle = (new BundleService())->createCourseBundle($data);
-                    (new BundleService())->addBundleCourses($bundle, $courses);
+                            $data = [
+                                'instructor_id'       => $instructor->id,
+                                'title'               => $this->title,
+                                'short_description'   => $this->short_description,
+                                'description'         => $this->course_description ?? '',
+                                'price'               => $this->price ?? 0,
+                                'discount_percentage' => $this->discount ?? 0,
+                                'created_by'          => auth()->id(),
+                            ];
 
-                    if (!empty($this->image)) {
-                        $imageName = setMediaPath($this->image);
-                        (new BundleService())->addBundleMedia($bundle, [
-                            'mediable_id' => $bundle->id,
-                            'mediable_type' => 'bundle',
-                            'type' => 'thumbnail',
-                        ], [
-                            'path' => $imageName,
-                        ]);
+                            Log::info("Creating bundle for instructor {$instructor->id}", $data);
+
+                            $bundle = (new BundleService())->createCourseBundle($data);
+                            (new BundleService())->addBundleCourses($bundle, $coursesForInstructor);
+
+                            if (!empty($this->image)) {
+                                $imageName = setMediaPath($this->image);
+                                if ($imageName) {
+                                    (new BundleService())->addBundleMedia($bundle, [
+                                        'mediable_id'   => $bundle->id,
+                                        'mediable_type' => 'bundle',
+                                        'type'          => 'thumbnail',
+                                    ], [
+                                        'path' => $imageName,
+                                    ]);
+                                }
+                            }
+                        }
+                    } else {
+                        // Instructor واحد عادي
+                        if (empty($instructorId) || empty($courses)) {
+                            Log::warning("Skipping instructor {$instructorId} - no courses");
+                            continue;
+                        }
+
+                        $data = [
+                            'instructor_id'       => $instructorId,
+                            'title'               => $this->title,
+                            'short_description'   => $this->short_description,
+                            'description'         => $this->course_description ?? '',
+                            'price'               => $this->price ?? 0,
+                            'discount_percentage' => $this->discount ?? 0,
+                            'created_by'          => auth()->id(),
+                        ];
+
+                        Log::info("Creating bundle for instructor {$instructorId}", $data);
+
+                        $bundle = (new BundleService())->createCourseBundle($data);
+                        (new BundleService())->addBundleCourses($bundle, $courses);
+
+                        if (!empty($this->image)) {
+                            $imageName = setMediaPath($this->image);
+                            if ($imageName) {
+                                (new BundleService())->addBundleMedia($bundle, [
+                                    'mediable_id'   => $bundle->id,
+                                    'mediable_type' => 'bundle',
+                                    'type'          => 'thumbnail',
+                                ], [
+                                    'path' => $imageName,
+                                ]);
+                            }
+                        }
                     }
+                }
+            } else {
+                $hasCourses = false;
+
+                foreach ($this->lines as $line) {
+                    $instructorId = $line['instructorId'] ?? auth()->id();
+                    $courses = $line['selected_courses'] ?? $this->selected_courses ?? [];
+
+                    if (!empty($courses)) {
+                        $hasCourses = true;
+
+                        $data = [
+                            'instructor_id' => $instructorId,
+                            'title' => $this->title,
+                            'short_description' => $this->short_description,
+                            'description' => $this->course_description ?? '',
+                            'price' => $this->price ?? 0,
+                            'discount_percentage' => $this->discount ?? 0,
+                            'created_by' => auth()->id(),
+                        ];
+
+                        Log::info("Creating bundle for instructor {$instructorId}", $data);
+
+                        $bundle = (new BundleService())->createCourseBundle($data);
+                        (new BundleService())->addBundleCourses($bundle, $courses);
+
+                        if (!empty($this->image)) {
+                            $imageName = setMediaPath($this->image);
+                            (new BundleService())->addBundleMedia($bundle, [
+                                'mediable_id' => $bundle->id,
+                                'mediable_type' => 'bundle',
+                                'type' => 'thumbnail',
+                            ], [
+                                'path' => $imageName,
+                            ]);
+                        }
+                    }
+                }
+
+                if (!$hasCourses) {
+                    DB::rollBack();
+                    $this->dispatch('showAlertMessage', [
+                        'type' => 'error',
+                        'title' => __('coursebundles::bundles.error_title'),
+                        'message' => __('coursebundles::bundles.courses_required')
+                    ]);
+                    return;
                 }
             }
 
-            if (!$hasCourses) {
-                DB::rollBack();
-                $this->dispatch('showAlertMessage', [
-                    'type' => 'error',
-                    'title' => __('coursebundles::bundles.error_title'),
-                    'message' => __('coursebundles::bundles.courses_required')
-                ]);
-                return;
-            }
+            DB::commit();
+            Log::info('Bundle(s) created successfully');
+
+            $this->dispatch('showAlertMessage', [
+                'type' => 'success',
+                'title' => __('coursebundles::bundles.success_title'),
+                'message' => __('coursebundles::bundles.create_bundle')
+            ]);
+
+            return redirect()->route('coursebundles.tutor.bundles');
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            Log::error('Failed to create bundle', [
+                'error' => $th->getMessage(),
+                'stack' => $th->getTraceAsString(),
+            ]);
+            $this->dispatch('showAlertMessage', [
+                'type' => 'error',
+                'title' => __('coursebundles::bundles.error_title'),
+                'message' => __('coursebundles::bundles.create_bundle_error')
+            ]);
         }
-
-        DB::commit();
-        Log::info('Bundle(s) created successfully');
-
-        $this->dispatch('showAlertMessage', [
-            'type' => 'success',
-            'title' => __('coursebundles::bundles.success_title'),
-            'message' => __('coursebundles::bundles.create_bundle')
-        ]);
-
-        return redirect()->route('coursebundles.tutor.bundles');
-    } catch (\Throwable $th) {
-        DB::rollBack();
-        Log::error('Failed to create bundle', [
-            'error' => $th->getMessage(),
-            'stack' => $th->getTraceAsString(),
-        ]);
-        $this->dispatch('showAlertMessage', [
-            'type' => 'error',
-            'title' => __('coursebundles::bundles.error_title'),
-            'message' => __('coursebundles::bundles.create_bundle_error')
-        ]);
     }
-}
 
 
 
@@ -589,9 +674,7 @@ if ($this->isAdmin && $this->selectAllInstructors) {
         }
 
         DB::beginTransaction();
-
         try {
-            // Update bundle details
             $data = [
                 'title' => $this->title,
                 'short_description' => $this->short_description,
@@ -600,25 +683,44 @@ if ($this->isAdmin && $this->selectAllInstructors) {
                 'discount_percentage' => $this->discount ?? 0,
             ];
 
-            $bundle = $bundleService->updateCourseBundle($bundle, $data);
+            // Admin scenario with multiple instructors
+            if ($this->isAdmin && $this->selectAllInstructors) {
+                foreach ($this->lines as $line) {
+                    $instructorId = $line['instructorId'] ?? null;
+                    $courses = $line['selected_courses'] ?? [];
 
-            // Handle courses and instructors
-            if ($this->isAdmin) {
-                $instructorLines = $this->selectAllInstructors
-                    ? collect($this->lines)->pluck('instructorId')->flatten()->unique()->toArray()
-                    : collect($this->lines)->pluck('instructorId')->toArray();
+                    if ($instructorId === 'alltutors') {
+                        foreach ($this->instructors as $instructor) {
+                            $coursesForInstructor = (new CourseService())->getAllCourses(
+                                instructorId: $instructor->id,
+                                filters: ['status' => 'active'],
+                                with: ['pricing:id,course_id,price,discount,final_price']
+                            )->pluck('id')->toArray();
 
-                foreach ($instructorLines as $index => $instructorId) {
-                    $courses = $this->selectAllInstructors
-                        ? ($this->selected_courses ?? [])
-                        : ($this->lines[$index]['selected_courses'] ?? []);
+                            if (empty($coursesForInstructor)) continue;
 
-                    if ($instructorId && !empty($courses)) {
+                            $bundleData = array_merge($data, ['instructor_id' => $instructor->id]);
+                            $newBundle = $bundleService->createCourseBundle($bundleData);
+                            $bundleService->addBundleCourses($newBundle, $coursesForInstructor);
+
+                            if (!empty($this->image)) {
+                                $imageName = setMediaPath($this->image);
+                                if ($imageName) {
+                                    $bundleService->addBundleMedia($newBundle, [
+                                        'mediable_id' => $newBundle->id,
+                                        'mediable_type' => 'bundle',
+                                        'type' => 'thumbnail',
+                                    ], ['path' => $imageName]);
+                                }
+                            }
+                        }
+                    } else {
+                        if (empty($instructorId) || empty($courses)) continue;
+
                         $bundleData = array_merge($data, ['instructor_id' => $instructorId]);
                         $newBundle = $bundleService->createCourseBundle($bundleData);
                         $bundleService->addBundleCourses($newBundle, $courses);
 
-                        // Handle image safely
                         if (!empty($this->image)) {
                             $imageName = setMediaPath($this->image);
                             if ($imageName) {
@@ -632,8 +734,35 @@ if ($this->isAdmin && $this->selectAllInstructors) {
                     }
                 }
             } else {
-                // Tutor scenario
-                if (empty($this->selected_courses)) {
+                // Tutor scenario or admin without select all
+                $hasCourses = false;
+                foreach ($this->lines as $line) {
+                    $instructorId = $line['instructorId'] ?? auth()->id();
+                    $courses = $line['selected_courses'] ?? $this->selected_courses ?? [];
+
+                    if (!empty($courses)) {
+                        $hasCourses = true;
+
+                        $bundleData = array_merge($data, ['instructor_id' => $instructorId]);
+                        $bundleService->updateCourseBundle($bundle, $bundleData);
+                        $bundleService->addBundleCourses($bundle, $courses);
+
+                        if (!empty($this->image)) {
+                            $imageName = setMediaPath($this->image);
+                            if ($imageName) {
+                                $bundleService->addBundleMedia($bundle, [
+                                    'mediable_id' => $bundle->id,
+                                    'mediable_type' => 'bundle',
+                                    'type' => 'thumbnail',
+                                ], ['path' => $imageName]);
+                            }
+                        } elseif ($this->image === null && $bundle->thumbnail) {
+                            $bundle->media()->where('type', 'thumbnail')->delete();
+                        }
+                    }
+                }
+
+                if (!$hasCourses) {
                     DB::rollBack();
                     $this->dispatch('showAlertMessage', [
                         'type' => 'error',
@@ -641,22 +770,6 @@ if ($this->isAdmin && $this->selectAllInstructors) {
                         'message' => __('coursebundles::bundles.courses_required')
                     ]);
                     return;
-                }
-
-                $bundleService->addBundleCourses($bundle, $this->selected_courses);
-
-                // Handle image
-                if (!empty($this->image)) {
-                    $imageName = setMediaPath($this->image);
-                    if ($imageName) {
-                        $bundleService->addBundleMedia($bundle, [
-                            'mediable_id' => $bundle->id,
-                            'mediable_type' => 'bundle',
-                            'type' => 'thumbnail',
-                        ], ['path' => $imageName]);
-                    }
-                } elseif ($this->image === null && $bundle->thumbnail) {
-                    $bundle->media()->where('type', 'thumbnail')->delete();
                 }
             }
 
@@ -669,14 +782,12 @@ if ($this->isAdmin && $this->selectAllInstructors) {
             ]);
 
             return redirect()->route('coursebundles.tutor.bundles');
-        } catch (\Throwable $e) {
+        } catch (\Throwable $th) {
             DB::rollBack();
-
             Log::error('Failed to update bundle', [
-                'error' => $e->getMessage(),
-                'stack' => $e->getTraceAsString(),
+                'error' => $th->getMessage(),
+                'stack' => $th->getTraceAsString(),
             ]);
-
             $this->dispatch('showAlertMessage', [
                 'type' => 'error',
                 'title' => __('coursebundles::bundles.error_title'),
@@ -684,6 +795,7 @@ if ($this->isAdmin && $this->selectAllInstructors) {
             ]);
         }
     }
+
 
     public function updatedInstructorId()
     {

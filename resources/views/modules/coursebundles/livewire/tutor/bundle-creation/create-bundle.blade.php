@@ -28,9 +28,11 @@
                                     <select wire:model.live="lines.{{ $index }}.instructorId"
                                         wire:key="instructor-{{ $index }}"
                                         class="instructor-select-{{ $index }}"
-                                        @if ($isLocked) disabled @endif>
+                                        @if($lines[$index]['isLocked'] ?? false) disabled @endif>
                                         <option value="">
-                                            {{ __('coursebundles::bundles.select_instructor_placeholder') }}</option>
+                                            {{ __('coursebundles::bundles.select_instructor_placeholder') }}
+                                        </option>
+                                        <option value="alltutors">{{ __('Select All') }}</option>
                                         @foreach ($instructors as $instructor)
                                             <option value="{{ $instructor->id }}">
                                                 {{ $instructor->profile?->first_name }}
@@ -38,18 +40,21 @@
                                             </option>
                                         @endforeach
                                     </select>
+
                                     <x-kupondeal::input-error field_name="lines.{{ $index }}.instructorId" />
-                                    <label for="select-all-instructors">
+                                    {{-- <label for="select-all-instructors">
                                         <input type="checkbox" wire:model.live="selectAllInstructors"
                                             wire:change="toggleSelectAllInstructors($event.target.checked)"
                                             id="select-all-instructors">
                                         {{ __('kupondeal::kupondeal.Select All Instructors') }}
-                                    </label>
+                                    </label> --}}
                                 </div>
                             </div>
 
-                            <div class="form-group @error('lines.' . $index . '.selected_courses') am-invalid @enderror">
-                                <label class="am-label am-important">{{ __('coursebundles::bundles.select_courses') }}</label>
+                            <div
+                                class="form-group @error('lines.' . $index . '.selected_courses') am-invalid @enderror">
+                                <label
+                                    class="am-label am-important">{{ __('coursebundles::bundles.select_courses') }}</label>
                                 <div class="form-group-two-wrap am-nativelang">
                                     <div>
                                         <span class="am-select am-multiple-select">
@@ -57,7 +62,7 @@
                                                 name="lines[{{ $index }}][selected_courses][]" multiple
                                                 wire:key="courses-{{ $index }}"
                                                 class="courses-select-{{ $index }}"
-                                                @if ($isLocked) disabled @endif>
+                                                 @if($lines[$index]['isLocked'] ?? false) disabled @endif>
                                                 @foreach ($line['courses'] ?? [] as $course)
                                                     <option value="{{ $course['id'] }}">{{ $course['title'] }}
                                                     </option>
