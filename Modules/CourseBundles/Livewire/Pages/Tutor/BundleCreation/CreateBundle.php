@@ -1,5 +1,4 @@
 <?php
-
 namespace Modules\CourseBundles\Livewire\Pages\Tutor\BundleCreation;
 
 use App\Models\User;
@@ -122,11 +121,6 @@ class CreateBundle extends Component
             ]);
         }
     }
-
-
-
-
-
 
     public function addLine()
     {
@@ -854,4 +848,4 @@ class CreateBundle extends Component
             'selected' => $this->selected_courses
         ]);
     }
-}
+} 
