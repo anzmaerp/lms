@@ -5,5 +5,4 @@ return [
     App\Providers\EventServiceProvider::class,
     App\Providers\VoltServiceProvider::class,
     Froiden\LaravelInstaller\Providers\LaravelInstallerServiceProvider::class,
-    Mccarlosen\LaravelMpdf\LaravelMpdfServiceProvider::class
 ];

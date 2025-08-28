@@ -15,7 +15,6 @@
         "amentotech/laravel-translations": "1.0",
         "amentotech/scssphp": "^1.11",
         "barryvdh/laravel-dompdf": "^3.1",
-        "carlos-meneses/laravel-mpdf": "^2.1",
         "diglactic/laravel-breadcrumbs": "^9.0",
         "doctrine/dbal": "^4.0",
         "google/apiclient": "^2.16",
