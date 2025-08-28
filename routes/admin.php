@@ -29,6 +29,7 @@ use Modules\Upcertify\Http\Controllers\CertificateController;
 use App\Livewire\Pages\Admin\ManageAdminUsers\ManageAdminUsers;
 use App\Livewire\Pages\Admin\IdentityVerification\IdentityVerification;
 use App\Livewire\Pages\Admin\NotificationTemplates\NotificationTemplates;
+use Modules\KuponDeal\Livewire\KuponList\KuponList;
 
 Route::middleware(['auth', 'verified', 'role:admin|sub_admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/insights', Insights::class)->name('insights')->middleware('permit-of:can-manage-insights');
@@ -45,7 +46,8 @@ Route::middleware(['auth', 'verified', 'role:admin|sub_admin'])->prefix('admin')
     });
     Route::get('commission-settings',   CommissionSettings::class)->name('commission-settings')->middleware('permit-of:can-manage-commission-settings');
     Route::get('payment-methods',       PaymentMethods::class)->name('payment-methods')->middleware('permit-of:can-manage-payment-methods');
-    Route::get('certificate-list',       CertificateController::class)->name('certificate-list')->middleware('permit-of:can-manage-certificates');
+    Route::get('certificate-list',        [CertificateController::class, 'certificateList'])->name('certificate-list')->middleware('permit-of:can-manage-certificates');
+    Route::get('coupon-list', KuponList::class)->name('coupon-list');
     Route::get('withdraw-requests',     WithdrawRequest::class)->name('withdraw-requests')->middleware('permit-of:can-manage-withdraw-requests');
     Route::get('offline-payments',      \App\Livewire\Pages\Admin\OfflinePayments\OfflinePayments::class)->name('offline-payments')->middleware('permit-of:can-manage-payment-methods');
 

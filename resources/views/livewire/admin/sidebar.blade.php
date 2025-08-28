@@ -194,20 +194,6 @@ new class extends Component {
                     ],
                 ],
             ],
-
-             [
-                'title' => __('sidebar.certificates'),
-                'icon' => 'icon-award',
-
-                // this just to make it show because copons does not have any permission and yet u check on it
-                'permission' => 'can-manage-certificates',
-                'routes' => [
-                    [
-                        'route' => 'upcertify.certificate-list',
-                        'title' => __('sidebar.certificates'),
-                    ],
-                ],
-    ],
         ];
 
         if (\Nwidart\Modules\Facades\Module::has('subscriptions') && \Nwidart\Modules\Facades\Module::isEnabled('subscriptions')) {
@@ -250,6 +236,19 @@ new class extends Component {
             ],
         ];
 
+        $this->menuItems[] = [
+                'title' => __('sidebar.certificates'),
+                'icon' => 'icon-award',
+                // this just to make it show because copons does not have any permission and yet u check on it
+                'permission' => 'can-manage-certificates',
+                'routes' => [
+                    [
+                        'route' => 'admin.certificate-list',
+                        'title' => __('sidebar.certificates'),
+                    ],
+                ],
+            ];
+
         if (\Nwidart\Modules\Facades\Module::has('kupondeal') && \Nwidart\Modules\Facades\Module::isEnabled('kupondeal')) {
             $this->menuItems[] = [
                 'title' => __('sidebar.coupons'),
@@ -258,7 +257,7 @@ new class extends Component {
                 'permission' => 'can-manage-courses',
                 'routes' => [
                     [
-                        'route' => 'kupondeal.coupon-list',
+                        'route' => 'admin.coupon-list',
                         'title' => __('sidebar.coupons'),
                     ],
                 ],

@@ -8,6 +8,7 @@ use App\Models\Role;
 use App\Models\User;
 use App\Notifications\EmailNotification;
 use App\Services\NotificationService;
+use App\Traits\pdfTrait;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -17,10 +18,12 @@ use Livewire\Attributes\Layout;
 use Livewire\Attributes\On;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Maatwebsite\Excel\Excel;
 
 class Users extends Component
 {
     use WithPagination;
+    use pdfTrait;
 
     public UserForm $form;
     public $editMode = false;
@@ -320,6 +323,11 @@ class Users extends Component
             $this->dispatch('showAlertMessage', type: 'error', title: __('general.demosite_res_title'), message: __('general.demosite_res_txt'));
             return;
         }
+    }
+
+    #[On('printUsersExcel')]
+    public function printUsersExcel(){
+        return (new excelExport($this))->download('Info.xlsx', Excel::XLSX);
     }
 
     #[On('verified-at-template')]
