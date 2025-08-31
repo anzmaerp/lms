@@ -9,6 +9,8 @@ use Livewire\Attributes\Layout;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Livewire\Attributes\On;
+use App\Livewire\Pages\Admin\NotificationTemplates\NotificationSettingsExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 
 
@@ -81,6 +83,11 @@ class NotificationTemplates extends Component
         $this->per_page         = !empty( $per_page_record )   ? $per_page_record : 10;
         $this->date_format      = !empty($date_format)    ? $date_format : 'm d, Y';
     }
+    #[On('printUsersExcel')]
+public function printUsersExcel()
+{
+    return Excel::download(new NotificationSettingsExport($this->search), 'NotificationTemplates.xlsx');
+}
 
     public function updatedSearch(){
         $this->resetPage();

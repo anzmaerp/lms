@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 use Livewire\WithPagination;
+use App\Livewire\Pages\Admin\Bookings\excelExport;
+
 
 class Bookings extends Component
 {
@@ -51,6 +53,18 @@ class Bookings extends Component
         $orders = $this->orderService->getBookings($this->status, $this->search,$this->sortby,$this->selectedSubject,$this->selectedSubGroup);
         return view('livewire.pages.admin.bookings.bookings',compact('orders'));
     }
+    
+#[On('printUsersExcel')]
+public function printUsersExcel()
+{
+    return (new ExcelExport(
+        $this->status,
+        $this->search,
+        $this->sortby,
+        $this->selectedSubject,
+        $this->selectedSubGroup
+    ))->download('Bookings.xlsx');
+}
 
     public function updated($propertyName)
     {

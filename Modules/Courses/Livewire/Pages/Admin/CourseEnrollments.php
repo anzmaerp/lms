@@ -2,10 +2,12 @@
 
 namespace Modules\Courses\Livewire\Pages\Admin;
 
-use Modules\Courses\Services\CourseService;
-use Livewire\Attributes\Layout;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Livewire\Attributes\Layout;
+use Maatwebsite\Excel\Facades\Excel;
+use Modules\Courses\Services\CourseService;
+use Modules\Courses\Livewire\Pages\Admin\CourseEnrollmentsExport;
 
 class CourseEnrollments extends Component
 {
@@ -37,6 +39,13 @@ class CourseEnrollments extends Component
             'orders' => $courses
         ]);
     }
+    public function printUsersExcel()
+{
+    return Excel::download(
+        new CourseEnrollmentsExport($this->search, $this->status, $this->sortby),
+        'course_enrollments.xlsx'
+    );
+}
 
     public function updated($propertyName)
     {

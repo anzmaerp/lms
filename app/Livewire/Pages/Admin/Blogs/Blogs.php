@@ -2,13 +2,15 @@
 
 namespace App\Livewire\Pages\Admin\Blogs;
 
-use Livewire\Component;
-use Livewire\WithPagination;
 use App\Models\Blog;
-use App\Models\BlogCategory;
-use Livewire\Attributes\Computed;
-use Livewire\Attributes\Layout;
+use Livewire\Component;
 use Livewire\Attributes\On;
+use App\Models\BlogCategory;
+use Livewire\WithPagination;
+use Maatwebsite\Excel\Facades\Excel;
+use Livewire\Attributes\Layout;
+use Livewire\Attributes\Computed;
+use App\Livewire\Pages\Admin\Blogs\BlogsExport;
 
 class Blogs extends Component
 {
@@ -55,6 +57,11 @@ class Blogs extends Component
         }
 
         return $blogs->orderBy('id', $this->sortby)->paginate($this->perPage);
+    }
+    public function printUsersExcel()
+    {
+        $fileName = 'blogs_' . now()->format('Y-m-d_H-i-s') . '.xlsx';
+        return Excel::download(new BlogsExport($this->search), $fileName);
     }
 
     public function updatedPerPage($value)

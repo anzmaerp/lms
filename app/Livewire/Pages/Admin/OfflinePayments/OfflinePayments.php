@@ -2,12 +2,15 @@
 
 namespace App\Livewire\Pages\Admin\OfflinePayments;
 
-use App\Models\OfflinePayment;
-use Illuminate\Support\Facades\DB;
-use Livewire\Attributes\Layout;
-use Livewire\Attributes\On;
 use Livewire\Component;
+use Livewire\Attributes\On;
 use Livewire\WithPagination;
+use App\Models\OfflinePayment;
+use Livewire\Attributes\Layout;
+use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Livewire\Pages\Admin\OfflinePayments\OfflinePaymentsExport;
+
 
 class OfflinePayments extends Component
 {
@@ -60,6 +63,12 @@ class OfflinePayments extends Component
     {
         $this->per_page = setting('_general.per_page_record') ? array_search(setting('_general.per_page_record'), $this->per_page_opt) : 0;
     }
+    public function printUsersExcel()
+    {
+        $fileName = 'offline_payments_' . now()->format('Y-m-d_H-i-s') . '.xlsx';
+        return Excel::download(new OfflinePaymentsExport($this->search), $fileName);
+    }
+
 
     public function updatedSelectAll($value)
     {

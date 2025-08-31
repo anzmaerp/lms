@@ -8,6 +8,13 @@
                         <fieldset>
                             <div class="tb-themeform__wrap">
                                 <div class="tb-actionselect">
+                                    <a href="javascript:void(0)" wire:click="printUsersExcel"
+                                        class="d-flex align-items-center justify-content-center"
+                                        style="width: 40px; height: 40px; background:#1D6F42; color:#fff; border-radius:6px;">
+                                        <i class="fa fa-file-excel" style="font-size:18px;"></i>
+                                    </a>
+                                </div>
+                                <div class="tb-actionselect">
                                     <a href="javascript:void(0)" id="add_user_click" class="tb-btn add-new"
                                        wire:click="openModel()">{{__('general.add_new_sub_admin')}}
                                         <i class="icon-plus"></i></a>

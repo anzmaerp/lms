@@ -2,14 +2,18 @@
 
 namespace App\Livewire\Pages\Admin\Taxonomy;
 
-use Illuminate\View\View;
 use Livewire\Component;
-use Livewire\Attributes\Layout;
+use Illuminate\View\View;
 use Livewire\Attributes\On;
-use App\Models\Scopes\ActiveScope;
 use App\Models\SubjectGroup;
 use Livewire\WithPagination;
+use Livewire\Attributes\Layout;
 use Livewire\Attributes\Computed;
+use App\Models\Scopes\ActiveScope;
+use Maatwebsite\Excel\Facades\Excel;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use App\Livewire\Pages\Admin\Taxonomy\SubjectGroupsExport;
+
 
 class SubjectGroups extends Component
 {
@@ -58,6 +62,10 @@ class SubjectGroups extends Component
 
     }
 
+    public function printUsersExcel(): BinaryFileResponse
+{
+    return Excel::download(new SubjectGroupsExport($this->search), 'subject_groups.xlsx');
+}
     public function updatedPage($page)
     {
         if($this->selectAll){

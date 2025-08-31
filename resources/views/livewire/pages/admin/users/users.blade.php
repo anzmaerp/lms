@@ -8,12 +8,11 @@
                         <fieldset>
                             <div class="tb-themeform__wrap">
                                 <div class="tb-actionselect">
-<a href="javascript:void(0)" 
-   wire:click="printUsersExcel" 
-   class="d-flex align-items-center justify-content-center"
-   style="width: 40px; height: 40px; background:#1D6F42; color:#fff; border-radius:6px;">
-    <i class="fa fa-file-excel" style="font-size:18px;"></i>
-</a>
+                                    <a href="javascript:void(0)" wire:click="printUsersExcel"
+                                        class="d-flex align-items-center justify-content-center"
+                                        style="width: 40px; height: 40px; background:#1D6F42; color:#fff; border-radius:6px;">
+                                        <i class="fa fa-file-excel" style="font-size:18px;"></i>
+                                    </a>
 
 
                                 </div>
@@ -31,7 +30,8 @@
                                             <option value="" {{ $verification == '' ? 'selected' : '' }}>
                                                 {{ __('All users') }}
                                             </option>
-                                            <option value="verified" {{ $verification == 'verified' ? 'selected' : '' }}>
+                                            <option value="verified"
+                                                {{ $verification == 'verified' ? 'selected' : '' }}>
                                                 {{ __('Verified users') }}</option>
                                             <option value="unverified"
                                                 {{ $verification == 'non_verified' ? 'selected' : '' }}>
@@ -141,7 +141,7 @@
                                                 {{ $single->profile?->phone_number }}</span></td>
                                         <td data-label="{{ __('general.created_date') }}">
                                             <span>{{ $single->created_at->format('F d,
-                                                                                    Y') }}</span>
+                                                                                                                                Y') }}</span>
                                         </td>
                                         <td data-label="{{ __('admin/general.role') }}">
                                             {{ ucfirst($single->roles()->first()->name) }}

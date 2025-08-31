@@ -9,6 +9,13 @@
                         <fieldset>
                             <div class="tb-themeform__wrap">
                                 <div class="tb-actionselect" >
+                                   <a href="javascript:void(0)" wire:click="printUsersExcel"
+                                        class="d-flex align-items-center justify-content-center"
+                                        style="width: 40px; height: 40px; background:#1D6F42; color:#fff; border-radius:6px;">
+                                        <i class="fa fa-file-excel" style="font-size:18px;"></i>
+                                    </a>
+                                </div>
+                                <div class="tb-actionselect" >
                                     <div class="tb-select">
                                         <select class="am-select2 form-control" data-componentid="@this" data-live="true" data-searchable="false" data-wiremodel="sortby" id="sortby">
                                             <option value="asc">{{ __('general.asc')  }}</option>

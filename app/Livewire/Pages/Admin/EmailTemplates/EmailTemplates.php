@@ -3,12 +3,13 @@
 namespace App\Livewire\Pages\Admin\EmailTemplates;
 
 
-use App\Models\EmailTemplate;
-use App\Models\Scopes\ActiveScope;
-use Livewire\Attributes\Layout;
 use Livewire\Component;
-use Livewire\WithPagination;
 use Livewire\Attributes\On;
+use Livewire\WithPagination;
+use App\Models\EmailTemplate;
+use Livewire\Attributes\Layout;
+use App\Models\Scopes\ActiveScope;
+use App\Livewire\Pages\Admin\EmailTemplates\EmailTemplatesExport;
 
 
 
@@ -86,6 +87,14 @@ class EmailTemplates extends Component
         $this->per_page         = !empty( $per_page_record )   ? $per_page_record : 10;
         $this->date_format      = !empty($date_format)    ? $date_format : 'm d, Y';
     }
+
+    public function printUsersExcel()
+{
+    return (new EmailTemplatesExport(
+        $this->search,
+        $this->sortby
+    ))->download('email_templates.xlsx');
+}
 
     public function updatedSearch(){
         $this->resetPage();

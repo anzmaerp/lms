@@ -9,8 +9,11 @@
                         <fieldset>
                             <div class="tb-themeform__wrap">
                                 <div class="tb-actionselect">
-                                    <a href="javascript:;" class="tb-btn btnred {{ $selectedCategories ? '' : 'd-none' }}" @click="$wire.dispatch('showConfirm', { action : 'delete-category' })">{{ __('general.delete_selected') }}</a>
-                                </div>
+                                    <a href="javascript:void(0)" wire:click="printUsersExcel"
+                                        class="d-flex align-items-center justify-content-center"
+                                        style="width: 40px; height: 40px; background:#1D6F42; color:#fff; border-radius:6px;">
+                                        <i class="fa fa-file-excel" style="font-size:18px;"></i>
+                                    </a>                                </div>
                                 <div class="tb-actionselect">
                                     <div class="tb-select" wire:ignore>
                                         <select class="am-select2" id="sortBy" data-searchable="false">

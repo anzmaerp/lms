@@ -9,6 +9,7 @@ use Livewire\Attributes\Layout;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Illuminate\Support\Facades\Storage;
+use App\Livewire\Pages\Admin\Invoices\InvoicesExport;
 
 class Invoices extends Component
 {
@@ -49,6 +50,14 @@ class Invoices extends Component
         $orders = $this->orderService->getOrdersList($this->status, $this->search, $this->sortby);
         return view('livewire.pages.admin.invoices.invoices', compact('orders'));
     }
+    public function printUsersExcel()
+    {
+        return (new InvoicesExport(
+            $this->status,
+            $this->search,
+            $this->sortby
+        ))->download('Invoices.xlsx');
+    }
 
     public function updated($propertyName)
     {
@@ -75,5 +84,4 @@ class Invoices extends Component
             $this->dispatch('showAlertMessage', type: 'success', title: __('general.success_title'), message: __('settings.updated_record_success'));
         }
     }
-
 }
