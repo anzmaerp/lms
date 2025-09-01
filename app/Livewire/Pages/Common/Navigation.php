@@ -155,16 +155,16 @@ class Navigation extends Component
                 'accessibility' => ['student', 'tutor'],
                 'disableNavigate' => true,
             ],
-            [
-                'tutorSortOrder' => 11,
-                'studentSortOrder' => 12,
-                'route' => 'admin.bookings',
-                'onActiveRoute' => [$this->role . '.disputes', $this->role . '.manage-bookings','can-manage-bookings'],
-                'title' => __('admin/sidebar.bookings'),
-                'icon'  => '<i class="icon-file-text"></i>',
-                'accessibility' => ['admin','student', 'tutor'],
-                'disableNavigate' => true,
-            ],
+            // [
+            //     'tutorSortOrder' => 11,
+            //     'studentSortOrder' => 12,
+            //     'route' => 'admin.bookings',
+            //     'onActiveRoute' => [$this->role . '.disputes', $this->role . '.manage-bookings','can-manage-bookings'],
+            //     'title' => __('admin/sidebar.bookings'),
+            //     'icon'  => '<i class="icon-file-text"></i>',
+            //     'accessibility' => ['admin','student', 'tutor'],
+            //     'disableNavigate' => true,
+            // ],
         ];
 
         if (\Nwidart\Modules\Facades\Module::has('forumwise') && \Nwidart\Modules\Facades\Module::isEnabled('forumwise')) {

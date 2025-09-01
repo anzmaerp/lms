@@ -236,6 +236,51 @@ new class extends Component {
             ],
         ];
 
+// $this->menuItems[] = [
+//     'title' => __('general.manage_educ'),
+//     'icon'  => 'icon-bold',
+//     'routes' => [
+//         [
+//             'title' => __('sidebar.taxonomies'),
+//             'icon'  => 'icon-database',
+//             'routes' => [
+//                 [
+//                     'route'      => 'admin.taxonomy.languages',
+//                     'title'      => __('sidebar.languages'),
+//                     'permission' => 'can-manage-languages',
+//                 ],
+//                 [
+//                     'route'      => 'admin.taxonomy.subjects',
+//                     'title'      => __('sidebar.subjects'),
+//                     'permission' => 'can-manage-subjects',
+//                 ],
+//                 [
+//                     'route'      => 'admin.taxonomy.subject-groups',
+//                     'title'      => __('sidebar.subject_groups'),
+//                     'permission' => 'can-manage-subject-groups',
+//                 ],
+//             ],
+//         ],
+
+//         [
+//                 'title' => __('admin/sidebar.invoices'),
+//                 'icon' => 'icon-dollar-sign',
+//                 'routes' => [
+//                     [
+//                         'route' => 'admin.invoices',
+//                         'title' => __('invoices'),
+//                         'permission' => 'can-manage-invoices',
+//                     ],
+//                 ],
+//          ],
+//         [
+//             'route'      => 'admin.blog-categories',
+//             'title'      => __('blogs.blog_categories'),
+//             'permission' => 'can-manage-blog-categories',
+//         ],
+//     ],
+// ];
+
         $this->menuItems[] = [
                 'title' => __('sidebar.certificates'),
                 'icon' => 'icon-award',
@@ -448,7 +493,11 @@ new class extends Component {
                         </a>
                     </li>
                 @endif
+
+
             </ul>
+
+            
             <div class="admin-sidebar-footer">
                 @if (auth()->user()->can('can-manage-insights'))
                     <div class="am-wallet">

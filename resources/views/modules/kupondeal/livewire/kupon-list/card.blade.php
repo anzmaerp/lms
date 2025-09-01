@@ -128,14 +128,20 @@
                                 </div>
                             @endif
                         @else
-                            @if (\Nwidart\Modules\Facades\Module::has('courses') && \Nwidart\Modules\Facades\Module::isEnabled('courses'))
+                        @if (\Nwidart\Modules\Facades\Module::has('courses') && \Nwidart\Modules\Facades\Module::isEnabled('courses'))
                                 <div class="form-group @error('form.couponable_type') am-invalid @enderror">
                                     <x-input-label class="am-important"
                                         for="couponable_type">{{ __('kupondeal::kupondeal.couponable_type') }}</x-input-label>
-                                    <span class="am-select">
-                                        <select wire:model="form.couponable_type" class="am-select2">
-                                            @foreach ($couponable_types as $type)
-                                                <option value="{{ $type['value'] }}">{{ $type['label'] }}</option>
+                                    <span class="am-select" wire:ignore>
+                                        <select class="am-select2" data-componentid="@this" id="couponable_type"
+                                            data-live="true" data-wiremodel="form.couponable_type"
+                                            data-placeholder="{{ __('kupondeal::kupondeal.select_couponable_type') }}">
+                                            <option value="">
+                                                {{ __('kupondeal::kupondeal.select_couponable_type') }}</option>
+                                            @foreach ($couponable_types as $couponable_type)
+                                                <option value="{{ $couponable_type['value'] }}"
+                                                    @if ($form['couponable_type'] == $couponable_type['value']) selected @endif>
+                                                    {{ $couponable_type['label'] }}</option>
                                             @endforeach
                                         </select>
                                     </span>
@@ -144,15 +150,23 @@
                             @endif
                             <div class="form-group @error('form.couponable_id') am-invalid @enderror"
                                 wire:loading.class="am-disabled" wire:loading.target="form.couponable_type">
+
                                 <x-input-label class="am-important"
                                     for="couponable_id">{{ Module::has('courses') && Module::isEnabled('courses') ? __('kupondeal::kupondeal.couponable_id') : __('kupondeal::kupondeal.subject') }}</x-input-label>
-                                <select multiple wire:model="form.couponable_id" class="am-select2">
-                                    @foreach ($couponable_ids as $c)
-                                        <option value="{{ $c['id'] }}">{{ $c['title'] }}</option>
+
+                                <select multiple id="couponable_id" class="form-control" wire:model="form.couponable_id"
+                                    @if (!Module::has('courses') || !Module::isEnabled('courses')) disabled @endif>
+
+                                    @foreach ($couponable_ids as $couponable)
+                                        <option value="{{ $couponable['id'] }}">
+                                            {{ $couponable['title'] }}
+                                        </option>
                                     @endforeach
                                 </select>
+
                                 <x-kupondeal::input-error field_name='form.couponable_id' />
                             </div>
+
                             @endif
                         </div>
                         <div class="form-group @error('form.discount_type') am-invalid @enderror">

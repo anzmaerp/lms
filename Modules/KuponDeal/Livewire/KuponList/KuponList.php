@@ -123,28 +123,27 @@ class KuponList extends Component
             'couponable_id' => [],
         ];
     }
-public function removeLine($index)
-{
-    unset($this->lines[$index]);
-    $this->lines = array_values($this->lines); // إعادة ترتيب الـ index
+    public function removeLine($index)
+    {
+        unset($this->lines[$index]);
+        $this->lines = array_values($this->lines);
 
-    if (empty($this->lines)) {
-        $this->lines[] = [
-            'instructorId'   => null,
-            'couponable_type'=> '',
-            'couponable_ids' => [],
-            'couponable_id'  => [],
-        ];
+        if (empty($this->lines)) {
+            $this->lines[] = [
+                'instructorId'   => null,
+                'couponable_type' => '',
+                'couponable_ids' => [],
+                'couponable_id'  => [],
+            ];
+        }
     }
-}
 
     public function selectAll($index)
     {
         $selected = $this->lines[$index]['couponable_id'] ?? [];
 
-        // تأكد أن couponable_ids موجودة فقط بعد اختيار المعلم والنوع
         if (empty($this->lines[$index]['couponable_ids'])) {
-            return; // لو لسه المعلم أو النوع مش مختار، ما يعملش حاجة
+            return;
         }
 
         $allIds = collect($this->lines[$index]['couponable_ids'])->pluck('id')->toArray();
@@ -439,14 +438,12 @@ public function removeLine($index)
                 $type = $line['couponable_type'] ?? null;
                 $ids  = $line['couponable_id'] ?? [];
 
-                // لو مختار All Tutors
                 $targetInstructors = ($instructorId === 'alltutors')
                     ? User::whereHas('roles', fn($q) => $q->where('name', 'tutor'))->pluck('id')->toArray()
                     : [$instructorId];
 
                 foreach ($targetInstructors as $insId) {
                     if ($type === '__ALL__') {
-                        // لو __ALL__ يجيب كل الأنواع
                         foreach (collect($this->couponable_types)->pluck('value') as $realType) {
                             $items = $this->initOptions($realType, $insId);
                             $allItemIds = collect($items)->pluck('id')->toArray();
