@@ -195,7 +195,7 @@
                         <label class="am-label am-important">{{ __('coursebundles::bundles.regular_price') }}</label>
                         <div class="form-control_wrap sr-formgroup">
                             <input class="form-control regular-price-input" placeholder="450" type="text"
-                                readonly>
+                                >
                             <i>$</i>
                         </div>
                     </div>
@@ -341,6 +341,7 @@
 
 @push('styles')
     <link rel="stylesheet" href="{{ asset('modules/coursebundles/css/main.css') }}">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     @vite(['public/summernote/summernote-lite.min.css'])
 @endpush
 
@@ -351,7 +352,5 @@
     <script defer src="{{ asset('summernote/summernote-lite.min.js') }}"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 
-    </script>
 @endpush
