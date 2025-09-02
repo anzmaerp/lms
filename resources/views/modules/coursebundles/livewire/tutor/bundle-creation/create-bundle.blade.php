@@ -22,7 +22,6 @@
                     @foreach ($lines as $index => $line)
                         <div wire:key="line-{{ $index }}" class="line-wrapper position-relative"
                             style="border: 1px solid #ddd; padding: 15px; margin: 15px 0;  border-radius: 8px;">
-
                             @if (count($lines) > 1 && $index > 0 && !($lines[$index]['isLocked'] ?? false))
                                 <button type="button" wire:click="removeLine({{ $index }})"
                                     class="btn btn-sm  position-absolute"
@@ -30,8 +29,6 @@
                                     ✕
                                 </button>
                             @endif
-
-                            {{-- select instructor --}}
                             <div class="form-group @error('lines.' . $index . '.instructorId') am-invalid @enderror"
                                 style="display:flex; gap:135px; padding: 10px 0">
                                 <label class="am-label am-important">
@@ -53,12 +50,10 @@
                                             </option>
                                         @endforeach
                                     </select>
-
                                     <x-kupondeal::input-error field_name="lines.{{ $index }}.instructorId" />
                                 </div>
                             </div>
 
-                            {{-- select courses --}}
                             <div class="form-group @error('lines.' . $index . '.selected_courses') am-invalid @enderror"
                                 style="display:flex; gap:115px; padding: 0;">
                                 <label class="am-label am-important">
@@ -346,6 +341,8 @@
 @endpush
 
 @push('scripts')
+
+
     <script>
         window.courses = @json($courses ?? []);
     </script>
