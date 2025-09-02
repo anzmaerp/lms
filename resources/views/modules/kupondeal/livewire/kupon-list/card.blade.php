@@ -171,7 +171,7 @@
                                     for="discount_type">{{ __('kupondeal::kupondeal.discount_type') }}</x-input-label>
                                 <span class="am-select" wire:ignore>
                                     <select class="am-select2" data-componentid="@this" id="discount_type"
-                                        data-live="true" data-wiremodel="form.discount_type"
+                                        data-live="false" data-wiremodel="form.discount_type"
                                         data-placeholder="{{ __('kupondeal::kupondeal.select_discount_type') }}">
                                         <option value="">{{ __('kupondeal::kupondeal.select_discount_type') }}
                                         </option>
