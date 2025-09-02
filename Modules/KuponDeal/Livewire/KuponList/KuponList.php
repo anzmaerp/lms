@@ -615,7 +615,6 @@ class KuponList extends Component
                         }
                     }
                 }
-
                 $this->lines[$index]['couponable_ids'] = $allItems;
                 $this->lines[$index]['couponable_id'] = collect($allItems)->pluck('id')->toArray();
             } else {
