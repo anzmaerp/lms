@@ -30,16 +30,15 @@ header * {
     font-weight: {{ $fontWeight }} !important;
 }
     </style>
-    </style>
     @vite(['public/css/bootstrap.min.css', 'public/admin/css/themify-icons.css', 'public/admin/css/fontawesome/all.min.css', 'public/css/select2.min.css', 'public/css/mCustomScrollbar.min.css', 'public/admin/css/feather-icons.css'])
     @stack('styles')
     <link rel="stylesheet" type="text/css" href="{{ asset('admin/css/main.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('css/custom.css') }}">
     @if (!empty(setting('_general.enable_rtl')) || !empty(session()->get('rtl')))
         <link rel="stylesheet" type="text/css" href="{{ asset('admin/css/rtl.css') }}"
-            @if (\Nwidart\Modules\Facades\Module::has('forumwise') && \Nwidart\Modules\Facades\Module::isEnabled('forumwise')) <link rel="stylesheet" type="text/css" href="{{ asset('modules/forumwise/css/rtl.css') }}"> @endif
-            @endif
-        @livewireStyles
+        @if (\Nwidart\Modules\Facades\Module::has('forumwise') && \Nwidart\Modules\Facades\Module::isEnabled('forumwise')) <link rel="stylesheet" type="text/css" href="{{ asset('modules/forumwise/css/rtl.css') }}"> @endif
+    @endif
+    @livewireStyles
 </head>
 
 <body class="tb-bodycolor @if (!empty(setting('_general.enable_rtl')) || !empty(session()->get('rtl'))) am-rtl @endif">

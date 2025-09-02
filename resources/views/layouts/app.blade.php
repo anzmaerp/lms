@@ -1,7 +1,7 @@
 @php
     $isAdmin = Auth::user()->hasRole('admin');
 @endphp
-@if($isAdmin)
+@if($isAdmin && false)
     @include('layouts.admin-app')
 @else
 
