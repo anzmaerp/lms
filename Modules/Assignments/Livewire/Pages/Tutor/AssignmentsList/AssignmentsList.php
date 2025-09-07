@@ -21,7 +21,7 @@ class AssignmentsList extends Component
     use WithPagination;
 
     public $isLoading           = true;
-    public $filters             = [ 'status' => ''];
+    public $filters             = ['status' => ''];
     public $assignmentStatus    = '';
     public $assignmentId        = 0;
     public $perPage             = 10;
@@ -33,12 +33,12 @@ class AssignmentsList extends Component
     {
         $this->dispatch('initSelect2', target: '.am-select2');
         // $this->statuses =  AssignmentStatusCast::$statusMap;
-        
+
         $this->statuses =  [
             Assignment::STATUS_DRAFT      =>  Assignment::DRAFT,
             Assignment::STATUS_PUBLISHED  =>  Assignment::PUBLISHED,
             Assignment::STATUS_ARCHIVED   =>  Assignment::ARCHIVED,
-            
+
         ];
     }
 
@@ -52,7 +52,7 @@ class AssignmentsList extends Component
             perPage: $this->perPage,
             withCount: ['submissionsAssignments'],
         );
-        return view('assignments::livewire.tutor.assignments-list.assignments-list' , compact('assignments')) ;
+        return view('assignments::livewire.tutor.assignments-list.assignments-list', compact('assignments'));
     }
 
     public function resetFilters()
@@ -89,7 +89,7 @@ class AssignmentsList extends Component
             $this->dispatch('showAlertMessage', type: 'error', title: __('general.demosite_res_title'), message: __('general.demosite_res_txt'));
             return;
         }
-       
+
         return $this->updateAssignmentStatus($params['id'], 'archived');
     }
 
@@ -103,22 +103,29 @@ class AssignmentsList extends Component
 
         $assignment = Assignment::where('id', $this->assignmentId)->first();
 
-        if ($assignment && $assignment?->related_type == 'Modules\Courses\Models\Course' && isActiveModule('courses')) {
+        if (
+            $assignment
+            && $assignment?->related_type == 'Modules\Courses\Models\Course'
+            && isActiveModule('courses')
+        ) {
             $assignment->load('related.enrollments');
 
-            $courseDuration = (new CourseService())->getCourseProgress(
-                courseId: $assignment?->related_id,
-                withSum: [
-                    'courseWatchedtime' => 'duration'
-                ],
-                studentId: $assignment?->related?->enrollments->pluck('student_id')->toArray()
-            );
+            $courseService = new CourseService();
+            if (method_exists($courseService, 'getCourseProgress')) {
+                $courseDuration = $courseService->getCourseProgress(
+                    courseId: $assignment?->related_id,
+                    withSum: [
+                        'courseWatchedtime' => 'duration'
+                    ],
+                    studentId: $assignment?->related?->enrollments->pluck('student_id')->toArray()
+                );
 
-            if (!empty($courseDuration?->course_watchedtime_sum_duration) && !empty($assignment?->related?->content_length)) {
-                foreach ($assignment?->related?->enrollments as $enrollment) {
-                    $this->progress = floor(($courseDuration?->course_watchedtime_sum_duration / $assignment?->related?->content_length) * 100);
-                    if ($this->progress >= 100) {
-                        $this->assignAssignment($assignment?->related, $enrollment?->student_id);
+                if (!empty($courseDuration?->course_watchedtime_sum_duration) && !empty($assignment?->related?->content_length)) {
+                    foreach ($assignment?->related?->enrollments as $enrollment) {
+                        $this->progress = floor(($courseDuration?->course_watchedtime_sum_duration / $assignment?->related?->content_length) * 100);
+                        if ($this->progress >= 100) {
+                            $this->assignAssignment($assignment?->related, $enrollment?->student_id);
+                        }
                     }
                 }
             }
@@ -130,7 +137,7 @@ class AssignmentsList extends Component
                     if ($sessionEndDate && $sessionEndDate < now()) {
 
                         $assignments = (new AssignemntsService())->assignmentsBySlot($booking->user_subject_slot_id);
-        
+
                         if ($assignments->isNotEmpty()) {
                             foreach ($assignments as $assignment) {
                                 if ($assignment->status == 'published') {
@@ -144,9 +151,9 @@ class AssignmentsList extends Component
                                             'tutorName'             => $assignment->tutor?->profile?->full_name,
                                             'assignedAssignmentUrl' => route('assignments.student.attempt-assignment', ['id' => $assignmentDetail->id]),
                                         ];
-                                    
+
                                         $notifyData = $emailData;
-                                    
+
                                         dispatch(new SendNotificationJob('assignedAssignment', $booking->booker, $emailData));
                                         dispatch(new SendDbNotificationJob('assignedassignment', $booking->booker, $notifyData));
                                     }
@@ -242,5 +249,4 @@ class AssignmentsList extends Component
             $this->dispatch('showAlertMessage', type: 'error', title: __('assignments::assignments.assignment_delete_error'), message: __('assignments::assignments.assignment_delete_failed'));
         }
     }
-
 }
