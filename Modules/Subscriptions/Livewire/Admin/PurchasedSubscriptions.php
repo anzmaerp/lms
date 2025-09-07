@@ -2,12 +2,16 @@
 
 namespace Modules\Subscriptions\Livewire\Admin;
 
-use Modules\Subscriptions\Services\SubscriptionService;
 use App\Models\Role;
-use Livewire\Attributes\Computed;
-use Livewire\Attributes\Layout;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Livewire\Attributes\Layout;
+use Livewire\Attributes\Computed;
+use Maatwebsite\Excel\Facades\Excel;
+use Modules\Subscriptions\Services\SubscriptionService;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Modules\Subscriptions\Livewire\Admin\PurchasedSubscriptionsExport;
+
 
 class PurchasedSubscriptions extends Component
 {
@@ -47,4 +51,9 @@ class PurchasedSubscriptions extends Component
     {
         $this->resetPage();
     }
+
+public function printUsersExcel(): BinaryFileResponse
+{
+    return Excel::download(new PurchasedSubscriptionsExport($this->filters), 'purchased_subscriptions.xlsx');
+}
 }
