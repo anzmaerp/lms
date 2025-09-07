@@ -53,6 +53,8 @@
                                         @php $ids = json_decode($coupon->couponable_id, true); @endphp
 
                                         @if ($coupon->couponable_type === Modules\Courses\Models\Course::class)
+                                        @if(is_array($ids) || is_object($ids))
+
                                             @foreach ($ids as $id)
                                                 @php $course = Modules\Courses\Models\Course::find($id); @endphp
                                                 @if ($course)
@@ -65,6 +67,7 @@
                                                     </div>
                                                 @endif
                                             @endforeach
+                                        @endif
                                         @else
                                             @foreach ($ids as $id)
                                                 @php
