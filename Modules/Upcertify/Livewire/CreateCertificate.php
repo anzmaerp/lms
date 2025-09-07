@@ -55,18 +55,24 @@ class CreateCertificate extends Component
     public $certificate;
     public $wildcards = [];
     public $userId;
-    public $selectedTutors = []; 
+    public $selectedTutors = [];
     public $tutors = [];
 
     private function resolveUserId()
     {
         if ($this->isAdmin()) {
-            return !empty($this->selectedTutors) ? $this->selectedTutors : [];
+            if (!empty($this->selectedTutors)) {
+                return $this->selectedTutors;
+            }
+
+            return null;
         }
+
         return [Auth::id()];
     }
 
-        private function isAdmin()
+
+    private function isAdmin()
     {
         return method_exists(Auth::user(), 'hasRole')
             ? Auth::user()->hasRole('admin')
@@ -518,25 +524,7 @@ class CreateCertificate extends Component
     {
         $response = isDemoSite();
         if ($response) {
-            $this->dispatch(
-                'showToast',
-                type: 'error',
-                message: __('general.demosite_res_txt')
-            );
-            return;
-        }
-
-        $slug = Str::slug($this->title);
-        $this->thumbnail_url = $this->saveCertificateCanvas('upcertify/templates', $slug, $this->body['thumbnail']);
-        $userId = $this->resolveUserId();
-        $certificate = Template::where('id', $this->id)->where('user_id', $userId)->first();
-
-        if (isset($this->body['thumbnail'])) {
-            unset($this->body['thumbnail']);
-        }
-
-        if (empty($this->body['elementsInfo'])) {
-            $this->dispatch('showToast', type: 'error', message: __('upcertify::upcertify.elements_not_found'));
+            $this->dispatch('showToast', type: 'error', message: __('general.demosite_res_txt'));
             return;
         }
 
@@ -546,29 +534,53 @@ class CreateCertificate extends Component
             return;
         }
 
-        $whare = [
-            'id' => empty($this->as_template) ? $this->id : null,
-            'user_id' => $userId,
+        if (empty($this->body['elementsInfo'])) {
+            $this->dispatch('showToast', type: 'error', message: __('upcertify::upcertify.elements_not_found'));
+            return;
+        }
+
+        $slug = Str::slug($this->title);
+        $this->thumbnail_url = $this->saveCertificateCanvas(
+            'upcertify/templates',
+            $slug,
+            $this->body['thumbnail'] ?? ''
+        );
+
+        unset($this->body['thumbnail']);
+
+        $userIds = $this->resolveUserId();
+
+        $data = [
+            'title'         => $this->title,
+            'thumbnail_url' => $this->thumbnail_url,
+            'status'        => 'publish',
+            'body'          => $this->body,
         ];
 
-        $certificate = Template::updateOrCreate(
-            $whare,
-            [
-                'title' => $this->title,
-                'user_id' => $userId,
-                'thumbnail_url' => $this->thumbnail_url,
-                'status' => 'publish',
-                'body' => $this->body,
-            ]
-        );
+        if (!empty($userIds)) {
+             $data['user_id'] = $userIds; 
+        }
+
+        if (!empty($this->id) && empty($this->as_template)) {
+            $certificate = Template::find($this->id);
+
+            if ($certificate) {
+                $certificate->update($data);
+            } else {
+                $certificate = Template::create($data);
+            }
+        } else {
+            $certificate = Template::create($data);
+        }
 
         if ($certificate) {
             $this->dispatch('showToast', type: 'success', message: __('upcertify::upcertify.certificate_published'));
             sleep(1);
-            $url = route('upcertify.certificate-list');
-            return redirect($url);
+            return redirect()->route('upcertify.certificate-list');
         }
     }
+
+
 
 
     public function getGoogleFonts()
