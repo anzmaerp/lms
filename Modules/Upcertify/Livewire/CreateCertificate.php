@@ -169,8 +169,6 @@ class CreateCertificate extends Component
         }
     }
 
-
-
     public function resetErrors($field = null)
     {
         $this->reset('media');
@@ -290,7 +288,6 @@ class CreateCertificate extends Component
 
     public function useAsShapeIcons()
     {
-
         $shapeIcons = [
             'ellipse',
             'hexagon',
@@ -488,10 +485,8 @@ class CreateCertificate extends Component
         $file_ext = ".png";
         $imageName = $name;
 
-        // Get the storage disk dynamically
         $disk = getStorageDisk();
 
-        // Check if the file already exists and generate a unique name if necessary
         $i = 0;
         while (Storage::disk($disk)->exists($dirName . '/' . $imageName . $file_ext)) {
             $i++;
@@ -501,20 +496,18 @@ class CreateCertificate extends Component
         $fileName = $imageName . $file_ext;
         $filePath = $dirName . '/' . $fileName;
 
-        // Decode the base64 image
         $image = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $imageUrl));
         if ($image === false) {
             throw new \Exception("Failed to decode base64 image");
         }
 
-        // Save the image file to the specified disk
         $storeFile = Storage::disk($disk)->put($filePath, $image);
         if ($storeFile === false) {
             throw new \Exception("Failed to save image file to disk: $filePath");
         }
 
         if ($storeFile) {
-            return $filePath; // Return the full path to the saved file
+            return $filePath; 
         }
 
         return '';
@@ -579,10 +572,6 @@ class CreateCertificate extends Component
             return redirect()->route('upcertify.certificate-list');
         }
     }
-
-
-
-
     public function getGoogleFonts()
     {
         $timeout = 30;

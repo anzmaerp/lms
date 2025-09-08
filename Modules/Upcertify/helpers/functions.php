@@ -7,13 +7,13 @@ use Illuminate\Support\Str;
 
 
 if (!function_exists('get_templates')) {
-    function get_templates($id = null) {
-        if(!empty($id)) {
-            return Template::where('user_id', Auth::id())->find($id);
-        }
-        return  Template::where('user_id', Auth::id())->get();
+    function get_templates() {
+        $userId =  Auth::id();
+        return Template::whereJsonContains('user_id', $userId)->get();    
+
     }
 }
+
 
 if (!function_exists('get_certificates')) {
     function get_certificates($filter = null) {
