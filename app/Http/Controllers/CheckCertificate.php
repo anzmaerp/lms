@@ -17,7 +17,7 @@ class CheckCertificate extends Controller
                 'certificate_number' => ['required', 'string', 'max:255'],
             ]);
 
-            $certificate = Certificate::where('id', $data['certificate_number'])->first();
+            $certificate = Certificate::where('hash_id', $data['certificate_number'])->first();
         }
 
         return view('check_certificate', compact('certificate'));
