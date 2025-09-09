@@ -25,7 +25,7 @@ class CouponRequest extends FormRequest
             ],
             'form.expiry_date' => 'required|date',
             'form.couponable_type' => 'required|string|max:255',
-            'form.couponable_id' => 'required|array',
+            'form.couponable_id' => 'required',
             'form.color' => 'required|string|max:50',
             'form.description' => ['nullable', 'string', 'max:500'],
         ];
