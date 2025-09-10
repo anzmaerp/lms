@@ -4,14 +4,16 @@
 namespace Modules\Upcertify\Livewire;
 
 
+use App\Models\User;
 use Livewire\Component;
-use Livewire\Attributes\Layout;
-use Modules\Upcertify\Models\Template;
-use Illuminate\Support\Facades\Auth;
-use Modules\Upcertify\Models\Certificate;
 use Livewire\WithPagination;
+use Livewire\Attributes\Layout;
+use Illuminate\Support\Facades\Auth;
+use Modules\Upcertify\Models\Template;
+use Modules\Upcertify\Models\Certificate;
 
-class CertificateList extends Component {
+class CertificateList extends Component
+{
     use WithPagination;
 
     public $tab;
@@ -21,38 +23,76 @@ class CertificateList extends Component {
     public $tabs;
     public $title;
     public $isLoading = true;
-    
+
+    public $selectedTutors = [];
+
     #[Layout('upcertify::layouts.app')]
-    public function render() {
-        $templates = Template::where('user_id', Auth::id())->orderBy('id', 'desc')->paginate(15);
-        return view('upcertify::livewire.certificate-list.certificate-list', compact('templates'));
+
+    private function resolveUserId()
+    {
+        if ($this->isAdmin()) {
+            return !empty($this->selectedTutors) ? $this->selectedTutors : [];
+        }
+        return [Auth::id()];
+    }
+    private function isAdmin()
+    {
+        return method_exists(Auth::user(), 'hasRole')
+            ? Auth::user()->hasRole('admin')
+            : (property_exists(Auth::user(), 'is_admin') && Auth::user()->is_admin);
     }
 
-    public function mount() {
-       
+
+    public function render()
+    {
+        if ($this->isAdmin()) {
+            $templates = Template::orderBy('id', 'desc')->paginate(15);
+        } else {
+            $userId = Auth::id(); 
+            $templates = Template::whereJsonContains('user_id', $userId)
+                ->orderBy('id', 'desc')
+                ->paginate(15);
+        }
+
+
+        $tutors = User::whereHas('roles', function ($q) {
+            $q->where('name', 'tutor');
+        })->get();
+
+        return view('upcertify::livewire.certificate-list.certificate-list', compact('templates', 'tutors'));
     }
 
-    public function createNow() {
-       
+    public function mount() {}
+
+    public function createNow()
+    {
+
         $this->validate([
             'title' => 'required|string|max:255',
         ]);
-       
+
         $response = isDemoSite();
         if ($response) {
-            $this->dispatch('showToast', 
-               type: 'error',
-               message: __('general.demosite_res_txt')
+            $this->dispatch(
+                'showToast',
+                type: 'error',
+                message: __('general.demosite_res_txt')
             );
             $this->dispatch('closeModal');
             return;
         }
+        $createdBy = Auth::id();
+        $certificate = Template::updateOrCreate(
+            ['title' => $this->title],
+            [
+                'user_id' => $this->isAdmin()
+                    ? array_map('intval', $this->selectedTutors) 
+                    : [(int) Auth::id()],
 
-        $certificate = Template::updateOrCreate([
-            'title' => $this->title,
-            'user_id' => Auth::id(),
-            'status' => 'draft',
-        ]);
+                'created_by' => $createdBy,
+                'status'     => 'draft',
+            ]
+        );
 
         $this->dispatch('showToast', type: 'success', message: __('upcertify::upcertify.certificate_created'));
         sleep(1);
@@ -60,7 +100,7 @@ class CertificateList extends Component {
         return redirect()->route('upcertify.update', [
             'id' => $certificate->id,
             'tab' => 'media'
-        ]);    
+        ]);
     }
 
     public function loadData()
@@ -68,20 +108,22 @@ class CertificateList extends Component {
         $this->isLoading = false;
     }
 
-    public function deleteTemplate($id) {
-        
+    public function deleteTemplate($id)
+    {
+
         $response = isDemoSite();
         if ($response) {
-            $this->dispatch('showToast', 
-               type: 'error',
-               message: __('general.demosite_res_txt')
+            $this->dispatch(
+                'showToast',
+                type: 'error',
+                message: __('general.demosite_res_txt')
             );
             $this->dispatch('closeModal');
             return;
         }
         $uc_certificate = Certificate::where('template_id', $id)->first();
         $certificate = Template::find($id);
-        if($certificate && empty($uc_certificate)) {
+        if ($certificate && empty($uc_certificate)) {
             $certificate->delete();
             $this->dispatch('showToast', type: 'success', message: 'Template deleted successfully');
         } else {

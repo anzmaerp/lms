@@ -2,13 +2,15 @@
 
 namespace App\Livewire\Pages\Admin\Payments;
 
-use App\Jobs\SendDbNotificationJob;
-use App\Jobs\SendNotificationJob;
+use Livewire\Component;
+use Livewire\Attributes\On;
+use Livewire\WithPagination;
 use App\Models\UserWithdrawal;
 use Livewire\Attributes\Layout;
-use Livewire\Attributes\On;
-use Livewire\Component;
-use Livewire\WithPagination;
+use App\Jobs\SendNotificationJob;
+use App\Jobs\SendDbNotificationJob;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Livewire\Pages\Admin\Payments\WithdrawRequestsExport;
 
 class WithdrawRequest extends Component
 {
@@ -61,6 +63,20 @@ class WithdrawRequest extends Component
         $requests = $requests->paginate($this->per_page);
         return view('livewire.pages.admin.payments.withdraw-request',compact( 'requests'));
     }
+
+    public function printUsersExcel()
+{
+    $fileName = 'withdraw_requests_' . now()->format('Y-m-d_H-i-s') . '.xlsx';
+
+    return Excel::download(
+        new WithdrawRequestsExport(
+            $this->search_request,
+            $this->filter_request,
+            $this->sortby
+        ),
+        $fileName
+    );
+}
 
     public function updated($propertyName)
     {

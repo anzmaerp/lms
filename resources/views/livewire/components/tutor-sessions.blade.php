@@ -1,7 +1,3 @@
-
-@php
-    dd($meetingLink)
-@endphp
 <div class="am-userinfo_section"  wire:init="loadPage" x-data="{
     defaultTimeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
     timezone: $wire.entangle('timezone'),

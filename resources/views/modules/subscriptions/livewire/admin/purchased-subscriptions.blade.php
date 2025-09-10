@@ -7,6 +7,16 @@
                     <form class="tb-themeform tb-displistform">
                         <fieldset>
                             <div class="tb-themeform__wrap">
+                                 <div class="tb-actionselect">
+                                    <div class="form-group tb-actionselect">
+                                        <a href="javascript:void(0)" wire:click="printUsersExcel"
+                                            class="d-flex align-items-center justify-content-center"
+                                            style="width: 40px; height: 40px; background:#1D6F42; color:#fff; border-radius:6px;">
+                                            <i class="fa fa-file-excel" style="font-size:18px;"></i>
+                                        </a>
+                                    </div>
+                                </div>
+
                                 <div class="tb-actionselect" wire:ignore>
                                     <div class="tb-select">
                                         <select data-componentid="@this" class="am-select2 form-control" data-searchable="false" data-live='true' id="status" data-wiremodel="filters.status" >

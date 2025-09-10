@@ -1,5 +1,4 @@
 <div class="am-cr-bundle">
-    <p><strong>Selected Instructor ID:</strong> {{ $instructorId }}</p>
 
     <div class="am-userperinfo">
         <div class="am-title_wrap">
@@ -8,22 +7,7 @@
                 <p>{{ __('coursebundles::bundles.create_bundle_desc') }}</p>
             </div>
         </div>
-        @if ($isAdmin)
-            <div class="form-group @error('instructorId') am-invalid @enderror">
-                <label class="am-label am-important">{{ __('coursebundles::bundles.select_instructor') }}</label>
-                <div class="form-control_wrap">
-<select wire:model="instructorId" data-componentid="@this">
-                        <option value="">{{ __('coursebundles::bundles.select_instructor_placeholder') }}</option>
-                        @foreach ($instructors as $instructor)
-                            <option value="{{ $instructor->id }}">
-                                {{ $instructor->profile?->first_name }} {{ $instructor->profile?->last_name }}
-                            </option>
-                        @endforeach
-                    </select>
-                    <x-input-error field_name="instructorId" />
-                </div>
-            </div>
-        @endif
+
         <form class="am-themeform am-themeform_personalinfo">
             <fieldset>
                 <div class="form-group @error('title') am-invalid @enderror">
@@ -34,31 +18,107 @@
                         <x-input-error field_name="title" />
                     </div>
                 </div>
-                <div class="form-group">
-                    <label class="am-label am-important">
-                        {{ __('coursebundles::bundles.select_courses') }}
-                        <div class="am-custom-tooltip">
-                            <span class="am-tooltip-text">
-                                <span>{{ __('coursebundles::bundles.tooltip_time_limit') }}</span>
-                            </span>
-                            <i class="am-icon-exclamation-01"></i>
+                @if ($isAdmin)
+                    @foreach ($lines as $index => $line)
+                        <div wire:key="line-{{ $index }}" class="line-wrapper position-relative"
+                            style="border: 1px solid #ddd; padding: 15px; margin: 15px 0;  border-radius: 8px;">
+                            @if (count($lines) > 1 && $index > 0 && !($lines[$index]['isLocked'] ?? false))
+                                <button type="button" wire:click="removeLine({{ $index }})"
+                                    class="btn btn-sm  position-absolute"
+                                    style="top:-5px; left:0px; border-radius:50%; width:34px; height:34px; display:flex; align-items:center; justify-content:center; font-weight:bold; font-size:16px;">
+                                    ✕
+                                </button>
+                            @endif
+                            <div class="form-group @error('lines.' . $index . '.instructorId') am-invalid @enderror"
+                                style="display:flex; gap:135px; padding: 10px 0">
+                                <label class="am-label am-important">
+                                    {{ __('coursebundles::bundles.select_instructor') }}
+                                </label>
+                                <div class="form-control_wrap">
+                                    <select wire:model.live="lines.{{ $index }}.instructorId"
+                                        wire:key="instructor-{{ $index }}"
+                                        class="instructor-select-{{ $index }}"
+                                        @if ($lines[$index]['isLocked'] ?? false) disabled @endif>
+                                        <option value="">
+                                            {{ __('coursebundles::bundles.select_instructor_placeholder') }}
+                                        </option>
+                                        <option value="alltutors">{{ __('Select All') }}</option>
+                                        @foreach ($instructors as $instructor)
+                                            <option value="{{ $instructor->id }}">
+                                                {{ $instructor->profile?->first_name }}
+                                                {{ $instructor->profile?->last_name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    <x-kupondeal::input-error field_name="lines.{{ $index }}.instructorId" />
+                                </div>
+                            </div>
+
+                            <div class="form-group @error('lines.' . $index . '.selected_courses') am-invalid @enderror"
+                                style="display:flex; gap:115px; padding: 0;">
+                                <label class="am-label am-important">
+                                    {{ __('coursebundles::bundles.select_courses') }}
+                                </label>
+                                <div class="form-group-two-wrap am-nativelang">
+                                    <div>
+                                        <span class="am-select am-multiple-select">
+                                            <select wire:model.live="lines.{{ $index }}.selected_courses"
+                                                name="lines[{{ $index }}][selected_courses][]" multiple
+                                                wire:key="courses-{{ $index }}"
+                                                class="courses-select-{{ $index }}"
+                                                @if ($lines[$index]['isLocked'] ?? false) disabled @endif>
+                                                @foreach ($line['courses'] ?? [] as $course)
+                                                    <option value="{{ $course['id'] }}">{{ $course['title'] }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </span>
+                                        <x-kupondeal::input-error
+                                            field_name="lines.{{ $index }}.selected_courses" />
+
+                                        @if (!$selectAllInstructors)
+                                            <label>
+                                                <input type="checkbox" wire:click="selectAll({{ $index }})">
+                                                {{ __('Select All') }}
+                                            </label>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                    </label>
-                    <div class="form-group-two-wrap am-nativelang @error('selected_courses') am-invalid @enderror">
-                        <div x-init="$wire.dispatch('initSelect2', { target: '.am-select2', data: @js($courses) });">
-                            <span class="am-select am-multiple-select" wire:ignore>
-                                <select class="languages am-select2"
-                                    data-placeholder="{{ __('coursebundles::bundles.select_courses_placeholder') }}"
-                                    data-componentid="@this" data-disable_onchange="true" data-searchable="true"
-                                    id="selected_courses" data-wiremodel="selected_courses" multiple>
-                                </select>
-                            </span>
-                            <x-input-error field_name="selected_courses" />
-                        </div>
-                        <div class="tu-labels languageList">
+                    @endforeach
+
+                    @if (!$selectAllInstructors)
+                        <button type="button" wire:click="addLine">{{ __('Add Line') }}</button>
+                    @endif
+                @else
+                    <div class="form-group">
+                        <label class="am-label am-important">
+                            {{ __('coursebundles::bundles.select_courses') }}
+                            <div class="am-custom-tooltip">
+                                <span class="am-tooltip-text">
+                                    <span>{{ __('coursebundles::bundles.tooltip_time_limit') }}</span>
+                                </span>
+                                <i class="am-icon-exclamation-01"></i>
+                            </div>
+                        </label>
+                        <div class="form-group-two-wrap am-nativelang @error('selected_courses') am-invalid @enderror">
+                            <div x-init="$wire.dispatch('initSelect2', { target: '.am-select2', data: @js($courses) });">
+                                <span class="am-select am-multiple-select">
+                                    <select class="languages am-select2"
+                                        data-placeholder="{{ __('coursebundles::bundles.select_courses_placeholder') }}"
+                                        data-componentid="@this" data-disable_onchange="true" data-searchable="true"
+                                        id="selected_courses" data-wiremodel="selected_courses" multiple>
+                                    </select>
+                                </span>
+                                <x-input-error field_name="selected_courses" />
+                            </div>
+                            <div class="tu-labels languageList">
+                            </div>
                         </div>
                     </div>
-                </div>
+                @endif
+
                 <div class="form-group @error('short_description') am-invalid @enderror">
                     <label
                         class="am-label am-important">{{ __('coursebundles::bundles.bundle_short_description') }}</label>
@@ -129,7 +189,8 @@
                     <div class="form-group">
                         <label class="am-label am-important">{{ __('coursebundles::bundles.regular_price') }}</label>
                         <div class="form-control_wrap sr-formgroup">
-                            <input class="form-control regular-price-input" placeholder="450" type="text" readonly>
+                            <input class="form-control regular-price-input" placeholder="450" type="text"
+                                >
                             <i>$</i>
                         </div>
                     </div>
@@ -275,116 +336,18 @@
 
 @push('styles')
     <link rel="stylesheet" href="{{ asset('modules/coursebundles/css/main.css') }}">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     @vite(['public/summernote/summernote-lite.min.css'])
 @endpush
 
 @push('scripts')
+
+
+    <script>
+        window.courses = @json($courses ?? []);
+    </script>
     <script defer src="{{ asset('summernote/summernote-lite.min.js') }}"></script>
-
-    
-<script type="text/javascript">
-    let courses = @json($courses);
-
-    document.addEventListener('livewire:initialized', function () {
-        setTimeout(() => {
-            populateLanguageList();
-            initInstructorSelect(); 
-        }, 500);
-
-        window.addEventListener('initSelect2', function (e) {
-            const { target, data } = e.detail;
-
-            courses = data; // ← تحديث الكورسات المستخدمة في حساب السعر وغيره
-
-            $(target).empty(); // تفريغ الاختيارات السابقة
-
-            $(target).select2({
-                data: data.map(item => ({
-                    id: item.id,
-                    text: item.text
-                })),
-                placeholder: "اختر دورة"
-            });
-
-            $(target).trigger('change'); // ← لتحديث القيمة
-            populateLanguageList();
-            calculateTotalPrice();
-        });
-
-        // ✅ لما المستخدم يغير الدورات المختارة
-        $(document).on("change", ".languages", function (e) {
-            let componentId = $(this).attr('data-componentid');
-            let component = Livewire.find(componentId);
-
-            if (component) {
-                component.set('selected_courses', $(this).val(), false);
-            }
-
-            populateLanguageList();
-            calculateTotalPrice();
-        });
-
-        // ✅ كود ربط instructorId بـ Livewire
-        function initInstructorSelect() {
-            const $select = $('select[wire\\:model="instructorId"]');
-
-            if (!$select.hasClass("select2-hidden-accessible")) {
-                $select.select2();
-            }
-
-            $(document).on('change', 'select[wire\\:model="instructorId"]', function () {
-                let val = $(this).val();
-                let componentId = $(this).closest('[wire\\:id]').attr('wire:id');
-                let component = Livewire.find(componentId);
-
-                if (component) {
-                    component.set('instructorId', val);
-                }
-            });
-        }
-
-        // ✅ عرض قائمة الدورات المختارة
-        function populateLanguageList() {
-            let languages = $('.languages').select2('data');
-
-            var lang_html = '<ul class="tu-labels">';
-            $.each(languages, function (index, elem) {
-                lang_html += `<li><span>${elem.text} <a href="javascript:void(0);" class="removeCourse" data-id="${elem.id}"><i class="am-icon-multiply-02"></i></a></span></li>`;
-            });
-            lang_html += '</ul>';
-
-            $('.languageList').html(lang_html);
-        }
-
-        // ✅ حذف دورة من القائمة المختارة
-        $("body").on("click", ".removeCourse", function () {
-            let id = $(this).attr('data-id');
-            var newArray = [];
-
-            $('.languages').select2('data').forEach((value) => {
-                if (value['id'] != id) newArray.push(value['id']);
-            });
-
-            $('.languages').val(newArray).trigger('change');
-            populateLanguageList();
-        });
-
-        // ✅ حساب السعر الإجمالي
-        function calculateTotalPrice() {
-            let selectedIds = $('.languages').val();
-            let totalPrice = 0;
-
-            selectedIds.forEach(id => {
-                let course = courses.find(c => c.id == id);
-                if (course && course.price) {
-                    totalPrice += parseFloat(course.price);
-                }
-            });
-
-            $('.regular-price-input').val(totalPrice ? totalPrice.toFixed(2).replace(/\.00$/, '') : null);
-        }
-    });
-</script>
-
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
 @endpush

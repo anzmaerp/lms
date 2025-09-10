@@ -1,6 +1,7 @@
 <?php
 
 use App\Livewire\Payouts;
+use Illuminate\Http\Request;
 use function JmesPath\search;
 use App\Livewire\Frontend\Blogs;
 use App\Livewire\Frontend\Checkout;
@@ -11,6 +12,7 @@ use App\Livewire\Frontend\BlogDetails;
 use App\Services\HesabePaymentService;
 use App\Http\Controllers\SiteController;
 use App\Livewire\Pages\Student\Invoices;
+use App\Http\Controllers\CheckCertificate;
 use App\Http\Controllers\OpenAiController;
 use App\Livewire\Pages\Common\Dispute\Dispute;
 use App\Http\Controllers\Auth\SocialController;
@@ -29,7 +31,6 @@ use App\Livewire\Pages\Tutor\ManageSessions\SessionDetail;
 use App\Livewire\Pages\Student\BillingDetail\BillingDetail;
 use App\Livewire\Pages\Tutor\ManageSessions\ManageSubjects;
 use App\Livewire\Pages\Common\ProfileSettings\AccountSettings;
-use Illuminate\Http\Request;
 use App\Livewire\Pages\Common\ProfileSettings\PersonalDetails;
 use App\Livewire\Pages\Common\ProfileSettings\IdentityVerification;
 
@@ -40,9 +41,7 @@ Route::get('/dbNew', function () {
 
 // // Clear Cache For Application
 Route::get('/clear', function () {
-    Artisan::call('cache:clear');
     Artisan::call('optimize:clear');
-    //Artisan::call('responsecache:clear');
     return response()->json([
         'status' => 'success',
         'message' => 'All Cleared!'
@@ -62,6 +61,8 @@ Route::get('/rebuild-storage-link', function () {
 
     return 'Storage link rebuilt successfully.';
 });
+
+Route::get('check-certificate', [CheckCertificate::class, 'index'])->name('check-certificate');
 
 Route::get('auth/{provider}', [SocialController::class, 'redirect'])->name('social.redirect');
 Route::get('auth/{provider}/callback', [SocialController::class, 'callback'])->name('social.callback');
@@ -148,7 +149,7 @@ Route::middleware(['locale', 'maintenance'])->group(function () {
 
         if ($type === 'courses') {
             // return redirect()->route('courses.search-courses', ['q' => $q, 'type' => 'courses']);
-                    return redirect()->route('courses.search-courses', $request->query());
+            return redirect()->route('courses.search-courses', $request->query());
         }
         if ($type === 'tutors') {
             // return redirect()->route('find-tutors', ['q' => $q, 'type' => 'tutors']);
@@ -167,5 +168,5 @@ Route::middleware(['locale', 'maintenance'])->group(function () {
     }
 
     // route::get('home-four',[HomefourController::class,'index','index'])->name('home4');
-    
+
 });

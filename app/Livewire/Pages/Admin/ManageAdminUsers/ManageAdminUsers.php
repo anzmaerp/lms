@@ -2,19 +2,21 @@
 
 namespace App\Livewire\Pages\Admin\ManageAdminUsers;
 
-use App\Livewire\Forms\Admin\ManageAdmin\AdminUserForm;
-use App\Models\Profile;
 use App\Models\Role;
 use App\Models\User;
-use Illuminate\Support\Facades\Auth;
-use Spatie\Permission\Models\Permission;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Log;
-use Livewire\Attributes\Layout;
-use Livewire\Attributes\On;
+use App\Models\Profile;
 use Livewire\Component;
+use Livewire\Attributes\On;
 use Livewire\WithPagination;
+use Livewire\Attributes\Layout;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Permission;
+use App\Livewire\Forms\Admin\ManageAdmin\AdminUserForm;
+use App\Livewire\Pages\Admin\ManageAdminUsers\AdminUsersExport;
 
 class ManageAdminUsers extends Component
 {
@@ -89,6 +91,15 @@ class ManageAdminUsers extends Component
     
         
     }
+
+    public function printUsersExcel()
+{
+    $fileName = 'sub_admins_' . now()->format('Y-m-d_H-i-s') . '.xlsx';
+    return Excel::download(
+        new AdminUsersExport($this->search, $this->filterUser, $this->sortby),
+        $fileName
+    );
+}
 
     public function updated($propertyName)
     {

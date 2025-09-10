@@ -2,14 +2,16 @@
 
 namespace App\Livewire\Pages\Admin\Taxonomy;
 
-use Illuminate\View\View;
 use Livewire\Component;
-use Livewire\Attributes\Layout;
-use Livewire\Attributes\On;
-use App\Models\Scopes\ActiveScope;
 use App\Models\Language;
+use Illuminate\View\View;
+use Livewire\Attributes\On;
 use Livewire\WithPagination;
+use Maatwebsite\Excel\Excel;
+use Livewire\Attributes\Layout;
 use Livewire\Attributes\Computed;
+use App\Models\Scopes\ActiveScope;
+use App\Livewire\Pages\Admin\Taxonomy\excelExport;
 
 class Languages extends Component
 {
@@ -46,6 +48,7 @@ class Languages extends Component
     #[Computed]
     public function languages(){
         $languages = Language::withoutGlobalScope(ActiveScope::class);
+     
 
         if( !empty($this->search) ){
             $languages = $languages->where(function($query){
@@ -53,11 +56,15 @@ class Languages extends Component
                 $query->orWhereFullText('description', $this->search);
             });
         }
-
         return $languages->orderBy('name', $this->sortby)->paginate($this->perPage);
 
     }
 
+#[On('printUsersExcel')]
+public function printUsersExcel()
+{
+    return (new excelExport($this->search))->download('Info.xlsx', Excel::XLSX);
+}
     public function updatedPage($page)
     {
         if($this->selectAll){

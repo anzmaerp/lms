@@ -11,6 +11,8 @@ use Livewire\WithFileUploads;
 use Livewire\WithPagination;
 use Nwidart\Modules\Facades\Module;
 use Illuminate\Support\Str;
+use Maatwebsite\Excel\Facades\Excel;
+
 class SubscriptionList extends Component
 {
     use WithPagination, WithFileUploads;
@@ -199,4 +201,14 @@ class SubscriptionList extends Component
     {
         $this->resetPage();
     }
+
+    public function printUsersExcel()
+{
+    if (isDemoSite()) {
+        $this->dispatch('showAlertMessage', type: 'error', message: __('general.demo_restriction'));
+        return;
+    }
+
+    return Excel::download(new SubscriptionsExport, 'subscriptions.xlsx');
+}
 }

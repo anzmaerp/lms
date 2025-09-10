@@ -2,6 +2,8 @@
 
 namespace App\Livewire\Pages\Admin\IdentityVerification;
 
+use App\Livewire\Pages\Admin\IdentityVerification\IdentityExcelExport;
+
 use App\Jobs\SendDbNotificationJob;
 use App\Jobs\SendNotificationJob;
 use App\Livewire\Forms\Admin\User\UserForm;
@@ -16,7 +18,8 @@ use Livewire\Attributes\Layout;
 use Livewire\Attributes\On;
 use Illuminate\Support\Facades\Storage;
 
-class IdentityVerification extends Component {
+class IdentityVerification extends Component
+{
     use WithPagination;
 
     public      UserForm $form;
@@ -61,22 +64,31 @@ class IdentityVerification extends Component {
 
     public function mount()
     {
-        $this->dispatch('initSelect2', target: '.am-select2' );
+        $this->dispatch('initSelect2', target: '.am-select2');
+    }
+    #[On('printUsersExcel')]
+    public function printUsersExcel()
+    {
+        return (new IdentityExcelExport(
+            $this->search,
+            $this->sortby,
+            $this->verification
+        ))->download('identity_verifications.xlsx');
     }
 
     public function download($filePath)
     {
         $filePath = str_replace('/storage/', '', $filePath);
         if (!Storage::disk(getStorageDisk())->exists($filePath)) {
-            $this->dispatch('showAlertMessage', type: 'error', title:  __('identity.error') , message: __('identity.identity_downloaded_error'));
+            $this->dispatch('showAlertMessage', type: 'error', title: __('identity.error'), message: __('identity.identity_downloaded_error'));
             return;
         }
 
-        $this->dispatch('showAlertMessage', type: 'success', title:  __('identity.success') , message: __('identity.identity_downloaded'));
+        $this->dispatch('showAlertMessage', type: 'success', title: __('identity.success'), message: __('identity.identity_downloaded'));
         return Storage::disk(getStorageDisk())->download($filePath);
     }
 
-    
+
     public function updated($propertyName)
     {
         if (in_array($propertyName, ['verification', 'search', 'sortby'])) {
@@ -88,18 +100,18 @@ class IdentityVerification extends Component {
     public function verifiedTemplate($params = [])
     {
         $response = isDemoSite();
-        if( $response ){
-            $this->dispatch('showAlertMessage', type: 'error', title:  __('general.demosite_res_title') , message: __('general.demosite_res_txt'));
+        if ($response) {
+            $this->dispatch('showAlertMessage', type: 'error', title: __('general.demosite_res_title'), message: __('general.demosite_res_txt'));
             return;
         }
 
         $date = now();
         if (!empty($params['id'])) {
-            $adminExists = User::whereHas('roles', function($query) {
+            $adminExists = User::whereHas('roles', function ($query) {
                 $query->where('name', 'admin');
             })->where('id', $params['id'])->exists();
 
-            if ($adminExists ) {
+            if ($adminExists) {
                 $this->dispatch('showAlertMessage', [
                     'type'      => 'error',
                     'title'     => __('admin/general.error_title'),
@@ -108,27 +120,26 @@ class IdentityVerification extends Component {
                 return;
             } else {
                 $userProfile = Profile::where('user_id', $params['id']);
-                  if($params['type'] == 'accepted'){
+                if ($params['type'] == 'accepted') {
                     $userProfile->update(['verified_at' => $date]);
-                  } else {
+                } else {
                     $userProfile->update(['verified_at' => NULL]);
-                  }
-                  $userIdentityVerification  =  UserIdentityVerification::where('user_id', $params['id'])->first();
-                  $userIdentityVerification->status = $params['type'];
-                  $userIdentityVerification->save();
-                  if($params['type'] == 'accepted'){
-                        dispatch(new SendNotificationJob('identityVerificationApproved', $userIdentityVerification->user, ['name'=>$userIdentityVerification?->name]));
-                        dispatch(new SendDbNotificationJob('identityVerificationApproved', $userIdentityVerification->user, ['userName'=>$userIdentityVerification?->name]));
-                    } else {
-                        dispatch(new SendNotificationJob('identityVerificationRejected', $userIdentityVerification->user, ['name'=>$userIdentityVerification?->name]));
-                        dispatch(new SendDbNotificationJob('identityVerificationRejected', $userIdentityVerification->user, ['userName'=>$userIdentityVerification?->name]));
-                  }
-                  if($params['type'] == 'rejected'){
+                }
+                $userIdentityVerification  =  UserIdentityVerification::where('user_id', $params['id'])->first();
+                $userIdentityVerification->status = $params['type'];
+                $userIdentityVerification->save();
+                if ($params['type'] == 'accepted') {
+                    dispatch(new SendNotificationJob('identityVerificationApproved', $userIdentityVerification->user, ['name' => $userIdentityVerification?->name]));
+                    dispatch(new SendDbNotificationJob('identityVerificationApproved', $userIdentityVerification->user, ['userName' => $userIdentityVerification?->name]));
+                } else {
+                    dispatch(new SendNotificationJob('identityVerificationRejected', $userIdentityVerification->user, ['name' => $userIdentityVerification?->name]));
+                    dispatch(new SendDbNotificationJob('identityVerificationRejected', $userIdentityVerification->user, ['userName' => $userIdentityVerification?->name]));
+                }
+                if ($params['type'] == 'rejected') {
                     $userIdentityVerification->address()->delete();
                     $userIdentityVerification->delete();
-                  }
+                }
             }
         }
     }
-
 }

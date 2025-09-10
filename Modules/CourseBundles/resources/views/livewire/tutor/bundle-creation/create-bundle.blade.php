@@ -15,7 +15,7 @@
                 <label class="am-label am-important">{{ __('coursebundles::bundles.select_instructor') }}</label>
                 <div class="form-control_wrap">
                     <select wire:model="instructorId" data-componentid="@this">
-                        <option value="">{{ __('coursebundles::bundles.select_instructor_placeholder') }}</option>
+                        <option value="">{{ __(key: 'coursebundles::bundles.select_instructor_placeholder') }}</option>
                         @foreach ($instructors as $instructor)
                             <option value="{{ $instructor->id }}">
                                 {{ $instructor->profile?->first_name }} {{ $instructor->profile?->last_name }}

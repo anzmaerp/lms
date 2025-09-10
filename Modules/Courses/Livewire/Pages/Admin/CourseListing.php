@@ -2,13 +2,15 @@
 
 namespace Modules\Courses\Livewire\Pages\Admin;
 
+use Livewire\Component;
+use Livewire\Attributes\On;
+use Livewire\WithPagination;
+use Livewire\Attributes\Layout;
 use App\Jobs\SendNotificationJob;
 use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
 use Modules\Courses\Services\CourseService;
-use Livewire\Attributes\Layout;
-use Livewire\Attributes\On;
-use Livewire\Component;
-use Livewire\WithPagination;
+use Modules\Courses\Livewire\Pages\Admin\CoursesExport;
 
 class CourseListing extends Component
 {
@@ -57,10 +59,17 @@ class CourseListing extends Component
 
 
         $courses = $this->courseService->getCourses(with: $with, filters: $this->filters);
-        
+
         return view('courses::livewire.admin.course-listing', [
             'courses' => $courses
         ]);
+    }
+    public function printUsersExcel()
+    {
+        return Excel::download(
+            new CoursesExport($this->filters),
+            'courses.xlsx'
+        );
     }
 
     public function updated($propertyName)
@@ -73,8 +82,8 @@ class CourseListing extends Component
     public function approveCourse($id)
     {
         $response = isDemoSite();
-        if( $response ){
-            $this->dispatch('showAlertMessage', type: 'error', title:  __('general.demosite_res_title') , message: __('general.demosite_res_txt'));
+        if ($response) {
+            $this->dispatch('showAlertMessage', type: 'error', title: __('general.demosite_res_title'), message: __('general.demosite_res_txt'));
             return;
         }
         $course = $this->courseService->getCourse(courseId: $id, relations: ['instructor.profile']);
@@ -89,8 +98,8 @@ class CourseListing extends Component
     public function rejectCourse($id)
     {
         $response = isDemoSite();
-        if( $response ){
-            $this->dispatch('showAlertMessage', type: 'error', title:  __('general.demosite_res_title') , message: __('general.demosite_res_txt'));
+        if ($response) {
+            $this->dispatch('showAlertMessage', type: 'error', title: __('general.demosite_res_title'), message: __('general.demosite_res_txt'));
             return;
         }
         $course = $this->courseService->getCourse(courseId: $id, relations: ['instructor.profile']);
@@ -103,26 +112,27 @@ class CourseListing extends Component
     }
 
     #[On('delete-course')]
-    public function deleteCourse($params){
+    public function deleteCourse($params)
+    {
         $response = isDemoSite();
-        if( $response ){
-            $this->dispatch('showAlertMessage', type: 'error', title:  __('general.demosite_res_title') , message: __('general.demosite_res_txt'));
+        if ($response) {
+            $this->dispatch('showAlertMessage', type: 'error', title: __('general.demosite_res_title'), message: __('general.demosite_res_txt'));
             return;
         }
-        if(!empty($params['id'])){
+        if (!empty($params['id'])) {
 
             $course = $this->courseService->courseEnrollments($params['id']);
-            if(!empty($course) && $course->enrollments->isNotEmpty()) {
-                $this->dispatch('showAlertMessage',type: 'error',title: __('general.error_title') ,message: __('general.enrollments_exist')); 
+            if (!empty($course) && $course->enrollments->isNotEmpty()) {
+                $this->dispatch('showAlertMessage', type: 'error', title: __('general.error_title'), message: __('general.enrollments_exist'));
                 return;
             }
             $course = $this->courseService->deleteCourse($params['id']);
-        } 
-        if($course){
+        }
+        if ($course) {
             $this->dispatch(
                 'showAlertMessage',
                 type: 'success',
-                title: __('general.success_title') ,
+                title: __('general.success_title'),
                 message: __('general.delete_record')
             );
         }

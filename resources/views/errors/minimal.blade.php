@@ -23,6 +23,13 @@
 <body class="am-bodywrap">
     <x-front.header :page="null" />
     <main class="am-main am-404">
+         <!-- WhatsApp Floating Button -->
+            <a href="https://wa.me/{{ setting('_general.technical_support_whatsapp_number') }}" 
+            class="whatsapp-float" 
+            target="_blank" 
+            rel="noopener noreferrer">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" />
+            </a> 
         <div class="tk-errorpage">
             <div class="tk-errorpage_content">
                 <h1>@yield('code')</h1>

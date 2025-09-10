@@ -2,12 +2,14 @@
 
 namespace App\Livewire\Pages\Admin\Blogs;
 
-use App\Models\BlogCategory;
-use Livewire\Attributes\Layout;
+use Livewire\Component;
 use Livewire\Attributes\On;
+use App\Models\BlogCategory;
 use Livewire\WithPagination;
 use Livewire\WithFileUploads;
-use Livewire\Component;
+use Livewire\Attributes\Layout;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Livewire\Pages\Admin\Blogs\BlogCategoriesExport;
 
 class BlogCategories extends Component
 {
@@ -74,6 +76,14 @@ class BlogCategories extends Component
         }
 
         return $blog_categories->orderBy('id', $this->sortby)->paginate($this->per_page);
+    }
+
+    public function printUsersExcel()
+    {
+        return Excel::download(
+            new BlogCategoriesExport($this->search),
+            'blog_categories.xlsx'
+        );
     }
 
     public function updatedSearch()

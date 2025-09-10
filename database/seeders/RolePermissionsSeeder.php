@@ -32,7 +32,6 @@ class RolePermissionsSeeder extends Seeder
     private function createPermissions(): void
     {
         $permissions = [
-
             'can-manage-courses',
             'can-manage-badges',
             'can-manage-course-bundles',
@@ -67,7 +66,8 @@ class RolePermissionsSeeder extends Seeder
             'can-manage-disputes-list',
             'can-create-course-bundle',
             'edit-course-bundle',
-            'can-manage-admin-users'
+            'can-manage-admin-users',
+            'can-manage-certificates'
         ];
 
         foreach ($permissions as $permissionName) {

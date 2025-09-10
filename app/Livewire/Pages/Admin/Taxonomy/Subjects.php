@@ -2,14 +2,16 @@
 
 namespace App\Livewire\Pages\Admin\Taxonomy;
 
-use App\Models\Scopes\ActiveScope;
 use App\Models\Subject;
-use Illuminate\View\View;
-use Livewire\Attributes\Computed;
-use Livewire\Attributes\Layout;
-use Livewire\Attributes\On;
 use Livewire\Component;
+use Illuminate\View\View;
+use Livewire\Attributes\On;
 use Livewire\WithPagination;
+use Livewire\Attributes\Layout;
+use Livewire\Attributes\Computed;
+use App\Models\Scopes\ActiveScope;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Livewire\Pages\Admin\Taxonomy\SubjectsExport;
 
 class Subjects extends Component
 {
@@ -58,6 +60,10 @@ class Subjects extends Component
         return $subjects->orderBy('name', $this->sortby)->paginate($this->perPage);
 
     }
+    public function printUsersExcel()
+{
+    return Excel::download(new SubjectsExport($this->search), 'subjects.xlsx');
+}
 
     public function updatedPage($page)
     {

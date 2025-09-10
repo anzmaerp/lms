@@ -2,13 +2,15 @@
 
 namespace Modules\Courses\Livewire\Pages\Admin;
 
-use Modules\Courses\Models\Category;
-use Livewire\Attributes\Layout;
+use Livewire\Component;
 use Livewire\Attributes\On;
 use Livewire\WithPagination;
 use Livewire\WithFileUploads;
-use Livewire\Component;
+use Livewire\Attributes\Layout;
 use Modules\Courses\Models\Course;
+use Maatwebsite\Excel\Facades\Excel;
+use Modules\Courses\Models\Category;
+use Modules\Courses\Livewire\Pages\Admin\CategoriesExport;
 
 class Categories extends Component
 {
@@ -46,6 +48,14 @@ class Categories extends Component
         $categories             = $this->Categories; // get mounted property
 
         return view('courses::livewire.admin.categories.categories', compact('categories'));
+    }
+
+    public function printUsersExcel()
+    {
+        return Excel::download(
+            new CategoriesExport($this->search, $this->sortby),
+            'categories.xlsx'
+        );
     }
 
     public function loadData()
@@ -173,15 +183,15 @@ class Categories extends Component
                     $course->delete();
                 }
             }
-            
+
             $category->delete();
 
             $this->dispatch(
-                        'showAlertMessage',
-                        type: 'success',
-                        title: __('general.error_title'),
-                        message: __('courses::courses.category_deleted_successfully')
-                    );
+                'showAlertMessage',
+                type: 'success',
+                title: __('general.error_title'),
+                message: __('courses::courses.category_deleted_successfully')
+            );
         }
     }
 

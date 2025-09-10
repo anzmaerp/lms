@@ -1,12 +1,14 @@
 <?php
 
 namespace App\Livewire\Pages\Admin\Dispute;
-use Livewire\Attributes\Layout;
-
 use Livewire\Component;
-use App\Services\DisputeService;
+
 use Livewire\WithPagination;
+use Livewire\Attributes\Layout;
+use App\Services\DisputeService;
 use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Livewire\Pages\Admin\Dispute\DisputesExport;
 
 class Dispute extends Component
 {
@@ -46,4 +48,11 @@ class Dispute extends Component
     {
         return redirect()->route('admin.manage-dispute', $id);
     }
+    public function printUsersExcel()
+{
+    return Excel::download(
+        new DisputesExport($this->keyword, $this->status, $this->sortby),
+        'disputes.xlsx'
+    );
+}
 }

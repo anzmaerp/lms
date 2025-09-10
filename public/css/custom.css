@@ -1,34 +1,11 @@
 /* Custom CSS overrides */
 /* These styles will not be overwritten by the theme panel */
 /* Add your custom CSS here */
+
 /* .am-banner-content-seven .am-explore-banner-button .am-explore-btn{
   background-color: var(--btn-color);
 } */
- /* .am-header_two{
-      position: sticky;
-    top: 0;
-    z-index: 999;
-    background: #ffffff0f;
-    
-    backdrop-filter: blur(10px);
- } */
-  /* .am-header_two.testo.am-header_tow {
-  position: sticky !important;
-  top: 0;
-  z-index: 999;
-}
-.testo.am-header_tow {
-  position: sticky !important;
-  top: 0;
-  z-index: 999;
-} */
-.am-header_three{
-  position: sticky !important;
-  top: 0;
-  z-index: 999;
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
-}
+
 .tb-dropdoenwrap {
   margin-left: 0;
   margin-inline-start: auto !important;

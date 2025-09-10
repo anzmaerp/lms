@@ -1,33 +1,35 @@
 <?php
 
-use App\Http\Controllers\Admin\GeneralController;
-use App\Livewire\Pages\Admin\Blogs\BlogCategories;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\SiteController;
 use App\Livewire\Pages\Admin\Blogs\Blogs;
+use App\Livewire\Pages\Admin\Users\Users;
+use App\Livewire\Pages\Admin\Dispute\Dispute;
+use App\Livewire\Pages\Admin\Menu\ManageMenu;
+use App\Livewire\Pages\Admin\Upgrade\Upgrade;
 use App\Livewire\Pages\Admin\Blogs\CreateBlog;
 use App\Livewire\Pages\Admin\Blogs\UpdateBlog;
 use App\Livewire\Pages\Admin\Bookings\Bookings;
-use App\Livewire\Pages\Admin\Dispute\Dispute;
-use App\Livewire\Pages\Admin\Dispute\ManageDispute;
-use App\Livewire\Pages\Admin\EmailTemplates\EmailTemplates;
-use App\Livewire\Pages\Admin\IdentityVerification\IdentityVerification;
 use App\Livewire\Pages\Admin\Insights\Insights;
-use App\Http\Controllers\SiteController;
 use App\Livewire\Pages\Admin\Invoices\Invoices;
-use App\Livewire\Pages\Admin\ManageAdminUsers\ManageAdminUsers;
-use App\Livewire\Pages\Admin\Menu\ManageMenu;
-use App\Livewire\Pages\Admin\NotificationTemplates\NotificationTemplates;
+use App\Livewire\Pages\Admin\Taxonomy\Subjects;
+use App\Livewire\Pages\Admin\Taxonomy\Languages;
+use App\Http\Controllers\Admin\GeneralController;
+use App\Livewire\Pages\Admin\Blogs\BlogCategories;
+use App\Livewire\Pages\Admin\Profile\AdminProfile;
+use App\Livewire\Pages\Admin\Dispute\ManageDispute;
+use App\Livewire\Pages\Admin\Taxonomy\SubjectGroups;
 use App\Livewire\Pages\Admin\Packages\ManagePackages;
-use App\Livewire\Pages\Admin\Packages\InstalledPackages;
-use App\Livewire\Pages\Admin\Payments\CommissionSettings;
 use App\Livewire\Pages\Admin\Payments\PaymentMethods;
 use App\Livewire\Pages\Admin\Payments\WithdrawRequest;
-use App\Livewire\Pages\Admin\Profile\AdminProfile;
-use App\Livewire\Pages\Admin\Taxonomy\Languages;
-use App\Livewire\Pages\Admin\Taxonomy\SubjectGroups;
-use App\Livewire\Pages\Admin\Taxonomy\Subjects;
-use App\Livewire\Pages\Admin\Upgrade\Upgrade;
-use App\Livewire\Pages\Admin\Users\Users;
-use Illuminate\Support\Facades\Route;
+use App\Livewire\Pages\Admin\Packages\InstalledPackages;
+use App\Livewire\Pages\Admin\Payments\CommissionSettings;
+use App\Livewire\Pages\Admin\EmailTemplates\EmailTemplates;
+use Modules\Upcertify\Http\Controllers\CertificateController;
+use App\Livewire\Pages\Admin\ManageAdminUsers\ManageAdminUsers;
+use App\Livewire\Pages\Admin\IdentityVerification\IdentityVerification;
+use App\Livewire\Pages\Admin\NotificationTemplates\NotificationTemplates;
+use Modules\KuponDeal\Livewire\KuponList\KuponList;
 
 Route::middleware(['auth', 'verified', 'role:admin|sub_admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/insights', Insights::class)->name('insights')->middleware('permit-of:can-manage-insights');
@@ -44,6 +46,8 @@ Route::middleware(['auth', 'verified', 'role:admin|sub_admin'])->prefix('admin')
     });
     Route::get('commission-settings',   CommissionSettings::class)->name('commission-settings')->middleware('permit-of:can-manage-commission-settings');
     Route::get('payment-methods',       PaymentMethods::class)->name('payment-methods')->middleware('permit-of:can-manage-payment-methods');
+    Route::get('certificate-list',        [CertificateController::class, 'certificateList'])->name('certificate-list')->middleware('permit-of:can-manage-certificates');
+    Route::get('coupon-list', KuponList::class)->name('coupon-list');
     Route::get('withdraw-requests',     WithdrawRequest::class)->name('withdraw-requests')->middleware('permit-of:can-manage-withdraw-requests');
     Route::get('offline-payments',      \App\Livewire\Pages\Admin\OfflinePayments\OfflinePayments::class)->name('offline-payments')->middleware('permit-of:can-manage-payment-methods');
 

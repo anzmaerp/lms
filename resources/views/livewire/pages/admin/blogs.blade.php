@@ -10,6 +10,12 @@
                                 <div class="tb-actionselect">
                                     <a href="javascript:;" class="tb-btn btnred {{ $selectedBlogs ? '' : 'd-none' }}" @click="$wire.dispatch('showConfirm', { action : 'delete-blog' })">{{ __('general.delete_selected') }}</a>
                                 </div>
+                                <div class="tb-actionselect">
+                                    <a href="javascript:void(0)" wire:click="printUsersExcel"
+                                        class="d-flex align-items-center justify-content-center"
+                                        style="width: 40px; height: 40px; background:#1D6F42; color:#fff; border-radius:6px;">
+                                        <i class="fa fa-file-excel" style="font-size:18px;"></i>
+                                    </a>                                </div>
                                 <a href="{{route('admin.create-blog')}}" class="tb-btn tb-menubtn">
                                     {{ __('blogs.add_blog') }} <i class="icon-plus"></i>
                                 </a>

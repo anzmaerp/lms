@@ -103,5 +103,6 @@
 
             document.body.innerHTML = originalContents;
         }
+        alert(123);
     </script>
 @endpush

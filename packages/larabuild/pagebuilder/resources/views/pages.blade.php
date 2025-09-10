@@ -25,6 +25,13 @@
                             <fieldset>
                                 <div class="tb-themeform__wrap">
                                     <div class="form-group tb-actionselect">
+                                    <a href="javascript:void(0)" wire:click="printUsersExcel"
+                                        class="d-flex align-items-center justify-content-center"
+                                        style="width: 40px; height: 40px; background:#1D6F42; color:#fff; border-radius:6px;">
+                                        <i class="fa fa-file-excel" style="font-size:18px;"></i>
+                                    </a>
+                                    </div>
+                                    <div class="form-group tb-actionselect">
                                         <div class="lb-select">
                                             <select class="form-control" id="filter_sort">
                                                 <option value="asc">{{ __('pagebuilder::pagebuilder.asc') }}</option>
