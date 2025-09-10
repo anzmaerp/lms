@@ -3,19 +3,20 @@
 
 namespace Modules\Courses\Livewire\Pages\Tutor\CourseCreation\Components;
 
-use Modules\Courses\Http\Requests\CoursePromotionRequest;
+use Carbon\Carbon;
+use Livewire\Component;
+use Livewire\Attributes\On;
+use Illuminate\Validation\Rule;
+use Livewire\Attributes\Computed;
+use Illuminate\Support\Facades\DB;
 use Modules\Courses\Models\Course;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 use Modules\Courses\Services\CourseService;
 use Modules\KuponDeal\Requests\CouponRequest;
 use Modules\KuponDeal\Services\CouponService;
-use Carbon\Carbon;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
-use Livewire\Attributes\Computed;
-use Livewire\Attributes\On;
-use Livewire\Component;
+use Modules\Courses\Http\Requests\CoursePromotionRequest;
 
 class CoursePromotions extends Component
 {
@@ -64,20 +65,37 @@ class CoursePromotions extends Component
         $this->dispatch('loadPageJs');
     }
 
-    public function addCoupon()
-    {
-        $response = isDemoSite();
-        if( $response ){
-            $this->dispatch('showAlertMessage', type: 'error', title:  __('general.demosite_res_title') , message: __('general.demosite_res_txt'));
-            return;
-        }
+public function addCoupon()
+{
+    Log::info('addCoupon started', ['form' => $this->form]);
+
+    $response = isDemoSite();
+    if ($response) {
+        Log::warning('Demo site restriction triggered');
+        $this->dispatch('showAlertMessage', type: 'error', title: __('general.demosite_res_title'), message: __('general.demosite_res_txt'));
+        return;
+    }
+
+    try {
         $request = new CouponRequest();
         $this->form['couponable_id'] = $this->courseId;
         $this->form['couponable_type'] = Course::class;
         $this->form['user_id'] = Auth::id();
-        $this->form['expiry_date'] = !empty($this->form['expiry_date']) ? Carbon::parse($this->form['expiry_date'])->format('Y-m-d') : null;
+        $this->form['expiry_date'] = !empty($this->form['expiry_date'])
+            ? Carbon::parse($this->form['expiry_date'])->format('Y-m-d')
+            : null;
+
+        Log::info('Form after preprocessing', ['form' => $this->form]);
+
         $rules = $request->rules();
-        $rules['form.code'] = ['required', 'string', 'max:50', 'min:3', 'regex:/^\S*$/', Rule::unique('coupons', 'code')->ignore($this->form['id'] ?? null)];
+        $rules['form.code'] = [
+            'required',
+            'string',
+            'max:50',
+            'min:3',
+            'regex:/^\S*$/',
+            Rule::unique('coupons', 'code')->ignore($this->form['id'] ?? null),
+        ];
         $rules['form.discount_value'] = [
             'required',
             'numeric',
@@ -88,22 +106,37 @@ class CoursePromotions extends Component
                 }
             },
         ];
+
+        Log::info('Validation rules prepared', ['rules' => $rules]);
+
         $this->validate($rules, $request->messages());
 
+        Log::info('Validation passed');
+
         $isAdded = $this->couponService->updateOrCreateCoupon($this->form);
+
+        Log::info('Coupon service executed', ['isAdded' => $isAdded]);
+
         $this->resetForm();
-      
+
         if ($isAdded) {
-            $this->dispatch('showAlertMessage', 
-                type: 'success', 
-                title: $this->form['id'] ? __('kupondeal::kupondeal.coupon_updated') : __('kupondeal::kupondeal.coupon_added'), 
+            Log::info('Coupon created/updated successfully');
+            $this->dispatch(
+                'showAlertMessage',
+                type: 'success',
+                title: $this->form['id'] ? __('kupondeal::kupondeal.coupon_updated') : __('kupondeal::kupondeal.coupon_added'),
                 message: $this->form['id'] ? __('kupondeal::kupondeal.coupon_updated_success') : __('kupondeal::kupondeal.coupon_added_success')
             );
             $this->dispatch('toggleModel', id: 'cr-create-coupon', action: 'hide');
         } else {
+            Log::error('Coupon creation failed in couponService');
             $this->dispatch('showAlertMessage', type: 'error', title: __('courses::courses.error'), message: __('courses::courses.noticeboard_delete_failed'));
         }
+    } catch (\Throwable $e) {
+        Log::error('Error in addCoupon', ['error' => $e->getMessage(), 'trace' => $e->getTraceAsString()]);
+        $this->dispatch('showAlertMessage', type: 'error', title: __('courses::courses.error'), message: $e->getMessage());
     }
+}
 
     public function openModal()
     {
