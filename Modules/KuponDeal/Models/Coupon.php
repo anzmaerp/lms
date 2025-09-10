@@ -10,13 +10,13 @@ class Coupon extends Model
 {
     protected $guarded = [];
 
-    public $casts = [
-        'status'                => StatusCast::class,
-        'discount_type'         => DiscountTypeCast::class,
-        'auto_apply'            => 'boolean',
-        'conditions'            => 'array'
+protected $casts = [
+        'status' => StatusCast::class,
+        'discount_type' => DiscountTypeCast::class,
+        'auto_apply' => 'boolean',
+        'conditions' => 'array',
+        'couponable_id' => 'array',
     ];
-
     public const CONDITION_FIRST_ORDER = 'first_purchase';
     public const CONDITION_MINIMUM_ORDER = 'minimum_order';
 

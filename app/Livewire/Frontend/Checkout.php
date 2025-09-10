@@ -63,7 +63,6 @@ class Checkout extends Component
         $this->profileService = new ProfileService(Auth::user()?->id);
         $this->walletService = new WalletService();
         $this->billingService = new BillingService(Auth::user());
-
     }
 
     public function mount()
@@ -133,7 +132,6 @@ class Checkout extends Component
             $this->form->setInfo($billingData);
             $this->form->setUserAddress($address);
             $this->chosenSubscription = $this->orderDetail->subscription_id;
-
         } elseif (!empty($this->billingDetail) && !empty($this->address)) {
 
             $this->form->setInfo($this->billingDetail);
@@ -373,7 +371,6 @@ class Checkout extends Component
             DB::rollBack();
             throw $e;
         }
-
     }
 
     public function removeCart($id, $type)
@@ -395,20 +392,33 @@ class Checkout extends Component
 
     public function applyCoupon()
     {
+
         $this->validate([
             'coupon' => 'required|string|max:30',
         ]);
 
         if (!empty($this->chosenSubscription)) {
             $this->dispatch('showAlertMessage', type: 'error', message: __('subscriptions::subscription.cupon_not_applicable_with_subscription'));
+            $this->reset('coupon');
+            $this->prepareCartAmount();
+            return;
         }
 
         if (Module::has('kupondeal') && Module::isEnabled('kupondeal')) {
             $conditionCopoun = \Modules\KuponDeal\Facades\KuponDeal::getCouponConditions($this->coupon);
+
+
             $order = $this->orderService->getUserOrderDetail();
+
             $couponConditions = true;
-            if (!empty($conditionCopoun->conditions)) {
-                foreach ($conditionCopoun->conditions as $condition => $value) {
+
+            $conditions = is_string($conditionCopoun->conditions) ? json_decode($conditionCopoun->conditions, true) : $conditionCopoun->conditions;
+            if (!is_array($conditions) && !is_object($conditions)) {
+                $conditions = [];
+            }
+
+            if (!empty($conditions) && (is_array($conditions) || is_object($conditions))) {
+                foreach ($conditions as $condition => $value) {
                     if ($condition == \Modules\KuponDeal\Models\Coupon::CONDITION_FIRST_ORDER && !empty($order)) {
                         $couponConditions = false;
                         break;
@@ -417,10 +427,58 @@ class Checkout extends Component
                         break;
                     }
                 }
+            } elseif (empty($conditions)) {
+                $couponConditions = true;
+            } else {
+
+                $couponConditions = false;
+                $response = [
+                    'status' => 'error',
+                    'message' => __('kupondeal::kupondeal.invalid_coupon_conditions'),
+                ];
+                $this->dispatch('showAlertMessage', type: $response['status'], message: $response['message']);
+                $this->reset('coupon');
+                $this->prepareCartAmount();
+                return;
             }
 
             if ($couponConditions) {
-                $response = \Modules\KuponDeal\Facades\KuponDeal::applyCoupon($this->coupon);
+                try {
+                    $couponModel = \Modules\KuponDeal\Models\Coupon::where('code', $this->coupon)->first();
+                    if (!$couponModel) {
+                        $response = [
+                            'status' => 'error',
+                            'message' => __('kupondeal::kupondeal.invalid_coupon'),
+                        ];
+                        $this->dispatch('showAlertMessage', type: $response['status'], message: $response['message']);
+                        $this->reset('coupon');
+                        $this->prepareCartAmount();
+                        return;
+                    }
+                    $cartItems = Cart::content();
+                    $applicable = false;
+                    foreach ($cartItems as $item) {
+                        if (empty($couponModel->couponable_id) || in_array($item['cartable_id'], $couponModel->couponable_id)) {
+                            $applicable = true;
+                            break;
+                        }
+                    }
+                    if (!$applicable) {
+
+                        $response = [
+                            'status' => 'error',
+                            'message' => __('kupondeal::kupondeal.coupon_not_applicable'),
+                        ];
+                    } else {
+                        $response = \Modules\KuponDeal\Facades\KuponDeal::applyCoupon($this->coupon);
+                    }
+                } catch (\Exception $e) {
+
+                    $response = [
+                        'status' => 'error',
+                        'message' => __('kupondeal::kupondeal.coupon_apply_failed') . ' (' . $e->getMessage() . ')',
+                    ];
+                }
             } else {
                 $response = [
                     'status' => 'error',
@@ -432,6 +490,7 @@ class Checkout extends Component
         } else {
             $this->dispatch('showAlertMessage', type: 'error', message: __('kupondeal::kupondeal.kupondeal_not_active'));
         }
+
         $this->reset('coupon');
         $this->prepareCartAmount();
     }
@@ -442,5 +501,4 @@ class Checkout extends Component
             'payment_file_path' => $this->form->removePhoto()
         };
     }
-
 }
