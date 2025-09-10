@@ -74,16 +74,26 @@ if (!function_exists('getBrowser')) {
 if (!function_exists('getIpInfo')) {
     function getIpInfo($ip)
     {
-        $response   = file_get_contents("https://ipinfo.io/{$ip}/json?token=d316557cb3e17a");
-        $data       = json_decode($response, true);
-        $location   = explode(',', $data['loc'] ?? '0.0,0.0');
-        return [
-            'ip'        => $data['ip'] ?? '127.0.0.1',
-            'country'   => $data['country'] ?? 'Unknown',
-            'city'      => $data['city'] ?? 'Unknown',
-            'latitude'  => $location[0] ?? '0.0',
-            'longitude' => $location[1] ?? '0.0',
-        ];
+        try{            
+            $response   = file_get_contents("https://ipinfo.io/{$ip}/json?token=d316557cb3e17a");
+            $data       = json_decode($response, true);
+            $location   = explode(',', $data['loc'] ?? '0.0,0.0');
+            return [
+                'ip'        => $data['ip'] ?? '127.0.0.1',
+                'country'   => $data['country'] ?? 'Unknown',
+                'city'      => $data['city'] ?? 'Unknown',
+                'latitude'  => $location[0] ?? '0.0',
+                'longitude' => $location[1] ?? '0.0',
+            ];
+        }catch(\Exception $e){
+            return [
+                'ip'        => '127.0.0.1',
+                'country'   => 'Unknown',
+                'city'      => 'Unknown',
+                'latitude'  => '0.0',
+                'longitude' => '0.0',
+            ];
+        }
     }
 }
 
