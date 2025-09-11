@@ -47,7 +47,7 @@ class DefaultSettingSeeder extends Seeder
                     ],
                     'footer_variation_for_pages' => [
                         ['page_id' => 1,  'footer_variation'  => 'am-footer'],
-                        ['page_id' => 2,  'footer_variation'  => 'am-footer_two'],
+                        ['page_id' => 2,  'footer_variation'  => 'am-footer_two '],
                         ['page_id' => 3,  'footer_variation'  => 'am-footer_three'],
                         ['page_id' => 4,  'footer_variation'  => 'am-footer_three'],
                         ['page_id' => 5,  'footer_variation'  => 'am-footer_three'],

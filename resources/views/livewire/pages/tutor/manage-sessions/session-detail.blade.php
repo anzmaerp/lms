@@ -221,8 +221,8 @@
                                                                                                     $wire.dispatch('initSelect2', {target:'.am-select2'});
                                                                                                 })
                                                                                             ">
-                                                                                <i class="am-icon-pencil-02"></i>
-                                                                                {{ __('general.edit') }}
+                                                                                {{-- <i class="am-icon-pencil-02"></i>
+                                                                                {{ __('general.edit') }} --}}
                                                                             </a>
                                                                         </li>
                                                                         <li>
