@@ -1,5 +1,5 @@
 <?php
- 
+
 use Modules\MeetFusion\Facades\MeetFusion;
 use Amentotech\LaraGuppy\Services\MessagesService;
 use Amentotech\LaraGuppy\Services\ThreadsService;
@@ -390,42 +390,35 @@ if (!function_exists('getStorageDisk')) {
 }
 
 if (!function_exists('resizedImage')) {
-
     function resizedImage(string $image, int $width, int $height)
     {
         $disk = getStorageDisk();
 
-        // Check if the original image exists
         if (!Storage::disk($disk)->exists($image)) {
             return null;
         }
 
-        // Generate a unique name for the resized image
         $resizedImageName = uniqueImageName($image, $width . 'x' . $height);
 
-        // Create a hashed directory structure similar to Laravel cache
         $hash = md5($resizedImageName);
-        $directory = "thumbnails/" . substr($hash, 0, 2); // First 2 characters as subdirectory
-        $resizedImagePath = $directory . '/' . substr($hash, 2); // Remaining hash as filename
+        $directory = "thumbnails/" . substr($hash, 0, 2);
+        $resizedImagePath = $directory . '/' . substr($hash, 2);
 
-        // Check if the resized image already exists
         if (Storage::disk($disk)->exists($resizedImagePath)) {
             return Storage::disk($disk)->url($resizedImagePath);
         }
 
-        // Generate the resized image
-        $resizedImage = Image::read(Storage::disk($disk)->get($image))
-            ->cover($width, $height)
+        $originalContent = Storage::disk($disk)->get($image);
+
+        $resizedImage = Image::make($originalContent)
+            ->fit($width, $height)
             ->encode();
 
-        // Store the resized image in the hashed directory
         Storage::disk($disk)->put($resizedImagePath, $resizedImage);
 
-        // Return the public URL for the resized image
         return Storage::disk($disk)->url($resizedImagePath);
     }
 }
-
 /**
  *get user role
  *
