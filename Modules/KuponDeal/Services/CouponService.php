@@ -63,8 +63,8 @@ class CouponService
         }
 
         $query->with(['couponable', 'user.profile']);
-
-        return $query->orderByDesc('id')->paginate(setting('_general.per_page_opt') ?? 10);
+        $per_page = (int) setting('_general.per_page_opt') ?? 10;
+        return $query->orderByDesc('id')->paginate($per_page);
     }
 
 

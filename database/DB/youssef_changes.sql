@@ -7,7 +7,7 @@ ALTER TABLE coupons MODIFY couponable_id JSON NULL;
 
 ALTER TABLE courses_bundles 
 ADD created_by BIGINT UNSIGNED NULL;
-
+    
 ALTER TABLE courses_bundles 
 ADD CONSTRAINT courses_bundles_created_by_fk FOREIGN KEY (created_by) REFERENCES users(id);
 
