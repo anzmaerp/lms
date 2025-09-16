@@ -46,7 +46,7 @@ class SessionDetail extends Component
         if(Module::has('upcertify') && Module::isEnabled('upcertify')){
             // Module is loaded but we don't have direct access to the function
             // For now, templates will be empty until proper integration is done
-            $this->templates = [];
+            $this->templates = get_templates();
         }
     }
 

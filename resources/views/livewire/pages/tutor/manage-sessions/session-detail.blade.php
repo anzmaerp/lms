@@ -221,8 +221,8 @@
                                                                                                     $wire.dispatch('initSelect2', {target:'.am-select2'});
                                                                                                 })
                                                                                             ">
-                                                                                {{-- <i class="am-icon-pencil-02"></i>
-                                                                                {{ __('general.edit') }} --}}
+                                                                                <i class="am-icon-pencil-02"></i>
+                                                                                {{ __('general.edit') }}
                                                                             </a>
                                                                         </li>
                                                                         <li>
@@ -521,8 +521,22 @@
                                     <span x-text="sessionInfo && sessionInfo.date ? sessionInfo.date : ''"></span>
                                 </div>
                             </div>
-                            <form class="am-themeform am-session-form" wire:submit="setSession">
-                                <fieldset>
+<form class="am-themeform am-session-form" wire:submit="setSession" 
+      x-data="{
+          sessionData: {
+              action: 'edit',
+              start_time: '',
+              end_time: '',
+              session_fee: '',
+              spaces: 1,
+              description: '',
+              meeting_link: '',
+              template_id: null,
+              assign_quiz_certificate: null,
+              allowed_for_subscriptions: 0,
+          },
+          totalBooking: 0
+      }">                                <fieldset>
                                     <template x-if="sessionData.action == 'add'">
                                         <div @class(['form-group', 'form-group-half', 'am-invalid' => $errors->has('form.start_time') || $errors->has('form.end_time')])>
                                             <label class="am-label">{{ __('calendar.start_end_time') }}</label>
