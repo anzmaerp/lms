@@ -28,7 +28,7 @@
             $families = collect($fontSet)->map(function ($font) {
                 return "family=" . urlencode($font) . ":ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900";
             })->join('&');
-            $linkHref = "https://fonts.googleapis.com/css2?{$families}&display=swap";a
+            $linkHref = "https://fonts.googleapis.com/css2?{$families}&display=swap";
         @endphp
 
         <link id="uc-custom-fonts" type="text/css" rel="stylesheet" href="{{ $linkHref }}">
