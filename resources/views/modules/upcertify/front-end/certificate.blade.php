@@ -73,7 +73,7 @@
                 let qrWrapper = document.createElement("div");
                 qrWrapper.style.position = "absolute";
                 qrWrapper.style.top = "60px";
-                qrWrapper.style.left = "60px";
+                qrWrapper.style.left = "90px";
 
                 let img = document.createElement("img");
                 img.src = window.qrCodeBase64;
