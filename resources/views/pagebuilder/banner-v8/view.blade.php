@@ -10,11 +10,11 @@
                                     <img src="{{ Storage::url($option['bg_image_one'][0]['path'] ?? '') }}"
                                         alt="Banner slice first image" class="image slice slice1">
                                 @endif
-                                @if (!empty($option['bg_image_two']))
+                                @if (!empty($option['bg_image_two']) && !empty($option['bg_image_two'][0]['path'] ?? ''))
                                     <img src="{{ Storage::url($option['bg_image_two'][0]['path']) }}"
                                         alt="Banner slice second image" class="image slice slice2">
                                 @endif
-                                @if (!empty($option['bg_image_three']))
+                                @if (!empty($option['bg_image_three']) && !empty($option['bg_image_three'][0]['path'] ?? ''))
                                     <img src="{{ Storage::url($option['bg_image_three'][0]['path']) }}"
                                         alt="Banner slice third image" class="image slice slice3">
                                 @endif
