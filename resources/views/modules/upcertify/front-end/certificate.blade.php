@@ -28,7 +28,7 @@
             $families = collect($fontSet)->map(function ($font) {
                 return "family=" . urlencode($font) . ":ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900";
             })->join('&');
-            $linkHref = "https://fonts.googleapis.com/css2?{$families}&display=swap";
+            $linkHref = "https://fonts.googleapis.com/css2?{$families}&display=swap";a
         @endphp
 
         <link id="uc-custom-fonts" type="text/css" rel="stylesheet" href="{{ $linkHref }}">
@@ -72,8 +72,8 @@
             if (bodyContainer && window.qrCodeBase64) {
                 let qrWrapper = document.createElement("div");
                 qrWrapper.style.position = "absolute";
-                qrWrapper.style.bottom = "20px";
-                qrWrapper.style.left = "20px";
+                qrWrapper.style.top = "60px";
+                qrWrapper.style.left = "60px";
 
                 let img = document.createElement("img");
                 img.src = window.qrCodeBase64;

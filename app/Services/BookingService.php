@@ -41,18 +41,18 @@ class BookingService {
 
     public function getAvailableSlots($subjectGroupIds, $date) {
         $myData = array();
-    $slots = UserSubjectSlot::select('id','start_time','spaces','total_booked')
-    ->whereHas('subjectGroupSubjects', function($groupSubjects) use($subjectGroupIds) {
-        $groupSubjects->select('id','user_subject_group_id');
-        $groupSubjects->whereHas('userSubjectGroup', fn($query)=>$query->whereUserId($this->user->id));
-        if ($subjectGroupIds) {
-            $groupSubjects->whereIn('id', $subjectGroupIds);
-        }
-    })
-    ->whereDate('start_time', '>=', $date->copy()->firstOfMonth())
-    ->whereDate('end_time', '<=', $date->copy()->lastOfMonth())
-    ->orderBy('start_time')
-    ->get();
+        $slots = UserSubjectSlot::select('id','start_time','spaces','total_booked')
+        ->whereHas('subjectGroupSubjects', function($groupSubjects) use($subjectGroupIds) {
+            $groupSubjects->select('id','user_subject_group_id');
+            $groupSubjects->whereHas('userSubjectGroup', fn($query)=>$query->whereUserId($this->user->id));
+            if ($subjectGroupIds) {
+                $groupSubjects->whereIn('id', $subjectGroupIds);
+            }
+        })
+        ->whereDate('start_time', '>=', $date->copy()->firstOfMonth())
+        ->whereDate('end_time', '<=', $date->copy()->lastOfMonth())
+        ->orderBy('start_time')
+        ->get();
     
 
 
@@ -647,8 +647,7 @@ class BookingService {
         return false;
     }
 
-    public function reservedBookingSlot($slot, $user)
-    {
+    public function reservedBookingSlot($slot, $user){
         $this->updateBooking($slot, ['total_booked' => $slot->total_booked + 1]);
         $slotBooking = $slot->bookings()->create([
             'student_id'    => Auth::user()->id,
@@ -827,8 +826,6 @@ class BookingService {
         ->get();
         return $bookings;
     }
-
-
 
     public function createFreeBookingSlot($slot, $user)
     {
