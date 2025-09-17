@@ -276,7 +276,7 @@
                                                                 
                                                                 @if(!empty($slot->bookings))
                                                                     @foreach($slot->bookings as $booking)
-                                                                        @if($booking->status == 5) {{-- 5 = completed --}}
+                                                                        @if($booking->status == 5) 
                                                                             <a href="#" @click="
                                                                                 sessionData.youtube_url = @js($slot->meta_data['youtube_url'] ?? '');
                                                                                 sessionInfo = @js($sessionInfo);
