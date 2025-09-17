@@ -24,26 +24,27 @@ class SessionDetail extends Component
     public $templates = [];
     public SubjectSessionStoreForm $form;
     public ResheduleSessionForm $rescheduleForm;
-
     public $MAX_SESSION_CHAR = 500;
     public $isLoading = true;
     public $activeRoute;
-    
-    public function boot() {
+
+    public function boot()
+    {
         $this->bookingService = new BookingService(Auth::user());
     }
 
-    public function mount($date){
+    public function mount($date)
+    {
         if (!$this->isValidDate($date)) {
             return $this->redirect(route('tutor.bookings.manage-sessions'));
         }
         $this->activeRoute = Route::currentRouteName();
         $this->date = parseToUserTz($date);
-        $startDate = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $date." 00:00:00", getUserTimezone());
-        $endDate   = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $date." 23:59:59", getUserTimezone());
+        $startDate = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $date . " 00:00:00", getUserTimezone());
+        $endDate   = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $date . " 23:59:59", getUserTimezone());
         $this->dateRange['start_date']  = parseToUTC($startDate);
         $this->dateRange['end_date']    = parseToUTC($endDate);
-        if(Module::has('upcertify') && Module::isEnabled('upcertify')){
+        if (Module::has('upcertify') && Module::isEnabled('upcertify')) {
             // Module is loaded but we don't have direct access to the function
             // For now, templates will be empty until proper integration is done
             $this->templates = get_templates();
@@ -59,90 +60,95 @@ class SessionDetail extends Component
         return view('livewire.pages.tutor.manage-sessions.session-detail');
     }
 
-    public function loadData() {
+    public function loadData()
+    {
         $this->isLoading = true;
         $this->sessionDetail = $this->bookingService->getUserSubjectSlots($this->dateRange);
         $this->isLoading = false;
     }
 
-    public function setSession() {
+    public function setSession()
+    {
         $this->form->validateData();
         $response = isDemoSite();
-        if( $response ){
-            $this->dispatch('showAlertMessage', type: 'error', title:  __('general.demosite_res_title') , message: __('general.demosite_res_txt'));
-            $this->dispatch('toggleModel', id:'edit-session', action:'hide');
+        if ($response) {
+            $this->dispatch('showAlertMessage', type: 'error', title: __('general.demosite_res_title'), message: __('general.demosite_res_txt'));
+            $this->dispatch('toggleModel', id: 'edit-session', action: 'hide');
             return;
         }
         $validatedData = $this->form->all();
         $validatedData['subject_group_id'] = $this->userSubjectGroupId;
-        if(Module::has('upcertify') && Module::isEnabled('upcertify')){
+        if (Module::has('upcertify') && Module::isEnabled('upcertify')) {
             $validatedData['meta_data']['template_id'] = $this->form->template_id;
         }
 
-        if(isActiveModule('upcertify') && isActiveModule('quiz')){
+        if (isActiveModule('upcertify') && isActiveModule('quiz')) {
             $validatedData['meta_data'] =  array('assign_quiz_certificate' => $this->form->assign_quiz_certificate);
         }
 
-        if(Module::has('subscriptions') && Module::isEnabled('subscriptions') && setting('_lernen.subscription_sessions_allowed') == 'tutor'){
+        if (Module::has('subscriptions') && Module::isEnabled('subscriptions') && setting('_lernen.subscription_sessions_allowed') == 'tutor') {
             $validatedData['meta_data']['allowed_for_subscriptions'] = $this->form->allowed_for_subscriptions ? 1 : 0;
         }
         if ($this->form->action == 'edit') {
             $this->bookingService->updateSessionSlotById($this->editableSlotId, $validatedData);
-            $this->dispatch('showAlertMessage', type: 'success', title: __('general.success_title') , message: __('general.updated_msg'));
+            $this->dispatch('showAlertMessage', type: 'success', title: __('general.success_title'), message: __('general.updated_msg'));
         } else {
             $slotInfo = $this->bookingService->addSessionSlot($this->date, $validatedData);
             if ($slotInfo) {
-                $this->dispatch('showAlertMessage', type: 'success', title: __('general.success_title') , message: __('general.success_message'));
+                $this->dispatch('showAlertMessage', type: 'success', title: __('general.success_title'), message: __('general.success_message'));
             } else {
-                $this->dispatch('showAlertMessage', type: 'error', title: __('general.error_title') , message: __('calendar.new_session_error'));
+                $this->dispatch('showAlertMessage', type: 'error', title: __('general.error_title'), message: __('calendar.new_session_error'));
             }
         }
         $this->form->reset();
-        $this->dispatch('toggleModel', id:'edit-session', action:'hide');
+        $this->dispatch('toggleModel', id: 'edit-session', action: 'hide');
         $this->loadData();
     }
 
-    public function rescheduleSession() {
+    public function rescheduleSession()
+    {
         $this->rescheduleForm->validateData();
         $response = isDemoSite();
-        if( $response ){
-            $this->dispatch('showAlertMessage', type: 'error', title:  __('general.demosite_res_title') , message: __('general.demosite_res_txt'));
-            $this->dispatch('toggleModel', id:'reschedule-popup', action:'hide');
+        if ($response) {
+            $this->dispatch('showAlertMessage', type: 'error', title: __('general.demosite_res_title'), message: __('general.demosite_res_txt'));
+            $this->dispatch('toggleModel', id: 'reschedule-popup', action: 'hide');
             return;
         }
         $validatedData = $this->rescheduleForm->all();
         $validatedData['subject_group_id'] = $this->userSubjectGroupId;
         $slotInfo = $this->bookingService->rescheduleSession($this->editableSlotId, $validatedData);
         if ($slotInfo) {
-            $this->dispatch('showAlertMessage', type: 'success', title: __('general.success_title') , message: __('calendar.reschedule_success'));
+            $this->dispatch('showAlertMessage', type: 'success', title: __('general.success_title'), message: __('calendar.reschedule_success'));
         } else {
-            $this->dispatch('showAlertMessage', type: 'error', title: __('general.error_title') , message: __('calendar.reschedule_error'));
+            $this->dispatch('showAlertMessage', type: 'error', title: __('general.error_title'), message: __('calendar.reschedule_error'));
         }
         $this->rescheduleForm->reset();
-        $this->dispatch('toggleModel', id:'reschedule-popup', action:'hide');
+        $this->dispatch('toggleModel', id: 'reschedule-popup', action: 'hide');
         $this->loadData();
     }
 
     #[On('delete-slot')]
-    public function deleteSlot($params){
+    public function deleteSlot($params)
+    {
         $response = isDemoSite();
-        if( $response ){
-            $this->dispatch('showAlertMessage', type: 'error', title:  __('general.demosite_res_title') , message: __('general.demosite_res_txt'));
+        if ($response) {
+            $this->dispatch('showAlertMessage', type: 'error', title: __('general.demosite_res_title'), message: __('general.demosite_res_txt'));
             return;
         }
         if ($this->bookingService->deleteSlotsMeta($params['id'])) {
-            $this->dispatch('showAlertMessage', type: 'success', title: __('general.success_title') , message: __('general.delete_record'));
+            $this->dispatch('showAlertMessage', type: 'success', title: __('general.success_title'), message: __('general.delete_record'));
         } else {
-            $this->dispatch('showAlertMessage', type: 'error', title: __('general.error_title') , message: __('general.error_msg'));
+            $this->dispatch('showAlertMessage', type: 'error', title: __('general.error_title'), message: __('general.error_msg'));
         }
         $this->loadData();
     }
 
-    protected function isValidDate($date){
+    protected function isValidDate($date)
+    {
         return preg_match('/^\d{4}-\d{2}-\d{2}$/', $date);
     }
-    
-    public function updateYoutubeUrl() 
+
+    public function updateYoutubeUrl()
     {
         $response = isDemoSite();
         if ($response) {
@@ -160,7 +166,7 @@ class SessionDetail extends Component
         } else {
             $this->dispatch('showAlertMessage', type: 'error', title: __('general.error_title'), message: __('Failed to update YouTube URL'));
         }
-        
+
         $this->dispatch('toggleModel', id: 'youtube-url-modal', action: 'hide');
         $this->loadData();
     }
