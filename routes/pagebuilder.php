@@ -2,9 +2,7 @@
 
 use Illuminate\Http\Request;
 use Larabuild\Pagebuilder\Http\Controllers\PageBuilderController;
-
 use Larabuild\Pagebuilder\Http\Controllers\PageController;
-
 use Illuminate\Support\Facades\Route;
 
 /*
