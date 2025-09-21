@@ -50,15 +50,12 @@ Route::get('/clear', function () {
 
 Route::get('/rebuild-storage-link', function () {
     $link = public_path('storage');
-
     // Delete the existing symlink if it exists
     if (File::exists($link)) {
         File::delete($link);
     }
-
     // Create the new symlink
     Artisan::call('storage:link');
-
     return 'Storage link rebuilt successfully.';
 });
 
