@@ -166,7 +166,5 @@ Route::middleware(['locale', 'maintenance'])->group(function () {
     if (!request()->is('api/*')) {
         require __DIR__ . '/pagebuilder.php';
     }
-
     // route::get('home-four',[HomefourController::class,'index','index'])->name('home4');
-
 });
