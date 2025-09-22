@@ -571,6 +571,9 @@ class BookingService {
         $slot = $this->getUserSessionSlot($slotId);
         if ($slot) {
             $updatedArray = Arr::only($updatedData, ['session_fee','spaces','description']);
+            if (isset($updatedData['meta_data']) && is_array($updatedData['meta_data'])) {
+                $updatedData = $updatedData['meta_data'];
+            }
             $updatedArray['meta_data'] = $slot->meta_data;
             $updatedArray['meta_data']['meeting_link'] = $updatedData['meeting_link']??'';
             if(Module::has('subscriptions') && Module::isEnabled('subscriptions') && setting('_lernen.subscription_sessions_allowed') == 'tutor'){
