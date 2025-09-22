@@ -102,7 +102,7 @@ class OrderForm extends Form
             'city' => $this->city,
             'postal_code' => $this->zipcode,
             'payment_method' => $paymentMethodName,
-            'payment_type_m' => $type,
+            'payment_type_m' => empty($type) ? 'online' : $type,
             'description' => $this->dec,
         ];
         $this->validate($this->rules(), $this->messages());

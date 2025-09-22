@@ -412,7 +412,10 @@ class Checkout extends Component
 
             $couponConditions = true;
 
-            $conditions = is_string($conditionCopoun->conditions) ? json_decode($conditionCopoun->conditions, true) : $conditionCopoun->conditions;
+            $conditionsRaw = $conditionCopoun?->conditions ?? '';
+            $conditions = is_string($conditionsRaw)
+                ? json_decode($conditionsRaw, true)
+                : $conditionsRaw;
             if (!is_array($conditions) && !is_object($conditions)) {
                 $conditions = [];
             }
@@ -458,7 +461,7 @@ class Checkout extends Component
                     $cartItems = Cart::content();
                     $applicable = false;
                     foreach ($cartItems as $item) {
-                        if (empty($couponModel->couponable_id) || in_array($item['cartable_id'], $couponModel->couponable_id)) {
+                        if (empty($couponModel->couponable_id) || $item['cartable_id'] == $couponModel->couponable_id) {
                             $applicable = true;
                             break;
                         }

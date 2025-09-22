@@ -572,12 +572,12 @@ class BookingService {
         if ($slot) {
             $updatedArray = Arr::only($updatedData, ['session_fee','spaces','description']);
             $updatedArray['meta_data'] = $slot->meta_data;
-            $updatedArray['meta_data']['meeting_link'] = $updatedData['meeting_link'];
+            $updatedArray['meta_data']['meeting_link'] = $updatedData['meeting_link']??'';
             if(Module::has('subscriptions') && Module::isEnabled('subscriptions') && setting('_lernen.subscription_sessions_allowed') == 'tutor'){
                 $updatedArray['meta_data']['allowed_for_subscriptions'] = $updatedData['allowed_for_subscriptions'] ? 1 : 0;
             }
             if(isActiveModule('upcertify') && isActiveModule('quiz')){
-                $updatedArray['meta_data']['assign_quiz_certificate'] = $updatedData['assign_quiz_certificate'];
+                $updatedArray['meta_data']['assign_quiz_certificate'] = $updatedData['assign_quiz_certificate'] ?? '';
             }
             $existingLink = $slot->meta_data['meeting_link'] ?? '';
             $slotUpdated = $slot->update($updatedArray);

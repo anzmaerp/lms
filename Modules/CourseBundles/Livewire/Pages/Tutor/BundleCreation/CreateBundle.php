@@ -674,13 +674,13 @@ class CreateBundle extends Component
                 }
             } else {
                 // Tutor scenario or admin without select all
-                $hasCourses = false;
+                //$hasCourses = false;
                 foreach ($this->lines as $line) {
                     $instructorId = $line['instructorId'] ?? auth()->id();
                     $courses = $line['selected_courses'] ?? $this->selected_courses ?? [];
 
                     if (!empty($courses)) {
-                        $hasCourses = true;
+                        //$hasCourses = true;
 
                         $bundleData = array_merge($data, ['instructor_id' => $instructorId]);
                         $bundleService->updateCourseBundle($bundle, $bundleData);
@@ -701,7 +701,7 @@ class CreateBundle extends Component
                     }
                 }
 
-                if (!$hasCourses) {
+                /*if (!$hasCourses) {
                     DB::rollBack();
                     $this->dispatch('showAlertMessage', 
                         type: 'error',
@@ -709,7 +709,7 @@ class CreateBundle extends Component
                         message: __('coursebundles::bundles.courses_required')
                     );
                     return;
-                }
+                }*/
             }
 
             DB::commit();

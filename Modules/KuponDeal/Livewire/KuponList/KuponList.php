@@ -332,7 +332,8 @@ class KuponList extends Component
             $this->use_conditions = true;
         }
         $this->form['expiry_date'] = !empty($this->form['expiry_date']) ? Carbon::parse($this->form['expiry_date'])->format('Y-m-d') : null;
-        $this->selectAllCouponableIds = count($this->form['couponable_id']) === count($this->initOptions($coupon->couponable_type)); // Set "Select All" state for tutors
+        // Set "Select All" state for tutors
+        $this->selectAllCouponableIds = count(is_countable($this->form['couponable_id']) ? $this->form['couponable_id'] : []) === count(is_countable($this->initOptions($coupon->couponable_type)) ? $this->initOptions($coupon->couponable_type) : []);
 
         $this->dispatch(
             'onEditCoupon',

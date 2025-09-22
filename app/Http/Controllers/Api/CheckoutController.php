@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\SlotBooking;
+use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Response;
 use App\Jobs\CompletePurchaseJob;
 use Illuminate\Http\Request;
@@ -44,6 +45,13 @@ class CheckoutController extends Controller
 
         $uniquePaymentId = Str::uuid();
 
+        $paymentMethodName = $request?->paymentMethod;
+        $type = '';
+        if (!empty($paymentMethodName)) {
+            $isOfflinePayment = DB::table('offline_payments as op')->where('id', str_replace(['offline-', 'online-'], '', $paymentMethodName))->exists();
+            $type = $isOfflinePayment ? 'offline' : 'online';
+        }
+
         $billingDetail = [
             'user_id' => Auth::user()->id,
             'first_name' => $request?->firstName,
@@ -60,6 +68,7 @@ class CheckoutController extends Controller
             'city' => $request?->city,
             'postal_code' => $request?->zipcode,
             'payment_method' => $request?->paymentMethod,
+            'payment_type_m' => empty($type) ? 'online' : $type,
             'description' => $request?->description,
         ];
 

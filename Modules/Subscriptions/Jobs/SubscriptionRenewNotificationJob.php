@@ -11,6 +11,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Support\Facades\DB;
 use Modules\Subscriptions\Models\UserSubscription;
 use Illuminate\Support\Str;
 use Modules\Subscriptions\Models\Subscription;
@@ -37,6 +38,13 @@ class SubscriptionRenewNotificationJob implements ShouldQueue
         $existingOrderItem = $this->userSubscription->orderItem;
         $existingOrder     = $this->userSubscription->order;
 
+        $paymentMethodName = $existingOrder?->payment_method;
+        $type = '';
+        if (!empty($paymentMethodName)) {
+            $isOfflinePayment = DB::table('offline_payments as op')->where('id', str_replace(['offline-', 'online-'], '', $paymentMethodName))->exists();
+            $type = $isOfflinePayment ? 'offline' : 'online';
+        }
+
         $newOrder = $orderService->createOrder([
             'user_id'                   => $this->userSubscription?->user_id,
             'first_name'                => $existingOrder?->first_name,
@@ -53,6 +61,7 @@ class SubscriptionRenewNotificationJob implements ShouldQueue
             'city'                      => $existingOrder?->city,
             'postal_code'               => $existingOrder?->postal_code,
             'payment_method'            => $existingOrder?->payment_method,
+            'payment_type_m' => empty($type) ? 'online' : $type,
             'description'               => $existingOrder?->description,
             'status'                    => 'pending',
         ]);
