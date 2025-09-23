@@ -9,7 +9,7 @@
                 </span>
             </div>
             <div class="am-modal-body">
-                <form class="am-themeform">
+                <form class="am-themeform" autocomplete="off">
                     <fieldset>
                         <div class="am-themeform__wrap">
                             <div class="form-group @error('form.code') am-invalid @enderror">
