@@ -131,7 +131,7 @@
                             <div class="form-group @error('form.expiry_date') am-invalid @enderror">
                                 <label for="expiry_date">{{ __('kupondeal::kupondeal.expiry_date') }}</label>
                                 <div class="am-booking-calander-date flatpicker">
-                                    <x-text-input class="flat-date" wire:model="form.expiry_date" id="expiry_date" data-min-date="today" data-format="Y-m-d" placeholder="{{ __('kupondeal::kupondeal.expiry_date') }}" type="text" id="datepicker" autofocus autocomplete="name" />
+                                    <x-text-input class="flat-date" wire:model="form.expiry_date" id="expiry_date" data-min-date="today" data-format="Y-m-d" placeholder="{{ __('kupondeal::kupondeal.expiry_date') }}" type="text" id="datepicker" />
                                 </div>
                                 <x-input-error field_name='form.expiry_date' />
                             </div>
