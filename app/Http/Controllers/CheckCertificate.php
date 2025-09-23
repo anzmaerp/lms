@@ -8,7 +8,7 @@ use Modules\Upcertify\Models\Certificate;
 
 class CheckCertificate extends Controller
 {
- public function index(Request $request)
+    public function index(Request $request)
     {
         $certificate = null;
 
@@ -22,7 +22,7 @@ class CheckCertificate extends Controller
 
         return view('check_certificate', compact('certificate'));
     }
- public function check(Request $request)
+    public function check(Request $request)
     {
         $certificate = null;
 
