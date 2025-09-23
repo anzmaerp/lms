@@ -278,8 +278,6 @@ class KuponList extends Component
 
     public function initOptions($type, $userId = null)
     {
-
-
         $userId = $userId ?: ($this->isAdmin ? $this->instructorId : Auth::id());
         if (!$userId) {
             return [];
@@ -288,8 +286,6 @@ class KuponList extends Component
         if ($type == \Modules\Courses\Models\Course::class) {
             $courses = (new \Modules\Courses\Services\CourseService())
                 ->getInstructorCourses($userId, [], ['title', 'id']);
-
-
             return $courses->map(fn($course) => [
                 'title' => $course->title,
                 'id' => $course->id
@@ -299,12 +295,9 @@ class KuponList extends Component
         if ($type == UserSubjectGroupSubject::class) {
             $this->subjectService = new SubjectService(User::find($userId));
             $subjectGroups = $this->subjectService->getUserSubjectGroups(['subjects:,name']);
-
-
             $formattedData = [];
             foreach ($subjectGroups as $sbjGroup) {
                 if ($sbjGroup->subjects->isEmpty()) continue;
-
                 foreach ($sbjGroup->subjects as $sbj) {
                     $formattedData[] = [
                         'id' => $sbj->pivot->id,
@@ -312,8 +305,6 @@ class KuponList extends Component
                     ];
                 }
             }
-
-
             return $formattedData;
         }
 
@@ -332,8 +323,28 @@ class KuponList extends Component
             $this->use_conditions = true;
         }
         $this->form['expiry_date'] = !empty($this->form['expiry_date']) ? Carbon::parse($this->form['expiry_date'])->format('Y-m-d') : null;
-        // Set "Select All" state for tutors
-        $this->selectAllCouponableIds = count(is_countable($this->form['couponable_id']) ? $this->form['couponable_id'] : []) === count(is_countable($this->initOptions($coupon->couponable_type)) ? $this->initOptions($coupon->couponable_type) : []);
+
+        // Handle admin-specific lines for instructors and couponable types
+        if ($this->isAdmin) {
+            $this->lines = [];
+            $instructorId = $coupon->instructor_id;
+            $couponableType = $coupon->couponable_type;
+            $couponableIds = is_array($coupon->couponable_id) ? $coupon->couponable_id : json_decode($coupon->couponable_id, true) ?? [];
+
+            // Initialize options for the couponable type
+            $options = $this->initOptions($couponableType, $instructorId);
+            $this->lines[] = [
+                'instructorId' => $instructorId,
+                'couponable_type' => $couponableType,
+                'couponable_ids' => $options,
+                'couponable_id' => $couponableIds,
+            ];
+            $this->selectAllInstructors = false;
+            $this->isLocked = false;
+        } else {
+            $this->couponable_ids = $this->initOptions($coupon->couponable_type, Auth::id());
+            $this->selectAllCouponableIds = count($this->form['couponable_id']) === count($this->couponable_ids);
+        }
 
         $this->dispatch(
             'onEditCoupon',
@@ -344,7 +355,7 @@ class KuponList extends Component
             couponable_type: $coupon->couponable_type,
             conditions: $coupon->conditions,
             color: $coupon->color,
-            optionList: $this->initOptions($coupon->couponable_type)
+            optionList: $this->isAdmin ? $this->lines[0]['couponable_ids'] : $this->couponable_ids
         );
     }
 
@@ -496,6 +507,15 @@ class KuponList extends Component
         $this->resetForm();
         $this->use_conditions = false;
         $this->selectAllCouponableIds = false; 
+        $this->lines = [
+            [
+                'instructorId' => null,
+                'couponable_type' => '',
+                'couponable_ids' => [],
+                'couponable_id' => [],
+            ]
+        ];
+        $this->isLocked = false;
         $this->dispatch('createCoupon', color: '#000000');
         if (!(\Nwidart\Modules\Facades\Module::has('courses') && \Nwidart\Modules\Facades\Module::isEnabled('courses'))) {
             $data = $this->initOptions(UserSubjectGroupSubject::class);
@@ -522,7 +542,16 @@ class KuponList extends Component
             'description' => '',
             'instructor_id' => '',
         ];
+        $this->lines = [
+            [
+                'instructorId' => null,
+                'couponable_type' => '',
+                'couponable_ids' => [],
+                'couponable_id' => [],
+            ]
+        ];
         $this->selectAllCouponableIds = false; 
+        $this->isLocked = false;
         $this->resetErrorBag();
     }
 
@@ -539,11 +568,8 @@ class KuponList extends Component
 
     public function updatedLines($value, $key)
     {
-
-
         [$index, $field] = explode('.', $key);
         $line = $this->lines[$index];
-
 
         if ($field === 'instructorId') {
             $instructorId = $line['instructorId'];
@@ -566,9 +592,9 @@ class KuponList extends Component
                     }
                 }
 
-                $this->lines[$index]['couponable_type'] = '';
-                $this->lines[$index]['couponable_ids'] = [];
-                $this->lines[$index]['couponable_id'] = [];
+                $this->lines[$index]['couponable_type'] = '__ALL__';
+                $this->lines[$index]['couponable_ids'] = $allItems;
+                $this->lines[$index]['couponable_id'] = collect($allItems)->pluck('id')->toArray();
             } else {
                 $this->lines[$index]['couponable_type'] = '';
                 $this->lines[$index]['couponable_ids'] = [];
@@ -616,10 +642,11 @@ class KuponList extends Component
                 if (!$instructorId) return;
 
                 $items = $this->initOptions($type, $instructorId);
-
                 $this->lines[$index]['couponable_ids'] = $items;
                 $this->lines[$index]['couponable_id'] = collect($items)->pluck('id')->toArray();
             }
+
+            $this->dispatch('couponableValuesUpdated', options: $this->lines[$index]['couponable_ids'], reset: true, index: $index);
         }
     }
 

@@ -51,14 +51,14 @@ class KuponDeal
                 ];
             }
 
-            foreach($cartItems as $cartItem){
-                if(!empty($cartItem->options['discount_code']) && $cartItem->options['discount_code'] == $coupon->code){
+            foreach ($cartItems as $cartItem) {
+                if (!empty($cartItem->options['discount_code']) && $cartItem->options['discount_code'] == $coupon->code) {
                     continue;
                 }
 
                 $discountAmount = getDiscountedAmount($cartItem->price, $coupon->discount_type, $coupon->discount_value);
-                
-                if($discountAmount > $cartItem->price){
+
+                if ($discountAmount > $cartItem->price) {
                     $discountAmount = $cartItem->price;
                 }
 
@@ -115,8 +115,8 @@ class KuponDeal
                     'message' => __('kupondeal::kupondeal.the_selected_item_is_not_in_the_cart'),
                 ];
             }
-            
-            foreach($cartItems as $cartItem) {
+
+            foreach ($cartItems as $cartItem) {
                 $options = $cartItem->options;
                 unset($options['discount_code']);
                 unset($options['discount_type']);
@@ -129,7 +129,6 @@ class KuponDeal
                 'status' => 'success',
                 'message' => __('kupondeal::kupondeal.coupon_removed_successfully'),
             ];
-
         } catch (Exception $e) {
             return [
                 'status' => 'error',
@@ -146,22 +145,48 @@ class KuponDeal
     public function getCouponBasedCartItems(Coupon $coupon, $appliedDiscount = false)
     {
         $cartItems = collect();
+
+        // Normalize couponable_id
+        $couponIds = [];
+        $raw = $coupon->couponable_id;
+
+        if (!empty($raw)) {
+            if (is_string($raw)) {
+                $decoded = json_decode($raw, true);
+                if (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
+                    $couponIds = array_map('intval', $decoded);
+                } elseif (is_numeric($raw)) {
+                    $couponIds = [(int)$raw];
+                }
+            } elseif (is_numeric($raw)) {
+                $couponIds = [(int)$raw];
+            } elseif (is_array($raw)) {
+                $couponIds = $raw;
+            }
+        }
+
         if ($coupon->couponable_type == UserSubjectGroupSubject::class) {
-            $cartItems = CartItem::whereHasMorph('cartable', SlotBooking::class, function($query) use ($coupon){
-                $query->whereHas('slot.subjectGroupSubjects', function($query) use ($coupon){
-                    $query->whereIn('id', $coupon->couponable_id);
+            $cartItems = CartItem::whereHasMorph('cartable', SlotBooking::class, function ($query) use ($couponIds) {
+                $query->whereHas('slot.subjectGroupSubjects', function ($query) use ($couponIds) {
+                    if (!empty($couponIds)) {
+                        $query->whereIn('id', $couponIds);
+                    }
                 });
-            })->when($appliedDiscount, function($query){
+            })->when($appliedDiscount, function ($query) {
                 $query->where('discount_amount', '>', 0);
             })->get();
         } else {
             $cartItems = CartItem::where('user_id', auth()->id())
                 ->where('cartable_type', $coupon->couponable_type)
-                ->whereIn('cartable_id', $coupon->couponable_id)
-                ->when($appliedDiscount, function($query){
+                ->when(!empty($couponIds), function ($query) use ($couponIds) {
+                    $query->whereIn('cartable_id', $couponIds);
+                })
+                ->when($appliedDiscount, function ($query) {
                     $query->where('discount_amount', '>', 0);
-                })->get();
+                })
+                ->get();
         }
+
         return $cartItems;
     }
 
@@ -196,11 +221,11 @@ class KuponDeal
     public function applyCouponIfAvailable($couponableId, $couponableType)
     {
         $coupon = $this->getCouponByCouponable($couponableType, $couponableId);
-        if(!empty($coupon)){
+        if (!empty($coupon)) {
             if ($this->cartHasCoupon($coupon)) {
                 return $this->applyCoupon($coupon->code);
             }
-    
+
             if ($coupon->auto_apply && Carbon::parse($coupon->expiry_date)->isFuture()) {
                 return $this->applyCoupon($coupon->code);
             }
@@ -214,9 +239,8 @@ class KuponDeal
 
     public function getCouponConditions($couponCode)
     {
-        return Coupon::select('id','conditions')->where('code', $couponCode)
+        return Coupon::select('id', 'conditions')->where('code', $couponCode)
             ->where('status', StatusCast::$statuses['active'])
             ->first();
     }
-   
 }

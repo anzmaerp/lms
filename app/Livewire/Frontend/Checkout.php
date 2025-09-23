@@ -392,7 +392,6 @@ class Checkout extends Component
 
     public function applyCoupon()
     {
-
         $this->validate([
             'coupon' => 'required|string|max:30',
         ]);
@@ -405,8 +404,8 @@ class Checkout extends Component
         }
 
         if (Module::has('kupondeal') && Module::isEnabled('kupondeal')) {
-            $conditionCopoun = \Modules\KuponDeal\Facades\KuponDeal::getCouponConditions($this->coupon);
 
+            $conditionCopoun = \Modules\KuponDeal\Facades\KuponDeal::getCouponConditions($this->coupon);
 
             $order = $this->orderService->getUserOrderDetail();
 
@@ -433,7 +432,6 @@ class Checkout extends Component
             } elseif (empty($conditions)) {
                 $couponConditions = true;
             } else {
-
                 $couponConditions = false;
                 $response = [
                     'status' => 'error',
@@ -448,6 +446,7 @@ class Checkout extends Component
             if ($couponConditions) {
                 try {
                     $couponModel = \Modules\KuponDeal\Models\Coupon::where('code', $this->coupon)->first();
+
                     if (!$couponModel) {
                         $response = [
                             'status' => 'error',
@@ -458,25 +457,44 @@ class Checkout extends Component
                         $this->prepareCartAmount();
                         return;
                     }
+
                     $cartItems = Cart::content();
+
+                    $couponableRaw = $couponModel->couponable_id;
+
+                    $couponIds = [];
+                    if (!empty($couponableRaw)) {
+                        if (is_string($couponableRaw)) {
+                            $decoded = json_decode($couponableRaw, true);
+                            if (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
+                                $couponIds = array_map('intval', $decoded); 
+                            } elseif (is_numeric($couponableRaw)) {
+                                $couponIds = [(int)$couponableRaw];
+                            }
+                        } elseif (is_numeric($couponableRaw)) {
+                            $couponIds = [(int)$couponableRaw];
+                        }
+                    }
+
                     $applicable = false;
                     foreach ($cartItems as $item) {
-                        if (empty($couponModel->couponable_id) || $item['cartable_id'] == $couponModel->couponable_id) {
+                        $cartableId = (int)($item['cartable_id'] ?? 0);
+                        if (empty($couponIds) || in_array($cartableId, $couponIds)) {
                             $applicable = true;
                             break;
                         }
                     }
-                    if (!$applicable) {
 
+                    if (!$applicable) {
                         $response = [
                             'status' => 'error',
                             'message' => __('kupondeal::kupondeal.coupon_not_applicable'),
                         ];
+
                     } else {
-                        $response = \Modules\KuponDeal\Facades\KuponDeal::applyCoupon($this->coupon);
+                        $response = \Modules\KuponDeal\Facades\KuponDeal::applyCoupon($this->coupon, $couponIds);
                     }
                 } catch (\Exception $e) {
-
                     $response = [
                         'status' => 'error',
                         'message' => __('kupondeal::kupondeal.coupon_apply_failed') . ' (' . $e->getMessage() . ')',
