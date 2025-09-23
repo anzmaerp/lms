@@ -60,7 +60,7 @@ Route::get('/rebuild-storage-link', function () {
 });
 
 Route::get('check-certificate', [CheckCertificate::class, 'index'])->name('check-certificate');
-Route::get('checkCertificate', [CheckCertificate::class, 'check'])->name('check-certificate');
+Route::get('checkCertificate', [CheckCertificate::class, 'check'])->name('checkCertificate');
 
 Route::get('auth/{provider}', [SocialController::class, 'redirect'])->name('social.redirect');
 Route::get('auth/{provider}/callback', [SocialController::class, 'callback'])->name('social.callback');
