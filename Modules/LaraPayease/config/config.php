@@ -3,12 +3,12 @@
 return [
     'name' => 'LaraPayease',
 
-    'paymob' => [
-        'api_key' => env('PAYMOB_API_KEY', ''),
-        'hmac_secret' => env('PAYMOB_HMAC_SECRET', ''),
-        'integration_id' => env('PAYMOB_INTEGRATION_ID', ''),
-        'mode' => env('PAYMOB_MODE', 'test'),
-    ],
+    // 'paymob' => [
+    //     'api_key' => env('PAYMOB_API_KEY', ''),
+    //     'hmac_secret' => env('PAYMOB_HMAC_SECRET', ''),
+    //     'integration_id' => env('PAYMOB_INTEGRATION_ID', ''),
+    //     'mode' => env('PAYMOB_MODE', 'test'),
+    // ],
 
     'hesabe' => [
         'merchant_id' => env('HESABE_MERCHANT_ID', ''),
