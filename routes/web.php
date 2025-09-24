@@ -39,7 +39,6 @@ Route::get('/dbNew', function () {
     return 'No thing to do!';
 });
 
-// // Clear Cache For Application
 Route::get('/clear', function () {
     Artisan::call('optimize:clear');
     return response()->json([
@@ -50,17 +49,16 @@ Route::get('/clear', function () {
 
 Route::get('/rebuild-storage-link', function () {
     $link = public_path('storage');
-    // Delete the existing symlink if it exists
     if (File::exists($link)) {
         File::delete($link);
     }
-    // Create the new symlink
     Artisan::call('storage:link');
     return 'Storage link rebuilt successfully.';
 });
 
 Route::get('check-certificate', [CheckCertificate::class, 'index'])->name('check-certificate');
-Route::get('checkCertificate', [CheckCertificate::class, 'check'])->name('checkCertificate');
+Route::get('checkCertificateAr', [CheckCertificate::class, 'checkAr'])->name('checkCertificateAr');
+Route::get('checkCertificate', [CheckCertificate::class, 'checkEn'])->name('checkCertificate');
 
 Route::get('auth/{provider}', [SocialController::class, 'redirect'])->name('social.redirect');
 Route::get('auth/{provider}/callback', [SocialController::class, 'callback'])->name('social.callback');

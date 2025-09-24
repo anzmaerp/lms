@@ -22,7 +22,7 @@ class CheckCertificate extends Controller
 
         return view('check_certificate', compact('certificate'));
     }
-    public function check(Request $request)
+    public function checkAr(Request $request)
     {
         $certificate = null;
 
@@ -34,6 +34,20 @@ class CheckCertificate extends Controller
             $certificate = Certificate::where('hash_id', $data['certificate_number'])->first();
         }
 
-        return view('checkCertificate', compact('certificate'));
+        return view('checkCertificate-ar', compact('certificate'));
+    }
+    public function checkEn(Request $request)
+    {
+        $certificate = null;
+
+        if ($request->filled('certificate_number')) {
+            $data = $request->validate([
+                'certificate_number' => ['required', 'string', 'max:255'],
+            ]);
+
+            $certificate = Certificate::where('hash_id', $data['certificate_number'])->first();
+        }
+
+        return view('checkCertificate-en', compact('certificate'));
     }
 }
