@@ -324,3 +324,7 @@ select::placeholder {
   flex-direction: row;
   justify-content: space-between;
 }
+
+.am-mainwrap{
+  margin-right:40px;
+}
