@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ar" dir="rtl">
+<html lang="en" dir="ltr">
 
 <head>
     <meta charset="utf-8" />
@@ -13,8 +13,8 @@
             background: #f8fafc;
             color: #1f2937;
             padding: 30px;
-            direction: rtl;
-            text-align: right;
+            direction: ltr;
+            text-align: left;
         }
 
         h1 {
@@ -41,7 +41,7 @@
             width: 97%;
             font-size: 14px;
             margin-bottom: 10px;
-            text-align: right;
+            text-align: left;
         }
 
         button {
@@ -77,7 +77,7 @@
         td {
             padding: 12px 14px;
             font-size: 14px;
-            text-align: right;
+            text-align: left;
             border-bottom: 1px solid #e5e7eb;
         }
 
@@ -91,7 +91,7 @@
         }
 
         .actions a {
-            margin-left: 10px;
+            margin-right: 10px;
             color: #4f46e5;
             text-decoration: none;
             font-weight: 500;
@@ -110,8 +110,6 @@
             margin-top: 20px;
         }
     </style>
-
-
 </head>
 
 <body>
@@ -121,7 +119,7 @@
     <form method="GET" action="">
         <label for="certificate_number">Certificate Number</label>
         <input type="text" id="certificate_number" name="certificate_number"
-            value="{{ old('certificate_number', request('certificate_number')) }}" placeholder="مثال: ABC-2025-000123"
+            value="{{ old('certificate_number', request('certificate_number')) }}" placeholder="e.g. ABC-2025-000123"
             required>
         <button type="submit">Search</button>
     </form>
@@ -164,5 +162,4 @@
     @endif
 
 </body>
-
 </html>
