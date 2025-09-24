@@ -40,7 +40,7 @@
             padding: 10px 14px;
             border: 1px solid #d1d5db;
             border-radius: 8px;
-            width: 100%;
+            width: 97%;
             font-size: 14px;
             margin-bottom: 10px;
             text-align: right;
@@ -118,11 +118,11 @@
 
     <body>
 
-        <h1>البحث عن شهادة</h1>
+        {{-- <h1>البحث عن شهادة</h1> --}}
 
         <form method="GET" action="">
             <label for="certificate_number">رقم الشهادة</label>
-            <input type="text" id="certificate_number" name="certificate_number"
+                <input type="text" id="certificate_number" name="certificate_number"
                 value="{{ old('certificate_number', request('certificate_number')) }}" placeholder="مثال: ABC-2025-000123"
                 required>
             <button type="submit">بحث</button>
