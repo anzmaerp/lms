@@ -15,10 +15,10 @@
                         <input type="text" class="form-control" placeholder="{{ __('coursebundles::bundles.search_by_keywords') }}" wire:model.live.debounce.250ms="filters.keyword">
                         <div class="cr-customdropdown">
                             <a href="javascript:void(0);" id="cr-customdropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Price
+                                {{ __("general.price") }}
                                 <i class="am-icon-chevron-down"></i>
                             </a>
-                            <div wire:ignore id="panelsStayOpen-collapseFive" class="cr-customdropdown_list dropdown-menu" aria-labelledby="dropdownMenuLink">
+                            <div style="min-width:330px" wire:ignore id="panelsStayOpen-collapseFive" class="cr-customdropdown_list dropdown-menu" aria-labelledby="dropdownMenuLink">
                                 <div class="accordion-body">
                                     <div class="cr-radio-options">
                                         <div class="at-form-group cr-price-range">
