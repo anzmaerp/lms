@@ -102,7 +102,7 @@
                                         </td>
                                     @endrole
                                     <td data-label="{{ __('Date Created') }}"><em>{{ \Carbon\Carbon::parse($dispute?->created_at)->format('F j, Y, g:i A') }}</em></td>
-                                    <td data-label="{{ __('Status') }}">
+                                    <td data-label="{{ __('general.status') }}">
                                         <div class="am-status-tag">
                                             <span class="tk-project-tag-two am-{{str_replace('_', '-', $dispute?->status)}} {{ $dispute?->status == 'pending' ? 'tk-hourly-tag' : 'tk-fixed-tag' }}">{{ ucfirst(str_replace('_', ' ', $dispute?->status)) }}</span>
                                             <a href="javascript:void(0)" wire:click="viewDetail('{{ $dispute?->uuid }}')" class="tk-project-tag-two am-view-btn">{{ __('dispute.view_detail') }}</a>

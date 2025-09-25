@@ -284,7 +284,7 @@
                                         @enderror
                                     </div>
                                     <div class="form-group">
-                                        <label class="tb-label">{{ __('User role') }}</label>
+                                        <label class="tb-label">{{ __('general.user_role') }}</label>
                                         <div class="tk-error @error('form.userRole') tk-invalid @enderror">
                                             <div class="tb-select" wire:ignore>
                                                 <select data-componentid="@this" class="am-select2 form-control"
