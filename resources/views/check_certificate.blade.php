@@ -19,7 +19,7 @@
         <h1>البحث عن شهادة</h1>
 
         <!-- Search form -->
-        <form method="GET" action="">
+        <form method="GET" action="{{route('check-certificate')}}">
             <label for="certificate_number">رقم الشهادة</label>
             <input type="text" id="certificate_number" name="certificate_number"
                 value="{{ old('certificate_number', request('certificate_number')) }}" placeholder="مثال: ABC-2025-000123"

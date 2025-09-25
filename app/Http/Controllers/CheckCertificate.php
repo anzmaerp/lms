@@ -22,6 +22,7 @@ class CheckCertificate extends Controller
 
         return view('check_certificate', compact('certificate'));
     }
+    
     public function checkAr(Request $request)
     {
         $certificate = null;
