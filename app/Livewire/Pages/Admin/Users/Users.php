@@ -139,6 +139,7 @@ class Users extends Component
         $this->form->userRole = '';
         $this->form->password = '';
         $this->form->confirm_password = '';
+        $this->form->gender = '';
     }
 
     public function verifyUserEmail($params)

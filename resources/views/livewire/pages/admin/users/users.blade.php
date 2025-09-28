@@ -272,6 +272,7 @@
                                                 <select data-componentid="@this" class="am-select2 form-control"
                                                     data-searchable="false" data-parent="#tb-add-user"
                                                     data-live='true' id="gender" data-wiremodel="form.gender">
+                                                    <option>{{ __('general.select') }}</option>
                                                     <option value="1">{{ __('auth.male') }}</option>
                                                     <option value="2">{{ __('auth.female') }}</option>
                                                 </select>
@@ -290,6 +291,7 @@
                                                 <select data-componentid="@this" class="am-select2 form-control"
                                                     data-searchable="false" data-parent="#tb-add-user"
                                                     data-live='true' id="user_role" data-wiremodel="form.userRole">
+                                                    <option>{{ __('general.select') }}</option>
                                                     <option value="tutor">{{ $tutor_name }}</option>
                                                     <option value="student">{{ $student_name }}</option>
                                                 </select>
