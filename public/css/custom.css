@@ -182,7 +182,7 @@ color: rgb(0, 0, 0);
   color: black;
   font: 400 1.25rem/1.6em "Inter", sans-serif;
 }
-.am-banner-potential.am-banner-content-four{
+.am-banner-potential.am-banner-content-four {
   padding-bottom: 20px !important;
 }
 .dropdownc-item3 {
@@ -320,11 +320,15 @@ select::placeholder {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
 }
 
-.am-header{
+.am-header {
   flex-direction: row;
   justify-content: space-between;
 }
 
-.am-mainwrap{
-  margin-right:40px;
+.am-mainwrap {
+  margin-right: 40px;
+}
+
+.flatpickr-calendar.hasTime.noCalendar {
+  left: 282px !important;
 }
