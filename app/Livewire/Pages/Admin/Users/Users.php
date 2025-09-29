@@ -108,8 +108,8 @@ class Users extends Component
 
     public function mount()
     {
-        $this->tutor_name = !empty(setting('_lernen.tutor_display_name')) ? setting('_lernen.tutor_display_name') : __('general.tutor');
-        $this->student_name = !empty(setting('_lernen.student_display_name')) ? setting('_lernen.student_display_name') : __('general.student');
+        $this->tutor_name = __('general.tutor');
+        $this->student_name =__('general.student');
         $date_format = setting('_general.date_format');
         $this->date_format = !empty($date_format) ? $date_format : 'm d, Y';
         $currency = setting('_general.currency');

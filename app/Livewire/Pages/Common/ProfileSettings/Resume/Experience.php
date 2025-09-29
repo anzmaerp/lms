@@ -49,7 +49,7 @@ class Experience extends Component
         $this->routes = [
             [
                 'icon' => '<i><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M3.3335 15.6667C3.3335 13.4575 5.12436 11.6667 7.3335 11.6667H12.6668C14.876 11.6667 16.6668 13.4575 16.6668 15.6667V15.6667C16.6668 17.1394 15.4729 18.3333 14.0002 18.3333H6.00016C4.5274 18.3333 3.3335 17.1394 3.3335 15.6667V15.6667Z" stroke="#585858" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M13.3335 5.00001C13.3335 6.84095 11.8411 8.33334 10.0002 8.33334C8.15921 8.33334 6.66683 6.84095 6.66683 5.00001C6.66683 3.15906 8.15921 1.66667 10.0002 1.66667C11.8411 1.66667 13.3335 3.15906 13.3335 5.00001Z" stroke="#585858" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></i>',
-                'title' => 'Education',
+                'title' => __('tutor.education'),
                 'route' => 'tutor.profile.resume.education',
             ],
             [
@@ -59,7 +59,7 @@ class Experience extends Component
             ],
             [
                 'icon' => '<i><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M2.08317 6.66667H17.9165M4.99984 10H8.33317M8.06651 17.5H11.9332C14.1734 17.5 15.2935 17.5 16.1491 17.064C16.9018 16.6805 17.5137 16.0686 17.8972 15.316C18.3332 14.4603 18.3332 13.3402 18.3332 11.1V8.9C18.3332 6.65979 18.3332 5.53968 17.8972 4.68404C17.5137 3.93139 16.9018 3.31947 16.1491 2.93597C15.2935 2.5 14.1734 2.5 11.9332 2.5H8.0665C5.82629 2.5 4.70619 2.5 3.85054 2.93597C3.09789 3.31947 2.48597 3.93139 2.10248 4.68404C1.6665 5.53968 1.6665 6.65979 1.6665 8.9V11.1C1.6665 13.3402 1.6665 14.4603 2.10248 15.316C2.48597 16.0686 3.09789 16.6805 3.85054 17.064C4.70619 17.5 5.82629 17.5 8.06651 17.5Z" stroke="#585858" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></i>',
-                'title' => 'Certificates & Awards',
+                'title' => __('app.certificate'),
                 'route' => 'tutor.profile.resume.certificate',
             ]
         ];

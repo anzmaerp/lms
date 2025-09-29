@@ -24,7 +24,7 @@ class Resume extends Component
         $this->routes = [
             [
                 'icon' => '<i class="am-icon-user-01"></i>',
-                'title' => 'Education',
+                'title' => __('tutor.education'),
                 'route' => 'tutor.profile.resume.education',
             ],
             [
@@ -34,7 +34,7 @@ class Resume extends Component
             ],
             [
                 'icon' => '<i class="am-icon-atm-card-02"></i>',
-                'title' => 'Certificates & Awards',
+                'title' => __('app.certificate'),
                 'route' => 'tutor.profile.resume.certificate',
             ]
         ];
