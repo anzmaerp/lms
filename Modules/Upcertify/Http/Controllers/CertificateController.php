@@ -2,12 +2,14 @@
 
 namespace Modules\Upcertify\Http\Controllers;
 
-use Modules\Upcertify\Models\Certificate;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Str;
 use Spatie\Browsershot\Browsershot;
+use Illuminate\Support\Facades\View;
+use Modules\Upcertify\Models\Certificate;
 
 class CertificateController extends Controller
 {
@@ -82,35 +84,36 @@ class CertificateController extends Controller
     }
 
 
-    public function getCertificate(Request $request, $uid)
-    {
+public function downloadCertificate($uid)
+{
+    $certificate = Certificate::whereHashId($uid)
+        ->with('template:id,body')
+        ->firstOrFail();
 
-        $certificate = Certificate::whereHashId($uid)->with('template:id,title')->first();
-        if (empty($certificate)) {
-            return abort(404);
-        }
+    $body = $certificate->body;
 
-        try {
-            $file = Browsershot::url(route('upcertify.certificate-short', ['uid' => $uid]))
-                ->setOption('args', ['--disable-web-security'])
-                ->format('Letter')
-                ->margins(0, 0, 0, 0)
-                ->pages('1')
-                ->waitUntilNetworkIdle()
-                ->showBackground()
-                ->pdf();
+    $pdf = Pdf::loadView('upcertify::front-end.pdf', [
+        'body' => $body,
+    ])->setPaper('a4', 'landscape');
 
-            $filename = Str::slug($certificate->template->title) . '.pdf';
-            $storagePath = sys_get_temp_dir();
-            $filePath = $storagePath . '/' . $filename;
-            file_put_contents($filePath, $file);
+    return $pdf->download("certificate-{$uid}.pdf");
+}
 
-            return response()->download($filePath, $filename)->deleteFileAfterSend(true);
-        } catch (\Exception $e) {
-            Log::error('Browsershot failed: ' . $e->getMessage(), [
-                'trace' => $e->getTraceAsString(),
-            ]);
-            return abort(500, 'Browsershot failed');
-        }
-    }
+
+public function getCertificate($uid)
+{
+    $certificate = Certificate::whereHashId($uid)
+        ->with('template:id,title,body')
+        ->firstOrFail();
+
+    $body = $certificate->template->body; // or $certificate->body depending on your schema
+
+    $pdf = Pdf::loadView('upcertify::front-end.pdf', [
+        'body' => $body,
+        'uid'  => $uid,
+    ])->setPaper('a4', 'landscape');
+
+    return $pdf->download("certificate-{$uid}.pdf");
+}
+
 }
