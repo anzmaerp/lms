@@ -33,13 +33,14 @@
                                 </td>
                                 <td data-label="{{ __('general.actions' )}}">
                                     <div class="am-invoicetable_actions">
-                                        <a href="{{ route('upcertify.certificate', $certificate?->hash_id) }}" target="_blank" class="am-custom-tooltip">
-                                            <span class="am-tooltip-text"><span>{{ __('general.view') }}</span></span><i class="am-icon-eye-open-01"></i>
-                                        </a>
-                                        <a href="{{ route('upcertify.download', $certificate?->hash_id) }}" class="am-custom-tooltip">
+     <a href="{{ route('upcertify.certificate', $certificate?->hash_id) }}" target="_blank" class="am-custom-tooltip">
+        <span class="am-tooltip-text"><span>{{ __('general.view') }}</span></span>
+        <i class="am-icon-eye-open-01"></i>
+    </a>
+                                        {{-- <a href="{{ route('upcertify.download', $certificate?->hash_id) }}" class="am-custom-tooltip">
                                             <i class="am-icon-download-01"></i>
                                             <span class="am-tooltip-text"><span>{{ __('general.download') }}</span></span>
-                                        </a>
+                                        </a> --}}
                                     </div>
                                 </td>
                             </tr>

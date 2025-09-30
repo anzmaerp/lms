@@ -37,7 +37,7 @@
                     <li><a href="javascript:void(0);" onclick="copyLink()">{{ __('upcertify::upcertify.copy_link') }}</a></li>
                 </ul>
             </div>
-            <a href="{{ route('upcertify.download', $uid) }}" class="uc-btn uc-download-btn">{{ __('upcertify::upcertify.download') }}<i><x-upcertify::icons.download /></i></a>
+            {{-- <a href="{{ route('upcertify.download', $uid) }}" class="uc-btn uc-download-btn">{{ __('upcertify::upcertify.download') }}<i><x-upcertify::icons.download /></i></a> --}}
         </div>
     </div>
 @endsection

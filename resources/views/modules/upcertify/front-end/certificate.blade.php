@@ -54,10 +54,10 @@
                     </li>
                 </ul>
             </div>
-            <a href="{{ route('upcertify.download', $uid) }}" class="uc-btn uc-download-btn">
+            {{-- <a href="{{ route('upcertify.download', $uid) }}" class="uc-btn uc-download-btn">
                 {{ __('upcertify::upcertify.download') }}
                 <i><x-upcertify::icons.download /></i>
-            </a>
+            </a> --}}
         </div>
     </div>
 @endsection
