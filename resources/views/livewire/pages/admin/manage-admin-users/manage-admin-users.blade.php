@@ -61,7 +61,7 @@
                         <thead>
                             <tr>
                                 <th>{{ __('#' )}}</th>
-                                <th>{{ __('Name' )}}</th>
+                                <th>{{ __('general.name') }}</th>
                                 <th>{{ __('general.email' )}}</th>
                                 <th>{{ __('general.created_date' )}}</th>
                                 <th>{{__('general.status')}}</th>
