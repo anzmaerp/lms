@@ -19,7 +19,7 @@
             </div>
             <div class="lb-col-8">
                 <div class="tb-dhb-mainheading">
-                    <h4> {{ __('pagebuilder::pagebuilder.pages') }}</h4>
+                    <h4> {{ __('general.pages') }}</h4>
                     <div class="tb-sortby">
                         <form class="tb-themeform tb-displistform">
                             <fieldset>
@@ -34,8 +34,8 @@
                                     <div class="form-group tb-actionselect">
                                         <div class="lb-select">
                                             <select class="form-control" id="filter_sort">
-                                                <option value="asc">{{ __('pagebuilder::pagebuilder.asc') }}</option>
-                                                <option value="desc">{{ __('pagebuilder::pagebuilder.desc') }}</option>
+                                                <option value="asc">{{ __('general.asc') }}</option>
+                                                <option value="desc">{{ __('general.desc') }}</option>
                                             </select>
                                         </div>
                                     </div>
@@ -51,7 +51,7 @@
                                     <div class="form-group tb-inputicon tb-inputheight">
                                         <i class="icon-search"></i>
                                         <input id="filter_search" type="text" class="form-control" autocomplete="off"
-                                            placeholder="{{ __('pagebuilder::pagebuilder.search') }}">
+                                            placeholder="{{ __('general.search') }}">
                                     </div>
                                 </div>
                             </fieldset>
@@ -252,19 +252,19 @@
     $(document).on('click', '.tb-checkaction', function(event){
         let _this = $(this);
         if(_this.is(':checked')){
-            _this.parent().find('#tb-textdes').html("{{__('pagebuilder::pagebuilder.active')}}");
+            _this.parent().find('#tb-textdes').html("{{__('general.active')}}");
             status = 'published';
         } else {
-            _this.parent().find('#tb-textdes').html( "{{__('pagebuilder::pagebuilder.deactive')}}");
+            _this.parent().find('#tb-textdes').html( "{{__('general.deactive')}}");
             status = 'draft';
         }
     });
 
     $(document).on('submit', '#page_form', function(event){
             event.preventDefault();
-            var update_text = '{{ __("pagebuilder::pagebuilder.updated_successfully") }}';
+            var update_text = '{{ __("general.updated_successfully") }}';
             if($('#id').val() === undefined)
-            var update_text = '{{ __("pagebuilder::pagebuilder.added_successfully") }}';
+            var update_text = '{{ __("general.added_successfully") }}';
 
             var data = $('#page_form').serializeArray();
             data.push({'name': 'status', 'value': status});
@@ -277,9 +277,9 @@
             success:function(data){
                 if (data.success == 'demo'){
                     showAlert({
-                        message     : '{{__("pagebuilder::pagebuilder.demosite_res_title")}}',
+                        message     : '{{__("general.demosite_res_title")}}',
                         type        : 'error',
-                        title       : '{{__("pagebuilder::pagebuilder.demosite_res_txt")}}' ,
+                        title       : '{{__("general.demosite_res_txt")}}' ,
                         autoclose   :  3000,
                     });
                     return;
@@ -291,7 +291,7 @@
                     showAlert({
                         message     : update_text,
                         type        : 'success',
-                        title       : '{{__("pagebuilder::pagebuilder.success")}}' ,
+                        title       : '{{__("general.success")}}' ,
                         autoclose   :  3000,
                     });
                 }else{
@@ -302,7 +302,7 @@
                     showAlert({
                         message     : message,
                         type        : 'error',
-                        title       : '{{__("pagebuilder::pagebuilder.alert_error_title")}}' ,
+                        title       : '{{__("general.alert_error_title")}}' ,
                         autoclose   :  3000,
                     });
                 }
@@ -317,8 +317,8 @@
     $(document).on('click','.deletePage',function(){
         let pageId = $(this).data('page-id');
         $.confirm({
-            title: '{{ __("pagebuilder::pagebuilder.confirm") }}',
-            content: '{{ __("pagebuilder::pagebuilder.confirm_content") }}',
+            title: '{{ __("general.confirm") }}',
+            content: '{{ __("general.confirm_content") }}',
             type: 'red',
             icon: "icon-alert-circle",
             closeIcon: true,
@@ -345,18 +345,18 @@
         success:function(data){
                 if (data.success == 'demo'){
                         showAlert({
-                            message     : '{{__("pagebuilder::pagebuilder.demosite_res_title")}}',
+                            message     : '{{__("general.demosite_res_title")}}',
                             type        : 'error',
-                            title       : '{{__("pagebuilder::pagebuilder.demosite_res_txt")}}' ,
+                            title       : '{{__("general.demosite_res_txt")}}' ,
                             autoclose   :  3000,
                         });
                         return;
                     }
                 if( data.success ){
                     showAlert({
-                        message     : '{{__("pagebuilder::pagebuilder.deleted_successfully")}}',
+                        message     : '{{__("general.deleted_successfully")}}',
                         type        : 'success',
-                        title       : '{{__("pagebuilder::pagebuilder.success")}}' ,
+                        title       : '{{__("general.success")}}' ,
                         autoclose   :  3000,
                     });
                     getPages($('#current_page').val());
