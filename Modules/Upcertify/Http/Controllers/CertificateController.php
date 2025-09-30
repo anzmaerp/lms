@@ -106,9 +106,11 @@ class CertificateController extends Controller
 
             return response()->download($filePath, $filename)->deleteFileAfterSend(true);
         } catch (\Exception $e) {
-            Log::error($e->getMessage());
-            return abort(500);
-        }
+    Log::error('Browsershot failed: '.$e->getMessage(), [
+        'trace' => $e->getTraceAsString(),
+    ]);
+    return abort(500, 'Browsershot failed');
+}
     }
 
 }

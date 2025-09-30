@@ -52,8 +52,8 @@
                                     <th>{{ __('identity.gaurdian_info' )}}</th>
                                     <th>{{ __('identity.school_info' )}}</th>
                                     <th>{{ __('identity.identity_document' )}}</th>
-                                    <th>{{ __('identity.status' )}}</th>
-                                    <th>{{__('identity.action' )}}</th>
+                                    <th>{{ __('general.status' )}}</th>
+                                    <th>{{__('general.action' )}}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -102,12 +102,12 @@
                                                 </strong>
                                             </a>
                                         </td>
-                                        <td data-label="{{ __('identity.status' )}}">
+                                        <td data-label="{{ __('general.status' )}}">
                                             <div class="am-status-tag">
                                                 <em class="tk-project-tag {{ $single?->status == 'accepted' ? 'tk-hourly-tag' : 'tk-fixed-tag' }}">{{ $single?->status }}</em>
                                             </div>
                                         </td>
-                                        <td  data-label="{{__('identity.action')}}">
+                                        <td  data-label="{{__('general.action')}}">
                                             <div class="am-resume_item_title">
                                                 <div class="am-itemdropdown">
                                                     <a href="#" id="am-itemdropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

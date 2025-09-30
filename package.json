@@ -17,7 +17,7 @@
     },
     "dependencies": {
         "jquery": "^3.7.1",
-        "puppeteer": "^23.5.1",
+        "puppeteer": "^24.22.3",
         "puppeteer-core": "^23.5.2"
     }
 }
