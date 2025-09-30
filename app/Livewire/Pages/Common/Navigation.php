@@ -96,7 +96,7 @@ class Navigation extends Component
                 'studentSortOrder' => 9,
                 'route' => 'tutor.payouts',
                 'onActiveRoute' => ['tutor.payouts'],
-                'title' => __('Payouts'),
+                'title' => __('general.payouts'),
                 'icon'  => '<i class="am-icon-dollar"></i>',
                 'accessibility' => ['tutor'],
             ],

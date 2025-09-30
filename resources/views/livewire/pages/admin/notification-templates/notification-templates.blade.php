@@ -3,7 +3,7 @@
         @include('livewire.pages.admin.notification-templates.update')
         <div class="col-lg-8 col-md-12 tb-md-60">
             <div class="tb-dhb-mainheading">
-                <h4> {{ __('notification_template.all_templates') }}</h4>
+                <h4> {{ __('notification_template.all_notification_templates') }}</h4>
                 <div class="tb-sortby">
                     <form class="tb-themeform tb-displistform">
                         <fieldset>

@@ -16,16 +16,16 @@ class CertificateController extends Controller
         $id = $request->id ?? null;
         $extends = 'upcertify::layouts.app';
         $component = 'create-certificate';
-        $props = [ 'record_id' => $id ];
+        $props = ['record_id' => $id];
         $load_livewire_scripts = true;
         $load_livewire_styles = true;
         $load_jquery = true;
         return view('upcertify::index', compact('props', 'extends', 'component', 'load_livewire_scripts', 'load_livewire_styles', 'load_jquery'));
     }
 
-    public function certificateList() 
+    public function certificateList()
     {
-        $extends = !empty(config('upcertify.layout')) ?  config('upcertify.layout') :'upcertify::layouts.app';
+        $extends = !empty(config('upcertify.layout')) ?  config('upcertify.layout') : 'upcertify::layouts.app';
         $component = 'certificate-list';
         $load_livewire_scripts = config('upcertify.livewire_scripts') ?? false;
         $load_livewire_styles = config('upcertify.livewire_styles') ?? false;
@@ -33,19 +33,20 @@ class CertificateController extends Controller
         return view('upcertify::index', compact('extends', 'component', 'load_livewire_scripts', 'load_livewire_styles', 'load_jquery'));
     }
 
-    public function viewCertificate(Request $request, $uid) {
-      
+    public function viewCertificate(Request $request, $uid)
+    {
+
         $certificate = Certificate::whereHashId($uid)->with('template:id,body')->first();
-        if(empty($certificate)) {
+        if (empty($certificate)) {
             return abort(404);
         }
 
         $wildcard_data = $certificate->wildcard_data;
         $template_body = $certificate->template->body;
-        
+
         foreach ($template_body['elementsInfo'] as $key => &$element) {
             $wildcardName = $element['wildcardName'];
-            if(array_key_exists($wildcardName, $wildcard_data)){
+            if (array_key_exists($wildcardName, $wildcard_data)) {
                 $element['wildcardName'] =  $wildcard_data[$wildcardName];
             }
         }
@@ -58,21 +59,21 @@ class CertificateController extends Controller
     public function takeCertificateShort(Request $request, $uid)
     {
         $certificate = Certificate::whereHashId($uid)->with('template:id,body')->first();
-        
-        if(empty($certificate)) {
+
+        if (empty($certificate)) {
             return abort(404);
         }
         $wildcard_data = $certificate->wildcard_data;
         $template_body = $certificate->template->body;
-        if (!empty($template_body['elementsInfo'])) { 
+        if (!empty($template_body['elementsInfo'])) {
             foreach ($template_body['elementsInfo'] as $key => &$element) {
                 $wildcardName = $element['wildcardName'];
-                if(array_key_exists($wildcardName, $wildcard_data)){
+                if (array_key_exists($wildcardName, $wildcard_data)) {
                     $element['wildcardName'] =  $wildcard_data[$wildcardName];
                 }
             }
         }
-        
+
 
         $body = $template_body;
         $page = 'template';
@@ -81,25 +82,24 @@ class CertificateController extends Controller
     }
 
 
-    public function getCertificate(Request $request, $uid) 
+    public function getCertificate(Request $request, $uid)
     {
 
         $certificate = Certificate::whereHashId($uid)->with('template:id,title')->first();
-        if(empty($certificate)) {
+        if (empty($certificate)) {
             return abort(404);
         }
 
         try {
             $file = Browsershot::url(route('upcertify.certificate-short', ['uid' => $uid]))
-            ->setOption('args', ['--disable-web-security'])
-            ->setOption('executablePath', 'C:\Program Files\Google\Chrome\Application\chrome.exe') 
-            ->format('Letter')
-            ->margins(0, 0, 0, 0)
-            ->pages('1')
-            ->waitUntilNetworkIdle()
-            ->showBackground()
-            ->pdf();
-            
+                ->setOption('args', ['--disable-web-security'])
+                ->format('Letter')
+                ->margins(0, 0, 0, 0)
+                ->pages('1')
+                ->waitUntilNetworkIdle()
+                ->showBackground()
+                ->pdf();
+
             $filename = Str::slug($certificate->template->title) . '.pdf';
             $storagePath = sys_get_temp_dir();
             $filePath = $storagePath . '/' . $filename;
@@ -107,11 +107,10 @@ class CertificateController extends Controller
 
             return response()->download($filePath, $filename)->deleteFileAfterSend(true);
         } catch (\Exception $e) {
-    Log::error('Browsershot failed: '.$e->getMessage(), [
-        'trace' => $e->getTraceAsString(),
-    ]);
-    return abort(500, 'Browsershot failed');
-}
+            Log::error('Browsershot failed: ' . $e->getMessage(), [
+                'trace' => $e->getTraceAsString(),
+            ]);
+            return abort(500, 'Browsershot failed');
+        }
     }
-
 }
