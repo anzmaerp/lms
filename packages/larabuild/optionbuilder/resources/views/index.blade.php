@@ -1,5 +1,4 @@
 @extends(config('optionbuilder.layout'))
-
 @section(config('optionbuilder.section'))
     <div class="lb-preloader-outer">
         <img src="{{ asset('vendor/optionbuilder/images/lb-loader.png') }}" >
@@ -10,10 +9,10 @@
         <div class="op-fields-wrapper">
             <div class="op-fields-title">
                 <div class="op-fields-info">
-                    <h6>{{ __('optionbuilder::option_builder.global_settings') }}</h6>
+                    <h6>{{ __('general.global_settings') }}</h6>
                     @if( config('optionbuilder.developer_mode') === 'yes' )
-                        <p>{{ __('optionbuilder::option_builder.option_builder_tab_desc') }}<span class="op-alert">setting(‘tab_key’)</span></p>
-                        <p>{{ __('optionbuilder::option_builder.option_builder_desc') }}<span class="op-alert">setting(‘tab.field_key’)</span></p>
+                        <p>{{ __('general.option_builder_tab_desc') }}<span class="op-alert">setting(‘tab_key’)</span></p>
+                        <p>{{ __('general.option_builder_desc') }}<span class="op-alert">setting(‘tab.field_key’)</span></p>
                     @endif
                     <span>{{ env('APP_NAME') }}</span>
                 </div>
@@ -75,15 +74,15 @@
                                            <div class="op-btnholder">
                                                <a href="javascript:void(0)" class="reset-section-settings" data-reset_all="1" data-form="{{ $single['id']}}-form">
                                                 <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
-                                                    {{ __('optionbuilder::option_builder.reset_all') }}
+                                                    {{ __('general.reset_all') }}
                                                 </a>
                                                <button class="op-btn-two reset-section-settings" data-form="{{ $single['id']}}-form">
                                                 <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
-                                                    {{ __('optionbuilder::option_builder.reset_section') }}
+                                                    {{ __('general.reset_section') }}
                                                 </button>
                                                <button class="op-btn update-section-settings" data-form="{{ $single['id']}}-form">
                                                 <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
-                                                    {{ __('optionbuilder::option_builder.save_changes') }}
+                                                    {{ __('general.save_changes') }}
                                                 </button>
                                            </div>
                                        </div>
@@ -121,15 +120,15 @@
                                         <div class="op-btnholder">
                                             <a href="javascript:void(0)" class="reset-section-settings" data-reset_all="1" data-form="{{ $single['id']}}-form">
                                                 <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
-                                                {{ __('optionbuilder::option_builder.reset_all') }}
+                                                {{ __('general.reset_all') }}
                                             </a>
                                             <button class="op-btn-two reset-section-settings" data-form="{{ $single['id']}}-form">
                                                 <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
-                                                {{ __('optionbuilder::option_builder.reset_section') }}
+                                                {{ __('general.reset_section') }}
                                             </button>
                                             <button class="op-btn update-section-settings" data-form="{{ $single['id']}}-form">
                                                 <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
-                                                {{ __('optionbuilder::option_builder.save_changes') }}
+                                                {{ __('general.save_changes') }}
                                             </button>
                                         </div>
                                     </div>
@@ -231,8 +230,8 @@
             let form_id     = _this.data('form');
 
             $.confirm({
-                title: "{{ __('optionbuilder::option_builder.confirm_txt')}}",
-                content: "{{ __('optionbuilder::option_builder.confirm_desc')}}",
+                title: "{{ __('general.confirm_txt')}}",
+                content: "{{ __('general.confirm_desc')}}",
                 type: 'red',
                 icon: 'icon-alert-circle',
                 closeIcon: true,
@@ -305,9 +304,9 @@
                 const fsize = Math.round((files[i].size/1024));
                 if( fsize > max_size ){
                     showAlert({
-                            message     : '{{__("optionbuilder::option_builder.max_file_size")}}',
+                            message     : '{{__("general.max_file_size")}}',
                             type        : 'error',
-                            title       : '{{__("optionbuilder::option_builder.error_title")}}' ,
+                            title       : '{{__("general.error_title")}}' ,
                             autoclose   :  3000,
                         });
                     return false;

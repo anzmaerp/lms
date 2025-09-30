@@ -7,7 +7,9 @@
                     <span>{{ __('profile.resume_highlights') }}</span>
                 </div>
                 <ul class="am-resumebox_tab_list">
+                    
                     @foreach ($routes as $item)
+                    
                     <li @class(["am-active"=> $activeRoute == $item['route']])>
                         <a href="{{ route($item['route']) }}" wire:navigate.remove>
                             {!! $item['icon'] !!}

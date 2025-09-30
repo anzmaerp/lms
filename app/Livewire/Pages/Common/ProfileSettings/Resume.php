@@ -29,7 +29,7 @@ class Resume extends Component
             ],
             [
                 'icon' => '<i class="am-icon-shopping-basket-04"></i>',
-                'title' => 'Experience',
+                'title' =>  __('tutor.experience'),
                 'route' => 'tutor.profile.resume.experience',
             ],
             [

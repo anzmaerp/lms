@@ -28,14 +28,14 @@
                                             data-searchable="false" data-live='true' id="verification"
                                             data-wiremodel="verification">
                                             <option value="" {{ $verification == '' ? 'selected' : '' }}>
-                                                {{ __('All users') }}
+                                                {{ __('general.all_users') }}
                                             </option>
                                             <option value="verified"
                                                 {{ $verification == 'verified' ? 'selected' : '' }}>
-                                                {{ __('Verified users') }}</option>
+                                                {{ __('general.verified_users') }}</option>
                                             <option value="unverified"
                                                 {{ $verification == 'non_verified' ? 'selected' : '' }}>
-                                                {{ __('Non verified users') }}</option>
+                                                {{ __('general.non_verified_users') }}</option>
                                         </select>
                                     </div>
                                 </div>
@@ -45,12 +45,12 @@
                                             data-searchable="false" data-live='true' id="filter_user"
                                             data-wiremodel="filterUser">
                                             <option value="" {{ $filterUser == '' ? 'selected' : '' }}>
-                                                {{ __('All users') }}
+                                                {{ __('general.all_users') }}
                                             </option>
                                             <option value="active" {{ $filterUser == 'active' ? 'selected' : '' }}>
-                                                {{ __('Active') }}</option>
+                                                {{ __('general.active') }}</option>
                                             <option value="inactive" {{ $filterUser == 'inactive' ? 'selected' : '' }}>
-                                                {{ __('Inactive') }}</option>
+                                                {{ __('general.inactive') }}</option>
                                         </select>
                                     </div>
                                 </div>
@@ -60,7 +60,7 @@
                                             data-searchable="false" data-live='true' id="roles"
                                             data-wiremodel="roles">
                                             <option value="" {{ $roles == '' ? 'selected' : '' }}>
-                                                {{ __('All users') }}
+                                                {{ __('general.all_users') }}
                                             </option>
                                             <option value="student"
                                                 {{ $roles == 'student' || $role == 'student' ? 'selected' : '' }}>
