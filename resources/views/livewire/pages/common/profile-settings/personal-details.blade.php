@@ -35,7 +35,7 @@
                         <x-input-error class="mt-2" :messages="$errors->get('email')" />
                     </div>
                     <div class="form-group @error('form.phone_number') am-invalid @enderror">
-                          <x-input-label for="phone_number" :value="__('general.phone_number')" :class="$isProfilePhoneMendatory ? 'am-important' : ''" />
+                          <x-input-label for="phone_number" :value="__('profile.phone_number')" :class="$isProfilePhoneMendatory ? 'am-important' : ''" />
                         <div class="form-control_wrap">
                             <x-text-input wire:model="form.phone_number" id="phone_number" placeholder="{{ __('general.enter_phone_number') }}" name="phone_number" type="text" class="block w-full mt-1"  autocomplete="phone_number" />
                             <x-input-error field_name="form.phone_number" />
