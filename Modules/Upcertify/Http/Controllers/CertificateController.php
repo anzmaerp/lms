@@ -92,6 +92,7 @@ class CertificateController extends Controller
         try {
             $file = Browsershot::url(route('upcertify.certificate-short', ['uid' => $uid]))
             ->setOption('args', ['--disable-web-security'])
+            ->setOption('executablePath', 'C:\Program Files\Google\Chrome\Application\chrome.exe') 
             ->format('Letter')
             ->margins(0, 0, 0, 0)
             ->pages('1')

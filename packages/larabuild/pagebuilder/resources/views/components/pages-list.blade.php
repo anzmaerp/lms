@@ -4,10 +4,10 @@
         <thead>
             <tr>
                 <th></th>
-                <th>{{__('pagebuilder::pagebuilder.name')}}</th>
-                <th>{{__('pagebuilder::pagebuilder.url')}}</th>
-                <th>{{__('pagebuilder::pagebuilder.status')}}</th>
-                <th>{{__('pagebuilder::pagebuilder.actions')}}</th>
+                <th>{{__('general.name')}}</th>
+                <th>{{__('general.url')}}</th>
+                <th>{{__('general.status')}}</th>
+                <th>{{__('general.actions')}}</th>
             </tr>
         </thead>
         <tbody>

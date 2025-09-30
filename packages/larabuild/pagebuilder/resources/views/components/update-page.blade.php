@@ -59,7 +59,7 @@
                     @endif
                     <div class="form-group tb-dbtnarea">
                         <button class="pb-btn" type="submit" id="form_submit_btn">{{
-                            $edit?__('general.update_page'):__('general.add_page')}}</button>
+                            $edit?__('general.update_page'):__('general.add_new_page')}}</button>
 
                         @if ($edit)
                         <button class="pb-btn goBack" type="button"
