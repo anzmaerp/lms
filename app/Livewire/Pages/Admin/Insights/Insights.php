@@ -49,8 +49,8 @@ class Insights extends Component
 
     public function mount()
     {
-        $this->tutor_name   = Str::plural(!empty(setting('_lernen.tutor_display_name')) ? setting('_lernen.tutor_display_name') : __('general.tutor')) ;
-        $this->student_name = Str::plural(!empty(setting('_lernen.student_display_name')) ? setting('_lernen.student_display_name') : __('general.student'));
+        $this->tutor_name   = !empty(setting('_lernen.tutor_display_name')) ? setting('_lernen.tutor_display_name') : __('general.tutor');
+        $this->student_name = !empty(setting('_lernen.student_display_name')) ? setting('_lernen.student_display_name') : __('general.student');
         $this->revenueStartDate         = now()->startOfMonth()->format('Y-m-d');
         $this->revenueEndDate           = now()->endOfMonth()->format('Y-m-d');
 
