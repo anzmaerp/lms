@@ -47,7 +47,7 @@
                                                     <span class="am-select">
                                                         <select wire:model.live="lines.{{ $index }}.couponable_type" wire:change="handleCouponableTypeChange({{ $index }}, $event.target.value)" class="am-select2" data-placeholder="{{ __('kupondeal::kupondeal.select_couponable_type') }}" id="couponable_type_{{ $index }}">
                                                             <option value="">{{ __('kupondeal::kupondeal.select_couponable_type') }}</option>
-                                                            <option value="__ALL__" @if ($line['couponable_type'] == '__ALL__') selected @endif>{{ __('Select All') }}</option>
+                                                            <option value="__ALL__" @if ($line['couponable_type'] == '__ALL__') selected @endif> {{ __('general.select_all') }}</option>
                                                             @foreach ($couponable_types as $type)
                                                                 <option value="{{ $type['value'] }}" @if ($line['couponable_type'] == $type['value']) selected @endif>{{ $type['label'] }}</option>
                                                             @endforeach
@@ -107,7 +107,7 @@
                                         <x-kupondeal::input-error field_name='form.couponable_id' />
                                         <label>
                                             <input type="checkbox" wire:model="selectAllCouponableIds" wire:change="selectAll">
-                                            {{ __('Select All') }}
+                                   {{ __('general.select_all') }}
                                         </label>
                                     </div>
                                 @endif
@@ -125,7 +125,7 @@
                             </div>
                             <div class="form-group @error('form.discount_value') am-invalid @enderror">
                                 <label for="discount_value">{{ __('kupondeal::kupondeal.discount_value') }}</label>
-                                <x-kupondeal::text-input type="number" wire:model="form.discount_value" id="discount_value" placeholder="Enter discount value" />
+                                <x-kupondeal::text-input type="number" wire:model="form.discount_value" id="discount_value" placeholder="{{ __('general.enter_discount_value') }}" />
                                 <x-kupondeal::input-error field_name='form.discount_value' />
                             </div>
                             <div class="form-group @error('form.expiry_date') am-invalid @enderror">
