@@ -69,7 +69,7 @@
                                                 @if (!$isLocked)
                                                     <label>
                                                         <input type="checkbox" wire:model="lines.{{ $index }}.select_all" wire:change="selectAll({{ $index }})">
-                                                        {{ __('Select All') }}
+                                                {{ __('general.select_all') }}
                                                     </label>
                                                 @endif
                                             </div>
@@ -78,7 +78,7 @@
                                     @if (!$isLocked)
                                         <div class="text-center mt-0">
                                             <button type="button" wire:click="addLine" class="btn outline-success px-4 py-2" style="border-radius: 6px; font-weight: bold;">
-                                                + {{ __('Add Line') }}
+                                                + {{ __('general.add_line') }}
                                             </button>
                                         </div>
                                     @endif

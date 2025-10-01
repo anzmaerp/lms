@@ -220,13 +220,13 @@
                                         <i class="am-icon-exclamation-01"></i>
                                     </div>
                                 </label>
-                                <x-text-input wire:model.live="dueDays" placeholder="Number of days" type="number" />
+                                <x-text-input wire:model.live="dueDays" placeholder="{{__('general.no_of_days')}}" type="number" />
                                 <x-input-error field_name="dueDays" />
                             </div>
                             <div class="form-control_wrap @error('dueTime') am-invalid @enderror">
                                 <label class="am-label am-time-lable">Time</label>
                                 <div class="am-input-field">
-                                    <x-text-input class="flat-time" id="dof" data-format="F-d-Y" wire:model="dueTime" placeholder="Time" type="text" id="datepicker" data-enable_time="true"  autofocus autocomplete="name" />
+                                    <x-text-input class="flat-time" id="dof" data-format="F-d-Y" wire:model="dueTime" placeholder="{{__('general.time')}}" type="text" id="datepicker" data-enable_time="true"  autofocus autocomplete="name" />
                                     <span class="am-input-field_icon">
                                         <i class="am-icon-time"></i>
                                     </span>
