@@ -125,7 +125,7 @@
                             </div>
                             <div class="form-group @error('form.discount_value') am-invalid @enderror">
                                 <label for="discount_value">{{ __('kupondeal::kupondeal.discount_value') }}</label>
-                                <x-kupondeal::text-input type="number" wire:model="form.discount_value" id="discount_value" placeholder="{{ __('general.enter_discount_value') }}e" />
+                                <x-kupondeal::text-input type="number" wire:model="form.discount_value" id="discount_value" placeholder="{{ __('general.enter_discount_value') }}" />
                                 <x-kupondeal::input-error field_name='form.discount_value' />
                             </div>
                             <div class="form-group @error('form.expiry_date') am-invalid @enderror">
