@@ -27,7 +27,7 @@
         </div>
            <div class="am-quizsearuch_header">
                 <div class="am-quizlist_search">
-                    <input type="text" wire:model.live.debounce.300ms="filters.keyword" class="form-control" placeholder="Search by keyword">
+                    <input type="text" wire:model.live.debounce.300ms="filters.keyword" class="form-control" placeholder="{{__('general.search_by_keyword')}}">
                     <i class="am-icon-search-02"></i>
                 </div>
                 <div class="am-slots_wrap">
@@ -432,7 +432,7 @@
                                         <div>
                                             <div class="form-group @error('form.title') am-invalid @enderror">
                                                 <label class="am-label am-important">{{ __('quiz::quiz.quiz_title') }}</label>
-                                                <input class="form-control" wire:model="form.title" placeholder="Add title here" type="text">
+                                                <input class="form-control" wire:model="form.title" placeholder="{{__('general.add_title_here')}}" type="text">
                                                 <x-quiz::input-error field_name='form.title' />
                                             </div>
                                             <div wire:ignore class="form-group am-custom-textarea">
