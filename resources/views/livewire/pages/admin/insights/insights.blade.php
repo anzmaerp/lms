@@ -237,7 +237,10 @@
             opens: 'left',
             autoUpdateInput: false,
             locale: {
-                cancelLabel: @json(__('general.clear'))
+                cancelLabel: @json(__('general.clear')),
+                applyLabel: @json(__('general.apply')),
+                customRangeLabel: @json(__('general.custom_range')), 
+
             },
             autoUpdateInput: true,
             alwaysShowCalendars: false,

@@ -61,7 +61,7 @@
                                 <th>{{ __('general.attached_file') }}</th>
                                 <th>{{ __('booking.items') }}</th>
                                 <th>{{ __('booking.student_name') }}</th>
-                                <th>{{ __('booking.payment_method') }}</th>
+                                <th>{{ __('general.payment_method') }}</th>
                                 <th>{{ __('booking.amount') }}</th>
                                 <th>{{ __('booking.admin_commission') }}</th>
                                 <th>{{ __('booking.status') }}</th>

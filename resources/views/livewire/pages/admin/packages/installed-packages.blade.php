@@ -5,7 +5,7 @@
     <div class="row">
             <div class="col-lg-12 col-md-12 tb-md-12">
                 <div class="tb-dhb-mainheading">
-                    <h4> {{ __('admin/general.manage_packages') }}</h4>
+                    <h4> {{ __('general.manage_packages') }}</h4>
                     <div class="tb-sortby">
                         <form class="tb-themeform tb-displistform">
                             <fieldset>

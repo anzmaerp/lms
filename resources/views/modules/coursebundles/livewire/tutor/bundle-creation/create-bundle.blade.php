@@ -79,7 +79,7 @@
                                         @if (!$selectAllInstructors)
                                             <label>
                                                 <input type="checkbox" wire:click="selectAll({{ $index }})">
-                                                {{ __('Select All') }}
+                                                {{ __('general.select_all') }}
                                             </label>
                                         @endif
                                     </div>
@@ -89,7 +89,7 @@
                     @endforeach
 
                     @if (!$selectAllInstructors)
-                        <button type="button" wire:click="addLine">{{ __('Add Line') }}</button>
+                        <button type="button" wire:click="addLine">{{ __('general.add_line') }}</button>
                     @endif
                 @else
                     <div class="form-group">
