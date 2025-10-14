@@ -346,25 +346,7 @@ class CompletePurchaseJob implements ShouldQueue
 
                 if (!empty($emailData['subscriptions']) || !empty($emailData['courses']) || !empty($emailData['bookings'])) {
                     dispatch(new SendNotificationJob('sessionBooking', $this->order?->orderBy, $emailData));
-                    if ($item->orderable_type === \App\Models\Course::class) {
-                        dispatch(new SendDbNotificationJob(
-                            'coursePurchased',
-                            $this->order?->orderBy,
-                            [
-                                'userName' => $this->order?->orderBy?->name,
-                                'courseTitle' => $item->orderable?->title,
-                                'instructorName' => $item->orderable?->instructor?->name,
-                                'coursePrice' => $item->price,
-                                'courseLink' => route('courses.course-list'),
-                            ]
-                        ));
-                    } else {
-                        dispatch(new SendDbNotificationJob(
-                            'sessionBooking',
-                            $this->order?->orderBy,
-                            ['bookingLink' => route('student.bookings')]
-                        ));
-                    }
+                    dispatch(new SendDbNotificationJob('sessionBooking', $this->order?->orderBy, ['bookingLink' => route('student.bookings')]));
                 }
 
                 if (!empty($tutorSubscriptions)) {
