@@ -2,14 +2,14 @@
 
 namespace App\Livewire\Pages\Admin\Invoices;
 
+use App\Livewire\Pages\Admin\Invoices\InvoicesExport;
 use App\Services\OrderService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 use Livewire\WithPagination;
-use Illuminate\Support\Facades\Storage;
-use App\Livewire\Pages\Admin\Invoices\InvoicesExport;
 
 class Invoices extends Component
 {
@@ -22,12 +22,12 @@ class Invoices extends Component
     public $discountAmount;
     public $user;
     public $company_name;
-
     public $company_logo;
     public $company_email;
     public $company_address;
     private ?OrderService $orderService = null;
     public $invoice;
+
     public function boot()
     {
         $this->user = Auth::user();
@@ -50,6 +50,7 @@ class Invoices extends Component
         $orders = $this->orderService->getOrdersList($this->status, $this->search, $this->sortby);
         return view('livewire.pages.admin.invoices.invoices', compact('orders'));
     }
+
     public function printUsersExcel()
     {
         return (new InvoicesExport(
@@ -76,12 +77,16 @@ class Invoices extends Component
     {
         if (!empty($id) && !empty($st)) {
             DB::table('orders')->where('id', $id)->update([
-                'payment_acceptnce' => $st
+                'payment_acceptnce' => $st,
             ]);
             DB::table('courses_enrollments')->where('order_id', $id)->update([
-                'is_paid' => $st
+                'is_paid' => $st,
             ]);
-            $this->dispatch('showAlertMessage', type: 'success', title: __('general.success_title'), message: __('settings.updated_record_success'));
+
+            $this->dispatch('showAlertMessage',
+                type: 'success',
+                title: __('general.success_title'),
+                message: __('settings.updated_record_success'));
         }
     }
 }

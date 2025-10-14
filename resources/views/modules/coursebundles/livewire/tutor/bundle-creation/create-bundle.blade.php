@@ -103,15 +103,15 @@
                         <div class="form-group-two-wrap am-nativelang">
                             <div x-init="$wire.dispatch('initSelect2', { target: '.am-select2', data: @js($courses), selected: @js($selected_courses) });">
                                 <span class="am-select am-multiple-select">
-<select
-    class="languages am-select2"
-    data-placeholder="{{ __('coursebundles::bundles.select_courses_placeholder') }}"
-    data-componentid="@this"
-    data-wiremodel="selected_courses"
-    data-searchable="true"
-    id="selected_courses"
-    multiple
->
+                                                <select
+                                                    class="languages am-select2"
+                                                    data-placeholder="{{ __('coursebundles::bundles.select_courses_placeholder') }}"
+                                                    data-componentid="@this"
+                                                    data-wiremodel="selected_courses"
+                                                    data-searchable="true"
+                                                    id="selected_courses"
+                                                    multiple
+                                                >
                                         @foreach ($courses as $course)
                                             <option value="{{ $course['id'] }}"
                                                 {{ in_array($course['id'], $selected_courses ?? []) ? 'selected' : '' }}>

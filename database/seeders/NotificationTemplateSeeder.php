@@ -176,6 +176,37 @@ class NotificationTemplateSeeder extends Seeder
                     ],
                 ],
             ],
+            'coursePurchased' => [
+    'version' => '2.1.6',
+    'title' => __('notification_template.course_purchased_title'),
+    'roles' => [
+        'student' => [
+            'fields' => [
+                'info' => [
+                    'title' => __('notification_template.variables_used'),
+                    'icon' => 'icon-info',
+                    'desc' => __('notification_template.course_purchased_student_variables'),
+                ],
+                'subject' => [
+                    'id' => 'subject',
+                    'title' => __('notification_template.subject'),
+                    'default' => __('notification_template.course_purchased_subject', ['courseTitle' => '{courseTitle}']),
+                ],
+                'content' => [
+                    'id' => 'content',
+                    'title' => __('notification_template.email_content'),
+                    'default' => __('notification_template.course_purchased_content', [
+                        'userName' => '{userName}',
+                        'courseTitle' => '{courseTitle}',
+                        'instructorName' => '{instructorName}',
+                        'coursePrice' => '{coursePrice}',
+                        'courseLink' => '{courseLink}'
+                    ]),
+                ],
+            ],
+        ],
+    ],
+],
             'bookingRescheduled' => [
                 'version' => '2.1.6',
                 'title' => __('notification_template.booking_rescheduled_title'),

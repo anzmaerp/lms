@@ -500,7 +500,6 @@ class CreateBundle extends Component
             $rules = (new BundleRequest())->rules();
             $this->validate($rules, (new BundleRequest())->messages(), (new BundleRequest())->attributes());
         } catch (\Illuminate\Validation\ValidationException $e) {
-            Log::error('Validation failed', ['errors' => $e->errors()]);
             $this->dispatch('showAlertMessage', type: 'error', title: __('coursebundles::bundles.error_title'), message: collect($e->errors())->flatten()->join(' '));
             return;
         }
