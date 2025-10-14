@@ -1,5 +1,4 @@
 <div class="am-cr-bundle">
-
     <div class="am-userperinfo">
         <div class="am-title_wrap">
             <div class="am-title">
@@ -18,13 +17,14 @@
                         <x-input-error field_name="title" />
                     </div>
                 </div>
+
                 @if ($isAdmin)
                     @foreach ($lines as $index => $line)
                         <div wire:key="line-{{ $index }}" class="line-wrapper position-relative"
-                            style="border: 1px solid #ddd; padding: 15px; margin: 15px 0;  border-radius: 8px;">
+                            style="border: 1px solid #ddd; padding: 15px; margin: 15px 0; border-radius: 8px;">
                             @if (count($lines) > 1 && $index > 0 && !($lines[$index]['isLocked'] ?? false))
                                 <button type="button" wire:click="removeLine({{ $index }})"
-                                    class="btn btn-sm  position-absolute"
+                                    class="btn btn-sm position-absolute"
                                     style="top:-5px; left:0px; border-radius:50%; width:34px; height:34px; display:flex; align-items:center; justify-content:center; font-weight:bold; font-size:16px;">
                                     ✕
                                 </button>
@@ -53,7 +53,6 @@
                                     <x-kupondeal::input-error field_name="lines.{{ $index }}.instructorId" />
                                 </div>
                             </div>
-
                             <div class="form-group @error('lines.' . $index . '.selected_courses') am-invalid @enderror"
                                 style="display:flex; gap:115px; padding: 0;">
                                 <label class="am-label am-important">
@@ -68,14 +67,14 @@
                                                 class="courses-select-{{ $index }}"
                                                 @if ($lines[$index]['isLocked'] ?? false) disabled @endif>
                                                 @foreach ($line['courses'] ?? [] as $course)
-                                                    <option value="{{ $course['id'] }}">{{ $course['title'] }}
+                                                    <option value="{{ $course['id'] }}"
+                                                        {{ in_array($course['id'], $line['selected_courses'] ?? []) ? 'selected' : '' }}>
+                                                        {{ $course['title'] }}
                                                     </option>
                                                 @endforeach
                                             </select>
                                         </span>
-                                        <x-kupondeal::input-error
-                                            field_name="lines.{{ $index }}.selected_courses" />
-
+                                        <x-kupondeal::input-error field_name="lines.{{ $index }}.selected_courses" />
                                         @if (!$selectAllInstructors)
                                             <label>
                                                 <input type="checkbox" wire:click="selectAll({{ $index }})">
@@ -87,12 +86,11 @@
                             </div>
                         </div>
                     @endforeach
-
                     @if (!$selectAllInstructors)
                         <button type="button" wire:click="addLine">{{ __('general.add_line') }}</button>
                     @endif
                 @else
-                    <div class="form-group">
+                    <div class="form-group @error('selected_courses') am-invalid @enderror">
                         <label class="am-label am-important">
                             {{ __('coursebundles::bundles.select_courses') }}
                             <div class="am-custom-tooltip">
@@ -102,26 +100,35 @@
                                 <i class="am-icon-exclamation-01"></i>
                             </div>
                         </label>
-                        <div class="form-group-two-wrap am-nativelang @error('selected_courses') am-invalid @enderror">
-                            <div x-init="$wire.dispatch('initSelect2', { target: '.am-select2', data: @js($courses) });">
+                        <div class="form-group-two-wrap am-nativelang">
+                            <div x-init="$wire.dispatch('initSelect2', { target: '.am-select2', data: @js($courses), selected: @js($selected_courses) });">
                                 <span class="am-select am-multiple-select">
-                                    <select class="languages am-select2"
-                                        data-placeholder="{{ __('coursebundles::bundles.select_courses_placeholder') }}"
-                                        data-componentid="@this" data-disable_onchange="true" data-searchable="true"
-                                        id="selected_courses" data-wiremodel="selected_courses" multiple>
+<select
+    class="languages am-select2"
+    data-placeholder="{{ __('coursebundles::bundles.select_courses_placeholder') }}"
+    data-componentid="@this"
+    data-wiremodel="selected_courses"
+    data-searchable="true"
+    id="selected_courses"
+    multiple
+>
+                                        @foreach ($courses as $course)
+                                            <option value="{{ $course['id'] }}"
+                                                {{ in_array($course['id'], $selected_courses ?? []) ? 'selected' : '' }}>
+                                                {{ $course['text'] }}
+                                            </option>
+                                        @endforeach
                                     </select>
                                 </span>
                                 <x-input-error field_name="selected_courses" />
                             </div>
-                            <div class="tu-labels languageList">
-                            </div>
+                            <div class="tu-labels languageList"></div>
                         </div>
                     </div>
                 @endif
 
                 <div class="form-group @error('short_description') am-invalid @enderror">
-                    <label
-                        class="am-label am-important">{{ __('coursebundles::bundles.bundle_short_description') }}</label>
+                    <label class="am-label am-important">{{ __('coursebundles::bundles.bundle_short_description') }}</label>
                     <div class="form-control_wrap">
                         <input class="form-control" wire:model="short_description"
                             placeholder="{{ __('coursebundles::bundles.bundle_short_description_placeholder') }}"
@@ -139,7 +146,7 @@
                             x-on:drop.prevent="isUploading = true; isDragging = false"
                             wire:drop.prevent="$upload('image', $event.dataTransfer.files[0])">
                             <x-text-input name="file" type="file" id="at_upload_image" x-ref="file_upload_image"
-                                accept="{{ !empty($allowImgFileExt)? join(',',array_map(function ($ex) {return '.' . $ex;}, $allowImgFileExt)): '*' }}"
+                                accept="{{ !empty($allowImgFileExt) ? join(',', array_map(function ($ex) { return '.' . $ex; }, $allowImgFileExt)) : '*' }}"
                                 x-on:change="isUploading = true; $wire.upload('image', $refs.file_upload_image.files[0])" />
                             <label for="at_upload_image" class="am-uploadfile">
                                 <span class="am-dropfileshadow">
@@ -177,6 +184,7 @@
                         @endif
                     </div>
                 </div>
+
                 @if (isPaidSystem())
                     <div class="am-cr-bundle_price">
                         <div class="am-title_wrap">
@@ -189,25 +197,23 @@
                     <div class="form-group">
                         <label class="am-label am-important">{{ __('coursebundles::bundles.regular_price') }}</label>
                         <div class="form-control_wrap sr-formgroup">
-                            <input class="form-control regular-price-input" placeholder="450" type="text"
-                                >
+                            <input class="form-control regular-price-input" placeholder="450" type="text">
                             <i>$</i>
                         </div>
                     </div>
-                    <div class="form-group  @error('price') am-invalid @enderror">
-                        <label class="am-label am-important"
-                            for="course-subtitle">{{ __('coursebundles::bundles.sale_price') }}</label>
+                    <div class="form-group @error('price') am-invalid @enderror">
+                        <label class="am-label am-important" for="course-subtitle">{{ __('coursebundles::bundles.sale_price') }}</label>
                         <div class="form-group-two-wrap am-cr-discount-wrap">
                             <div class="at-form-group">
-                                <input type="number" wire:model.live.debounce.500ms="price" id="price"
-                                    placeholder="150">
+                                <input type="number" wire:model.live.debounce.500ms="price" id="price" placeholder="150">
                                 <i>{{ getCurrencySymbol() }}</i>
                             </div>
                             <div class="am-cr-allow-discount">
-                                <label for="allow-discount"
-                                    class="am-cr-label">{{ __('coursebundles::bundles.allow_discount') }}<span
-                                        class="am-cr-optional">{{ __('coursebundles::bundles.optional') }}</span></label>
-                                <input type="checkbox" wire:click='toggleDiscountAllowed' id="allow-discount"
+                                <label for="allow-discount" class="am-cr-label">
+                                    {{ __('coursebundles::bundles.allow_discount') }}
+                                    <span class="am-cr-optional">{{ __('coursebundles::bundles.optional') }}</span>
+                                </label>
+                                <input type="checkbox" wire:click="toggleDiscountAllowed" id="allow-discount"
                                     class="am-cr-toggle" wire:model="discountAllowed">
                             </div>
                             <x-input-error field_name="price" />
@@ -216,11 +222,9 @@
                     @if ($discountAllowed)
                         <div class="form-group">
                             <div class="am-cr-choose_discount">
-
                                 <div class="am-cr-free_course">
                                     <div class="am-cr-free_discription">
-                                        <label
-                                            for="am-cr-free-course-toggle">{{ __('coursebundles::bundles.choose_discount_amount') }}</label>
+                                        <label>{{ __('coursebundles::bundles.choose_discount_amount') }}</label>
                                         <p>{{ __('coursebundles::bundles.discount_description') }}</p>
                                     </div>
                                     @if (!empty($final_price))
@@ -230,7 +234,6 @@
                                         </strong>
                                     @endif
                                 </div>
-
                                 <div class="am-cr-discount-table am-payouthistory">
                                     <table class="am-table">
                                         <thead>
@@ -251,8 +254,7 @@
                                                                 type="radio"
                                                                 id="discount-{{ $discountPercentage }}"
                                                                 value="{{ $discountPercentage }}">
-                                                            <label
-                                                                for="discount-{{ $discountPercentage }}">{{ $discountPercentage }}%</label>
+                                                            <label for="discount-{{ $discountPercentage }}">{{ $discountPercentage }}%</label>
                                                         </div>
                                                     </td>
                                                     <td data-label="Discount price">
@@ -301,16 +303,16 @@
                 </div>
                 <div class="form-group @error('course_description') am-invalid @enderror">
                     <div wire:key="course_description{{ time() }}" id="course_description{{ time() }}"
-                        x-data="{
-                            contentDesc: @entangle('course_description')
-                        }" x-init="$wire.dispatch('initSummerNote', {
+                        x-data="{ contentDesc: @entangle('course_description') }"
+                        x-init="$wire.dispatch('initSummerNote', {
                             target: '#course_description',
                             wiremodel: 'course_description',
-                            conetent: contentDesc,
+                            content: contentDesc,
                             componentId: @this
                         });"
                         class="form-control_wrap am-custom-editor am-custom-textarea" wire:ignore>
-                        <textarea id="course_description" class="form-control am-question-desc" placeholder="Add course description..."
+                        <textarea id="course_description" class="form-control am-question-desc"
+                            placeholder="Add course description..."
                             data-textarea="course_description"></textarea>
                         <span class="characters-count"></span>
                     </div>
@@ -328,7 +330,6 @@
                             wire:click="updateCourseBundle({{ $bundleId }})">{{ __('coursebundles::bundles.save') }}</button>
                     @endif
                 </div>
-
             </fieldset>
         </form>
     </div>
@@ -341,13 +342,69 @@
 @endpush
 
 @push('scripts')
-
-
     <script>
         window.courses = @json($courses ?? []);
     </script>
     <script defer src="{{ asset('summernote/summernote-lite.min.js') }}"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script>
+        document.addEventListener('livewire:load', function () {
+            Livewire.on('initSelect2', ({ target, data, selected }) => {
+                const $select = $(target);
+                $select.select2({
+                    placeholder: $select.data('placeholder') || 'Select options',
+                    allowClear: true,
+                    data: data.map(item => ({
+                        id: item.id,
+                        text: item.text || item.title
+                    })),
+                    multiple: true,
+                    search: $select.data('searchable') === 'true'
+                });
 
+                // Restore selected values
+                if (selected && Array.isArray(selected)) {
+                    $select.val(selected).trigger('change');
+                }
+
+                // Update Livewire on change
+                $select.on('change', function () {
+                    let componentId = $select.data('componentid');
+                    let wireModel = $select.data('wiremodel');
+                    if (componentId && wireModel) {
+                        Livewire.find(componentId).set(wireModel, $(this).val());
+                    }
+                });
+            });
+
+            Livewire.on('initSelect2Line', ({ index, data, selected }) => {
+                const $select = $(`.courses-select-${index}`);
+                $select.select2({
+                    placeholder: 'Select courses',
+                    allowClear: true,
+                    data: data.map(item => ({
+                        id: item.id,
+                        text: item.title
+                    })),
+                    multiple: true,
+                    search: true
+                });
+
+                // Restore selected values
+                if (selected && Array.isArray(selected)) {
+                    $select.val(selected).trigger('change');
+                }
+
+                // Update Livewire on change
+                $select.on('change', function () {
+                    let componentId = $select.data('componentid');
+                    let wireModel = `lines.${index}.selected_courses`;
+                    if (componentId) {
+                        Livewire.find(componentId).set(wireModel, $(this).val());
+                    }
+                });
+            });
+        });
+    </script>
 @endpush
