@@ -5,8 +5,8 @@ namespace App\Livewire\Pages\Student;
 use App\Services\OrderService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Livewire\Attributes\Layout;
 use Illuminate\Support\Facades\Storage;
+use Livewire\Attributes\Layout;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -28,6 +28,7 @@ class Invoices extends Component
     public $company_address;
 
     private ?OrderService $orderService = null;
+
     public function boot()
     {
         $this->user = Auth::user();
@@ -68,13 +69,16 @@ class Invoices extends Component
     {
         if (!empty($id) && !empty($st)) {
             DB::table('orders')->where('id', $id)->update([
-                'payment_acceptnce' => $st
+                'payment_acceptnce' => $st,
             ]);
             DB::table('courses_enrollments')->where('order_id', $id)->update([
-                'is_paid' => $st
+                'is_paid' => $st,
             ]);
-            $this->dispatch('showAlertMessage', type: 'success', title: __('general.success_title'), message: __('settings.updated_record_success'));
+
+            $this->dispatch('showAlertMessage',
+                type: 'success',
+                title: __('general.success_title'),
+                message: __('settings.updated_record_success'));
         }
     }
-
 }

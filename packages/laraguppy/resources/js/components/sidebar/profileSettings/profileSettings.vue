@@ -1,132 +1,146 @@
 <script setup>
-    import {ref, defineAsyncComponent, onMounted, computed} from 'vue';
-    import { storeToRefs } from 'pinia';
-    import { Cropper } from 'vue-advanced-cropper';
-    import 'vue-advanced-cropper/dist/style.css';
-    import Avatar  from "../../../assets/images/avatar.png"
-    import useProfileStore from "../../../stores/useProfileStore";
-    import useSettingsStore from "../../../stores/useSettingsStore";
-    import RestApiManager from '../../../services/restApiManager';
-    const profileStore = useProfileStore();
-    const settingsStore = useSettingsStore();
-    const { setNotication } = profileStore;
-    import useEventsBus from "../../../services/useEventBus";
-    const {
-        isMuted,
-        profileInfo, 
-        accountNotification 
-    } = storeToRefs(profileStore)
-    const { settings } = storeToRefs(settingsStore)
-    const isOpenModel = ref(false);
-    const isUpdating = ref(false);
-    const fileUrl = ref('');
-    const imgCropper = ref(null);
-    const resultImg = ref(null);
-    const imgFile = ref(null);
-    const errorBag = ref(null);
-    const isloading = ref(false);
-    const isOpen = ref(false);
-    const { on } = useEventsBus();
-    const csrf = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+import { ref, defineAsyncComponent, onMounted, computed } from 'vue';
+import { storeToRefs } from 'pinia';
+import { Cropper } from 'vue-advanced-cropper';
+import 'vue-advanced-cropper/dist/style.css';
+import Avatar from '../../../assets/images/avatar.png';
+import useProfileStore from '../../../stores/useProfileStore';
+import useSettingsStore from '../../../stores/useSettingsStore';
+import RestApiManager from '../../../services/restApiManager';
+import Swal from 'sweetalert2'; // Import SweetAlert2
+import useEventsBus from '../../../services/useEventBus';
 
-    const { updateProfileInfo } = profileStore;
+const profileStore = useProfileStore();
+const settingsStore = useSettingsStore();
+const { setNotication } = profileStore;
+const { isMuted, profileInfo, accountNotification } = storeToRefs(profileStore);
+const { settings } = storeToRefs(settingsStore);
+const isOpenModel = ref(false);
+const isUpdating = ref(false);
+const fileUrl = ref('');
+const imgCropper = ref(null);
+const resultImg = ref(null);
+const imgFile = ref(null);
+const errorBag = ref(null);
+const isloading = ref(false);
+const isOpen = ref(false);
+const { on } = useEventsBus();
+const csrf = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
-    const userData = ref({
-        'name': '',
-        'email': '',
-        'photo':'',
-        'phone': '',
-        'userId': '',
-    });
+const { updateProfileInfo } = profileStore;
 
-    const uploadImage = ( event ) => {
-        const { files } = event.target;
-        if( files && files[0] ){
-            let file = files[0]
-            if (file) {
-                URL.revokeObjectURL(file)
-            }
-            fileUrl.value     = URL.createObjectURL(file);
-            isOpenModel.value = true;
+const userData = ref({
+    name: '',
+    email: '',
+    photo: '',
+    phone: '',
+    userId: '',
+});
+
+const uploadImage = (event) => {
+    const { files } = event.target;
+    if (files && files[0]) {
+        let file = files[0];
+        if (file) {
+            URL.revokeObjectURL(file);
         }
-        event.target.value = '';
+        fileUrl.value = URL.createObjectURL(file);
+        isOpenModel.value = true;
+    }
+    event.target.value = '';
+};
+
+const updateInfo = async () => {
+    const { name, email, phone, userId } = userData.value;
+    let formData = new FormData();
+    formData.append('name', name);
+    formData.append('email', email);
+    formData.append('phone', phone ?? '');
+    formData.append('userId', userId);
+    if (imgFile.value) {
+        formData.append('photo', imgFile.value);
+    }
+    isloading.value = true;
+    let response = await updateProfileInfo(formData);
+    isloading.value = false;
+
+    if (response.type === 'error') {
+        errorBag.value = response.errors;
+        // Show error alert
+        Swal.fire({
+            icon: 'error',
+            title: $t('chatapp.app_title'), // "LaraGuppy"
+            text: response.message || $t('chatapp.invalid_input_file'), // Fallback error message
+            confirmButtonText: $t('chatapp.cancel'), // "Cancel"
+        });
+    } else if (response.type === 'success' && response.extra?.alert) {
+        // Show success alert
+        Swal.fire({
+            icon: 'success',
+            title: $t('chatapp.app_title'), // "LaraGuppy"
+            text: response.extra.alert, // "Profile updated successfully"
+            confirmButtonText: $t('chatapp.cancel'), // "Cancel"
+        });
+        // Update profileInfo in store if needed
+        profileStore.setProfileInfo(response.data);
     }
 
-    const updateInfo = async () => {
-        const { name, email, phone, userId } = userData.value;
-        let formData = new FormData();
-        formData.append('name', name);
-        formData.append('email', email);
-        formData.append('phone', phone ?? '');
-        formData.append('userId', userId);
-        if( imgFile.value ){
-            formData.append('photo', imgFile.value);
-        }
-        isloading.value = true;
-        let response = await updateProfileInfo(formData);
-        isloading.value = false;
+    imgFile.value = '';
+};
 
-        if( response.type == 'error' ){
-            errorBag.value = response.errors;
-        }
+on('openSettings', (payload) => {
+    isOpen.value = true;
+});
 
-        imgFile.value = '';
+onMounted(() => {
+    if (profileInfo.value?.name) {
+        userData.value = JSON.parse(JSON.stringify(profileInfo.value));
     }
+});
 
-    on('openSettings', (payload) => {
-		isOpen.value = true;
-	});
-
-    onMounted(() => {
-        if( profileInfo.value?.name ) {
-            userData.value = JSON.parse(JSON.stringify(profileInfo.value));
-        }
-    });
-
-    const croppedImage = () => {
-        const { canvas } = imgCropper.value.getResult();
-        if (canvas) {
-            canvas.toBlob(blob => {
-                let currentDate     = new Date();
-                let timeStamp       = currentDate.getTime();
-                imgFile.value       = new File([blob], `profile_${timeStamp}.jpg`, { lastModified: timeStamp } );                   
-                resultImg.value     = URL.createObjectURL(blob);
-            }, 'image/jpeg');
-        }
-        isOpenModel.value = false;
+const croppedImage = () => {
+    const { canvas } = imgCropper.value.getResult();
+    if (canvas) {
+        canvas.toBlob((blob) => {
+            let currentDate = new Date();
+            let timeStamp = currentDate.getTime();
+            imgFile.value = new File([blob], `profile_${timeStamp}.jpg`, { lastModified: timeStamp });
+            resultImg.value = URL.createObjectURL(blob);
+        }, 'image/jpeg');
     }
+    isOpenModel.value = false;
+};
 
-    const removeImage = () =>{
-        userData.value.photo = imgFile.value = resultImg.value = '';
+const removeImage = () => {
+    userData.value.photo = imgFile.value = resultImg.value = '';
+};
+
+const hasError = (value) => {
+    return errorBag.value?.[value] ?? false;
+};
+
+const logout = async (e) => {
+    e.preventDefault();
+    document.getElementById('logout-form').submit();
+};
+
+const setNotification = async () => {
+    isUpdating.value = true;
+    let status = accountNotification.value === 'unmute_notifications' ? 'mute_notifications' : 'unmute_notifications';
+    let response = await RestApiManager.postRecord('account-notifications', { action: status });
+    isUpdating.value = false;
+    if (response.type === 'success') {
+        setNotication(response.data);
     }
+};
 
-    const hasError = (value) => {
-        return errorBag.value?.[value] ?? false;
-    };
+const toggleSideBar = () => {
+    isOpen.value = false;
+};
 
-    const logout = async (e) => {
-        e.preventDefault()
-        document.getElementById('logout-form').submit();
-    }
-
-    const setNotification = async () => {
-        isUpdating.value = true;
-        let status = accountNotification.value == 'unmute_notifications' ? 'mute_notifications' : 'unmute_notifications'
-        let response = await RestApiManager.postRecord('account-notifications',{action: status});
-        isUpdating.value = false;
-        if( response.type === 'success' ) {
-            setNotication(response.data)
-        }
-    }
-
-    const toggleSideBar = () => {
-        isOpen.value = false;
-    }
-
-    const redirectUrl = computed(()=>{
-        return settings.redirectUrl ? settings.redirectUrl : '/'
-    });
-    
+const redirectUrl = computed(() => {
+    return settings.redirectUrl ? settings.redirectUrl : '/';
+});
 </script>
 <template>
     <div id="setting" class="at-usersetting" :class="{'at-usersetting_open': isOpen}">
