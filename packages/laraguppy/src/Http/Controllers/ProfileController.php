@@ -29,25 +29,25 @@ class ProfileController extends Controller
     /**
      * Edit user profile
      */
-public function store(ProfileStoreRequest $request)
-{
-    $values = $request->only(['name', 'email', 'phone']);
-    $data = array_filter($values);
+    public function store(ProfileStoreRequest $request)
+    {
+        $values = $request->only(['name', 'email', 'phone']);
+        $data = array_filter($values);
 
-    if ($request->hasFile('photo')) {
-        $file_path = $request->file('photo')->store('laraguppy/profile', getStorageDisk());
-        $file_path = str_replace('public/', '', $file_path);
-        $data['photo'] = $file_path;
+        if ($request->hasFile('photo')) {
+            $file_path = $request->file('photo')->store('laraguppy/profile', getStorageDisk());
+            $file_path = str_replace('public/', '', $file_path);
+            $data['photo'] = $file_path;
+        }
+
+        GpUser::updateOrCreate(['user_id' => auth()->user()->id], $data);
+
+        return $this->success(
+            new GuppyUserResource($request->user()),
+            __('laraguppy::chatapp.profile_updated'),
+            ['alert' => __('laraguppy::chatapp.profile_updated')] 
+        );
     }
-
-    GpUser::updateOrCreate(['user_id' => auth()->user()->id], $data);
-
-    return $this->success(
-        new GuppyUserResource($request->user()),
-        __('laraguppy::chatapp.profile_updated'),
-        ['alert' => __('laraguppy::chatapp.profile_updated')] // Alert message
-    );
-}
 
     /**
      * Get LaraGuppy Settings

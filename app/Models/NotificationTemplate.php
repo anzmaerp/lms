@@ -33,8 +33,8 @@ class NotificationTemplate extends Model {
     protected function casts(): array
     {
         return [
-            'content' => SerializeCast::class,
-        ];
+'content' => 'array',       
+ ];
     }
 
 }

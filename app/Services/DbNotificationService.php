@@ -185,9 +185,12 @@ class DbNotificationService
             $content[$key] = Str::replace('{studentName}', $data['studentName'] ?? '', $value);
             $content[$key] = Str::replace('{studentEmail}', $data['studentEmail'] ?? '', $value);
             $content[$key] = Str::replace('{sessionType}', $data['sessionType'] ?? '', $value);
+            $content[$key] = Str::replace('{pdf}', $data['pdf'] ?? '', $value);
             $content[$key] = Str::replace('{message}', $data['message'] ?? '', $value);
         }
         $emailTemplate = $content;
+        \Log::info($emailTemplate);
+        \Log::info("ds;klfhdsfhdhsfshdfh");
         return $emailTemplate;
     }
 

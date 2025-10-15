@@ -366,59 +366,67 @@
         </div>
         <x-slot-detail-modal :cartItems="$cartItems" :timezone="$timezone" :currentSlot="$currentSlot" :user="$user" wire:key="{{ time() }}" />
     @endif  
-    <div wire:ignore.self class="modal fade am-requestsessionpopup" id="requestsession-popup" data-bs-backdrop="static" x-data="{requestSessionForm: @entangle('requestSessionForm')}">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="am-modal-header">
-                    <h2>{{ __('tutor.request_a_session') }}</h2>
-                    <span data-bs-dismiss="modal" class="am-closepopup">
-                        <i class="am-icon-multiply-01"></i>
-                    </span>
-                </div>
-                <div class="am-modal-body">
-                    <ul class="nav nav-pills am-booking-tabs" id="pills-tab" role="tablist">
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link active" @click="requestSessionForm.type = 'private'" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home" aria-selected="true"> 
-                                {{ __('tutor.private_session') }}
-                            </button>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link" @click="requestSessionForm.type = 'group'" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-profile" type="button" role="tab" aria-controls="pills-profile" aria-selected="false"> 
-                                {{ __('tutor.group_session') }}
-                            </button>
-                        </li>
-                    </ul>
-                    <form class="am-themeform">
-                        <fieldset>
-                            <div class="form-group form-group-two-wrap">
-                                <div @error('requestSessionForm.first_name') class="am-invalid" @enderror>
-                                    <label class="am-label am-important" for="name">{{ __('auth.first_name') }}</label>
-                                    <input type="text" x-model="requestSessionForm.first_name" class="form-control" placeholder="{{ __('auth.first_name') }}">
-                                    <x-input-error field_name="requestSessionForm.first_name" />
-                                </div>
-                                <div @error('requestSessionForm.last_name') class="am-invalid" @enderror>
-                                    <label class="am-label am-important" for="email">{{ __('auth.last_name') }}</label>
-                                    <input type="text" x-model="requestSessionForm.last_name" class="form-control" placeholder="{{ __('auth.last_name') }}">
-                                    <x-input-error field_name="requestSessionForm.last_name" />
-                                </div>
+<div wire:ignore.self class="modal fade am-requestsessionpopup" id="requestsession-popup" data-bs-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="am-modal-header">
+                <h2>{{ __('tutor.request_a_session') }}</h2>
+                <span data-bs-dismiss="modal" class="am-closepopup">
+                    <i class="am-icon-multiply-01"></i>
+                </span>
+            </div>
+            <div class="am-modal-body">
+                <ul class="nav nav-pills am-booking-tabs" id="pills-tab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" wire:click="$set('requestSessionForm.type', 'private')" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home" aria-selected="true"> 
+                            {{ __('tutor.private_session') }}
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" wire:click="$set('requestSessionForm.type', 'group')" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-profile" type="button" role="tab" aria-controls="pills-profile" aria-selected="false"> 
+                            {{ __('tutor.group_session') }}
+                        </button>
+                    </li>
+                </ul>
+                <form class="am-themeform" wire:submit.prevent="sendRequestSession" enctype="multipart/form-data">
+                    <fieldset>
+                        <div class="form-group form-group-two-wrap">
+                            <div @error('requestSessionForm.first_name') class="am-invalid" @enderror>
+                                <label class="am-label am-important" for="first_name">{{ __('auth.first_name') }}</label>
+                                <input type="text" wire:model="requestSessionForm.first_name" class="form-control" placeholder="{{ __('auth.first_name') }}">
+                                <x-input-error field_name="requestSessionForm.first_name" />
                             </div>
-                            <div class="form-group @error('requestSessionForm.email') am-invalid @enderror">
-                                <label class="am-label am-important" for="email">{{ __('auth.email_placeholder') }}</label>
-                                <input type="text" x-model="requestSessionForm.email" class="form-control" placeholder="{{ __('auth.email_placeholder') }}">
-                                <x-input-error field_name="requestSessionForm.email" />
+                            <div @error('requestSessionForm.last_name') class="am-invalid" @enderror>
+                                <label class="am-label am-important" for="last_name">{{ __('auth.last_name') }}</label>
+                                <input type="text" wire:model="requestSessionForm.last_name" class="form-control" placeholder="{{ __('auth.last_name') }}">
+                                <x-input-error field_name="requestSessionForm.last_name" />
                             </div>
-                            <div class="form-group @error('requestSessionForm.message') am-invalid @enderror">
-                                <label class="am-label am-important" for="email">{{ __('tutor.message') }}</label>
-                                <textarea name="message" x-model="requestSessionForm.message" placeholder="{{ __('tutor.message_placeholder') }}"></textarea>
-                                <x-input-error field_name="requestSessionForm.message" />
-                            </div>
-                        </fieldset>
-                    </form>
-                    <button class="am-btn" wire:click="sendRequestSession" wire:loading.class="am-btn_disable" wire:target="sendRequestSession">{{ __('tutor.send_request') }}</button>
-                </div>
+                        </div>
+                        <div class="form-group @error('requestSessionForm.email') am-invalid @enderror">
+                            <label class="am-label am-important" for="email">{{ __('auth.email_placeholder') }}</label>
+                            <input type="text" wire:model="requestSessionForm.email" class="form-control" placeholder="{{ __('auth.email_placeholder') }}">
+                            <x-input-error field_name="requestSessionForm.email" />
+                        </div>
+                        <div class="form-group @error('requestSessionForm.pdf') am-invalid @enderror">
+                            <label class="am-label am-important" for="pdf">{{ __('tutor.upload_pdf') }}</label>
+                            <input type="file" wire:model="requestSessionForm.pdf" class="form-control" accept=".pdf">
+                            <x-input-error field_name="requestSessionForm.pdf" />
+                        </div>
+                        <div class="form-group @error('requestSessionForm.message') am-invalid @enderror">
+                            <label class="am-label am-important" for="message">{{ __('tutor.message') }}</label>
+                            <textarea wire:model="requestSessionForm.message" placeholder="{{ __('tutor.message_placeholder') }}" class="form-control"></textarea>
+                            <x-input-error field_name="requestSessionForm.message" />
+                        </div>
+                    </fieldset>
+                    <button class="am-btn" type="submit" wire:loading.class="am-btn_disable" wire:target="sendRequestSession">
+                        <span wire:loading.remove wire:target="sendRequestSession">{{ __('tutor.send_request') }}</span>
+                        <span wire:loading wire:target="sendRequestSession">{{ __('tutor.sending') }}</span>
+                    </button>
+                </form>
             </div>
         </div>
     </div>
+</div>
 </div>
 
 @push('styles')
