@@ -435,7 +435,7 @@ class Checkout extends Component
                 $couponConditions = false;
                 $response = [
                     'status' => 'error',
-                    'message' => __('kupondeal::kupondeal.invalid_coupon_conditions'),
+                    'message' => __('general.invalid_coupon_conditions'),
                 ];
                 $this->dispatch('showAlertMessage', type: $response['status'], message: $response['message']);
                 $this->reset('coupon');
@@ -450,7 +450,7 @@ class Checkout extends Component
                     if (!$couponModel) {
                         $response = [
                             'status' => 'error',
-                            'message' => __('kupondeal::kupondeal.invalid_coupon'),
+                            'message' => __('general.invalid_coupon'),
                         ];
                         $this->dispatch('showAlertMessage', type: $response['status'], message: $response['message']);
                         $this->reset('coupon');
