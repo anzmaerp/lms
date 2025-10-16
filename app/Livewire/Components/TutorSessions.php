@@ -50,6 +50,7 @@ class TutorSessions extends Component
     public $currentBooking = null;
     public $selectedDate = null;
     public $pdfPath;
+    public $pdfUrl;
 
     private $bookingService,
         $subjectService;
