@@ -13,7 +13,7 @@ use App\Services\BookingService;
 use App\Services\SubjectService;
 use App\Services\UserService;
 use Carbon\Carbon;
-use Illuminate\Http\UploadedFile; 
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
@@ -26,9 +26,16 @@ class TutorSessions extends Component
 {
     use WithFileUploads;
 
-    public $currentDate, $startOfWeek, $timezone;
+    public $currentDate,
+        $startOfWeek,
+        $timezone;
+
     public $activeId;
-    public $disablePrevious, $showCurrent = false, $isCurrent = false;
+
+    public $disablePrevious,
+        $showCurrent = false,
+        $isCurrent = false;
+
     public $dateRange = [];
     public $availableSlots = [];
     public $filter = [];
@@ -42,9 +49,10 @@ class TutorSessions extends Component
     public $meetingLink = null;
     public $currentBooking = null;
     public $selectedDate = null;
-    public $pdfPath ;
+    public $pdfPath;
 
-    private $bookingService, $subjectService;
+    private $bookingService,
+        $subjectService;
 
     public RequestSessionForm $requestSessionForm;
 
@@ -76,7 +84,7 @@ class TutorSessions extends Component
         $this->userId = $user->id;
         $this->selectedDate = now($this->timezone)->toDateString();
         $this->currentDate = parseToUserTz(Carbon::now());
-        $this->startOfWeek = (int)(setting('_lernen.start_of_week') ?? Carbon::SUNDAY);
+        $this->startOfWeek = (int) (setting('_lernen.start_of_week') ?? Carbon::SUNDAY);
         $this->subjectService = new SubjectService($user);
         $this->timezone = getUserTimezone();
         $this->subjectGroups = $this->subjectService->getSubjectsByUserRole();
@@ -201,8 +209,8 @@ class TutorSessions extends Component
         $start = $end = null;
         $this->disablePrevious = $this->isCurrent = false;
         $now = Carbon::now($this->timezone);
-        $start = $this->currentDate->copy()->startOfWeek($this->startOfWeek)->toDateString() . " 00:00:00";
-        $end = $this->currentDate->copy()->endOfWeek(getEndOfWeek($this->startOfWeek))->toDateString() . " 23:59:59";
+        $start = $this->currentDate->copy()->startOfWeek($this->startOfWeek)->toDateString() . ' 00:00:00';
+        $end = $this->currentDate->copy()->endOfWeek(getEndOfWeek($this->startOfWeek))->toDateString() . ' 23:59:59';
         if ($now->between($this->currentDate->copy()->startOfWeek($this->startOfWeek), $this->currentDate->copy()->endOfWeek(getEndOfWeek($this->startOfWeek)))) {
             $this->disablePrevious = true;
             $this->isCurrent = true;
@@ -218,7 +226,7 @@ class TutorSessions extends Component
     {
         $start = $this->currentDate->copy()->startOfWeek($this->startOfWeek);
         $end = $this->currentDate->copy()->endOfWeek(getEndOfWeek($this->startOfWeek));
-        return $start->format('F') . " " . $start->format('d') . " - " . $end->format('F') . " " . $end->format('d') . " " . $end->format('Y');
+        return $start->format('F') . ' ' . $start->format('d') . ' - ' . $end->format('F') . ' ' . $end->format('d') . ' ' . $end->format('Y');
     }
 
     public function setDefaultTimezone($timezone)
@@ -259,7 +267,7 @@ class TutorSessions extends Component
         }
     }
 
-public function updatedRequestSessionFormPdf()
+    public function updatedRequestSessionFormPdf()
     {
         \Log::info('PDF File Updated', [
             'pdf' => $this->requestSessionForm->pdf,
@@ -271,13 +279,12 @@ public function updatedRequestSessionFormPdf()
         if ($this->requestSessionForm->pdf instanceof \Livewire\Features\SupportFileUploads\TemporaryUploadedFile) {
             $fileName = time() . '_' . $this->requestSessionForm->pdf->getClientOriginalName();
             $this->pdfPath = $this->requestSessionForm->pdf->storeAs('session_requests', $fileName, 'public');
-            $this->requestSessionForm->pdf = null; // Clear the temporary file to prevent re-upload
+            $this->requestSessionForm->pdf = null;  // Clear the temporary file to prevent re-upload
         }
     }
 
     public function sendRequestSession()
     {
-
         $this->validate();
 
         $response = isDemoSite();
@@ -289,31 +296,29 @@ public function updatedRequestSessionFormPdf()
             return;
         }
 
-if (!empty($this->pdfPath)) {
-    $pdfUrl = url(Storage::url($this->pdfPath));
-}
+        if (!empty($this->pdfPath)) {
+            $pdfUrl = url(Storage::url($this->pdfPath));
+        }
 
-\Log::info( $pdfUrl);
-\Log::info('pdfurl');
+        $templateData = [
+            'userName' => $this->user?->profile?->full_name,
+            'studentName' => $this->requestSessionForm->last_name,
+            'studentEmail' => $this->requestSessionForm->email,
+            'pdf' => $pdfUrl,
+            'sessionType' => __('tutor.' . $this->requestSessionForm->type . '_session'),
+            'message' => $this->requestSessionForm->message,
+        ];
 
-$templateData = [
-    'userName'     => $this->user?->profile?->full_name,
-    'studentName'  => $this->requestSessionForm->last_name,
-    'studentEmail' => $this->requestSessionForm->email,
-    'pdf'          => $pdfUrl,
-    'sessionType'  => __('tutor.' . $this->requestSessionForm->type . '_session'),
-    'message'      => $this->requestSessionForm->message,
-];
-
-        // dispatch(new SendNotificationJob('sessionRequest', $this->user, $templateData));
+        dispatch(new SendNotificationJob('sessionRequest', $this->user, $templateData));
         dispatch(new SendDbNotificationJob('sessionRequest', $this->user, $templateData));
-        // dispatch(new SendNotificationJob('sessionRequest', User::admin(), $templateData));
+        dispatch(new SendNotificationJob('sessionRequest', User::admin(), $templateData));
 
         $this->dispatch('toggleModel', id: 'requestsession-popup', action: 'hide');
         $this->dispatch('showAlertMessage', type: 'success', title: __('general.success_title'), message: __('tutor.request_session_success'));
         $this->requestSessionForm->reset();
         $this->pdfPath = null;
     }
+
     public function getFreeSession($slotId)
     {
         $response = isDemoSite();

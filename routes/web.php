@@ -38,20 +38,6 @@ use App\Livewire\Pages\Common\ProfileSettings\IdentityVerification;
 Route::get('/dbNew', function () {
     return 'No thing to do!';
 });
-Route::get('/db', function () {
-    $template = [
-        'info' => '{studentName} - For Student Name <br> {studentEmail} - For Student Notification <br> {sessionType} - For Session Type <br> {pdf} - For PDF <br> {message} - For Message',
-        'subject' => 'New Custom Session Request from {studentName}',
-        'content' => 'New session request from {studentName} ({studentEmail}). Type: {sessionType}. Attached pdf: {pdf}. Message: {message}',
-    ];
-
-    DB::table('notification_templates')
-        ->where('type', 'sessionRequest')
-        ->where('role', 'tutor')
-        ->update(['content' => serialize($template)]);
-
-    return '✅ Template updated successfully!';
-});
 
 Route::get('/clear', function () {
     Artisan::call('optimize:clear');

@@ -181,10 +181,7 @@ class DbNotificationService
     public function getSessionRequestNotification($content, $data)
     {
         $emailTemplate = array();
-            \Log::info($content);
-            \Log::info('the content');
-            \Log::info($data);
-            \Log::info('the data');
+
         foreach ($content as $key => &$value) {
             $content[$key] = Str::replace('{studentName}', $data['studentName'] ?? '', $value);
             $content[$key] = Str::replace('{studentEmail}', $data['studentEmail'] ?? '', $value);
@@ -198,8 +195,7 @@ class DbNotificationService
             $content[$key] = Str::replace('{message}', $data['message'] ?? '', $value);
         }
         $emailTemplate = $content;
-        \Log::info($emailTemplate);
-        \Log::info("ds;klfhdsfhdhsfshdfh");
+
         return $emailTemplate;
     }
 
