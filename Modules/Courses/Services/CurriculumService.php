@@ -7,15 +7,16 @@ use Illuminate\Support\Facades\DB;
 use Modules\Courses\Models\Curriculum;
 use Modules\Courses\Models\Watchtime;
 
-class CurriculumService {
-
+class CurriculumService
+{
     /**
      * Create a new curriculum.
      *
      * @param array $data
      * @return Curriculum
      */
-    public function createCurriculum(array $data) {
+    public function createCurriculum(array $data)
+    {
         // Add sort_order to $data if not already present
         if (empty($data['sort_order'])) {
             $maxSortOrder = Curriculum::where('section_id', $data['section_id'])->max('sort_order');
@@ -54,7 +55,8 @@ class CurriculumService {
      * @param array $data
      * @return Curriculum
      */
-    public function updateCurriculum(int $curriculumId, array $data) {
+    public function updateCurriculum(int $curriculumId, array $data)
+    {
         $curriculum = Curriculum::findOrFail($curriculumId);
         $curriculum->update($data);
         return $curriculum;
@@ -66,7 +68,8 @@ class CurriculumService {
      * @param int $id
      * @return Curriculum
      */
-    public function getCurriculumById(int $id) {
+    public function getCurriculumById(int $id)
+    {
         return Curriculum::findOrFail($id);
     }
 
@@ -76,7 +79,8 @@ class CurriculumService {
      * @param int $id
      * @return bool
      */
-    public function deleteCurriculum(int $id) {
+    public function deleteCurriculum(int $id)
+    {
         $curriculum = Curriculum::findOrFail($id);
         return $curriculum->delete();
     }
@@ -87,29 +91,32 @@ class CurriculumService {
      * @param int $perPage
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
-    public function getAllCurriculums(int $sectionId) {
+    public function getAllCurriculums(int $sectionId)
+    {
         return Curriculum::where('section_id', $sectionId)->orderBy('sort_order', 'asc')->get();
     }
 
-
-    public function updateWatchtime(int $curriculumId, int $sectionId, int $duration) {
+    public function updateWatchtime(int $curriculumId, int $sectionId, int $duration)
+    {
         $watchtime = Watchtime::where('curriculum_id', $curriculumId)->where('user_id', Auth::id())->where('section_id', $sectionId)->first();
-        if($watchtime) {
+        if ($watchtime) {
             $watchtime->update(['duration' => $duration]);
         }
     }
 
-    public function addWatchtime(int $courseId, int $curriculumId, int $sectionId, int $duration) {
+    public function addWatchtime(int $courseId, int $curriculumId, int $sectionId, int $duration)
+    {
         Watchtime::create([
-            'course_id' => $courseId, 
-            'curriculum_id' => $curriculumId, 
-            'user_id' => Auth::id(), 
-            'duration' => $duration, 
+            'course_id' => $courseId,
+            'curriculum_id' => $curriculumId,
+            'user_id' => Auth::id(),
+            'duration' => $duration,
             'section_id' => $sectionId
         ]);
     }
 
-    public function getWatchtime(int $curriculumId, int $sectionId) {
+    public function getWatchtime(int $curriculumId, int $sectionId)
+    {
         return Watchtime::where('curriculum_id', $curriculumId)->where('user_id', Auth::id())->where('section_id', $sectionId)->first();
     }
 }

@@ -2,28 +2,27 @@
 
 namespace Modules\Courses\Livewire\Pages\Student\CourseTaking;
 
-use Modules\Courses\Services\CourseService;
-use Modules\Courses\Services\CurriculumService;
-use Modules\Assignments\Services\AssignemntsService;
-use Modules\Quiz\Services\QuizService;
+use App\Jobs\SendDbNotificationJob;
+use App\Jobs\SendNotificationJob;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
-use Livewire\Attributes\Computed;
-use App\Jobs\SendNotificationJob;
-use App\Jobs\SendDbNotificationJob;
-use Illuminate\Support\Str;
-use Modules\Assignments\Models\Assignment;
-use Modules\Quiz\Models\Quiz;
-use App\Models\User;
-use Livewire\Component;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Str;
+use Livewire\Attributes\Computed;
 use Livewire\Attributes\On;
 use Livewire\Attributes\Renderless;
+use Livewire\Component;
+use Modules\Assignments\Models\Assignment;
+use Modules\Assignments\Services\AssignemntsService;
+use Modules\Courses\Services\CourseService;
+use Modules\Courses\Services\CurriculumService;
+use Modules\Quiz\Models\Quiz;
+use Modules\Quiz\Services\QuizService;
 
 class CourseTaking extends Component
 {
-
     public $logo;
     public $activeCurriculum;
     public $instructorCoursesCount;
@@ -37,6 +36,8 @@ class CourseTaking extends Component
     public $backRoute = null;
     public $curriculumOrder = [];
     public $nextCurriculumItem = [];
+    public $totalPdfs;
+
     public $socialIcons = [
         'Facebook' => 'am-icon-facebook-1',
         'X/Twitter' => 'am-icon-twitter-02',
@@ -94,11 +95,11 @@ class CourseTaking extends Component
         }
 
         if ($this->role == 'admin') {
-            $this->backRoute =  route('courses.admin.courses');
+            $this->backRoute = route('courses.admin.courses');
         }
 
         if ($this->course->instructor_id == Auth::id()) {
-            $this->backRoute =  route('courses.tutor.courses');
+            $this->backRoute = route('courses.tutor.courses');
         }
 
         // Build curriculum order array for navigation
@@ -152,7 +153,7 @@ class CourseTaking extends Component
                 'ratings.student.address',
             ],
             withSum: [
-                'courseWatchtime' => 'duration'  // Add this line to get sum of duration
+                'courseWatchtime' => 'duration'
             ],
             withAvg: [
                 'ratings' => 'rating',
@@ -164,8 +165,9 @@ class CourseTaking extends Component
                 'instructorReviews',
                 'faqs',
                 'enrollments',
-                'instructor as active_students_count' => function ($query) {  // Count total enrollments
-                    $query->withCount('courses')
+                'instructor as active_students_count' => function ($query) {
+                    $query
+                        ->withCount('courses')
                         ->join(config('courses.db_prefix') . 'courses', 'users.id', '=', config('courses.db_prefix') . 'courses.instructor_id')
                         ->join(config('courses.db_prefix') . 'enrollments', config('courses.db_prefix') . 'courses.id', '=', config('courses.db_prefix') . 'enrollments.course_id');
                 },
@@ -194,14 +196,31 @@ class CourseTaking extends Component
         return $count;
     }
 
+    #[Computed]
+    public function totalPdfs()
+    {
+        $count = 0;
+        foreach ($this->course->sections as $section) {
+            $count += count($section->curriculums->where('type', 'pdf'));
+        }
+        return $count;
+    }
+
     public function loadCourseData() {}
 
     public function render()
     {
         $totalVideos = $this->totalVideos;
-        $this->instructorCoursesCount       = (new CourseService())->getInstructorCoursesCount($this->course->instructor_id);
+        $totalArticles = $this->totalArticles;
+        $totalPdfs = $this->totalPdfs;
+        $this->instructorCoursesCount = (new CourseService())->getInstructorCoursesCount($this->course->instructor_id);
 
-        return view('courses::livewire.student.course-taking.course-taking', ['course' => $this->course, 'totalArticles' => $this->totalArticles, 'totalVideos' => $totalVideos])->extends('courses::layouts.app');
+        return view('courses::livewire.student.course-taking.course-taking', [
+            'course' => $this->course,
+            'totalArticles' => $totalArticles,
+            'totalVideos' => $totalVideos,
+            'totalPdfs' => $totalPdfs
+        ])->extends('courses::layouts.app');
     }
 
     public function loadData()
@@ -232,7 +251,7 @@ class CourseTaking extends Component
             $this->dispatch('showAlertMessage', type: 'error', title: __('general.demosite_res_title'), message: __('general.demosite_res_txt'));
             return;
         }
-        $curriculumId = (int)$this->activeCurriculum['id'] ?? 0;
+        $curriculumId = (int) $this->activeCurriculum['id'] ?? 0;
         $sectionId = (int) $this->activeCurriculum['section_id'] ?? 0;
         $totalDuration = (int) $this->activeCurriculum['content_length'] ?? 0;
         $watchtime = (new CurriculumService())->getWatchtime($curriculumId, $sectionId);
@@ -255,19 +274,40 @@ class CourseTaking extends Component
 
         $this->activeCurriculum['watchtime']['duration'] = $totalDuration;
 
-        $this->dispatch('updated-progress', progress: $this->progress);
+        // Check if progress is 100% to trigger certificate and assignments
+        if ($this->progress >= 100) {
+            \Log::info('🎯 Progress reached 100%. Initiating certificate logic.');
+            if (isActiveModule('upcertify') && !empty($this->course?->certificate_id)) {
+                $metaData = $this->course->meta_data ?? null;
+                if (isActiveModule('Quiz')) {
+                    if (!empty($metaData['assign_quiz_certificate']) && $metaData['assign_quiz_certificate'] == 'none') {
+                        $this->generateCertificate();
+                    }
+                } else {
+                    $this->generateCertificate();
+                }
+            }
+            $isAssigned = $this->assignQuiz();
+            $this->assignAssignment();
+            $this->dispatch('updated-progress', progress: $this->progress, resultAssigned: $isAssigned);
+        } else {
+            $this->dispatch('updated-progress', progress: $this->progress);
+        }
     }
 
     #[Renderless]
     public function updateWatchtime($isCompleted = false)
     {
-
         $response = isDemoSite();
         if ($response) {
             return;
         }
 
-        $curriculumId = (int)$this->activeCurriculum['id'] ?? 0;
+        if (in_array($this->activeCurriculum['type'] ?? '', ['article', 'pdf'])) {
+            return;
+        }
+
+        $curriculumId = (int) $this->activeCurriculum['id'] ?? 0;
         $sectionId = (int) $this->activeCurriculum['section_id'] ?? 0;
         $totalDuration = (int) $this->activeCurriculum['content_length'] ?? 0;
         $isAssigned = false;
@@ -283,16 +323,14 @@ class CourseTaking extends Component
                 }
             }
         } else {
-
             if ($isCompleted) {
                 $updateDuration = $totalDuration;
             } else {
                 $updateDuration = $totalDuration > 60 ? 60 : $totalDuration;
             }
-
             (new CurriculumService())->addWatchtime((int) $this->course?->id, (int) $curriculumId, (int) $sectionId, (int) $updateDuration);
         }
-        // Refresh course data to get updated watchtime values
+
         $courseDuration = (new CourseService())->getCourse(
             courseId: $this->course->id,
             withSum: [
@@ -306,8 +344,7 @@ class CourseTaking extends Component
 
         if ($this->progress >= 100) {
             \Log::info('🎯 Progress reached 100%. Initiating certificate logic.');
-
-            if (isActiveModule('upcertify')  && !empty($this->course?->certificate_id)) {
+            if (isActiveModule('upcertify') && !empty($this->course?->certificate_id)) {
                 $metaData = $this->course->meta_data ?? null;
                 if (isActiveModule('Quiz')) {
                     if (!empty($metaData['assign_quiz_certificate']) && $metaData['assign_quiz_certificate'] == 'none') {
@@ -336,26 +373,25 @@ class CourseTaking extends Component
         if (isActiveModule('Quiz')) {
             $quizzes = $this->course?->quizzes;
             if (!empty($quizzes)) {
-
                 foreach ($quizzes as $quiz) {
                     $isAlreadyAssigned = (new \Modules\Quiz\Services\QuizService())->getAssignedQuiz($quiz->id, auth()->user()->id);
                     if (!$isAlreadyAssigned && $quiz->status == 'published') {
                         $isAssigned = true;
                         $quizDetail = (new \Modules\Quiz\Services\QuizService())->assignQuiz($quiz->id, [auth()->user()->id]);
-                        $quizData   = Quiz::with('questions', 'tutor.profile')->whereStatus(Quiz::PUBLISHED)->find($quizDetail->quiz_id);
+                        $quizData = Quiz::with('questions', 'tutor.profile')->whereStatus(Quiz::PUBLISHED)->find($quizDetail->quiz_id);
 
                         $emailData = [
-                            'quizTitle'       => $quiz->title,
-                            'studentName'     => $student?->profile?->full_name,
-                            'tutorName'       => $quizData?->tutor?->profile?->full_name,
-                            'quizUrl'         => route('quiz.student.quiz-details', ['attemptId' => $quizDetail?->id])
+                            'quizTitle' => $quiz->title,
+                            'studentName' => $student?->profile?->full_name,
+                            'tutorName' => $quizData?->tutor?->profile?->full_name,
+                            'quizUrl' => route('quiz.student.quiz-details', ['attemptId' => $quizDetail?->id])
                         ];
 
                         $notifyData = [
-                            'quizTitle'         => $quiz->title,
-                            'studentName'       => $student?->profile?->full_name,
-                            'tutorName'         => $quizData?->tutor?->profile?->full_name,
-                            'assignedQuizUrl'   => route('quiz.student.quizzes')
+                            'quizTitle' => $quiz->title,
+                            'studentName' => $student?->profile?->full_name,
+                            'tutorName' => $quizData?->tutor?->profile?->full_name,
+                            'assignedQuizUrl' => route('quiz.student.quizzes')
                         ];
 
                         dispatch(new SendNotificationJob('assignedQuiz', $student, $emailData));
@@ -375,26 +411,24 @@ class CourseTaking extends Component
         if (isActiveModule('assignments')) {
             $assignments = $this->course?->assignments;
             if (!empty($assignments)) {
-
                 foreach ($assignments as $assignment) {
                     $isAlreadyAssigned = (new \Modules\Assignments\Services\AssignemntsService())->getAssignedAssignment($assignment->id, auth()->user()->id);
-
                     if (!$isAlreadyAssigned && $assignment->status == 'published') {
                         $isAssigned = true;
                         $assignmentDetail = (new \Modules\Assignments\Services\AssignemntsService())->assignAssignment($assignment->id, [auth()->user()->id]);
-                        $assignmentData   = Assignment::with('tutor.profile')->whereStatus(Assignment::STATUS_PUBLISHED)->find($assignmentDetail->assignment_id);
+                        $assignmentData = Assignment::with('tutor.profile')->whereStatus(Assignment::STATUS_PUBLISHED)->find($assignmentDetail->assignment_id);
 
                         $emailData = [
-                            'assignmentTitle'       => $assignment->title,
-                            'studentName'           => $student?->profile?->full_name,
-                            'tutorName'             => $assignmentData?->instructor?->profile?->full_name,
+                            'assignmentTitle' => $assignment->title,
+                            'studentName' => $student?->profile?->full_name,
+                            'tutorName' => $assignmentData?->instructor?->profile?->full_name,
                             'assignedAssignmentUrl' => route('assignments.student.attempt-assignment', ['id' => $assignmentDetail?->id])
                         ];
 
                         $notifyData = [
-                            'assignmentTitle'       => $assignment->title,
-                            'studentName'           => $student?->profile?->full_name,
-                            'tutorName'             => $assignmentData?->instructor?->profile?->full_name,
+                            'assignmentTitle' => $assignment->title,
+                            'studentName' => $student?->profile?->full_name,
+                            'tutorName' => $assignmentData?->instructor?->profile?->full_name,
                             'assignedAssignmentUrl' => route('assignments.student.attempt-assignment', ['id' => $assignmentDetail?->id])
                         ];
 
@@ -406,30 +440,31 @@ class CourseTaking extends Component
         }
         return $isAssigned;
     }
+
     public function generateCertificate()
     {
         $wildcard_data = [
-            'tutor_name'         => $this->course?->instructor?->profile?->full_name ?? '',
-            'student_name'       => auth()->user()->profile?->full_name ?? '',
-            'gender'             => !empty(auth()->user()->profile?->gender) ? ucfirst(auth()->user()->profile?->gender) : '',
-            'tutor_tagline'      => $this->course?->instructor?->profile?->tagline ?? '',
-            'issued_by'          => $this->course?->instructor?->profile?->full_name ?? '',
-            'platform_name'      => setting('_general.site_name'),
-            'platform_email'     => setting('_general.site_email'),
-            'course_title'       => $this->course?->title ?? '',
-            'course_subtitle'    => $this->course?->subtitle ?? '',
+            'tutor_name' => $this->course?->instructor?->profile?->full_name ?? '',
+            'student_name' => auth()->user()->profile?->full_name ?? '',
+            'gender' => !empty(auth()->user()->profile?->gender) ? ucfirst(auth()->user()->profile?->gender) : '',
+            'tutor_tagline' => $this->course?->instructor?->profile?->tagline ?? '',
+            'issued_by' => $this->course?->instructor?->profile?->full_name ?? '',
+            'platform_name' => setting('_general.site_name'),
+            'platform_email' => setting('_general.site_email'),
+            'course_title' => $this->course?->title ?? '',
+            'course_subtitle' => $this->course?->subtitle ?? '',
             'course_description' => $this->course?->description ?? '',
-            'course_category'    => $this->course?->category?->name ?? '',
+            'course_category' => $this->course?->category?->name ?? '',
             'course_subcategory' => $this->course?->subCategory?->name ?? '',
-            'course_type'        => $this->course?->type ?? '',
-            'course_level'       => $this->course?->level ?? '',
-            'course_language'    => $this->course?->language?->name ?? '',
-            'free_course'        => $this->course?->is_free ? 'Yes' : 'No',
-            'course_price'       => $this->course?->pricing?->price ? formatAmount($this->course?->pricing?->price) : '',
-            'course_discount'    => $this->course?->pricing?->discount ? formatAmount($this->course?->pricing?->discount) : '',
-            'issue_date'         => now()->format(setting('_general.date_format')),
-            'student_email'      => auth()->user()->email ?? '',
-            'tutor_email'        => $this->course?->instructor?->email ?? '',
+            'course_type' => $this->course?->type ?? '',
+            'course_level' => $this->course?->level ?? '',
+            'course_language' => $this->course?->language?->name ?? '',
+            'free_course' => $this->course?->is_free ? 'Yes' : 'No',
+            'course_price' => $this->course?->pricing?->price ? formatAmount($this->course?->pricing?->price) : '',
+            'course_discount' => $this->course?->pricing?->discount ? formatAmount($this->course?->pricing?->discount) : '',
+            'issue_date' => now()->format(setting('_general.date_format')),
+            'student_email' => auth()->user()->email ?? '',
+            'tutor_email' => $this->course?->instructor?->email ?? '',
         ];
 
         $certificate = generate_certificate(
@@ -475,7 +510,7 @@ class CourseTaking extends Component
         $this->studentRating = $courseRatings->ratings?->where('student_id', auth()->id())->first();
     }
 
-    private function getCourseSingedUrl($path)
+    private function getCourseSignedUrl($path)
     {
         return URL::signedRoute('courses.secure.video', ['path' => Str::replace('courses/', '', $path)]);
     }
@@ -483,8 +518,8 @@ class CourseTaking extends Component
     private function setActiveCurriculmPath()
     {
         if (!empty($this->activeCurriculum['media_path'])) {
-            if (getStorageDisk() !== 's3') {
-                $this->activeCurriculum['media_path'] = Storage::url($this->activeCurriculum['media_path']);
+            if ($this->activeCurriculum['type'] === 'video') {
+                $this->activeCurriculum['media_path'] = $this->getCourseSignedUrl($this->activeCurriculum['media_path']);
             } else {
                 $this->activeCurriculum['media_path'] = Storage::url($this->activeCurriculum['media_path']);
             }
