@@ -19,7 +19,7 @@ class RequestSessionRequest extends FormRequest
             'email' => 'required|string|email',
             'message' => 'required|string|max:16777215',
             'type' => 'required|string|in:private,group',
-            'pdf' => 'nullable|file|mimes:pdf|max:10240', // 10MB max, PDF only
+            'pdf' => 'nullable|file|mimes:pdf|max:10240', 
         ];
     }
 

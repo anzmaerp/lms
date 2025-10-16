@@ -961,8 +961,14 @@ class EmailTemplateSeeder extends Seeder
                             ],
                             'content' => [
                                 'id' => 'content',
-                                'title' => __('email_template.email_content'),
-                                'default' => __('email_template.session_request_content', ['userName' => '{userName}', 'studentName' => '{studentName}', 'studentEmail' => '{studentEmail}', 'sessionType' => '{sessionType}', 'message' => '{message}']),
+                                'title' => __('notification_template.email_content'),
+                                'default' => __('notification_template.session_request_content', [
+                                    'studentName' => '{studentName}',
+                                    'studentEmail' => '{studentEmail}',
+                                    'sessionType' => '{sessionType}',
+                                    'message' => '{message}',
+                                    'pdf' => '{pdf}',
+                                ]),
                             ],
                         ],
                     ],

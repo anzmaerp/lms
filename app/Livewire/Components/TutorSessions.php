@@ -289,19 +289,25 @@ public function updatedRequestSessionFormPdf()
             return;
         }
 
-        $templateData = [
-            'userName' => $this->user?->profile?->full_name,
-            'studentName' => $this->requestSessionForm->last_name,
-            'studentEmail' => $this->requestSessionForm->email,
-            'pdf' => $this->pdfPath ? url(Storage::url($this->pdfPath)) : null, 
-            'sessionType' => __('tutor.' . $this->requestSessionForm->type . '_session'),
-            'message' => $this->requestSessionForm->message,
-        ];
+if (!empty($this->pdfPath)) {
+    $pdfUrl = url(Storage::url($this->pdfPath));
+}
 
+\Log::info( $pdfUrl);
+\Log::info('pdfurl');
 
-        dispatch(new SendNotificationJob('sessionRequest', $this->user, $templateData));
+$templateData = [
+    'userName'     => $this->user?->profile?->full_name,
+    'studentName'  => $this->requestSessionForm->last_name,
+    'studentEmail' => $this->requestSessionForm->email,
+    'pdf'          => $pdfUrl,
+    'sessionType'  => __('tutor.' . $this->requestSessionForm->type . '_session'),
+    'message'      => $this->requestSessionForm->message,
+];
+
+        // dispatch(new SendNotificationJob('sessionRequest', $this->user, $templateData));
         dispatch(new SendDbNotificationJob('sessionRequest', $this->user, $templateData));
-        dispatch(new SendNotificationJob('sessionRequest', User::admin(), $templateData));
+        // dispatch(new SendNotificationJob('sessionRequest', User::admin(), $templateData));
 
         $this->dispatch('toggleModel', id: 'requestsession-popup', action: 'hide');
         $this->dispatch('showAlertMessage', type: 'success', title: __('general.success_title'), message: __('tutor.request_session_success'));

@@ -1,12 +1,14 @@
 <?php
 
 namespace Database\Seeders;
+
 use App\Models\NotificationTemplate;
 use Illuminate\Database\Seeder;
 
 class NotificationTemplateSeeder extends Seeder
 {
     protected $version = null;
+
     /**
      * Run the database seeds.
      *
@@ -18,14 +20,14 @@ class NotificationTemplateSeeder extends Seeder
         $this->setEmailTemplates();
     }
 
-    public function setEmailTemplates(){
-
+    public function setEmailTemplates()
+    {
         if ($this->version == '1.0') {
             NotificationTemplate::truncate();
         }
 
         $emailTemplates = $this->getEmailTemplates();
-        $template_list  = [];
+        $template_list = [];
 
         foreach ($emailTemplates as $type => $template) {
             foreach ($template['roles'] as $role => $data) {
@@ -33,17 +35,16 @@ class NotificationTemplateSeeder extends Seeder
                     'type' => $type,
                     'title' => $template['title'],
                     'role' => $role,
-                    'content' => ['info' => $data['fields']['info']['desc'],'subject' => $data['fields']['subject']['default'], 'content' => $data['fields']['content']['default']]
+                    'content' => ['info' => $data['fields']['info']['desc'], 'subject' => $data['fields']['subject']['default'], 'content' => $data['fields']['content']['default']]
                 ]);
             }
         }
         NotificationTemplate::insert($template_list);
     }
 
-    private function getEmailTemplates(){
-
-       return
-        [
+    private function getEmailTemplates()
+    {
+        return [
             'identityVerificationApproved' => [
                 'version' => '2.1.6',
                 'title' => __('notification_template.identity_verification_approved_title'),
@@ -88,7 +89,7 @@ class NotificationTemplateSeeder extends Seeder
                     ],
                 ],
             ],
-            'identityVerificationRejected' => [ 
+            'identityVerificationRejected' => [
                 'version' => '2.1.6',
                 'title' => __('notification_template.identity_verification_rejected_title'),
                 'roles' => [
@@ -177,36 +178,36 @@ class NotificationTemplateSeeder extends Seeder
                 ],
             ],
             'coursePurchased' => [
-    'version' => '2.1.6',
-    'title' => __('notification_template.course_purchased_title'),
-    'roles' => [
-        'student' => [
-            'fields' => [
-                'info' => [
-                    'title' => __('notification_template.variables_used'),
-                    'icon' => 'icon-info',
-                    'desc' => __('notification_template.course_purchased_student_variables'),
-                ],
-                'subject' => [
-                    'id' => 'subject',
-                    'title' => __('notification_template.subject'),
-                    'default' => __('notification_template.course_purchased_subject', ['courseTitle' => '{courseTitle}']),
-                ],
-                'content' => [
-                    'id' => 'content',
-                    'title' => __('notification_template.email_content'),
-                    'default' => __('notification_template.course_purchased_content', [
-                        'userName' => '{userName}',
-                        'courseTitle' => '{courseTitle}',
-                        'instructorName' => '{instructorName}',
-                        'coursePrice' => '{coursePrice}',
-                        'courseLink' => '{courseLink}'
-                    ]),
+                'version' => '2.1.6',
+                'title' => __('notification_template.course_purchased_title'),
+                'roles' => [
+                    'student' => [
+                        'fields' => [
+                            'info' => [
+                                'title' => __('notification_template.variables_used'),
+                                'icon' => 'icon-info',
+                                'desc' => __('notification_template.course_purchased_student_variables'),
+                            ],
+                            'subject' => [
+                                'id' => 'subject',
+                                'title' => __('notification_template.subject'),
+                                'default' => __('notification_template.course_purchased_subject', ['courseTitle' => '{courseTitle}']),
+                            ],
+                            'content' => [
+                                'id' => 'content',
+                                'title' => __('notification_template.email_content'),
+                                'default' => __('notification_template.course_purchased_content', [
+                                    'userName' => '{userName}',
+                                    'courseTitle' => '{courseTitle}',
+                                    'instructorName' => '{instructorName}',
+                                    'coursePrice' => '{coursePrice}',
+                                    'courseLink' => '{courseLink}'
+                                ]),
+                            ],
+                        ],
+                    ],
                 ],
             ],
-        ],
-    ],
-],
             'bookingRescheduled' => [
                 'version' => '2.1.6',
                 'title' => __('notification_template.booking_rescheduled_title'),
@@ -232,7 +233,7 @@ class NotificationTemplateSeeder extends Seeder
                     ],
                 ],
             ],
-            'acceptedWithdrawRequest' => [ 
+            'acceptedWithdrawRequest' => [
                 'version' => '2.1.6',
                 'title' => __('notification_template.accepted_withdraw_request_title'),
                 'roles' => [
@@ -257,7 +258,7 @@ class NotificationTemplateSeeder extends Seeder
                     ],
                 ],
             ],
-            'newMessage' => [ 
+            'newMessage' => [
                 'version' => '2.1.6',
                 'title' => __('notification_template.new_message_notification_title'),
                 'roles' => [
@@ -326,7 +327,7 @@ class NotificationTemplateSeeder extends Seeder
                     ],
                 ]
             ],
-            'bookingCompletionRequest' => [ 
+            'bookingCompletionRequest' => [
                 'version' => '2.1.6',
                 'title' => __('notification_template.booking_completion_request_title'),
                 'roles' => [
@@ -351,7 +352,7 @@ class NotificationTemplateSeeder extends Seeder
                     ],
                 ]
             ],
-            'sessionRequest' => [ 
+            'sessionRequest' => [
                 'version' => '2.1.6',
                 'title' => __('notification_template.session_request_title'),
                 'roles' => [
@@ -370,7 +371,13 @@ class NotificationTemplateSeeder extends Seeder
                             'content' => [
                                 'id' => 'content',
                                 'title' => __('notification_template.email_content'),
-                                'default' => __('notification_template.session_request_content', ['studentName' => '{studentName}', 'studentEmail' => '{studentEmail}', 'sessionType' => '{sessionType}', 'message' => '{message}']),
+                                'default' => __('notification_template.session_request_content', [
+                                    'studentName' => '{studentName}',
+                                    'studentEmail' => '{studentEmail}',
+                                    'sessionType' => '{sessionType}',
+                                    'message' => '{message}',
+                                    'pdf' => '{pdf}',
+                                ]),
                             ],
                         ],
                     ]
@@ -395,8 +402,8 @@ class NotificationTemplateSeeder extends Seeder
                                 'id' => 'content',
                                 'title' => __('notification_template.email_content'),
                                 'default' => __('notification_template.dispute_resolved_student_content', [
-                                    'tutorName' => '{tutorName}', 
-                                    'refundAmount' => '{refundAmount}', 
+                                    'tutorName' => '{tutorName}',
+                                    'refundAmount' => '{refundAmount}',
                                 ]),
                             ],
                         ],
@@ -417,12 +424,12 @@ class NotificationTemplateSeeder extends Seeder
                                 'id' => 'content',
                                 'title' => __('notification_template.email_content'),
                                 'default' => __('notification_template.dispute_resolved_tutor_content', [
-                                    'studentName' => '{studentName}', 
+                                    'studentName' => '{studentName}',
                                 ]),
                             ],
                         ],
                     ],
-                ]    
+                ]
             ]
         ];
     }

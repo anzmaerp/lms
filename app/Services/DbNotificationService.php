@@ -62,7 +62,7 @@ class DbNotificationService
         $template = $this->getNotificationTemplate($type, $role);
         if ($template) {
             $content = $template['content'];
-            $parseFunction = (string)"get" . Str::ucfirst(Str::camel($type)) . "Notification";
+        $parseFunction = "get" . Str::studly($type) . "Notification"; 
             $emailTemplate = $this->$parseFunction($content, $data);
         }
 
@@ -181,11 +181,20 @@ class DbNotificationService
     public function getSessionRequestNotification($content, $data)
     {
         $emailTemplate = array();
+            \Log::info($content);
+            \Log::info('the content');
+            \Log::info($data);
+            \Log::info('the data');
         foreach ($content as $key => &$value) {
             $content[$key] = Str::replace('{studentName}', $data['studentName'] ?? '', $value);
             $content[$key] = Str::replace('{studentEmail}', $data['studentEmail'] ?? '', $value);
             $content[$key] = Str::replace('{sessionType}', $data['sessionType'] ?? '', $value);
-            $content[$key] = Str::replace('{pdf}', $data['pdf'] ?? '', $value);
+            if (!empty($data['pdf'])) {
+                $pdfLink = "<a href='{$data['pdf']}' target='_blank'>" . __('notification_template.view_pdf') . "</a>";
+                $content[$key] = Str::replace('{pdf}', $pdfLink, $value);
+            } else {
+                $content[$key] = Str::replace('{pdf}', '', $value);
+            }
             $content[$key] = Str::replace('{message}', $data['message'] ?? '', $value);
         }
         $emailTemplate = $content;
