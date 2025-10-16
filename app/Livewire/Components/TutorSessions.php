@@ -276,35 +276,63 @@ class TutorSessions extends Component
             $fileName = time() . '_' . $this->requestSessionForm->pdf->getClientOriginalName();
 
             try {
-                $filePath = $this->requestSessionForm->pdf->storeAs('', $fileName, 'public_session_requests');
+                $disk = 'public_session_requests';
+                $diskPath = Storage::disk($disk)->path('');
 
-                $this->pdfUrl = asset('session_requests/' . $fileName);
-                $this->pdfPath = 'session_requests/' . $fileName;
+                if (!Storage::disk($disk)->exists('')) {
+                    Storage::disk($disk)->makeDirectory('');
+                }
+
+                $filePath = $this->requestSessionForm->pdf->storeAs('', $fileName, $disk);
+
+                if (!$filePath) {
+                    \Log::error('⚠️ Failed to store file: ' . $fileName);
+                    $this->pdfUrl = null;
+                    $this->pdfPath = null;
+                    $this->dispatch('showAlertMessage', type: 'error', title: __('general.error_title'), message: __('tutor.storage_failed'));
+                    return;
+                }
+
+                $absolutePath = Storage::disk($disk)->path($filePath);
+
+                if (file_exists($absolutePath)) {
+                    $this->pdfUrl = Storage::disk($disk)->url($filePath);
+                    $this->pdfPath = $filePath;
+                } else {
+                    $this->pdfUrl = null;
+                    $this->pdfPath = null;
+                    $this->dispatch('showAlertMessage', type: 'error', title: __('general.error_title'), message: __('tutor.file_not_found'));
+                }
             } catch (\Throwable $e) {
-                \Log::error('PDF move failed: ' . $e->getMessage());
                 $this->pdfUrl = null;
                 $this->pdfPath = null;
+                $this->dispatch('showAlertMessage', type: 'error', title: __('general.error_title'), message: __('tutor.upload_failed') . ': ' . $e->getMessage());
             }
 
             $this->requestSessionForm->pdf = null;
+        } else {
+            $this->pdfUrl = null;
+            $this->pdfPath = null;
+            $this->dispatch('showAlertMessage', type: 'error', title: __('general.error_title'), message: __('tutor.invalid_file'));
         }
     }
 
     public function sendRequestSession()
     {
         $this->validate();
-
         $response = isDemoSite();
         if ($response) {
             $this->requestSessionForm->reset();
             $this->pdfPath = null;
+            $this->pdfUrl = null;
             $this->dispatch('toggleModel', id: 'requestsession-popup', action: 'hide');
             $this->dispatch('showAlertMessage', type: 'error', title: __('general.demosite_res_title'), message: __('general.demosite_res_txt'));
             return;
         }
-        $pdfUrl = null;
-        if (!empty($this->pdfPath)) {
-            $pdfUrl = $this->pdfPath ? asset($this->pdfPath) : null;
+
+        $pdfUrl = $this->pdfUrl;
+        if (empty($pdfUrl) && !empty($this->pdfPath)) {
+            $pdfUrl = Storage::disk('public_session_requests')->url($this->pdfPath);
         }
 
         $templateData = [
@@ -315,15 +343,14 @@ class TutorSessions extends Component
             'sessionType' => __('tutor.' . $this->requestSessionForm->type . '_session'),
             'message' => $this->requestSessionForm->message,
         ];
-
         dispatch(new SendNotificationJob('sessionRequest', $this->user, $templateData));
         dispatch(new SendDbNotificationJob('sessionRequest', $this->user, $templateData));
         dispatch(new SendNotificationJob('sessionRequest', User::admin(), $templateData));
-
         $this->dispatch('toggleModel', id: 'requestsession-popup', action: 'hide');
         $this->dispatch('showAlertMessage', type: 'success', title: __('general.success_title'), message: __('tutor.request_session_success'));
         $this->requestSessionForm->reset();
         $this->pdfPath = null;
+        $this->pdfUrl = null;
     }
 
     public function getFreeSession($slotId)

@@ -40,9 +40,10 @@ return [
         ],
         'public_session_requests' => [
             'driver' => 'local',
-            'root' => public_path('session_requests'),
-            'url' => env('APP_URL') . '/session_requests',
+            'root' => storage_path('app/public/session_requests'),
+            'url' => env('APP_URL') . '/storage/session_requests',
             'visibility' => 'public',
+            'throw' => false,
         ],
         's3' => [
             'driver' => 's3',
