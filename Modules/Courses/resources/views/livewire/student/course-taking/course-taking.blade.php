@@ -110,19 +110,20 @@
     <div class="cr-coursedetails_content">
         <div wire:ignore class="cr-usercourse_header">
             @role('student')
-                <div x-data="{ progress: @js(floor($progress)) }"
-                     x-on:updated-progress.window="
-                     progress = $event.detail.progress;
-                     if( $event.detail.resultAssigned){
-                         let modal = new bootstrap.Modal(document.getElementById('course_completed_popup'));
-                         modal.show();
-                     }
-                     " class="cr-usercourse_header_progress">
-                    <span>{{ __('courses::courses.course_progress') }}<em x-text="progress+'%'"></em></span>
-                    <div class="cr-usercourse_header_progress_bar">
-                        <div class="cr-usercourse_header_progress_bar_inner" :style="'width: '+progress+'%'"></div>
-                    </div>
-                </div>
+<div x-data="{ progress: @js(floor($progress)) }"
+     x-on:updated-progress.window="
+         console.log('Progress updated:', $event.detail.progress);
+         progress = $event.detail.progress;
+         if( $event.detail.resultAssigned){
+             let modal = new bootstrap.Modal(document.getElementById('course_completed_popup'));
+             modal.show();
+         }
+     " class="cr-usercourse_header_progress">
+    <span>{{ __('courses::courses.course_progress') }}<em x-text="progress+'%'"></em></span>
+    <div class="cr-usercourse_header_progress_bar">
+        <div class="cr-usercourse_header_progress_bar_inner" :style="'width: '+progress+'%'"></div>
+    </div>
+</div>
             @endrole
             <div class="cr-usercourse_header_actions">
                 <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#cr-sharemodal" class="cr-btn">
@@ -956,38 +957,48 @@
             function showNextItemContent() {
                 $('.cr-next-curriculum').removeClass('d-none');
             }
-            function initializeVideoPlayer(videoElement, courseId) {
-                if(!videoElement.player) {
-                    let player = videojs(videoElement, {
-                        controls: true,
-                        autoplay: false,
-                        playbackRates: [0.5, 1, 1.5, 2]
-                    });
-                    videoElement.player = player;
-                    player.on('loadstart', function() {
-                        player.addClass('vjs-waiting');
-                        $(`#cr-card-skeleton-${courseId}`).remove();
-                        player.removeClass('d-none');
-                    });
-                    player.on('loadeddata', function() {
-                        player.removeClass('vjs-waiting');
-                        player.removeClass('d-none');
-                        $(`#cr-card-skeleton-${courseId}`)?.remove();
-                    });
-                    player.on('playing', function() {
-                        let players = document.querySelectorAll('.video-js');
-                        let current = document.getElementById(this.id());
-                        players.forEach((element) => {
-                            if(current != element) {
-                                let otherPlayer = videojs(element);
-                                if(!otherPlayer.paused()) {
-                                    otherPlayer.pause();
-                                }
-                            }
-                        });
-                    });
+function initializeVideoPlayer(videoElement, courseId) {
+    if (!videoElement.player) {
+        let player = videojs(videoElement, {
+            controls: true,
+            autoplay: false,
+            playbackRates: [0.5, 1, 1.5, 2]
+        });
+        videoElement.player = player;
+
+        player.on('loadstart', function() {
+            player.addClass('vjs-waiting');
+            $(`#cr-card-skeleton-${courseId}`).remove();
+            player.removeClass('d-none');
+        });
+
+        player.on('loadeddata', function() {
+            player.removeClass('vjs-waiting');
+            player.removeClass('d-none');
+            $(`#cr-card-skeleton-${courseId}`)?.remove();
+        });
+
+        player.on('playing', function() {
+            let players = document.querySelectorAll('.video-js');
+            let current = document.getElementById(this.id());
+            players.forEach((element) => {
+                if (current != element) {
+                    let otherPlayer = videojs(element);
+                    if (!otherPlayer.paused()) {
+                        otherPlayer.pause();
+                    }
                 }
-            }
+            });
+        });
+
+        player.on('ended', function() {
+            @role('student')
+                @this.call('updateWatchtime', true);
+            @endrole
+            showNextItemContent();
+        });
+    }
+}
             function updateWatchtime(curriculumId) {
                 let video = document.getElementById("video-" + curriculumId + "_html5_api");
                 let interval;
