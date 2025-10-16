@@ -959,6 +959,7 @@
             }
 function initializeVideoPlayer(videoElement, courseId) {
     if (!videoElement.player) {
+        console.log('Initializing Video.js player for curriculum ID:', courseId);
         let player = videojs(videoElement, {
             controls: true,
             autoplay: false,
@@ -967,18 +968,21 @@ function initializeVideoPlayer(videoElement, courseId) {
         videoElement.player = player;
 
         player.on('loadstart', function() {
+            console.log('Video loadstart for curriculum ID:', courseId);
             player.addClass('vjs-waiting');
             $(`#cr-card-skeleton-${courseId}`).remove();
             player.removeClass('d-none');
         });
 
         player.on('loadeddata', function() {
+            console.log('Video loadeddata for curriculum ID:', courseId);
             player.removeClass('vjs-waiting');
             player.removeClass('d-none');
             $(`#cr-card-skeleton-${courseId}`)?.remove();
         });
 
         player.on('playing', function() {
+            console.log('Video playing for curriculum ID:', courseId);
             let players = document.querySelectorAll('.video-js');
             let current = document.getElementById(this.id());
             players.forEach((element) => {
@@ -992,6 +996,7 @@ function initializeVideoPlayer(videoElement, courseId) {
         });
 
         player.on('ended', function() {
+            console.log('Video ended for curriculum ID:', courseId);
             @role('student')
                 @this.call('updateWatchtime', true);
             @endrole
