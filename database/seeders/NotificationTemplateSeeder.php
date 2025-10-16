@@ -177,6 +177,64 @@ class NotificationTemplateSeeder extends Seeder
                     ],
                 ],
             ],
+            'paymentAccepted' => [
+                'version' => '2.1.6',
+                'title' => __('notification_template.payment_accepted_title'),
+                'roles' => [
+                    'student' => [
+                        'fields' => [
+                            'info' => [
+                                'title' => __('notification_template.variables_used'),
+                                'icon' => 'icon-info',
+                                'desc' => __('notification_template.payment_accepted_student_variables'),
+                            ],
+                            'subject' => [
+                                'id' => 'subject',
+                                'title' => __('notification_template.subject'),
+                                'default' => __('notification_template.payment_accepted_subject'),
+                            ],
+                            'content' => [
+                                'id' => 'content',
+                                'title' => __('notification_template.email_content'),
+                                'default' => __('notification_template.payment_accepted_content', [
+                                    'userName' => '{userName}',
+                                    'orderId' => '{orderId}',
+                                    'courseTitle' => '{courseTitle}'
+                                ]),
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'paymentRejected' => [
+                'version' => '2.1.6',
+                'title' => __('notification_template.payment_rejected_title'),
+                'roles' => [
+                    'student' => [
+                        'fields' => [
+                            'info' => [
+                                'title' => __('notification_template.variables_used'),
+                                'icon' => 'icon-info',
+                                'desc' => __('notification_template.payment_rejected_student_variables'),
+                            ],
+                            'subject' => [
+                                'id' => 'subject',
+                                'title' => __('notification_template.subject'),
+                                'default' => __('notification_template.payment_rejected_subject'),
+                            ],
+                            'content' => [
+                                'id' => 'content',
+                                'title' => __('notification_template.email_content'),
+                                'default' => __('notification_template.payment_rejected_content', [
+                                    'userName' => '{userName}',
+                                    'orderId' => '{orderId}',
+                                    'courseTitle' => '{courseTitle}'
+                                ]),
+                            ],
+                        ],
+                    ],
+                ],
+            ],
             'coursePurchased' => [
                 'version' => '2.1.6',
                 'title' => __('notification_template.course_purchased_title'),

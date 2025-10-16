@@ -296,7 +296,6 @@ class CompletePurchaseJob implements ShouldQueue
                     }
                 }
 
-                // Student bookings
                 $emailData = [];
                 $emailData['emailFor'] = 'student';
                 $emailData['studentName'] = $this->order?->userProfile?->full_name;

@@ -334,4 +334,40 @@ class DbNotificationService
         }
         return $emailTemplate;
     }
+    public function getPaymentAcceptedNotification($content, $data)
+{
+    foreach ($content as $key => &$value) {
+        $content[$key] = Str::replace('{userName}', $data['userName'] ?? '', $value);
+        $content[$key] = Str::replace('{orderId}', $data['orderId'] ?? '', $value);
+        $content[$key] = Str::replace('{courseTitle}', $data['courseTitle'] ?? '', $value);
+    }
+
+    if (Str::contains($content['content'], '{orderLink}')) {
+        $content['has_link']    = true;
+        $content['link_target'] = route('courses.course-list');
+        $content['link_text']   = __('notification_template.view_order');
+        $content['content']     = Str::replace('{orderLink}', '', $content['content']);
+    }
+
+    return $content;
+}
+
+public function getPaymentRejectedNotification($content, $data)
+{
+    foreach ($content as $key => &$value) {
+        $content[$key] = Str::replace('{userName}', $data['userName'] ?? '', $value);
+        $content[$key] = Str::replace('{orderId}', $data['orderId'] ?? '', $value);
+        $content[$key] = Str::replace('{courseTitle}', $data['courseTitle'] ?? '', $value);
+    }
+
+    if (Str::contains($content['content'], '{orderLink}')) {
+        $content['has_link']    = true;
+        $content['link_target'] = route('student.orders.show', $data['orderId']);
+        $content['link_text']   = __('notification_template.view_order');
+        $content['content']     = Str::replace('{orderLink}', '', $content['content']);
+    }
+
+    return $content;
+}
+
 }

@@ -2,7 +2,9 @@
 
 namespace App\Livewire\Pages\Admin\Invoices;
 
+use App\Jobs\SendDbNotificationJob;
 use App\Livewire\Pages\Admin\Invoices\InvoicesExport;
+use App\Models\User;
 use App\Services\OrderService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -75,18 +77,47 @@ class Invoices extends Component
 
     public function paymentStatus($id, $st)
     {
-        if (!empty($id) && !empty($st)) {
-            DB::table('orders')->where('id', $id)->update([
-                'payment_acceptnce' => $st,
-            ]);
-            DB::table('courses_enrollments')->where('order_id', $id)->update([
-                'is_paid' => $st,
-            ]);
-
-            $this->dispatch('showAlertMessage',
-                type: 'success',
-                title: __('general.success_title'),
-                message: __('settings.updated_record_success'));
+        if (empty($id) || empty($st)) {
+            return;
         }
+
+        DB::transaction(function () use ($id, $st) {
+            DB::table('orders')
+                ->where('id', $id)
+                ->update(['payment_acceptnce' => $st]);
+
+            DB::table('courses_enrollments')
+                ->where('order_id', $id)
+                ->update(['is_paid' => $st]);
+
+            $enrollment = DB::table('courses_enrollments')
+                ->where('order_id', $id)
+                ->first();
+
+            $order = DB::table('orders')->where('id', $id)->first();
+
+            if ($enrollment) {
+                $student = User::find($enrollment->student_id);
+                $course = DB::table('courses_courses')->where('id', $enrollment->course_id)->first();
+
+                if ($student) {
+                    $notificationData = [
+                        'userName' => $student->email ?? 'User',
+                        'orderId' => $order->id ?? '',
+                        'courseTitle' => $course->title ?? '',
+                    ];
+                    if ($st === 'Y') {
+                        dispatch(new SendDbNotificationJob('paymentAccepted', $student, $notificationData));
+                    } elseif ($st === 'N') {
+                        dispatch(new SendDbNotificationJob('paymentRejected', $student, $notificationData));
+                    }
+                }
+            }
+        });
+
+        $this->dispatch('showAlertMessage',
+            type: 'success',
+            title: __('general.success_title'),
+            message: __('settings.updated_record_success'));
     }
 }
