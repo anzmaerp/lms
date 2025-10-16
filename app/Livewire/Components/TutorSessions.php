@@ -270,17 +270,23 @@ class TutorSessions extends Component
 
     public function updatedRequestSessionFormPdf()
     {
-        \Log::info('PDF File Updated', [
-            'pdf' => $this->requestSessionForm->pdf,
-            'isTemporaryUploadedFile' => $this->requestSessionForm->pdf instanceof \Livewire\Features\SupportFileUploads\TemporaryUploadedFile,
-        ]);
-
         $this->validateOnly('requestSessionForm.pdf');
 
         if ($this->requestSessionForm->pdf instanceof \Livewire\Features\SupportFileUploads\TemporaryUploadedFile) {
             $fileName = time() . '_' . $this->requestSessionForm->pdf->getClientOriginalName();
-            $this->pdfPath = $this->requestSessionForm->pdf->storeAs('session_requests', $fileName, 'public');
-            $this->requestSessionForm->pdf = null;  // Clear the temporary file to prevent re-upload
+
+            try {
+                $filePath = $this->requestSessionForm->pdf->storeAs('', $fileName, 'public_session_requests');
+
+                $this->pdfUrl = asset('session_requests/' . $fileName);
+                $this->pdfPath = 'session_requests/' . $fileName;
+            } catch (\Throwable $e) {
+                \Log::error('PDF move failed: ' . $e->getMessage());
+                $this->pdfUrl = null;
+                $this->pdfPath = null;
+            }
+
+            $this->requestSessionForm->pdf = null;
         }
     }
 
@@ -296,9 +302,9 @@ class TutorSessions extends Component
             $this->dispatch('showAlertMessage', type: 'error', title: __('general.demosite_res_title'), message: __('general.demosite_res_txt'));
             return;
         }
-           $pdfUrl = null;
+        $pdfUrl = null;
         if (!empty($this->pdfPath)) {
-            $pdfUrl = url(Storage::url($this->pdfPath));
+            $pdfUrl = $this->pdfPath ? asset($this->pdfPath) : null;
         }
 
         $templateData = [
