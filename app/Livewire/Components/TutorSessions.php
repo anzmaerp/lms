@@ -50,7 +50,6 @@ class TutorSessions extends Component
     public $currentBooking = null;
     public $selectedDate = null;
     public $pdfPath;
-    public $pdfUrl;
 
     private $bookingService,
         $subjectService;
@@ -296,7 +295,7 @@ class TutorSessions extends Component
             $this->dispatch('showAlertMessage', type: 'error', title: __('general.demosite_res_title'), message: __('general.demosite_res_txt'));
             return;
         }
-
+           $pdfUrl = null;
         if (!empty($this->pdfPath)) {
             $pdfUrl = url(Storage::url($this->pdfPath));
         }
