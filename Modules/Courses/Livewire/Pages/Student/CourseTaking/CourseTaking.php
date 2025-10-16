@@ -305,76 +305,58 @@ class CourseTaking extends Component
     #[Renderless]
     public function updateWatchtime($isCompleted = false)
     {
-        \Log::info("updateWatchtime called with isCompleted: {$isCompleted}, Curriculum ID: {$this->activeCurriculum['id']}, Course ID: {$this->course->id}");
 
-        if (isDemoSite()) {
-            \Log::info('Demo site detected, exiting updateWatchtime');
-            $this->dispatch('showAlertMessage', type: 'error', title: __('general.demosite_res_title'), message: __('general.demosite_res_txt'));
+        $response = isDemoSite();
+        if ($response) {
             return;
         }
 
-        if (!in_array($this->activeCurriculum['type'] ?? '', ['video', 'yt_link', 'vm_link'])) {
-            \Log::info("Invalid curriculum type: {$this->activeCurriculum['type']}");
-            return;
-        }
-
-        $curriculumId = (int) ($this->activeCurriculum['id'] ?? 0);
-        $sectionId = (int) ($this->activeCurriculum['section_id'] ?? 0);
-        $totalDuration = (int) ($this->activeCurriculum['content_length'] ?? 0);
+        $curriculumId = (int)$this->activeCurriculum['id'] ?? 0;
+        $sectionId = (int) $this->activeCurriculum['section_id'] ?? 0;
+        $totalDuration = (int) $this->activeCurriculum['content_length'] ?? 0;
         $isAssigned = false;
-
-        if ($totalDuration === 0) {
-            \Log::warning("No content_length set for curriculum ID: {$curriculumId}");
-            return;
-        }
-
         $watchtime = (new CurriculumService())->getWatchtime($curriculumId, $sectionId);
-        \Log::info('Watchtime retrieved: ', ['watchtime' => $watchtime ? $watchtime->toArray() : null]);
-
         if ($watchtime) {
             $duration = $watchtime->duration;
-            \Log::info("Current watchtime duration: {$duration}, Total duration: {$totalDuration}");
             if ($isCompleted) {
-                \Log::info("Marking curriculum ID {$curriculumId} as completed with duration: {$totalDuration}");
-                (new CurriculumService())->updateWatchtime($curriculumId, $sectionId, $totalDuration);
+                (new CurriculumService())->updateWatchtime((int) $curriculumId, (int) $sectionId, (int) $totalDuration);
             } else {
                 if ($duration < $totalDuration) {
-                    $updateDuration = min($duration + 60, $totalDuration);
-                    \Log::info("Updating watchtime for curriculum ID {$curriculumId} to: {$updateDuration}");
-                    (new CurriculumService())->updateWatchtime($curriculumId, $sectionId, $updateDuration);
+                    $updateDuration = $duration + 60 <= $totalDuration ? $duration + 60 : $totalDuration;
+                    (new CurriculumService())->updateWatchtime((int) $curriculumId, (int) $sectionId, (int) $updateDuration);
                 }
             }
         } else {
-            $updateDuration = $isCompleted ? $totalDuration : min(60, $totalDuration);
-            \Log::info("Adding new watchtime for curriculum ID {$curriculumId} with duration: {$updateDuration}");
-            (new CurriculumService())->addWatchtime($this->course->id, $curriculumId, $sectionId, $updateDuration);
-        }
 
-        $this->course = null;  // Reset cached course
+            if ($isCompleted) {
+                $updateDuration = $totalDuration;
+            } else {
+                $updateDuration = $totalDuration > 60 ? 60 : $totalDuration;
+            }
+
+            (new CurriculumService())->addWatchtime((int) $this->course?->id, (int) $curriculumId, (int) $sectionId, (int) $updateDuration);
+        }
         $courseDuration = (new CourseService())->getCourse(
             courseId: $this->course->id,
-            withSum: ['courseWatchtime' => 'duration']
+            withSum: [
+                'courseWatchtime' => 'duration'
+            ]
         );
-        \Log::info('Course duration data: ', ['course_watchtime_sum_duration' => $courseDuration->course_watchtime_sum_duration, 'content_length' => $this->course->content_length]);
 
         if (!empty($courseDuration->course_watchtime_sum_duration) && !empty($this->course->content_length)) {
-            $this->progress = min(100, floor(($courseDuration->course_watchtime_sum_duration / $this->course->content_length) * 100));
-            \Log::info("Progress calculated: {$this->progress}%");
-        } else {
-            \Log::warning("Unable to calculate progress for course ID: {$this->course->id}");
+            $this->progress = floor(($courseDuration->course_watchtime_sum_duration / $this->course->content_length) * 100);
         }
 
         if ($this->progress >= 100) {
-            \Log::info('Progress reached 100%, triggering certificate and assignments');
-            if (isActiveModule('upcertify') && !empty($this->course?->certificate_id)) {
+            \Log::info('🎯 Progress reached 100%. Initiating certificate logic.');
+
+            if (isActiveModule('upcertify')  && !empty($this->course?->certificate_id)) {
                 $metaData = $this->course->meta_data ?? null;
                 if (isActiveModule('Quiz')) {
                     if (!empty($metaData['assign_quiz_certificate']) && $metaData['assign_quiz_certificate'] == 'none') {
-                        \Log::info("Generating certificate for course ID: {$this->course->id}");
                         $this->generateCertificate();
                     }
                 } else {
-                    \Log::info("Generating certificate for course ID: {$this->course->id}");
                     $this->generateCertificate();
                 }
             }
@@ -382,12 +364,10 @@ class CourseTaking extends Component
             $this->assignAssignment();
         }
 
-        if ($isCompleted && !empty($this->curriculumOrder[$curriculumId])) {
-            \Log::info("Moving to next curriculum ID: {$this->curriculumOrder[$curriculumId]}");
-            $this->nextCurriculum($this->curriculumOrder[$curriculumId]);
+        if ($isCompleted) {
+            $this->nextCurriculum($this->activeCurriculum['id']);
         }
 
-        \Log::info("Dispatching updated-progress event with progress: {$this->progress}, resultAssigned: {$isAssigned}");
         $this->dispatch('updated-progress', progress: $this->progress, resultAssigned: $isAssigned);
     }
 
