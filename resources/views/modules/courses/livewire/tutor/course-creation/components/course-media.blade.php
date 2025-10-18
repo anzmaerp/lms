@@ -77,7 +77,7 @@
             </div>
 
             <!-- Promotional Video Upload Section -->
-            <div class="form-group">
+            <div class="form-group d-none">
                 <x-input-label class="am-important" :value="__('courses::courses.add_promotional_video')" />
                 <div class="am-uploadoption" x-data="{isUploading:false}" wire:key="uploading-video-{{ time() }}">
                     <div class="tk-draganddrop" x-bind:class="{ 'am-dragfile' : isDragging, 'am-uploading' : isUploading }" x-on:drop.prevent="isDragging = false; isUploading = true" wire:drop.prevent="$upload('promotionalVideo', $event.dataTransfer.files[0])">
