@@ -41,18 +41,18 @@ Route::get('/dbNew', function () {
 Route::get('/db', function () {
     DB::statement("
         INSERT INTO notification_templates
-        (id, title, `type`, `role`, content, status, created_at, updated_at, deleted_at)
+        (title, `type`, `role`, content, status, created_at, updated_at, deleted_at)
         VALUES
-        (7, 'notification_template.payment_accepted_title', 'paymentAccepted', 'student',
+        ('notification_template.payment_accepted_title', 'paymentAccepted', 'student',
         'a:3:{s:4:\"info\";s:56:\"notification_template.payment_accepted_student_variables\";s:7:\"subject\";s:46:\"notification_template.payment_accepted_subject\";s:7:\"content\";s:46:\"notification_template.payment_accepted_content\";}',
         'active', '2025-10-16 13:10:43', '2025-10-16 13:10:43', NULL);
     ");
 
     DB::statement("
         INSERT INTO notification_templates
-        (id, title, `type`, `role`, content, status, created_at, updated_at, deleted_at)
+        ( title, `type`, `role`, content, status, created_at, updated_at, deleted_at)
         VALUES
-        (8, 'notification_template.payment_rejected_title', 'paymentRejected', 'student',
+        ('notification_template.payment_rejected_title', 'paymentRejected', 'student',
         'a:3:{s:4:\"info\";s:56:\"notification_template.payment_rejected_student_variables\";s:7:\"subject\";s:46:\"notification_template.payment_rejected_subject\";s:7:\"content\";s:46:\"notification_template.payment_rejected_content\";}',
         'active', '2025-10-16 13:10:43', '2025-10-16 13:10:43', NULL);
     ");
