@@ -232,83 +232,57 @@
                                 </div>
                             @endif
 
-                        @elseif($activeCurriculumItem['type'] === 'pdf')
-                            @if(empty($curriculumPdf) && (empty($curriculumItem->media_path) || empty(Storage::disk(getStorageDisk())->exists($curriculumItem->media_path))))
-                                <div wire:loading.remove wire:target="curriculumPdf" class="form-group" id="pdf-upload-section"
-                                    wire:ignore.self>
-                                    <label for="at_upload_pdf{{ $activeCurriculumItem['id'] }}" class="am-uploadfile">
-                                        <svg class="am-border-svg">
-                                            <rect width="100%" height="100%"></rect>
-                                        </svg>
-                                        <input type="file" id="at_upload_pdf{{ $activeCurriculumItem['id'] }}"
-                                            wire:model="curriculumPdf" accept="{{ !empty($allowPdfFileExt) ? join(',', array_map(function ($ex) {
-                                    return '.' . $ex; }, $allowPdfFileExt)) : '.pdf' }}">
-                                        <span class="am-dropfileshadow"><span class="am-uploadiconanimation"><svg
-                                                    xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                                    fill="none">
-                                                    <path
-                                                        d="M18.5 10.98V12.98C18.5 15.1891 16.7091 16.98 14.5 16.98H8.5C6.29086 16.98 4.5 15.1891 4.5 12.98V10.98"
-                                                        stroke="#585858" stroke-width="1.5" stroke-miterlimit="10"
-                                                        stroke-linecap="round" />
-                                                    <path d="M8.76953 9.23999L11.4995 6.49999L14.2295 9.23999" stroke="#585858"
-                                                        stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round"
-                                                        stroke-linejoin="round" />
-                                                    <path d="M11.5 7.50998V12.98" stroke="#585858" stroke-width="1.5"
-                                                        stroke-miterlimit="10" stroke-linecap="round" />
-                                                </svg></span>{{ __('courses::courses.drop_pdf_here_or') }}</span>
-                                        <em><i class="am-icon-export-03"></i></em>
-                                        <span>{{ __('courses::courses.drop_pdf_file_here_or') }}
-                                            <strong>{{ __('courses::courses.click_here') }} </strong>
-                                            @if (!empty($allowPdfFileExt))<span><em>{{ join(', ', array_map(function ($ex) {
-                                                return ('.' . $ex); }, $allowPdfFileExt)) }}
-                                            (max. {{ $pdfFileSize ?? 10 }} MB)</em></span>@else<span><em>.pdf (max.
-                                                    {{ $pdfFileSize ?? 10 }} MB)</em></span>@endif</span>
-                                    </label>
-                                </div>
-                                <div wire:loading wire:target="curriculumPdf" class="am-uploadedfile am-noborder">
-                                    <figure></figure>
-                                </div>
-                            @elseif(!empty($curriculumPdf) || (!empty($curriculumItem->media_path) && Storage::disk(getStorageDisk())->exists($curriculumItem->media_path)))
-                                <div class="am-uploadedfile">
-                                    <figure>
-                                        <div class="cr-expert-video cr-custom-pdf">
-                                            <div class="video-js pdf-video-container"
-                                                style="width: 100%; height: 240px; position: relative;">
-                                                <iframe
-                                                    src="{{ !empty($curriculumItem->media_path) ? Storage::disk(getStorageDisk())->url($curriculumItem->media_path) . '#view=FitH&toolbar=0&navpanes=0&scrollbar=0' : $curriculumPdf->temporaryUrl() . '#view=FitH&toolbar=0&navpanes=0&scrollbar=0' }}"
-                                                    class="pdf-video-player" width="100%" height="100%" frameborder="0"
-                                                    wire:key="profile-pdf-src-{{ $curriculumItem->id . time() }}">
-                                                </iframe>
-
-                                                <div class="video-controls-overlay">
-                                                    <div class="video-controls">
-                                                        <button class="control-btn play-pause-btn" onclick="togglePdfFullscreen(this)">
-                                                            <i class="am-icon-play"></i>
-                                                        </button>
-                                                        <div class="control-spacer"></div>
-                                                        <button class="control-btn fullscreen-btn" onclick="togglePdfFullscreen(this)">
-                                                            <i class="am-icon-fullscreen"></i>
-                                                        </button>
-                                                        <button class="control-btn download-btn"
-                                                            onclick="window.open('{{ !empty($curriculumItem->media_path) ? Storage::disk(getStorageDisk())->url($curriculumItem->media_path) : $curriculumPdf->temporaryUrl() }}', '_blank')">
-                                                            <i class="am-icon-download"></i>
-                                                        </button>
-                                                    </div>
-                                                    <div class="progress-bar">
-                                                        <div class="progress-fill"></div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </figure>
-                                </div>
-                            @else
-                                <div class="am-uploadedfile am-noborder">
-                                    <figure>
-                                        <span>{{ __('courses::courses.pdf_uploaded_waiting_save') }}</span>
-                                    </figure>
-                                </div>
-                            @endif
+@elseif($activeCurriculumItem['type'] === 'pdf')
+    @if(empty($curriculumPdf) && (empty($curriculumItem->media_path) || !Storage::disk(getStorageDisk())->exists($curriculumItem->media_path)))
+        <div wire:loading.remove wire:target="curriculumPdf" class="form-group" id="pdf-upload-section" wire:ignore.self>
+            <label for="at_upload_pdf{{ $activeCurriculumItem['id'] }}" class="am-uploadfile">
+                <svg class="am-border-svg">
+                    <rect width="100%" height="100%"></rect>
+                </svg>
+                <input type="file" id="at_upload_pdf{{ $activeCurriculumItem['id'] }}"
+                    wire:model="curriculumPdf"
+                    accept="{{ !empty($allowPdfFileExt) ? join(',', array_map(function ($ex) {
+                        return '.' . $ex; }, $allowPdfFileExt)) : '.pdf' }}">
+                <span class="am-dropfileshadow"><span class="am-uploadiconanimation"><svg
+                            xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <path
+                                d="M18.5 10.98V12.98C18.5 15.1891 16.7091 16.98 14.5 16.98H8.5C6.29086 16.98 4.5 15.1891 4.5 12.98V10.98"
+                                stroke="#585858" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" />
+                            <path d="M8.76953 9.23999L11.4995 6.49999L14.2295 9.23999" stroke="#585858"
+                                stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                            <path d="M11.5 7.50998V12.98" stroke="#585858" stroke-width="1.5"
+                                stroke-miterlimit="10" stroke-linecap="round" />
+                        </svg></span>{{ __('courses::courses.drop_pdf_here_or') }}</span>
+                <em><i class="am-icon-export-03"></i></em>
+                <span>{{ __('courses::courses.drop_pdf_file_here_or') }}
+                    <strong>{{ __('courses::courses.click_here') }} </strong>
+                    @if (!empty($allowPdfFileExt))<span><em>{{ join(', ', array_map(function ($ex) {
+                        return ('.' . $ex); }, $allowPdfFileExt)) }}
+                    (max. {{ $pdfFileSize ?? 10 }} MB)</em></span>@else<span><em>.pdf (max.
+                            {{ $pdfFileSize ?? 10 }} MB)</em></span>@endif</span>
+            </label>
+        </div>
+        <div wire:loading wire:target="curriculumPdf" class="am-uploadedfile am-noborder">
+            <figure></figure>
+        </div>
+    @elseif(!empty($curriculumItem->media_path) && Storage::disk(getStorageDisk())->exists($curriculumItem->media_path))
+        <div class="am-uploadedfile">
+            <figure>
+                <div class="cr-expert-pdf cr-custom-pdf">
+                    <embed src="{{ Storage::disk(getStorageDisk())->url($curriculumItem->media_path) }}"
+                        type="application/pdf" width="320" height="240"
+                        wire:key="profile-pdf-src-{{ $curriculumItem->id . time() }}" />
+                </div>
+            </figure>
+        </div>
+    @elseif(!empty($curriculumPdf))
+        <div class="am-uploadedfile am-noborder">
+            <figure>
+                <span>{{ __('courses::courses.pdf_uploaded_waiting_save') }}</span>
+                <span>{{ $curriculumPdf->getClientOriginalName() }}</span>
+            </figure>
+        </div>
+    @endif
                         @endif
                         <div class="cr-btns">
                             <div class="cr-preview">
@@ -321,7 +295,7 @@
                                     wire:target="updateActiveCurriculumItem" wire:loading.class="am-btn_disable">
                                     {{ __('courses::courses.skip') }}
                                 </button>
-                                <button wire:click="updateCurriculumContent({{ $curriculumItem }})" type="click" class="am-btn">
+                                <button wire:click="updateCurriculumContent" type="button" class="am-btn">
                                     <span wire:loading.remove
                                         wire:target="updateCurriculumContent">{{ __('courses::courses.save') }}</span>
                                     <span wire:loading
@@ -386,7 +360,6 @@
             <i class="am-icon-plus-02" wire:loading.remove wire:target="updateCurriculumState(true)"></i>
         </button>
     @endif
-    <!-- edit modal start -->
     <div wire:ignore.self class="modal fade cr-course-modal" id="edit-curriculum-{{ $section->id }}" tabindex="-1"
         aria-labelledby="edit-curriculumLabel-{{ $section->id }}" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
