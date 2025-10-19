@@ -198,10 +198,10 @@ class Curriculum extends Component
         $allowed_extensions = !empty(setting('_general.allowed_video_extensions')) 
             ? explode(',', setting('_general.allowed_video_extensions')) 
             : ['mp4']; 
-        $max_size = !empty(setting('_general.max_video_size')) ? setting('_general.max_video_size') * 1024 : 20 * 1024; // Convert MB to KB
+        $max_size = !empty(setting('_general.max_video_size')) ? setting('_general.max_video_size') * 1024 : 20 * 1024; 
 
         $file_extension = $this->curriculumVideo->getClientOriginalExtension();
-        $file_size = $this->curriculumVideo->getSize() / 1024; // Size in KB
+        $file_size = $this->curriculumVideo->getSize() / 1024; 
 
         if (!in_array(strtolower($file_extension), $allowed_extensions) || $file_size > $max_size) {
             $this->dispatch('showAlertMessage', type: 'error', message: __(
@@ -215,11 +215,11 @@ class Curriculum extends Component
 
     public function updatedCurriculumPdf()
     {
-        $allowed_extensions = ['pdf']; // Default to PDF only, adjust if settings allow more
-        $max_size = !empty(setting('_general.max_pdf_size')) ? setting('_general.max_pdf_size') * 1024 : 10 * 1024; // Convert MB to KB, default 10MB
+        $allowed_extensions = ['pdf'];
+        $max_size = !empty(setting('_general.max_pdf_size')) ? setting('_general.max_pdf_size') * 1024 : 10 * 1024;
 
         $file_extension = $this->curriculumPdf->getClientOriginalExtension();
-        $file_size = $this->curriculumPdf->getSize() / 1024; // Size in KB
+        $file_size = $this->curriculumPdf->getSize() / 1024; 
 
         if (!in_array(strtolower($file_extension), $allowed_extensions) || $file_size > $max_size) {
             $this->dispatch('showAlertMessage', type: 'error', message: __(
@@ -261,6 +261,7 @@ class Curriculum extends Component
                 );
                 $this->updateActiveCurriculumItem($curriculum->toArray());
                 $this->dispatch('showAlertMessage', type: 'success', title: __('courses::courses.curriculum_updated_successfully'), message: __('courses::courses.curriculum_updated_successfully'));
+                $this->curriculumVideo = null; 
             } else {
                 $this->dispatch('showAlertMessage', type: 'error', title: __('courses::courses.please_add_a_video'), message: __('courses::courses.please_add_a_video'));
             }
@@ -268,7 +269,7 @@ class Curriculum extends Component
             if ($this->curriculumPdf) {
                 if ($this->curriculumPdf instanceof \Illuminate\Http\UploadedFile) {
                     $fileName = time() . '_' . $this->curriculumPdf->getClientOriginalName();
-                    $filePath = $this->curriculumPdf->storeAs('curriculum_videos', $fileName, getStorageDisk()); // Use curriculum_videos for consistency
+                    $filePath = $this->curriculumPdf->storeAs('curriculum_videos', $fileName, getStorageDisk());
                     if ($filePath) {
                         $this->curriculumPdf = $filePath;
                     } else {
@@ -281,12 +282,13 @@ class Curriculum extends Component
                     [
                         'media_path' => $this->curriculumPdf,
                         'type' => 'pdf',
-                        'content_length' => 0, // PDF duration is typically not tracked
+                        'content_length' => 0, 
                         'is_preview' => !empty($this->activeCurriculumItem['is_preview']) ? $this->activeCurriculumItem['is_preview'] : false
                     ]
                 );
                 $this->updateActiveCurriculumItem($curriculum->toArray());
                 $this->dispatch('showAlertMessage', type: 'success', title: __('courses::courses.curriculum_updated_successfully'), message: __('courses::courses.curriculum_updated_successfully'));
+                $this->curriculumPdf = null;
             } else {
                 $this->dispatch('showAlertMessage', type: 'error', title: __('courses::courses.please_add_a_pdf'), message: __('courses::courses.please_add_a_pdf'));
             }
