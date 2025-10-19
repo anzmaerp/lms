@@ -232,7 +232,6 @@
                                 </div>
                             @endif
                         @elseif($activeCurriculumItem['type'] === 'pdf')
-   
                                 @if(empty($curriculumPdf) && (empty($curriculumItem->media_path) || !Storage::disk(getStorageDisk())->exists($curriculumItem->media_path)))
                                     <div wire:loading.remove wire:target="curriculumPdf" class="form-group" id="pdf-upload-section"
                                         wire:ignore.self>
