@@ -16,5 +16,5 @@ jobs:
         with:
           server: ftp.wakp.net
           username: "main@langplanet.net"
-          password: "BpYaw9OSuI3Y"
+          password: "loT5LvIXWm8q"
           server-dir: /public_html/
