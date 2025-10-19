@@ -114,7 +114,7 @@
      x-on:updated-progress.window="
          console.log('Progress updated:', $event.detail.progress);
          progress = $event.detail.progress;
-         if( $event.detail.resultAssigned){
+         if($event.detail.resultAssigned){
              let modal = new bootstrap.Modal(document.getElementById('course_completed_popup'));
              modal.show();
          }
@@ -166,71 +166,85 @@
                             </div>
                         </div>
                     @endif
-                    @if($activeCurriculum['type'] == 'video')
-                        <div class="cr-card-skeleton" id="cr-card-skeleton-{{ $activeCurriculum['id'] }}">
-                            <div class="cr-image-wrapper-skeleton"></div>
-                        </div>
-                        <div class="cr-coursetasking-video"
-                             x-data="{ showVideo: false }"
-                             x-init="
-                                 showVideo = true;
-                                 $nextTick(() => {
-                                     let video = document.getElementById('video-{{ $activeCurriculum['id'] }}');
-                                     if (video) {
-                                         let player = videojs(video, {
-                                             controls: true,
-                                             autoplay: false,
-                                             playbackRates: [0.5, 1, 1.5, 2]
-                                         });
-                                         player.ready(() => {
-                                             player.load();
-                                         });
-                                     }
-                                 });"
-                        >
-                            <template x-if="showVideo">
-                                <video
-                                    id="video-{{ $activeCurriculum['id'] }}"
-                                    preload="auto"
-                                    class="video-js vjs-default-skin d-none"
-                                    data-setup="{}"
-                                    onloadstart="initializeVideoPlayer(this, '{{ $activeCurriculum['id'] }}')"
-                                    onloadeddata="initializeVideoPlayer(this, '{{ $activeCurriculum['id'] }}')"
-                                    onplay="updateWatchtime({{ $activeCurriculum['id'] }})"
-                                    width="320"
-                                    height="240"
-                                    controls
-                                >
-                                    <source src="{{ $activeCurriculum['media_path'] }}" type="video/mp4">
-                                </video>
-                            </template>
-                            <strong class="am-logo">
-                                @if(!empty(setting('_general.watermark_logo')))
-                                    <img src="{{ url(Storage::url(setting('_general.watermark_logo')[0]['path'])) }}" alt="watermark-logo">
-                                @else
-                                    <img src="{{ asset('modules/courses/images/green-logo.png') }}" alt="watermark-logo">
-                                @endif
-                            </strong>
-                            <div class="cr-video-info">
-                                <figure>
-                                    @if(!empty($course?->instructor?->profile?->image) && Storage::disk(getStorageDisk())->exists($course?->instructor?->profile?->image))
-                                        <img src="{{ resizedImage($course?->instructor?->profile?->image,50,50) }}" alt="{{ $course?->instructor?->profile?->image }}" />
-                                    @else
-                                        <img src="{{ setting('_general.default_avatar_for_user') ? url(Storage::url(setting('_general.default_avatar_for_user')[0]['path'])) : resizedImage('placeholder.png', 50, 50) }}" alt="{{ $course?->instructor?->profile?->image }}" />
-                                    @endif
-                                </figure>
-                                @if(!empty($course?->instructor?->profile?->full_name) || !empty($course?->instructor?->profile?->tagline))
-                                    <h6>
-                                        @if(!empty($course?->instructor?->profile?->full_name))
-                                            {{$course?->instructor?->profile?->full_name}}
-                                        @endif
-                                        @if(!empty($course?->instructor?->profile?->tagline))
-                                            <span>{{$course?->instructor?->profile?->tagline}}</span>
-                                        @endif
-                                    </h6>
-                                @endif
-                            </div>
-                        </div>
+@if($activeCurriculum['type'] == 'video')
+    <div class="cr-coursetasking-video"
+         x-data="{ showVideo: false }"
+         x-init="
+             showVideo = true;
+             $nextTick(() => {
+                 let video = document.getElementById('video-{{ $activeCurriculum['id'] }}');
+                 if (video && !video.player) { // Check if player is not already initialized
+                     let player = videojs(video, {
+                         controls: true,
+                         autoplay: false,
+                         playbackRates: [0.5, 1, 1.5, 2],
+                         sources: [{ src: '{{ $activeCurriculum['media_path'] }}', type: 'video/mp4' }]
+                     }, function() {
+                         console.log('Video.js player ready for curriculum ID: {{ $activeCurriculum['id'] }}');
+                     });
+                     player.ready(() => {
+                         player.load();
+                         player.removeClass('d-none'); // Ensure video is visible
+                         console.log('Video loaded for curriculum ID: {{ $activeCurriculum['id'] }}');
+                     });
+                     player.on('error', (error) => {
+                         console.error('Video.js error for curriculum ID: {{ $activeCurriculum['id'] }}', error);
+                     });
+                     player.on('ended', () => {
+                         @role('student')
+                             @this.call('updateWatchtime', true);
+                         @endrole
+                         showNextItemContent();
+                     });
+                     video.player = player; // Store player instance to prevent reinitialization
+                 } else if (!video) {
+                     console.error('Video element not found for curriculum ID: {{ $activeCurriculum['id'] }}');
+                 }
+             });"
+         wire:key="video-{{ $activeCurriculum['id'] }}"
+    >
+        <template x-if="showVideo">
+            <video
+                id="video-{{ $activeCurriculum['id'] }}"
+                class="video-js vjs-default-skin"
+                preload="auto"
+                width="100%"
+                height="auto"
+                controls
+            >
+                <source src="{{ $activeCurriculum['media_path'] }}" type="video/mp4">
+                <p>Your browser does not support the video tag. <a href="{{ $activeCurriculum['media_path'] }}">Download the video</a>.</p>
+            </video>
+        </template>
+        <strong class="am-logo">
+            @if(!empty(setting('_general.watermark_logo')))
+                <img src="{{ url(Storage::url(setting('_general.watermark_logo')[0]['path'])) }}" alt="watermark-logo">
+            @else
+                <img src="{{ asset('modules/courses/images/green-logo.png') }}" alt="watermark-logo">
+            @endif
+        </strong>
+        <div class="cr-video-info">
+            <figure>
+                @if(!empty($course?->instructor?->profile?->image) && Storage::disk(getStorageDisk())->exists($course?->instructor?->profile?->image))
+                    <img src="{{ resizedImage($course?->instructor?->profile?->image,50,50) }}" alt="{{ $course?->instructor?->profile?->image }}" />
+                @else
+                    <img src="{{ setting('_general.default_avatar_for_user') ? url(Storage::url(setting('_general.default_avatar_for_user')[0]['path'])) : resizedImage('placeholder.png', 50, 50) }}" alt="{{ $course?->instructor?->profile?->image }}" />
+                @endif
+            </figure>
+            @if(!empty($course?->instructor?->profile?->full_name) || !empty($course?->instructor?->profile?->tagline))
+                <h6>
+                    @if(!empty($course?->instructor?->profile?->full_name))
+                        {{$course?->instructor?->profile?->full_name}}
+                    @endif
+                    @if(!empty($course?->instructor?->profile?->tagline))
+                        <span>{{$course?->instructor?->profile?->tagline}}</span>
+                    @endif
+                </h6>
+            @endif
+        </div>
+    </div>
+@endif
+
                     @elseif($activeCurriculum['type'] == 'yt_link')
                         @php
                             $yt_link = explode('v=', $activeCurriculum['media_path']);
