@@ -343,39 +343,39 @@
                                 <div class="cr-coursedetails_article_wrap">{!! $activeCurriculum['article_content'] !!}</div>
                             </div>
                         @endrole
-@elseif($activeCurriculum['type'] == 'pdf')
-    <div
-        id="pdf-{{ $activeCurriculum['id'] }}"
-        class="cr-coursedetails_pdf"
-    >
-        <div class="cr-pdf-viewer">
-            <embed
-                src="{{ $activeCurriculum['media_path'] }}"
-                type="application/pdf"
-                width="100%"
-                height="600px"
-                @role('student')
-                    onload="@this.call('markAsCompleted')"
-                @endrole
-            >
-        </div>
-        @role('student')
-            <div class="cr-coursedetails_pdf_actions">
-                @if(
-                    isset($activeCurriculum['watchtime']['duration']) && isset($activeCurriculum['content_length'])
-                    && ($activeCurriculum['watchtime']['duration'] == $activeCurriculum['content_length'])
-                )
-                    @if(!empty($curriculumOrder[$activeCurriculum['id']]))
-                        <a href="javascript:void(0);" class="am-btn" wire:click.prevent="nextCurriculum({{ $curriculumOrder[$activeCurriculum['id']] }})">Go to next item</a>
-                    @endif
-                    <button type="button" class="am-btnnext"><svg xmlns="http://www.w3.org/2000/svg" width="17" height="16" viewBox="0 0 17 16" fill="none"><path d="M3.16699 8.66667L6.50033 12L13.8337 4" stroke="#34A853" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"/></svg> Completed</button>
-                @else
-                    <button type="button" class="am-btn" wire:click.prevent="markAsCompleted()">Mark as complete</button>
-                @endif
-            </div>
-        @endrole
-    </div>
-@endif
+                            @elseif($activeCurriculum['type'] == 'pdf')
+                                <div
+                                    id="pdf-{{ $activeCurriculum['id'] }}"
+                                    class="cr-coursedetails_pdf"
+                                >
+                                    <div class="cr-pdf-viewer">
+                                        <embed
+                                            src="{{ $activeCurriculum['media_path'] }}"
+                                            type="application/pdf"
+                                            width="100%"
+                                            height="600px"
+                                            @role('student')
+                                                onload="@this.call('markAsCompleted')"
+                                            @endrole
+                                        >
+                                    </div>
+                                    @role('student')
+                                        <div class="cr-coursedetails_pdf_actions">
+                                            @if(
+                                                isset($activeCurriculum['watchtime']['duration']) && isset($activeCurriculum['content_length'])
+                                                && ($activeCurriculum['watchtime']['duration'] == $activeCurriculum['content_length'])
+                                            )
+                                                @if(!empty($curriculumOrder[$activeCurriculum['id']]))
+                                                    <a href="javascript:void(0);" class="am-btn" wire:click.prevent="nextCurriculum({{ $curriculumOrder[$activeCurriculum['id']] }})">Go to next item</a>
+                                                @endif
+                                                <button type="button" class="am-btnnext"><svg xmlns="http://www.w3.org/2000/svg" width="17" height="16" viewBox="0 0 17 16" fill="none"><path d="M3.16699 8.66667L6.50033 12L13.8337 4" stroke="#34A853" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"/></svg> Completed</button>
+                                            @else
+                                                <button type="button" class="am-btn" wire:click.prevent="markAsCompleted()">Mark as complete</button>
+                                            @endif
+                                        </div>
+                                    @endrole
+                                </div>
+
                 @else
                     <div wire:ignore class="cr-image-wrapper" x-data="{
                         isPlaying: false,
