@@ -20,7 +20,6 @@ use Modules\Courses\Services\CourseService;
 use Modules\Courses\Services\CurriculumService;
 use Modules\Quiz\Models\Quiz;
 use Modules\Quiz\Services\QuizService;
-use Modules\Courses\Models\Course;
 
 class CourseTaking extends Component
 {
@@ -119,7 +118,7 @@ class CourseTaking extends Component
             $this->nextCurriculumItem[$currentCurriculum->id] = !empty($nextItem) ? [
                 'id' => $nextItem?->id,
                 'title' => $nextItem?->title,
-                'description' => $nextItem?->description,
+                'description' => $nextItem?->title,
                 'type' => $nextItem?->type,
             ] : null;
         }
@@ -274,8 +273,8 @@ class CourseTaking extends Component
             withSum: ['courseWatchtime' => 'duration']
         );
 
-        if (!empty($courseDuration->course_watchtime_sum_duration) && !empty($this->course->content_length)) {
-            $this->progress = min(100, floor(($courseDuration->course_watchtime_sum_duration / $this->course->content_length) * 100));
+        if (!empty($courseDuration->course_watchtime_sum_duration) && !empty($courseDuration->content_length)) {
+            $this->progress = min(100, floor(($courseDuration->course_watchtime_sum_duration / $courseDuration->content_length) * 100));
         } else {
             \Log::warning("Unable to calculate progress for course ID: {$this->course->id}");
         }
@@ -303,164 +302,104 @@ class CourseTaking extends Component
         $this->dispatch('updated-progress', progress: $this->progress, resultAssigned: $isAssigned);
     }
 
-#[Renderless]
-public function updateWatchtime($isCompleted = false)
-{
-    \Log::info("updateWatchtime called with isCompleted: {$isCompleted}, Curriculum ID: {$this->activeCurriculum['id']}, Course ID: {$this->course->id}");
+    #[Renderless]
+    public function updateWatchtime($isCompleted = false)
+    {
+        \Log::info("updateWatchtime called with isCompleted: {$isCompleted}, Curriculum ID: {$this->activeCurriculum['id']}, Course ID: {$this->course->id}");
 
-    if (isDemoSite()) {
-        \Log::info("Demo site detected, exiting updateWatchtime");
-        $this->dispatch('showAlertMessage', type: 'error', title: __('general.demosite_res_title'), message: __('general.demosite_res_txt'));
-        return;
-    }
-
-    if (!in_array($this->activeCurriculum['type'] ?? '', ['video', 'yt_link', 'vm_link'])) {
-        \Log::info("Invalid curriculum type: {$this->activeCurriculum['type']}");
-        return;
-    }
-
-    $curriculumId = (int) ($this->activeCurriculum['id'] ?? 0);
-    $sectionId = (int) ($this->activeCurriculum['section_id'] ?? 0);
-    $totalDuration = (int) ($this->activeCurriculum['content_length'] ?? 0);
-    $isAssigned = false;
-
-    if ($totalDuration === 0) {
-        \Log::warning("No content_length set for curriculum ID: {$curriculumId}");
-        return;
-    }
-
-    $watchtime = (new CurriculumService())->getWatchtime($curriculumId, $sectionId);
-    \Log::info("Watchtime retrieved: ", ['watchtime' => $watchtime ? $watchtime->toArray() : null]);
-
-    if ($watchtime) {
-        $duration = $watchtime->duration;
-        \Log::info("Current watchtime duration: {$duration}, Total duration: {$totalDuration}");
-        if ($isCompleted) {
-            \Log::info("Marking curriculum ID {$curriculumId} as completed with duration: {$totalDuration}");
-            (new CurriculumService())->updateWatchtime($curriculumId, $sectionId, $totalDuration);
-        } else {
-            if ($duration < $totalDuration) {
-                $updateDuration = min($duration + 60, $totalDuration);
-                \Log::info("Updating watchtime for curriculum ID {$curriculumId} to: {$updateDuration}");
-                (new CurriculumService())->updateWatchtime($curriculumId, $sectionId, $updateDuration);
-            }
+        if (isDemoSite()) {
+            \Log::info('Demo site detected, exiting updateWatchtime');
+            $this->dispatch('showAlertMessage', type: 'error', title: __('general.demosite_res_title'), message: __('general.demosite_res_txt'));
+            return;
         }
-    } else {
-        $updateDuration = $isCompleted ? $totalDuration : min(60, $totalDuration);
-        \Log::info("Adding new watchtime for curriculum ID {$curriculumId} with duration: {$updateDuration}");
-        (new CurriculumService())->addWatchtime($this->course->id, $curriculumId, $sectionId, $updateDuration);
-    }
 
-    // Store course ID before any potential reset
-    $courseId = $this->course->id;
+        $curriculumId = (int) ($this->activeCurriculum['id'] ?? 0);
+        $sectionId = (int) ($this->activeCurriculum['section_id'] ?? 0);
+        $totalDuration = (int) ($this->activeCurriculum['content_length'] ?? 0);
+        $isAssigned = false;
 
-    // Validate course existence
-    $courseCheck = Course::withTrashed()->find($courseId);
-    if (!$courseCheck) {
-        \Log::error("Course ID {$courseId} does not exist in the database");
-        $this->dispatch('showAlertMessage', type: 'error', title: __('general.error_title'), message: __('courses::courses.course_not_found'));
-        return;
-    }
-    if ($courseCheck->trashed()) {
-        \Log::error("Course ID {$courseId} is soft-deleted");
-        $this->dispatch('showAlertMessage', type: 'error', title: __('general.error_title'), message: __('courses::courses.course_not_found'));
-        return;
-    }
+        if ($totalDuration === 0) {
+            \Log::warning("No content_length set for curriculum ID: {$curriculumId}");
+            return;
+        }
 
-    // Fetch course duration data
-    $courseDuration = (new CourseService())->getCourse(
-        courseId: $courseId,
-        withSum: ['courseWatchtime' => 'duration']
-    );
+        $watchtime = (new CurriculumService())->getWatchtime($curriculumId, $sectionId);
+        \Log::info('Watchtime retrieved: ', ['watchtime' => $watchtime ? $watchtime->toArray() : null]);
 
-    // Only reset and reload $this->course if necessary
-    if (!$this->course || $this->course->id !== $courseId) {
-        $this->course = null; // Reset cached course
-        $this->course = (new CourseService())->getCourse(
+        if ($watchtime) {
+            $duration = $watchtime->duration;
+            \Log::info("Current watchtime duration: {$duration}, Total duration: {$totalDuration}");
+            if ($isCompleted) {
+                \Log::info("Marking curriculum ID {$curriculumId} as completed with duration: {$totalDuration}");
+                (new CurriculumService())->updateWatchtime($curriculumId, $sectionId, $totalDuration);
+            } else {
+                if ($duration < $totalDuration) {
+                    $updateDuration = min($duration + 60, $totalDuration);
+                    \Log::info("Updating watchtime for curriculum ID {$curriculumId} to: {$updateDuration}");
+                    (new CurriculumService())->updateWatchtime($curriculumId, $sectionId, $updateDuration);
+                }
+            }
+        } else {
+            $updateDuration = $isCompleted ? $totalDuration : min(60, $totalDuration);
+            \Log::info("Adding new watchtime for curriculum ID {$curriculumId} with duration: {$updateDuration}");
+            (new CurriculumService())->addWatchtime($this->course->id, $curriculumId, $sectionId, $updateDuration);
+        }
+
+        // Store course ID before resetting
+        $courseId = $this->course->id;
+        $this->course = null;  // Reset cached course
+        $courseDuration = (new CourseService())->getCourse(
             courseId: $courseId,
-            relations: [
-                'category',
-                'instructor',
-                'instructor.languages',
-                'instructor.profile:id,user_id,first_name,last_name,image,slug,tagline,gender,native_language,description,verified_at',
-                'instructor.socialProfiles',
-                'instructor.address',
-                'subCategory',
-                'language',
-                'thumbnail',
-                'promotionalVideo',
-                'pricing',
-                'noticeboards',
-                'sections' => function ($query) {
-                    $query->withWhereHas('curriculums', function ($subQuery) {
-                        $subQuery->whereNotNull('media_path')->orWhereNotNull('article_content');
-                        $subQuery->with('watchtime');
-                        $subQuery->orderBy('sort_order', 'asc');
-                    });
-                },
-                'ratings.student.profile',
-                'ratings.student.address',
-            ],
-            withSum: ['courseWatchtime' => 'duration'],
-            withAvg: ['ratings' => 'rating'],
-            withCount: ['ratings', 'sections', 'curriculums', 'instructorReviews', 'faqs', 'enrollments']
+            withSum: ['courseWatchtime' => 'duration']
         );
-    }
 
-    if (!$courseDuration || !$this->course) {
-        \Log::error("Failed to retrieve course data for course ID: {$courseId}", [
-            'courseDuration' => $courseDuration ? 'found' : 'null',
-            'this->course' => $this->course ? 'found' : 'null'
-        ]);
-        $this->dispatch('showAlertMessage', type: 'error', title: __('general.error_title'), message: __('courses::courses.course_not_found'));
-        return;
-    }
+        if (!$courseDuration) {
+            \Log::error("Failed to fetch course data for course ID: {$courseId}");
+            $this->dispatch('showAlertMessage', type: 'error', title: __('general.error_title'), message: __('courses::courses.course_not_found'));
+            return;
+        }
 
-    // Calculate progress
-    if (!empty($courseDuration->course_watchtime_sum_duration) && !empty($courseDuration->content_length)) {
-        $this->progress = min(100, floor(($courseDuration->course_watchtime_sum_duration / $courseDuration->content_length) * 100));
-        \Log::info("Progress calculated: {$this->progress}%");
-    } else {
-        \Log::warning("Unable to calculate progress for course ID: {$courseId}", [
+        // Reload course to ensure $this->course is up-to-date
+        $this->course = $courseDuration;
+
+        \Log::info('Course duration data: ', [
             'course_watchtime_sum_duration' => $courseDuration->course_watchtime_sum_duration,
             'content_length' => $courseDuration->content_length
         ]);
-    }
 
-    // Update active curriculum watchtime duration for frontend
-    if ($isCompleted) {
-        $this->activeCurriculum['watchtime']['duration'] = $totalDuration;
-    } else {
-        $this->activeCurriculum['watchtime']['duration'] = $watchtime ? min($watchtime->duration + 60, $totalDuration) : min(60, $totalDuration);
-    }
+        if (!empty($courseDuration->course_watchtime_sum_duration) && !empty($courseDuration->content_length)) {
+            $this->progress = min(100, floor(($courseDuration->course_watchtime_sum_duration / $courseDuration->content_length) * 100));
+            \Log::info("Progress calculated: {$this->progress}%");
+        } else {
+            \Log::warning("Unable to calculate progress for course ID: {$courseId}. Watchtime sum: {$courseDuration->course_watchtime_sum_duration}, Content length: {$courseDuration->content_length}");
+        }
 
-    // Trigger certificate and assignments if progress reaches 100%
-    if ($this->progress >= 100) {
-        \Log::info("Progress reached 100%, triggering certificate and assignments");
-        if (isActiveModule('upcertify') && !empty($this->course->certificate_id)) {
-            $metaData = $this->course->meta_data ?? null;
-            if (isActiveModule('Quiz')) {
-                if (!empty($metaData['assign_quiz_certificate']) && $metaData['assign_quiz_certificate'] == 'none') {
+        if ($this->progress >= 100) {
+            \Log::info('Progress reached 100%, triggering certificate and assignments');
+            if (isActiveModule('upcertify') && !empty($this->course?->certificate_id)) {
+                $metaData = $this->course->meta_data ?? null;
+                if (isActiveModule('Quiz')) {
+                    if (!empty($metaData['assign_quiz_certificate']) && $metaData['assign_quiz_certificate'] == 'none') {
+                        \Log::info("Generating certificate for course ID: {$courseId}");
+                        $this->generateCertificate();
+                    }
+                } else {
                     \Log::info("Generating certificate for course ID: {$courseId}");
                     $this->generateCertificate();
                 }
-            } else {
-                \Log::info("Generating certificate for course ID: {$courseId}");
-                $this->generateCertificate();
             }
+            $isAssigned = $this->assignQuiz();
+            $this->assignAssignment();
         }
-        $isAssigned = $this->assignQuiz();
-        $this->assignAssignment();
-    }
 
-    if ($isCompleted && !empty($this->curriculumOrder[$curriculumId])) {
-        \Log::info("Moving to next curriculum ID: {$this->curriculumOrder[$curriculumId]}");
-        $this->nextCurriculum($this->curriculumOrder[$curriculumId]);
-    }
+        if ($isCompleted && !empty($this->curriculumOrder[$curriculumId])) {
+            \Log::info("Moving to next curriculum ID: {$this->curriculumOrder[$curriculumId]}");
+            $this->nextCurriculum($this->curriculumOrder[$curriculumId]);
+        }
 
-    \Log::info("Dispatching updated-progress event with progress: {$this->progress}, resultAssigned: {$isAssigned}");
-    $this->dispatch('updated-progress', progress: $this->progress, resultAssigned: $isAssigned);
-}
+        \Log::info("Dispatching updated-progress event with progress: {$this->progress}, resultAssigned: {$isAssigned}");
+        $this->dispatch('updated-progress', progress: $this->progress, resultAssigned: $isAssigned);
+    }
 
     public function assignQuiz()
     {
