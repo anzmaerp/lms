@@ -38,27 +38,6 @@ use function JmesPath\search;
 Route::get('/dbNew', function () {
     return 'No thing to do!';
 });
-Route::get('/db', function () {
-    DB::statement("
-        INSERT INTO notification_templates
-        (title, `type`, `role`, content, status, created_at, updated_at, deleted_at)
-        VALUES
-        ('notification_template.payment_accepted_title', 'paymentAccepted', 'student',
-        'a:3:{s:4:\"info\";s:56:\"notification_template.payment_accepted_student_variables\";s:7:\"subject\";s:46:\"notification_template.payment_accepted_subject\";s:7:\"content\";s:46:\"notification_template.payment_accepted_content\";}',
-        'active', '2025-10-16 13:10:43', '2025-10-16 13:10:43', NULL);
-    ");
-
-    DB::statement("
-        INSERT INTO notification_templates
-        ( title, `type`, `role`, content, status, created_at, updated_at, deleted_at)
-        VALUES
-        ('notification_template.payment_rejected_title', 'paymentRejected', 'student',
-        'a:3:{s:4:\"info\";s:56:\"notification_template.payment_rejected_student_variables\";s:7:\"subject\";s:46:\"notification_template.payment_rejected_subject\";s:7:\"content\";s:46:\"notification_template.payment_rejected_content\";}',
-        'active', '2025-10-16 13:10:43', '2025-10-16 13:10:43', NULL);
-    ");
-
-    return '✅ Notification templates inserted successfully!';
-});
 
 Route::get('/clear', function () {
     Artisan::call('optimize:clear');
