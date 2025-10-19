@@ -185,6 +185,7 @@
                                             <select data-componentid="@this" class="am-select2 form-control"
                                                 data-searchable="true" data-parent="#tb-add-user" data-live='true'
                                                 id="gender" data-wiremodel="form.gender">
+                                                <option>{{__('general.select')}}</option>
                                                 <option value="male">{{__('auth.male')}}</option>
                                                 <option value="female">{{__('auth.female')}}</option>
                                             </select>
