@@ -1,54 +1,63 @@
 <?php
 
-use App\Livewire\Payouts;
-use Illuminate\Http\Request;
-use function JmesPath\search;
+use App\Http\Controllers\Auth\SocialController;
+use App\Http\Controllers\Frontend\SearchController;
+use App\Http\Controllers\CheckCertificate;
+use App\Http\Controllers\Impersonate;
+use App\Http\Controllers\OpenAiController;
+use App\Http\Controllers\SearchDispatecherController;
+use App\Http\Controllers\SiteController;
+use App\Http\Livewire\Admin\Settings\Payment\Fawaterk;
+use App\Livewire\Frontend\BlogDetails;
 use App\Livewire\Frontend\Blogs;
 use App\Livewire\Frontend\Checkout;
 use App\Livewire\Frontend\ThankYou;
-use App\Http\Controllers\Impersonate;
-use Illuminate\Support\Facades\Route;
-use App\Livewire\Frontend\BlogDetails;
-use App\Services\HesabePaymentService;
-use App\Http\Controllers\SiteController;
-use App\Livewire\Pages\Student\Invoices;
-use App\Http\Controllers\CheckCertificate;
-use App\Http\Controllers\OpenAiController;
-use App\Livewire\Pages\Common\Dispute\Dispute;
-use App\Http\Controllers\Auth\SocialController;
-use App\Livewire\Pages\Student\CertificateList;
-use App\Livewire\Pages\Student\RescheduleSession;
-use App\Http\Controllers\Frontend\SearchController;
 use App\Livewire\Pages\Common\Bookings\UserBooking;
+use App\Livewire\Pages\Common\Dispute\Dispute;
 use App\Livewire\Pages\Common\Dispute\ManageDispute;
-use App\Livewire\Pages\Student\Favourite\Favourites;
-use App\Http\Controllers\SearchDispatecherController;
-use App\Livewire\Pages\Common\ProfileSettings\Resume;
-use App\Http\Livewire\Admin\Settings\Payment\Fawaterk;
-use App\Livewire\Pages\Tutor\ManageSessions\MyCalendar;
-use App\Livewire\Pages\Tutor\ManageAccount\ManageAccount;
-use App\Livewire\Pages\Tutor\ManageSessions\SessionDetail;
-use App\Livewire\Pages\Student\BillingDetail\BillingDetail;
-use App\Livewire\Pages\Tutor\ManageSessions\ManageSubjects;
 use App\Livewire\Pages\Common\ProfileSettings\AccountSettings;
-use App\Livewire\Pages\Common\ProfileSettings\PersonalDetails;
 use App\Livewire\Pages\Common\ProfileSettings\IdentityVerification;
+use App\Livewire\Pages\Common\ProfileSettings\PersonalDetails;
+use App\Livewire\Pages\Common\ProfileSettings\Resume;
+use App\Livewire\Pages\Student\BillingDetail\BillingDetail;
+use App\Livewire\Pages\Student\Favourite\Favourites;
+use App\Livewire\Pages\Student\CertificateList;
+use App\Livewire\Pages\Student\Invoices;
+use App\Livewire\Pages\Student\RescheduleSession;
+use App\Livewire\Pages\Tutor\ManageAccount\ManageAccount;
+use App\Livewire\Pages\Tutor\ManageSessions\ManageSubjects;
+use App\Livewire\Pages\Tutor\ManageSessions\MyCalendar;
+use App\Livewire\Pages\Tutor\ManageSessions\SessionDetail;
+use App\Livewire\Payouts;
+use App\Services\HesabePaymentService;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
+use function JmesPath\search;
 
 Route::get('/dbNew', function () {
     return 'No thing to do!';
 });
 Route::get('/db', function () {
-    try {
-        DB::statement("
-            ALTER TABLE courses_curriculums 
-            MODIFY COLUMN type ENUM('video','yt_link','vm_link','article','pdf') NOT NULL
-        ");
+    DB::statement("
+        INSERT INTO notification_templates
+        (id, title, `type`, `role`, content, status, created_at, updated_at, deleted_at)
+        VALUES
+        (7, 'notification_template.payment_accepted_title', 'paymentAccepted', 'student',
+        'a:3:{s:4:\"info\";s:56:\"notification_template.payment_accepted_student_variables\";s:7:\"subject\";s:46:\"notification_template.payment_accepted_subject\";s:7:\"content\";s:46:\"notification_template.payment_accepted_content\";}',
+        'active', '2025-10-16 13:10:43', '2025-10-16 13:10:43', NULL);
+    ");
 
-        return '✅ Column type in courses_curriculums updated successfully.';
-    } catch (\Exception $e) {
-        return '❌ Error: ' . $e->getMessage();
-    }
+    DB::statement("
+        INSERT INTO notification_templates
+        (id, title, `type`, `role`, content, status, created_at, updated_at, deleted_at)
+        VALUES
+        (8, 'notification_template.payment_rejected_title', 'paymentRejected', 'student',
+        'a:3:{s:4:\"info\";s:56:\"notification_template.payment_rejected_student_variables\";s:7:\"subject\";s:46:\"notification_template.payment_rejected_subject\";s:7:\"content\";s:46:\"notification_template.payment_rejected_content\";}',
+        'active', '2025-10-16 13:10:43', '2025-10-16 13:10:43', NULL);
+    ");
+
+    return '✅ Notification templates inserted successfully!';
 });
 
 Route::get('/clear', function () {
@@ -174,7 +183,6 @@ Route::middleware(['locale', 'maintenance'])->group(function () {
     if (!request()->is('api/*')) {
         require __DIR__ . '/pagebuilder.php';
     }
-    
-    // route::get('home-four',[HomefourController::class,'index','index'])->name('home4');
 
+    // route::get('home-four',[HomefourController::class,'index','index'])->name('home4');
 });

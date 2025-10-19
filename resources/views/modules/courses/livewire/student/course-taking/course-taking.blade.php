@@ -302,7 +302,7 @@
                         @endrole
                         showNextItemContent();
                     });
-                }
+                } 
             }
         }">
             <iframe
