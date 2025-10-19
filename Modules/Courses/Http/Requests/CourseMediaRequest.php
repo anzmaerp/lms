@@ -27,7 +27,7 @@ class CourseMediaRequest extends FormRequest
     {
         return [
             'thumbnail'         => 'required|string',
-            'promotionalVideo'  => 'required|mimes:' . $this->videoExtensions . '|max:' . $this->videoSize,
+            'promotionalVideo'  => 'nullable|mimes:' . $this->videoExtensions . '|max:' . $this->videoSize,
         ];
     }
 
