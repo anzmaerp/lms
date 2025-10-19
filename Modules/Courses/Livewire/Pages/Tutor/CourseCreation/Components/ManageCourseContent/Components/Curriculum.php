@@ -2,13 +2,13 @@
 
 namespace Modules\Courses\Livewire\Pages\Tutor\CourseCreation\Components\ManageCourseContent\Components;
 
+use App\Traits\PrepareForValidation;
 use Livewire\Attributes\Renderless;
+use Livewire\Component;
+use Livewire\WithFileUploads;
 use Modules\Courses\Http\Requests\CurriculumRequest;
 use Modules\Courses\Services\CourseService;
-use Livewire\Component;
 use Modules\Courses\Services\CurriculumService;
-use Livewire\WithFileUploads;
-use App\Traits\PrepareForValidation;
 
 class Curriculum extends Component
 {
@@ -43,14 +43,14 @@ class Curriculum extends Component
         $this->section = $section;
         $file_ext = !empty(setting('_general.allowed_video_extensions')) ? setting('_general.allowed_video_extensions') : 'mp4';
         $this->allowVideoFileExt = explode(',', $file_ext);
-        $this->videoFileSize = !empty(setting('_general.max_video_size')) ? setting('_general.max_video_size') * 1024 : 20 * 1024; // Convert MB to KB
-        $this->pdfFileSize = !empty(setting('_general.max_pdf_size')) ? setting('_general.max_pdf_size') * 1024 : 10 * 1024; // Convert MB to KB, default 10MB
+        $this->videoFileSize = !empty(setting('_general.max_video_size')) ? setting('_general.max_video_size') * 1024 : 20 * 1024;  // Convert MB to KB
+        $this->pdfFileSize = !empty(setting('_general.max_pdf_size')) ? setting('_general.max_pdf_size') * 1024 : 10 * 1024;  // Convert MB to KB, default 10MB
     }
 
     public function render()
     {
         $curriculumItems = (new CurriculumService())->getAllCurriculums($this->section->id);
-     
+
         return view('courses::livewire.tutor.course-creation.components.manage-course-content.components.curriculum', [
             'curriculumItems' => $curriculumItems,
         ]);
@@ -59,7 +59,7 @@ class Curriculum extends Component
     public function updateCurriculumType($type)
     {
         $this->activeCurriculumItem['type'] = $type;
-        $this->dispatch('initEditor', target: '#curriculum_des_'.$this->section->id, content: $this->description);
+        $this->dispatch('initEditor', target: '#curriculum_des_' . $this->section->id, content: $this->description);
     }
 
     public function updateCurriculumState($state = false)
@@ -68,7 +68,7 @@ class Curriculum extends Component
         $this->resetErrorBag();
         if ($state) {
             $this->updateActiveCurriculumItem(null);
-            $this->dispatch('initEditor', target: '#curriculum_des_'.$this->section->id, content: $this->description);
+            $this->dispatch('initEditor', target: '#curriculum_des_' . $this->section->id, content: $this->description);
         }
     }
 
@@ -118,7 +118,7 @@ class Curriculum extends Component
             }
         } elseif ($this->curriculumPdf) {
             $fileName = time() . '_' . $this->curriculumPdf->getClientOriginalName();
-            $filePath = $this->curriculumPdf->storeAs('curriculum_videos', $fileName, getStorageDisk()); // Use curriculum_videos for consistency
+            $filePath = $this->curriculumPdf->storeAs('curriculum_videos', $fileName, getStorageDisk());  // Use curriculum_videos for consistency
             if ($filePath) {
                 $validatedData['media_path'] = $filePath;
                 $validatedData['type'] = 'pdf';
@@ -174,7 +174,7 @@ class Curriculum extends Component
 
         $this->reset(['title', 'description', 'type', 'isCurriculumEditing']);
         $this->dispatch('showAlertMessage', type: 'success', title: __('courses::courses.curriculum_updated_successfully'), message: __('courses::courses.curriculum_updated_successfully'));
-        $this->dispatch('toggleEditorModal', target: '#edit-curriculum-'.$this->section->id, action: 'hide');
+        $this->dispatch('toggleEditorModal', target: '#edit-curriculum-' . $this->section->id, action: 'hide');
         $this->updateActiveCurriculumItem($curriculum->toArray());
     }
 
@@ -185,7 +185,7 @@ class Curriculum extends Component
             $this->dispatch('showAlertMessage', type: 'error', title: __('general.demosite_res_title'), message: __('general.demosite_res_txt'));
             return;
         }
-        $isDeleted = (new CourseService())->deleteCurriculum((int)$curriculumId);
+        $isDeleted = (new CourseService())->deleteCurriculum((int) $curriculumId);
         if ($isDeleted) {
             $this->dispatch('showAlertMessage', type: 'success', title: __('courses::courses.curriculum_deleted_successfully'), message: __('courses::courses.curriculum_deleted_successfully'));
         } else {
@@ -195,17 +195,17 @@ class Curriculum extends Component
 
     public function updatedCurriculumVideo()
     {
-        $allowed_extensions = !empty(setting('_general.allowed_video_extensions')) 
-            ? explode(',', setting('_general.allowed_video_extensions')) 
-            : ['mp4']; 
-        $max_size = !empty(setting('_general.max_video_size')) ? setting('_general.max_video_size') * 1024 : 20 * 1024; 
+        $allowed_extensions = !empty(setting('_general.allowed_video_extensions'))
+            ? explode(',', setting('_general.allowed_video_extensions'))
+            : ['mp4'];
+        $max_size = !empty(setting('_general.max_video_size')) ? setting('_general.max_video_size') * 1024 : 20 * 1024;
 
         $file_extension = $this->curriculumVideo->getClientOriginalExtension();
-        $file_size = $this->curriculumVideo->getSize() / 1024; 
+        $file_size = $this->curriculumVideo->getSize() / 1024;
 
         if (!in_array(strtolower($file_extension), $allowed_extensions) || $file_size > $max_size) {
             $this->dispatch('showAlertMessage', type: 'error', message: __(
-                'validation.invalid_file_type', 
+                'validation.invalid_file_type',
                 ['file_types' => implode(', ', $allowed_extensions)]
             ));
             $this->curriculumVideo = null;
@@ -219,11 +219,11 @@ class Curriculum extends Component
         $max_size = !empty(setting('_general.max_pdf_size')) ? setting('_general.max_pdf_size') * 1024 : 10 * 1024;
 
         $file_extension = $this->curriculumPdf->getClientOriginalExtension();
-        $file_size = $this->curriculumPdf->getSize() / 1024; 
+        $file_size = $this->curriculumPdf->getSize() / 1024;
 
         if (!in_array(strtolower($file_extension), $allowed_extensions) || $file_size > $max_size) {
             $this->dispatch('showAlertMessage', type: 'error', message: __(
-                'validation.invalid_file_type', 
+                'validation.invalid_file_type',
                 ['file_types' => implode(', ', $allowed_extensions)]
             ));
             $this->curriculumPdf = null;
@@ -237,10 +237,10 @@ class Curriculum extends Component
         if ($response) {
             $this->dispatch('showAlertMessage', type: 'error', title: __('general.demosite_res_title'), message: __('general.demosite_res_txt'));
             return;
-        }  
+        }
         if ($this->activeCurriculumItem['type'] == 'video') {
             if ($this->curriculumVideo) {
-                if ($this->curriculumVideo instanceof \Illuminate\Http\UploadedFile) { 
+                if ($this->curriculumVideo instanceof \Illuminate\Http\UploadedFile) {
                     $fileName = time() . '_' . $this->curriculumVideo->getClientOriginalName();
                     $filePath = $this->curriculumVideo->storeAs('curriculum_videos', $fileName, getStorageDisk());
                     if ($filePath) {
@@ -251,7 +251,7 @@ class Curriculum extends Component
                     }
                 }
                 $curriculum = (new CurriculumService())->updateCurriculum(
-                    $this->activeCurriculumItem['id'], 
+                    $this->activeCurriculumItem['id'],
                     [
                         'media_path' => $this->curriculumVideo,
                         'type' => 'video',
@@ -261,7 +261,7 @@ class Curriculum extends Component
                 );
                 $this->updateActiveCurriculumItem($curriculum->toArray());
                 $this->dispatch('showAlertMessage', type: 'success', title: __('courses::courses.curriculum_updated_successfully'), message: __('courses::courses.curriculum_updated_successfully'));
-                $this->curriculumVideo = null; 
+                $this->curriculumVideo = null;
             } else {
                 $this->dispatch('showAlertMessage', type: 'error', title: __('courses::courses.please_add_a_video'), message: __('courses::courses.please_add_a_video'));
             }
@@ -282,7 +282,7 @@ class Curriculum extends Component
                     [
                         'media_path' => $this->curriculumPdf,
                         'type' => 'pdf',
-                        'content_length' => 0, 
+                        'content_length' => 0,
                         'is_preview' => !empty($this->activeCurriculumItem['is_preview']) ? $this->activeCurriculumItem['is_preview'] : false
                     ]
                 );
@@ -315,7 +315,7 @@ class Curriculum extends Component
                     'content_length' => $this->duration,
                     'is_preview' => !empty($this->activeCurriculumItem['is_preview']) ? $this->activeCurriculumItem['is_preview'] : false,
                 ]
-            );    
+            );
             $this->updateActiveCurriculumItem($curriculum->toArray());
             $this->dispatch('showAlertMessage', type: 'success', title: __('courses::courses.curriculum_updated_successfully'), message: __('courses::courses.curriculum_updated_successfully'));
         } elseif ($this->activeCurriculumItem['type'] == 'vm_link') {
@@ -333,7 +333,7 @@ class Curriculum extends Component
                     'content_length' => $this->duration,
                     'is_preview' => !empty($this->activeCurriculumItem['is_preview']) ? $this->activeCurriculumItem['is_preview'] : false,
                 ]
-            );    
+            );
             $this->updateActiveCurriculumItem($curriculum->toArray());
             $this->dispatch('showAlertMessage', type: 'success', title: __('courses::courses.curriculum_updated_successfully'), message: __('courses::courses.curriculum_updated_successfully'));
         } else {
@@ -348,7 +348,7 @@ class Curriculum extends Component
                 $duration = $totalMinutes * 60;
             }
             $curriculum = (new CurriculumService())->updateCurriculum(
-                $this->activeCurriculumItem['id'], 
+                $this->activeCurriculumItem['id'],
                 [
                     'article_content' => $this->article_content,
                     'type' => 'article',
@@ -379,12 +379,12 @@ class Curriculum extends Component
     }
 
     public function editCurriculumModal($curriculum)
-    {   
+    {
         $this->resetErrorBag();
         $this->title = $curriculum['title'];
         $this->description = $curriculum['description'];
         $this->editCurriculumData = $curriculum;
-        $this->dispatch('initEditor', target: '#edit_curriculum_des_'.$this->section->id, content: $curriculum['description'], modal: '#edit-curriculum-'.$this->section->id);
+        $this->dispatch('initEditor', target: '#edit_curriculum_des_' . $this->section->id, content: $curriculum['description'], modal: '#edit-curriculum-' . $this->section->id);
     }
 
     public function updateCurriculumOrder($list)
