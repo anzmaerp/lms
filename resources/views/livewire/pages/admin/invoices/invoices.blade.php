@@ -65,6 +65,7 @@
                                 <th>{{ __('booking.amount') }}</th>
                                 <th>{{ __('booking.admin_commission') }}</th>
                                 <th>{{ __('booking.status') }}</th>
+                                <th>{{ __('general.payment_status') }}</th>
                                 <th>{{ __('general.actions') }}</th>
                             </thead>
                             <tbody>
@@ -162,6 +163,31 @@
                                                     class="tk-project-tag  {{ $order?->status == 'complete' ? 'tk-hourly-tag' : 'tk-fixed-tag' }}">{{ $order?->status }}</em>
                                             </div>
                                         </td>
+
+                                        <td data-label="{{ __('general.payment_status') }}" class="text-center align-middle">
+                                            @if ($order?->payment_type_m == 'offline')
+                                                @if ($order?->payment_acceptnce == 'Y')
+                                                    <span class="inline-flex items-center gap-1 px-3 py-1 text-xs font-semibold shadow-sm"
+                                                        style="background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%); color: #15803d; border: 1px solid #86efac; border-radius: 50px; min-height: 24px; display: inline-flex; align-items: center;">
+                                                        <i class="icon-check-circle" style="font-size: 12px; color: #16a34a;"></i>
+                                                        {{ __('general.accepted') }}
+                                                    </span>
+                                                @elseif ($order?->payment_acceptnce == 'N')
+                                                    <span class="inline-flex items-center gap-1 px-3 py-1 text-xs font-semibold shadow-sm"
+                                                        style="background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%); color: #b91c1c; border: 1px solid #fca5a5; border-radius: 50px; min-height: 24px; display: inline-flex; align-items: center;">
+                                                        <i class="icon-x" style="font-size: 12px; color: #dc2626;"></i>
+                                                        {{ __('general.rejected') }}
+                                                    </span>
+                                                @else
+                                                    <span class="inline-flex items-center gap-1 px-3 py-1 text-xs font-semibold shadow-sm"
+                                                        style="background: linear-gradient(135deg, #fef9c3 0%, #fef08a 100%); color: #92400e; border: 1px solid #fde68a; border-radius: 50px; min-height: 24px; display: inline-flex; align-items: center;">
+                                                        <i class="icon-clock" style="font-size: 12px; color: #ca8a04;"></i>
+                                                        {{ __('general.pending') }}
+                                                    </span>
+                                                @endif
+                                            @endif
+                                        </td>
+
                                         <td data-label="{{ __('general.actions') }}">
                                             <ul class="tb-action-icon">
                                                 <li>
