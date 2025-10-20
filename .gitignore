@@ -1,7 +1,15 @@
 # Dependency directories
 /node_modules
-/vendor
-
+/vendor/*                                
+!/vendor/larabuild/                     
+/vendor/larabuild/*                     
+!/vendor/larabuild/pagebuilder/         
+/vendor/larabuild/pagebuilder/*         
+!/vendor/larabuild/pagebuilder/resources/   
+/vendor/larabuild/pagebuilder/resources/*   
+!/vendor/larabuild/pagebuilder/resources/views/   
+/vendor/larabuild/pagebuilder/resources/views/*   
+!/vendor/larabuild/pagebuilder/resources/views/pages.blade.php  
 /database/DB/*
 
 # Environment files
