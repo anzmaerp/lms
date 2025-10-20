@@ -134,9 +134,9 @@
                         @elseif(in_array($activeCurriculumItem['type'], ['video', 'yt_link', 'vm_link']))
                             <div class="am-upload-options">
                                 <h6 class="am-important">{{ __('courses::courses.video') }}</h6>
-                                <div class="am-radio"><input type="radio" id="video" name="media_type" value="video"
+                                {{-- <div class="am-radio"><input type="radio" id="video" name="media_type" value="video"
                                         wire:model.live="activeCurriculumItem.type" /><label
-                                        for="video">{{ __('courses::courses.video') }}</label></div>
+                                        for="video">{{ __('courses::courses.video') }}</label></div> --}}
                                 <div class="am-radio"><input type="radio" id="yt_link" name="media_type" value="yt_link"
                                         wire:model.live="activeCurriculumItem.type" /><label
                                         for="yt_link">{{ __('courses::courses.youtube_link') }}</label></div>
@@ -145,7 +145,7 @@
                                         for="vimeo-link">{{ __('courses::courses.vimeo_link') }}</label></div>
                             </div>
                             @if($activeCurriculumItem['type'] === 'video')
-                                @if(empty($curriculumVideo) && (empty($curriculumItem->media_path) || empty(Storage::disk(getStorageDisk())->exists($curriculumItem->media_path))))
+                                {{-- @if(empty($curriculumVideo) && (empty($curriculumItem->media_path) || empty(Storage::disk(getStorageDisk())->exists($curriculumItem->media_path))))
                                     <div wire:loading.remove wire:target="curriculumVideo" class="form-group" id="video-upload-section"
                                         wire:ignore.self>
                                         <label for="at_upload_video{{ $activeCurriculumItem['id'] }}" class="am-uploadfile">
@@ -193,7 +193,7 @@
                                                 </video></div>
                                         </figure>
                                     </div>
-                                @endif
+                                @endif --}}
                             @elseif($activeCurriculumItem['type'] === 'yt_link')
                                 <div id="yt_link-input-section" class="form-group"
                                     x-data="{ onYouTubeIframeAPIReady(videoId){ console.log('videoId: ' + videoId); const ytPlayer = new YT.Player(`yt-video-${videoId}`, { events: { onReady: function (event) { const ytVideoDuration = event.target.getDuration(); console.log('evt', ytVideoDuration, event); @this.set('duration', Math.round(ytVideoDuration), false); }, }, }); }}">

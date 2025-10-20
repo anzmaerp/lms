@@ -298,7 +298,7 @@ class Curriculum extends Component
                     'required',
                     'url',
                     function ($attribute, $value, $fail) {
-                        if (!preg_match('/^(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/)[a-zA-Z0-9_-]+$/', $value)) {
+                        if (!preg_match('/^(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/)[a-zA-Z0-9_-]+(&.*)?$/', $value)) {
                             $fail('Please enter a valid YouTube video link.');
                         }
                     },
