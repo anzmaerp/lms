@@ -40,7 +40,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/db', function () {
     DB::statement("
-        UPDATE lms.notification_templates
+        UPDATE notification_templates
         SET 
             title='notification_template.payment_accepted_title',
             `type`='paymentAccepted',
@@ -54,7 +54,7 @@ Route::get('/db', function () {
     ");
 
     DB::statement("
-        UPDATE lms.notification_templates
+        UPDATE notification_templates
         SET 
             title='notification_template.payment_rejected_title',
             `type`='paymentRejected',
