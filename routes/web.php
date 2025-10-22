@@ -38,40 +38,6 @@ use Illuminate\Support\Facades\Route;
 
 
 
-Route::get('/db', function () {
-    DB::statement("
-        UPDATE notification_templates
-        SET 
-            title='notification_template.payment_accepted_title',
-            `type`='paymentAccepted',
-            `role`='student',
-            content='a:3:{s:4:\"info\";s:56:\"notification_template.payment_accepted_student_variables\";s:7:\"subject\";s:46:\"notification_template.payment_accepted_subject\";s:7:\"content\";s:46:\"notification_template.payment_accepted_content\";}',
-            status='active',
-            created_at='2025-10-16 13:10:43',
-            updated_at='2025-10-16 13:10:43',
-            deleted_at=NULL
-        WHERE id=7;
-    ");
-
-    DB::statement("
-        UPDATE notification_templates
-        SET 
-            title='notification_template.payment_rejected_title',
-            `type`='paymentRejected',
-            `role`='student',
-            content='a:3:{s:4:\"info\";s:56:\"notification_template.payment_rejected_student_variables\";s:7:\"subject\";s:46:\"notification_template.payment_rejected_subject\";s:7:\"content\";s:46:\"notification_template.payment_rejected_content\";}',
-            status='active',
-            created_at='2025-10-16 13:10:43',
-            updated_at='2025-10-16 13:10:43',
-            deleted_at=NULL
-        WHERE id=8;
-    ");
-
-
-
-    return '✅ SQL statements executed successfully!';
-});
-
 Route::get('/dbNew', function () {
     return 'No thing to do!';
 });
