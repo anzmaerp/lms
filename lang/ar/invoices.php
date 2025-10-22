@@ -18,4 +18,6 @@ return [
     'invoice_total' => 'المجموع',
     'invoice_discount_code' => 'رمز الخصم',
     'invoice_discount_amount' => 'مبلغ الخصم',
+    'preview' => 'معاينة',
+    'pdf' => 'pdf',
 ];

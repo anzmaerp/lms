@@ -59,4 +59,7 @@ return [
     'sign_in_with_google' => 'Sign in with Google',
     'social_login_error' => 'Unable to login using :platform. Please try again.',
     'username_placeholder' => 'Email | Phone',
+    'gender' => 'gender',
+    'female' => 'female',
+    'male' => 'male',
 ];

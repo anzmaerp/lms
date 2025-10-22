@@ -68,7 +68,7 @@ return [
     'discover_tutor_text' => 'Discover a skilled online tutor for your studies',
     'discover_tutor_desc' => 'Master your studies with personalized online tutoring from expert educators. Our skilled tutors are here to help you build strong foundations and achieve your academic goals.',
     'manage_packages' => 'Manage Addons',
-    'installed_packages' => 'Installed Addons',
+    'installed_packages' => 'installed_packages',
     'add_new_package' => 'Add New',
     'insights' => 'Insights',
     'coupons' => 'Deals & Coupons',
@@ -86,4 +86,5 @@ return [
     'Installed' => [
         'Addons' => 'installedaddons',
     ],
+    'offline_payments' => 'offline_payments',
 ];

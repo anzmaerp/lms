@@ -55,7 +55,7 @@ return [
     'translation_settings' => 'ترجمات اللغة',
     'groups' => 'المجموعات',
     'subjects' => 'المواد',
-    'subject_groups' => 'مجموعات المواد',
+    'subject_groups' => 'المراحل الدراسية',
     'bookings' => 'حجوزاتي',
     'invoices' => 'فواتيري',
     'certificates' => 'الشهادات',
@@ -84,4 +84,6 @@ return [
     'Installed' => [
         'Addons' => 'الإضافات المثبتة',
     ],
+    'offline_payments' => 'المدفوعات الاوفلاين',
+    'installed_packages' => 'الاضافات المثبتة',
 ];

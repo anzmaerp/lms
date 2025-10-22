@@ -21,7 +21,7 @@
                                                     $key = $template['type'] . '-' . $template['role'];
                                                 @endphp
                                                 @if(!in_array($key, $exclude_templates))
-                                                    <option value="{{ $template['id'] }}">{{ $template['title'] }} ( {{ $template['role'] }} )</option>
+                                                    <option value="{{ $template['id'] }}">{{ __($template['title']) }} ( {{ __('general.'.$template['role']) }} )</option>
                                                 @endif
                                             @endforeach
                                         @endif
@@ -32,7 +32,6 @@
                         @if( !empty($selected_template) )
                            @foreach( $selected_template['content'] as $key => $single )
                                 @if( $key == 'subject' || $key == 'greeting' )
-
                                     <div class="form-group">
                                         <label class="tb-label">{{ $single['title'] }}</label>
                                         <input type="text" class="form-control @error('validated_fields.'.$single['id']) tk-invalid @enderror"  placeholder="{{ $single['title'] }}"  wire:model="validated_fields.{{ $single['id'] }}" required>
@@ -43,17 +42,15 @@
                                         @enderror
                                     </div>
                                 @elseif( $key == 'info' )
-
                                     <div class="form-group">
                                         <label class="tb-label">{{ $single['title'] }}
                                             <i class="{{ $single['icon'] }}"></i>
                                         </label>
                                         <span class="tb-emailsubject-list">
-                                            {!! $single['desc'] !!}
+                                            {!! __($single['desc']) !!}
                                         </span>
                                     </div>
                                 @elseif( $key == 'content' )
-
                                     <div class="form-group">
                                         <label class="tb-label">{{ $single['title'] }}</label>
                                         <textarea class="form-control @error('validated_fields.'.$single['id']) tk-invalid @enderror" placeholder="{{ $single['title'] }}"  wire:model="validated_fields.{{ $single['id'] }}" required></textarea>

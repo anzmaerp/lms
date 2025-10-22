@@ -25,4 +25,9 @@ return [
     'no_messages_detail' => 'ستظهر محادثاتك هنا بمجرد البدء في الدردشة.',
     'type_your_message_here' => 'اكتب رسالتك هنا',
     'winning_party' => 'الطرف الفائز',
+    'dispute' => 'نزاع',
+    'session' => 'محاضرة',
+    'student' => 'طالب',
+    'tutor' => 'معلم',
+    'date_created' => 'تاريخ الإنشاء',
 ];

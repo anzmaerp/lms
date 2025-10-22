@@ -17,7 +17,7 @@ return [
     'select_subject' => 'Select Subject',
     'select_subject_group' => 'Select Subject Group',
     'date' => 'Date',
-    'payment_method' => 'Payment Method',
+    'payment_method' => 'payment_method',
     'admin_commission' => 'Admin Commission',
     'items' => 'Items',
     'sessions_count' => ':count Sessions',

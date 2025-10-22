@@ -72,4 +72,5 @@ return [
     'social_profile_placeholder' => 'أدخل رابط :profile_name',
     'meta_keywords' => 'كلمات ميتا المفتاحية',
     'meta_keywords_placeholder' => 'أدخل الكلمات المفتاحية (Meta Keywords) الخاصة بك',
+    'phone_number' => 'رقم الهاتف',
 ];
