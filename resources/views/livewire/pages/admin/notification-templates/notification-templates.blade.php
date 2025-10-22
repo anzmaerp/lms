@@ -56,7 +56,7 @@
                             <tbody>
                                 @foreach($listed_templated as $single)
                                     <tr>
-                                        <td data-label="{{ __('notification_template.notification_title') }}"><span>{!! $single->title !!}</span></td>
+                                        <td data-label="{{ __('notification_template.notification_title') }}"><span>{!! __($single->title) !!}</span></td>
                                         <td data-label="{{__('notification_template.role_type')}}"><span>{{ ucfirst($single->role) }}</span></td>
                                         <td data-label="{{__('general.status')}}">
                                             <div class="am-status-tag">

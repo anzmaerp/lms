@@ -6,7 +6,7 @@ return [
     'taxonomies' => 'التصنيفات',
     'languages' => 'اللغات',
     'amenities' => 'المرافق',
-    'subject_groups' => 'مجموعات المواد',
+    'subject_groups' => 'المراحل الدراسية',
     'subjects' => 'المواد',
     'email_templates' => 'أنماط البريد الإلكتروني',
     'menu_setting' => 'القوائم',

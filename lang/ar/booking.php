@@ -27,4 +27,5 @@ return [
     'subscriptions_count' => ':count اشتراكات',
     'coursebundle_count' => ':count باقة',
     'coursebundles_count' => ':count باقات',
+    'payment_method' => 'طريقة الدفع',
 ];

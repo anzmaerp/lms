@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'dispute' => 'Dispute',
+    'dispute' => 'dispute',
     'send' => 'Send',
     'dispute_id' => 'Dispute ID',
     'reason' => 'Reason',
@@ -13,13 +13,13 @@ return [
     'select_a_dispute_reason' => 'Select a dispute reason',
     'dispute_success_msg' => 'Dispute raised successfully',
     'title' => 'Disputes',
-    'session' => 'Session',
-    'student' => 'Student',
+    'session' => 'session',
+    'student' => 'student',
     'select_winning_party' => 'Select winning Party',
     'leave_comment' => 'Leave comment for',
     'resolve_dispute' => 'Resolve Dispute',
-    'tutor' => 'Tutor',
-    'date_created' => 'Date Created',
+    'tutor' => 'tutor',
+    'date_created' => 'date_created',
     'status' => 'Status',
     'view_detail' => 'View Detail',
     'all' => 'All',
@@ -44,4 +44,5 @@ return [
     'type_your_message_here' => 'Type your message here',
     'no_record_title' => 'No disputes found',
     'winning_party' => 'Winning Party',
+    'Session' => 'Session',
 ];

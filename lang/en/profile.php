@@ -72,4 +72,5 @@ return [
     'description_text' => 'Please provide your educational background to help us assess your qualifications.',
     'resume_highlights' => 'Resume Highlights',
     'social_profile_placeholder' => 'Enter :profile_name :type',
+    'phone_number' => 'phone number',
 ];

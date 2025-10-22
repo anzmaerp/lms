@@ -1,11 +1,11 @@
 <?php
 
 return [
-    'title' => 'مثبت arch-space Acadmey',
+    'title' => 'مثبت lms.wakp',
     'next' => 'الخطوة التالية',
     'finish' => 'تثبيت',
     'welcome' => [
-        'title' => 'مرحبًا بك في مثبت arch-space Acadmey',
+        'title' => 'مرحبًا بك في مثبت lms.wakp',
         'message' => 'مرحبًا بك في معالج الإعداد.',
     ],
     'requirements' => [
@@ -14,12 +14,12 @@ return [
     ],
     'permissions' => [
         'title' => 'الأذونات',
-        'message' => 'يرجى التأكد من أن arch space academy لديه الأذونات اللازمة <br /> للوصول إلى المجلدات التالية من أجل المتابعة.',
+        'message' => 'يرجى التأكد من أن lms.wakp   لديه الأذونات اللازمة <br /> للوصول إلى المجلدات التالية من أجل المتابعة.',
     ],
     'seeders' => [
         'title' => 'ترحيل واستيراد المحتوى التجريبي',
         'migrate_title' => 'ترحيل قاعدة البيانات',
-        'migrate_desc' => 'ترحيل مخطط وهيكل قاعدة البيانات لـ arch-space Acadmey.',
+        'migrate_desc' => 'ترحيل مخطط وهيكل قاعدة البيانات لـ lms.wakp.',
         'general_title' => 'استيراد إعدادات الموقع',
         'general_desc' => 'يستورد الإعدادات والتكوينات الأساسية لموقعك.',
         'pages_title' => 'استيراد الصفحات والتخطيطات',

@@ -207,4 +207,6 @@ return [
     'social_login_settings_error' => 'Failed to update social login settings. Please make your .env file writable',
     'impersonate' => 'Impersonating User!',
     'impersonate_user_confirm' => 'Are you sure you want to impersonate this user?',
+    'payment_status' => 'payment_status',
+    'accepted' => 'accepted',
 ];

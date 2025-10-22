@@ -32,7 +32,7 @@ return [
     'login' => 'تسجيل الدخول',
     'logout' => 'تسجيل الخروج',
     'lost_password' => 'نسيت كلمة المرور؟',
-    'register_terms' => 'أوافق على </span><a href="https://arch-space.org/terms-condition">شروط الخدمة</a> و <a href="https://arch-space.org/privacy-policy">سياسة الخصوصية</a>',
+    'register_terms' => 'أوافق على </span><a href="https://lms.wakp.net/terms-condition">شروط الخدمة</a> و <a href="https://lms.wakp.net/privacy-policy">سياسة الخصوصية</a>',
     'verify_title' => 'تحقق من عنوان بريدك الإلكتروني',
     'verify_email_link' => 'تم إرسال رابط تحقق جديد إلى عنوان البريد الإلكتروني الذي قدمته أثناء التسجيل.',
     'verify_email_msg' => 'شكرًا لتسجيلك! قبل البدء، هل يمكنك التحقق من عنوان بريدك الإلكتروني بالنقر على الرابط الذي أرسلناه إليك؟',
@@ -58,4 +58,7 @@ return [
     'sign_in_with_google' => 'تسجيل الدخول مع Google',
     'social_login_error' => 'غير قادر على تسجيل الدخول باستخدام :platform. من فضلك حاول مرة أخرى.',
     'username_placeholder' => 'البريد الإلكتروني | رقم الهاتف',
+    'gender' => 'النوع',
+    'female' => 'أنثى',
+    'male' => 'ذكر',
 ];

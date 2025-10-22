@@ -9,7 +9,7 @@ return [
     'deleted_msg' => 'تم حذف السجل بنجاح',
     'search_here' => 'ابحث هنا',
     'language_status' => 'تعيين حالة اللغة كـ',
-    'subject_groups' => 'مجموعات المواد',
+    'subject_groups' => 'المراحل الدراسية',
     'update_subject_group' => 'تحديث مجموعة المواد',
     'add_subject_group' => 'إضافة مرحلة دراسية جديدة',
     'edit_subject_group' => 'تعديل مجموعة المواد',
