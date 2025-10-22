@@ -400,6 +400,10 @@
                 </div>
                 <a class="am-clicktop" href="#"><i class="am-icon-arrow-up"></i></a>
             </div>
+            <div class="am-footer-powered text-center">
+                <span class="powered-text">{{ __('general.powered_by')}}&nbsp;</span>
+                <a href="https://anzma.net" target="_blank" class="anzma-link">{{ __('general.anzma')}}</a>
+            </div>
         </footer>
     @else
         <footer class="am-footer-v4">
@@ -454,10 +458,10 @@
                 </div>
             </div>
             <img class="am-img" src="../demo-content/home-v2/banner/pattran.png" alt="image-description">
-            {{-- <div class="am-footer-powered text-center">
+            <div class="am-footer-powered text-center">
                 <span class="powered-text">{{ __('general.powered_by')}}&nbsp;</span>
                 <a href="https://anzma.net" target="_blank" class="anzma-link">{{ __('general.anzma')}}</a>
-            </div> --}}
+            </div>
         </footer>
     @endif
 </div>
