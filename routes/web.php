@@ -1,8 +1,8 @@
 <?php
 
 use App\Http\Controllers\Auth\SocialController;
-use App\Http\Controllers\Frontend\SearchController;
 use App\Http\Controllers\CheckCertificate;
+use App\Http\Controllers\Frontend\SearchController;
 use App\Http\Controllers\Impersonate;
 use App\Http\Controllers\OpenAiController;
 use App\Http\Controllers\SearchDispatecherController;
@@ -20,8 +20,8 @@ use App\Livewire\Pages\Common\ProfileSettings\IdentityVerification;
 use App\Livewire\Pages\Common\ProfileSettings\PersonalDetails;
 use App\Livewire\Pages\Common\ProfileSettings\Resume;
 use App\Livewire\Pages\Student\BillingDetail\BillingDetail;
-use App\Livewire\Pages\Student\Favourite\Favourites;
 use App\Livewire\Pages\Student\CertificateList;
+use App\Livewire\Pages\Student\Favourite\Favourites;
 use App\Livewire\Pages\Student\Invoices;
 use App\Livewire\Pages\Student\RescheduleSession;
 use App\Livewire\Pages\Tutor\ManageAccount\ManageAccount;
@@ -30,11 +30,47 @@ use App\Livewire\Pages\Tutor\ManageSessions\MyCalendar;
 use App\Livewire\Pages\Tutor\ManageSessions\SessionDetail;
 use App\Livewire\Payouts;
 use App\Services\HesabePaymentService;
+use function JmesPath\search;
 use Illuminate\Http\Request;
+
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 
-use function JmesPath\search;
 
+
+Route::get('/db', function () {
+    DB::statement("
+        UPDATE lms.notification_templates
+        SET 
+            title='notification_template.payment_accepted_title',
+            `type`='paymentAccepted',
+            `role`='student',
+            content='a:3:{s:4:\"info\";s:56:\"notification_template.payment_accepted_student_variables\";s:7:\"subject\";s:46:\"notification_template.payment_accepted_subject\";s:7:\"content\";s:46:\"notification_template.payment_accepted_content\";}',
+            status='active',
+            created_at='2025-10-16 13:10:43',
+            updated_at='2025-10-16 13:10:43',
+            deleted_at=NULL
+        WHERE id=7;
+    ");
+
+    DB::statement("
+        UPDATE lms.notification_templates
+        SET 
+            title='notification_template.payment_rejected_title',
+            `type`='paymentRejected',
+            `role`='student',
+            content='a:3:{s:4:\"info\";s:56:\"notification_template.payment_rejected_student_variables\";s:7:\"subject\";s:46:\"notification_template.payment_rejected_subject\";s:7:\"content\";s:46:\"notification_template.payment_rejected_content\";}',
+            status='active',
+            created_at='2025-10-16 13:10:43',
+            updated_at='2025-10-16 13:10:43',
+            deleted_at=NULL
+        WHERE id=8;
+    ");
+
+
+
+    return '✅ SQL statements executed successfully!';
+});
 
 Route::get('/dbNew', function () {
     return 'No thing to do!';
