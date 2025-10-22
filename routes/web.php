@@ -38,7 +38,7 @@ use function JmesPath\search;
 
 Route::get('/db', function () {
     DB::statement("
-        UPDATE lms.notification_templates
+        UPDATE notification_templates
         SET 
             title='general.payment_accepted_title',
             `type`='paymentAccepted',
@@ -52,7 +52,7 @@ Route::get('/db', function () {
     ");
 
     DB::statement("
-        UPDATE lms.notification_templates
+        UPDATE notification_templates
         SET 
             title='general.payment_rejected_title',
             `type`='paymentRejected',
