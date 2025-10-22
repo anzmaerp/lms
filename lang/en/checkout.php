@@ -43,8 +43,4 @@ return [
     'need_help' => 'Need help in finding the tutor?',
     'need_help_desc' => 'We\'ll help you find the perfect tutor to meet your educational needs.',
     'contact_us_now' => 'Contact Us Now',
-    'complete_your_payment'=>'Complete Your Payment',
-    'payment_failed'=>'Payment failed. Please try again.',
-    'payment_pending' => 'Your payment is pending. We will notify you once it is confirmed.'
-
- ];
+];

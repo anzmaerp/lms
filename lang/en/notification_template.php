@@ -57,7 +57,7 @@ return [
     'new_message_content' => 'New message from :messageSender. Goto messages to respond.',
     'meeting_link_content' => 'New meeting link for your session with :tutorName on :sessionDate ( :sessionSubject ) :meetingLink',
     'booking_completion_request_content' => 'Confirm session completion with :tutorName on :sessionDateTime. Auto-confirmed after {days} days. {completeBookingLink}',
-    'session_request_content' => 'New session request from :studentName (:studentEmail). Type: :sessionType. Message: :message',
+    'session_request_content' => 'New session request from :studentName (:studentEmail). Type: :sessionType. Message: :message. Attached PDF: :pdf',
     'dispute_resolved_student_content' => 'Your dispute with :tutorName is resolved. Refund of :refundAmount issued.',
     'dispute_resolved_tutor_content' => 'Your dispute with :studentName is resolved. Payment released to your wallet.',
     'identity_verification_approved_student_variables' => '{userName} - For Username',

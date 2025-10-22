@@ -163,4 +163,5 @@ return [
     'per_bundle' => '/bundle',
     'slot_not_available' => 'Slot not available',
     'booked_sessions' => 'Booked Sessions',
+    'search_tutor_course' => 'Search Tutor Course',
 ];

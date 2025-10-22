@@ -240,7 +240,7 @@
                                 <div
                                     style="display: flex; align-items: center; border-radius: 28px; overflow: hidden; border: 1px solid #ddd; height: 44px; background: #fff; box-shadow: 0 2px 6px rgba(0,0,0,0.08);">
                                     <input type="search" name="filters[keyword]"
-                                        placeholder="{{ __('settings')['search_tutor_course'] }}"
+                                        placeholder=""
                                         style="flex: 1; font-size: 15px; padding: 0 16px; border: none; outline: none; background: transparent; color: #333;">
 
                                     <select name="type"

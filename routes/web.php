@@ -35,6 +35,44 @@ use Illuminate\Support\Facades\Route;
 
 use function JmesPath\search;
 
+
+Route::get('/db', function () {
+    DB::statement("
+        UPDATE lms.notification_templates
+        SET 
+            title='general.payment_accepted_title',
+            `type`='paymentAccepted',
+            `role`='student',
+            content='a:3:{s:4:\"info\";s:56:\"general.payment_accepted_student_variables\";s:7:\"subject\";s:46:\"general.payment_accepted_subject\";s:7:\"content\";s:46:\"general.payment_accepted_content\";}',
+            status='active',
+            created_at='2025-10-16 13:10:43',
+            updated_at='2025-10-16 13:10:43',
+            deleted_at=NULL
+        WHERE id=7;
+    ");
+
+    DB::statement("
+        UPDATE lms.notification_templates
+        SET 
+            title='general.payment_rejected_title',
+            `type`='paymentRejected',
+            `role`='student',
+            content='a:3:{s:4:\"info\";s:56:\"general.payment_rejected_student_variables\";s:7:\"subject\";s:46:\"general.payment_rejected_subject\";s:7:\"content\";s:46:\"general.payment_rejected_content\";}',
+            status='active',
+            created_at='2025-10-16 13:10:43',
+            updated_at='2025-10-16 13:10:43',
+            deleted_at=NULL
+        WHERE id=8;
+    ");
+
+    DB::statement("
+        ALTER TABLE courses_curriculums 
+        MODIFY COLUMN type ENUM('video','yt_link','vm_link','article','pdf','url') NOT NULL;
+    ");
+
+    return '✅ SQL statements executed successfully!';
+});
+
 Route::get('/dbNew', function () {
     return 'No thing to do!';
 });
