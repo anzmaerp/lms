@@ -21,6 +21,7 @@ class CourseBundleListing extends Component
     public $statuses = [];
     public $currency_symbol;
     protected $bundleService;
+    public $bundleId = 0;
 
     public $filters = [
         'keyword' => '',
@@ -65,6 +66,12 @@ class CourseBundleListing extends Component
     public function loadData()
     {
         $this->isLoading = false;
+    }
+
+    public function openPublishModal($id)
+    {
+        $this->bundleId = $id;
+        $this->dispatch('toggleModel', id: 'course_completed_popup', action: 'show');
     }
 
     #[On('delete-course-bundle')]
