@@ -174,6 +174,7 @@
                     @endforeach
                 </ul>
                 @if (!$isLoading && $bundles->links()->paginator->hasPages())
+                
                     <div class='am-pagination cr-bundle-pagination'>
                         @if (!empty($parPageList))
                             <div class="am-pagination-filter" wire:ignore>
@@ -231,13 +232,13 @@
                         <h3>{{ __('coursebundles::bundles.publish_bundle_confirmation_title') }}</h3>
                         <p>{{ __('coursebundles::bundles.publish_bundle_confirmation_desc') }}</p>
                     </div>
-                    <div class="cr-confirm-popup_btns">
+                    {{-- <div class="cr-confirm-popup_btns">
                         <a href="{{route('coursebundles.tutor.edit-course-bundle', ['id' => $bundleId])}}" class="am-white-btn cr-btnsmall">{{ __('coursebundles::bundles.edit_bundle') }}</a>
                         <a  
                         wire:loading.class="am-btn_disable" 
                         wire:target="publishBundle"
                         wire:click="publishBundle" class="am-btn cr-btnsmall">{{ __('coursebundles::bundles.publish') }}</a>
-                    </div>
+                    </div> --}}
                 </div>
             </div>
         </div>
