@@ -585,7 +585,9 @@ return [
 'course_already_enrolled' => 'لقد قمت بالتسجيل بالفعل في هذه الدورة',
 'author' => '(المؤلف)',
 'certificate_awarded' => '🎉 مبروك! لقد حصلت على الشهادة. <br><a href=":url" target="_blank" class="text-blue-600 underline">اضغط هنا لعرض الشهادة</a>',
-'certificate_success_title' => 'تم إصدار الشهادة!'
+'certificate_success_title' => 'تم إصدار الشهادة!',
+'edit_article' => 'ادخال نص',
+'rating_description' =>'وصف التقييم',
 
 
 ];
