@@ -4,39 +4,45 @@ namespace Modules\CourseBundles\Livewire\Pages\Bundle;
 
 use App\Facades\Cart;
 use App\Services\BookingService;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 use Livewire\WithPagination;
-use Illuminate\Support\Facades\Auth;
 use Modules\CourseBundles\Models\Bundle;
 use Modules\CourseBundles\Services\BundleService;
 
 class BundleDetails extends Component
 {
     use WithPagination;
+
     public string $slug;
 
     public $isBuyable = true;
+
     public $viewCourse = false;
+
     public $role;
 
     public $isLoading = true;
+
     public $perPage;
+
     public $perPageList = [10, 25, 50, 100];
 
     public $filters = [
-        'statuses'      => [Bundle::STATUS_PUBLISHED]
+        'statuses' => [Bundle::STATUS_PUBLISHED]
     ];
+
     public $socialIcons = [
-        'Facebook'      => 'am-icon-facebook-1',
-        'X/Twitter'     => 'am-icon-twitter-02',
-        'LinkedIn'      => 'am-icon-linkedin-02',
-        'Instagram'     => 'am-icon-instagram',
-        'Pinterest'     => 'am-icon-pinterest',
-        'YouTube'       => 'am-icon-youtube',
-        'TikTok'        => 'am-icon-tiktok-02',
-        'WhatsApp'      => 'am-icon-whatsapp',
+        'Facebook' => 'am-icon-facebook-1',
+        'X/Twitter' => 'am-icon-twitter-02',
+        'LinkedIn' => 'am-icon-linkedin-02',
+        'Instagram' => 'am-icon-instagram',
+        'Pinterest' => 'am-icon-pinterest',
+        'YouTube' => 'am-icon-youtube',
+        'TikTok' => 'am-icon-tiktok-02',
+        'WhatsApp' => 'am-icon-whatsapp',
     ];
 
     #[Layout('layouts.frontend-app')]
@@ -44,7 +50,7 @@ class BundleDetails extends Component
     {
         $this->role = auth()?->user()?->role;
         $this->slug = $slug;
-        $this->perPage =  setting('_general.per_page_record') ?? 10;
+        $this->perPage = setting('_general.per_page_record') ?? 10;
 
         if ($this->role == 'student') {
             $bundleAddedToStudent = (new BundleService())->getPurchasedBundles(
@@ -63,7 +69,7 @@ class BundleDetails extends Component
             slug: $this->slug,
             relations: [
                 'instructor' => fn($q) => $q
-                    ->withCount(['bookingSlots as active_students'  => fn($query) => $query->whereStatus('active')])
+                    ->withCount(['bookingSlots as active_students' => fn($query) => $query->whereStatus('active')])
                     ->withCount('reviews')
                     ->withAvg('reviews', 'rating'),
                 'thumbnail:mediable_id,mediable_type,type,path',
@@ -130,14 +136,21 @@ class BundleDetails extends Component
         }
         $bundleCourses = $this->bundleCourses;
         $bundlesData = $this->relatedBundles;
-        return view('coursebundles::livewire.bundle.bundle-details', compact('bundle', 'bundlesData', 'bundleCourses'));
+        $currency = setting('_general.currency');
+        $currency_detail = !empty($currency) ? currencyList($currency) : array();
+
+        if (!empty($currency_detail['symbol'])) {
+            $this->currency_symbol = $currency_detail['symbol'];
+        }
+        $currency_symbol = $this->currency_symbol;
+
+        return view('coursebundles::livewire.bundle.bundle-details', compact('bundle', 'bundlesData', 'bundleCourses', 'currency_symbol'));
     }
 
     public function loadData()
     {
         $this->isLoading = false;
     }
-
 
     public function addToCart()
     {
@@ -201,9 +214,8 @@ class BundleDetails extends Component
                 message: __('courses::courses.login_required')
             );
 
-        return redirect('/login');
+            return redirect('/login');
         }
-
 
         if (!auth()?->user()?->role == 'student') {
             $this->dispatch(
