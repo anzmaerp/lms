@@ -53,10 +53,13 @@ class BundleDetails extends Component
         $this->perPage = setting('_general.per_page_record') ?? 10;
 
         if ($this->role == 'student') {
+            // Use the first instructor's ID for checking purchased bundles
+            $bundle = $this->bundle;
+            $tutorId = $bundle->instructors->first()->id ?? null;
             $bundleAddedToStudent = (new BundleService())->getPurchasedBundles(
-                bundleId: $this->bundle->id,
+                bundleId: $bundle->id,
                 studentId: Auth::id(),
-                tutorId: $this->bundle->instructor_id
+                tutorId: $tutorId
             );
             $this->viewCourse = !empty($bundleAddedToStudent);
         }
@@ -68,12 +71,12 @@ class BundleDetails extends Component
         return (new BundleService())->getBundle(
             slug: $this->slug,
             relations: [
-                'instructor' => fn($q) => $q
+                'instructors' => fn($q) => $q
                     ->withCount(['bookingSlots as active_students' => fn($query) => $query->whereStatus('active')])
                     ->withCount('reviews')
                     ->withAvg('reviews', 'rating'),
                 'thumbnail:mediable_id,mediable_type,type,path',
-                'instructor.profile',
+                'instructors.profile',
                 'courses',
                 'courses.category',
                 'courses.subcategory',
@@ -114,7 +117,7 @@ class BundleDetails extends Component
     {
         $excludedId = $this->bundle->id ?? null;
         return (new BundleService())->getAllBundles(
-            with: ['thumbnail:mediable_id,mediable_type,type,path', 'instructor.profile'],
+            with: ['thumbnail:mediable_id,mediable_type,type,path', 'instructors.profile'],
             withCount: ['courses'],
             withSum: ['courses' => 'content_length'],
             filters: $this->filters,
@@ -197,14 +200,7 @@ class BundleDetails extends Component
             $this->dispatch('showAlertMessage', type: 'error', title: __('general.demosite_res_title'), message: __('general.demosite_res_txt'));
             return;
         }
-        // if (!auth()?->check()) {
-        //     $this->dispatch(
-        //         'showAlertMessage',
-        //         type: 'error',
-        //         message: __('courses::courses.login_required')
-        //     );
-        //     return;
-        // }
+
         if (!auth()->check()) {
             session()->put('url.intended', request()->fullUrl());
 

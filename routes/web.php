@@ -33,9 +33,37 @@ use App\Services\HesabePaymentService;
 use function JmesPath\search;
 use Illuminate\Http\Request;
 
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Route;
+Route::get('/db', function () {
+    try {
+        // Create the bundle_instructor table
+        DB::statement("
+            CREATE TABLE IF NOT EXISTS `bundle_instructor` (
+                `id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+                `bundle_id` BIGINT(20) UNSIGNED NOT NULL,
+                `instructor_id` BIGINT(20) UNSIGNED NOT NULL,
+                `created_at` TIMESTAMP NULL DEFAULT NULL,
+                `updated_at` TIMESTAMP NULL DEFAULT NULL,
+                PRIMARY KEY (`id`),
+                KEY `bundle_instructor_bundle_id_index` (`bundle_id`),
+                KEY `bundle_instructor_instructor_id_index` (`instructor_id`),
+                CONSTRAINT `bundle_instructor_bundle_id_fk` FOREIGN KEY (`bundle_id`)
+                    REFERENCES `courses_bundles` (`id`) ON DELETE CASCADE,
+                CONSTRAINT `bundle_instructor_instructor_id_fk` FOREIGN KEY (`instructor_id`)
+                    REFERENCES `users` (`id`) ON DELETE CASCADE
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+        ");
 
+        // Alter the existing courses_bundles table
+        DB::statement("
+            ALTER TABLE `courses_bundles` 
+            MODIFY `instructor_id` JSON NOT NULL;
+        ");
+
+        return '✅ SQL executed successfully!';
+    } catch (\Throwable $e) {
+        return '❌ Error: ' . $e->getMessage();
+    }
+});
 
 
 Route::get('/dbNew', function () {

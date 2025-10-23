@@ -6,21 +6,20 @@ use App\Models\Language;
 use App\Models\OrderItem;
 use App\Models\Rating;
 use App\Models\User;
-use Modules\Assignments\Models\Assignment;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
-
 use Illuminate\Database\Eloquent\Relations\MorphOne;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Arr;
+use Modules\Assignments\Models\Assignment;
 
 class Course extends Model
 {
@@ -56,43 +55,42 @@ class Course extends Model
         'certificate_id'
     ];
 
-
     public $casts = [
-        'tags'                      => 'array',
-        'learning_objectives'       => 'array',
-        'discussion_forum'          => 'boolean',
-        'meta_data'                 => 'array'
+        'tags' => 'array',
+        'learning_objectives' => 'array',
+        'discussion_forum' => 'boolean',
+        'meta_data' => 'array'
     ];
 
     public const STATUSES = [
-        'draft'             => 1,
-        'under_review'      => 2,
-        'need_revision'     => 3,
-        'active'            => 4,
-        'inactive'          => 5,
+        'draft' => 1,
+        'under_review' => 2,
+        'need_revision' => 3,
+        'active' => 4,
+        'inactive' => 5,
     ];
 
     public const STATUS_COLOR = [
-        'draft'             => '#FFA500',
-        'under_review'      => '#0000FF',
-        'need_revision'     => '#F79009', //FF0000
-        'active'            => '#008000',
-        'inactive'          => '#808080',
+        'draft' => '#FFA500',
+        'under_review' => '#0000FF',
+        'need_revision' => '#F79009',  // FF0000
+        'active' => '#008000',
+        'inactive' => '#808080',
     ];
 
     public const TYPES = [
-        'video'             => 1,
-        'audio'             => 2,
-        'live'              => 3,
-        'article'           => 4,
-        'all'               => 5,
+        'video' => 1,
+        'audio' => 2,
+        'live' => 3,
+        'article' => 4,
+        'all' => 5,
     ];
 
     public const LEVEL = [
-        'beginner'          => 1,
-        'intermediate'      => 2,
-        'expert'            => 3,
-        'all'               => 4,
+        'beginner' => 1,
+        'intermediate' => 2,
+        'expert' => 3,
+        'all' => 4,
     ];
 
     /**
@@ -105,6 +103,16 @@ class Course extends Model
         return Attribute::make(
             get: fn($value) => Arr::get(array_flip(self::STATUSES), $value, null),
             set: fn($value) => Arr::get(self::STATUSES, $value, null)
+        );
+    }
+
+    public function bundles()
+    {
+        return $this->belongsToMany(
+            \Modules\CourseBundles\Models\Bundle::class,
+            (config('coursebundles.db_prefix') ?? 'courses_') . 'course_bundles',
+            'course_id',
+            'bundle_id'
         );
     }
 
@@ -145,7 +153,6 @@ class Course extends Model
             set: fn($value) => Arr::get(self::LEVEL, $value, null)
         );
     }
-
 
     /**
      * Get category.
@@ -189,14 +196,13 @@ class Course extends Model
 
     /**
      * Get course promotional video
-     *
      */
     public function promotionalVideo(): MorphOne
     {
         return $this->morphOne(Media::class, 'mediable')->whereType('promotional_video');
     }
 
-    /**Get course media */
+    /* Get course media */
     public function media(): MorphOne
     {
         return $this->morphOne(Media::class, 'mediable');
@@ -334,7 +340,6 @@ class Course extends Model
         return $this->morphOne(OrderItem::class, 'orderable');
     }
 
-
     /**
      * Get the quizzes for the course.
      *
@@ -354,7 +359,7 @@ class Course extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function assignments(): HasMany | null
+    public function assignments(): HasMany|null
     {
         if (isActiveModule('assignments')) {
             return $this->hasMany(\Modules\Assignments\Models\Assignment::class, 'related_id')->where('related_type', self::class)->where('status', \Modules\Assignments\Models\Assignment::STATUS_PUBLISHED);

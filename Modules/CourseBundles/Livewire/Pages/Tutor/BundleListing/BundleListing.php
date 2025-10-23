@@ -29,31 +29,34 @@ class BundleListing extends Component
     }
 
     #[Layout('layouts.app')]
-    public function render()
-    {
-        $bundles = [];
-        $bundles = (new BundleService())->getBundles(
-            instructorId: $this->isAdmin() ? null : auth()->id(),
-            with: [
-                'thumbnail:mediable_id,mediable_type,type,path',
-                'createdBy.profile:id,user_id,first_name,last_name'
-            ],
-            withCount: ['courses'],
-            withSum: ['courses' => 'content_length'],
-            filters: $this->filters,
-            perPage: $this->perPage
-        );
-        $currency = setting('_general.currency');
-        $currency_detail = !empty($currency) ? currencyList($currency) : array();
+public function render()
+{
+    $bundles = (new BundleService())->getBundles(
+        instructorId: $this->isAdmin() ? null : auth()->id(),
+        with: [
+            'thumbnail:mediable_id,mediable_type,type,path',
+            'createdBy.profile:id,user_id,first_name,last_name',
+            'instructors.profile:id,user_id,first_name,last_name',
+        ],
+        withCount: ['courses'],
+        withSum: ['courses' => 'content_length'],
+        filters: $this->filters,
+        perPage: $this->perPage
+    );
+    // dd($bundles->toArray());
 
-        if (!empty($currency_detail['symbol'])) {
-            $this->currency_symbol = $currency_detail['symbol'];
-        }
-        $currency_symbol = $this->currency_symbol;
+    $currency = setting('_general.currency');
+    $currency_detail = !empty($currency) ? currencyList($currency) : [];
 
-        return view('coursebundles::livewire.tutor.bundle-listing.bundle-listing', compact('bundles', 'currency_symbol'));
+    if (!empty($currency_detail['symbol'])) {
+        $this->currency_symbol = $currency_detail['symbol'];
     }
 
+    return view('coursebundles::livewire.tutor.bundle-listing.bundle-listing', [
+        'bundles' => $bundles,
+        'currency_symbol' => $this->currency_symbol,
+    ]);
+}
     protected function isAdmin(): bool
     {
         return auth()->check() && auth()->user()?->role === 'admin';

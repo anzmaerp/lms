@@ -168,7 +168,7 @@
                                             'am-invalid' => $errors->has('form.firstName'),
                                         ])>
                                             <input wire:model="form.firstName" type="text" class="form-control"
-                                                placeholder="Add first name">
+                                                placeholder="{{ __('general.add_first_name') }}">
                                             <x-input-error field_name="form.firstName" />
 
                                         </div>
@@ -177,19 +177,19 @@
                                             'am-invalid' => $errors->has('form.lastName'),
                                         ])>
                                             <input wire:model="form.lastName" type="text" class="form-control"
-                                                placeholder="Add last name">
+                                                placeholder="{{ __('general.add_last_name') }}">
                                             <x-input-error field_name="form.lastName" />
                                         </div>
                                         <div @class(['form-group', 'am-invalid' => $errors->has('form.company')]) class="">
                                             <input wire:model="form.company" type="text" class="form-control"
-                                                placeholder="Add company title">
+                                                placeholder="{{ __('general.add_company_title') }}">
                                         </div>
                                         <div @class([
                                             'form-group form-group-half',
                                             'am-invalid' => $errors->has('form.email'),
                                         ]) class="">
                                             <input wire:model="form.email" type="text" class="form-control"
-                                                placeholder="Add email">
+                                                placeholder="{{ __('general.add_email')}}">
                                             <x-input-error field_name="form.email" />
                                         </div>
                                         <div @class([
@@ -197,11 +197,11 @@
                                             'am-invalid' => $errors->has('form.phone'),
                                         ])>
                                             <input wire:model="form.phone" type="text" class="form-control"
-                                                placeholder="Add phone number">
+                                                placeholder="{{ __('general.add_phone_number')}}">
                                             <x-input-error field_name="form.phone" />
                                         </div>
                                         <div class="form-group">
-                                            <x-input-label for="country" :value="__('profile.country')" />
+                                            <x-input-label for="country" :value="{{ __('profile.country')}}" />
                                             <div @class([
                                                 'form-control_wrap',
                                                 'am-invalid' => $errors->has('form.country'),
@@ -227,7 +227,7 @@
                                             'am-invalid' => $errors->has('form.city'),
                                         ])>
                                             <input wire:model="form.city" type="text" class="form-control"
-                                                placeholder="Add town/city">
+                                                placeholder="{{ __('general.add_city') }}">
                                             <x-input-error field_name="form.city" />
                                         </div>
                                         <div @class([
@@ -235,7 +235,7 @@
                                             'am-invalid' => $errors->has('form.state'),
                                         ])>
                                             <input wire:model="form.state" type="text" class="form-control"
-                                                placeholder="Add state/country">
+                                                placeholder="{{ __('general.add_state')}}">
                                             <x-input-error field_name="form.state" />
                                         </div>
                                         <div @class([
@@ -243,11 +243,11 @@
                                             'am-invalid' => $errors->has('form.zipcode'),
                                         ])>
                                             <input wire:model="form.zipcode" type="text" class="form-control"
-                                                placeholder="Add postcode/zip">
+                                                placeholder="{{ __('general.add_zipcode') }}>
                                             <x-input-error field_name="form.zipcode" />
                                         </div>
                                         <div class="form-group" x-show="isOfflinePayment">
-                                            <x-input-label for="profile_photo" :value="__('general.attach_file')" />
+                                            <x-input-label for="profile_photo" :value="{{ __('general.attach_file') }}" />
                                             <div class="am-uploadoption" x-data="{ isUploading: false, isDragging: false }"
                                                 wire:key="uploading-profile-photo-{{ time() }}">
                                                 <div class="tk-draganddrop"
