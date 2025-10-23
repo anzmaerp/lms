@@ -67,11 +67,9 @@
                                 <div class="cr-bundles_item_content">
                                     <div class="cr-bundles_coursename">
                                         <div class="cr-bundles_coursetitle">
-                                            <a
-                                                href="{{ route('coursebundles.bundle-details', ['slug' => $bundle->slug]) }}">
+                                            <a href="{{ route('coursebundles.bundle-details', ['slug' => $bundle->slug]) }}">
                                                 <h3>{{ $bundle?->title ?? '' }}</h3>
                                             </a>
-
                                         </div>
 
                                         <div class="mt-2 am-itemdropdown">
@@ -98,8 +96,7 @@
                                                             {{ __('coursebundles::bundles.edit_bundle') }}
                                                         </a>
                                                     </li>
-                                                    <li
-                                                        @click="$wire.dispatch('showConfirm', { id: {{ $bundle->id }}, action: 'delete-bundle'})">
+                                                    <li @click="$wire.dispatch('showConfirm', { id: {{ $bundle->id }}, action: 'delete-bundle'})">
                                                         <a href="javascript:void(0);">
                                                             <i class="am-icon-trash-02"></i>
                                                             {{ __('coursebundles::bundles.delete_bundle') }}
@@ -160,7 +157,6 @@
                                         @endif
                                     </ul>
                                 </div>
-
 
                                 <div class="cr-bundle-price-container">
                                     <div class="cr-bundle-price-info">

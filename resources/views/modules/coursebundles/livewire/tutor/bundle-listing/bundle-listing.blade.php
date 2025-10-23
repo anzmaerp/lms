@@ -174,7 +174,6 @@
                     @endforeach
                 </ul>
                 @if (!$isLoading && $bundles->links()->paginator->hasPages())
-                
                     <div class='am-pagination cr-bundle-pagination'>
                         @if (!empty($parPageList))
                             <div class="am-pagination-filter" wire:ignore>
