@@ -4,7 +4,7 @@
             <h2>{{ __('dispute.disputes_overview') }}</h2>
             <div class="am-dbbox_title_sorting">
                 <div class="am-inputicon">
-                    <input type="text" placeholder="__('taxonomy.search_here')" class="form-control" wire:model.live.debounce.500ms="keyword"  autocomplete="off" placeholder="{{ __('general.search') }}">
+                    <input type="text" placeholder="{{ __('taxonomy.search_here')}}" class="form-control" wire:model.live.debounce.500ms="keyword"  autocomplete="off" placeholder="{{ __('general.search') }}">
                     <a href="#"><i class="am-icon-search-02"></i></a>
                 </div>
                 <span class="am-select" wire:ignore>
