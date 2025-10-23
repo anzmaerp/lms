@@ -152,7 +152,7 @@
                                                 </span>
                                             @endif
                                             <div class="cr-bundle-discounted-price">
-                                                <span class="cr-bundle-price-amount"><sup>$</sup>{{ $bundle?->discount_percentage > 0 ? $bundle?->final_price : $bundle?->price }}</span>
+                                                <span class="cr-bundle-price-amount"><sup>{{ $currency_symbol}}</sup>{{ $bundle?->discount_percentage > 0 ? $bundle?->final_price : $bundle?->price }}</span>
                                             </div>
                                         @else
                                             <div class="cr-bundle-discounted-price">

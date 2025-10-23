@@ -17,7 +17,8 @@ class CourseBundleListing extends Component
 
     public $user;
     public $perPage = 10;
-        public $statuses = [];
+    public $statuses = [];
+    public $currency_symbol;
     protected $bundleService;
     public $filters = [
         'keyword'   => '',
@@ -52,7 +53,15 @@ class CourseBundleListing extends Component
             filters: $this->filters,
             perPage: $this->perPage
         );
-        return view('coursebundles::livewire.tutor.bundle-listing.bundle-listing', compact('bundles'));
+        $currency = setting('_general.currency');
+        $currency_detail = !empty($currency) ? currencyList($currency) : array();
+
+        if (!empty($currency_detail['symbol'])) {
+            $this->currency_symbol = $currency_detail['symbol'];
+        }
+        $currency_symbol = $this->currency_symbol;
+
+        return view('coursebundles::livewire.tutor.bundle-listing.bundle-listing', compact('bundles','currency_symbol'));
     }
 
     #[On('delete-course-bundle')]

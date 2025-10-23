@@ -6,9 +6,9 @@ use Livewire\Attributes\Layout;
 use Livewire\Attributes\On;
 use Livewire\Component;
 use Livewire\WithPagination;
-use Modules\CourseBundles\Services\BundleService;
-use Modules\CourseBundles\Models\Bundle;
 use Modules\CourseBundles\Casts\BundleStatusCast;
+use Modules\CourseBundles\Models\Bundle;
+use Modules\CourseBundles\Services\BundleService;
 
 class BundleListing extends Component
 {
@@ -25,7 +25,7 @@ class BundleListing extends Component
     {
         $this->dispatch('initSelect2', target: '.am-select2');
 
-        $this->statuses =  BundleStatusCast::$statusMap;
+        $this->statuses = BundleStatusCast::$statusMap;
     }
 
     #[Layout('layouts.app')]
@@ -43,14 +43,21 @@ class BundleListing extends Component
             filters: $this->filters,
             perPage: $this->perPage
         );
-        return view('coursebundles::livewire.tutor.bundle-listing.bundle-listing', compact('bundles'));
+        $currency = setting('_general.currency');
+        $currency_detail = !empty($currency) ? currencyList($currency) : array();
+
+        if (!empty($currency_detail['symbol'])) {
+            $this->currency_symbol = $currency_detail['symbol'];
+        }
+        $currency_symbol = $this->currency_symbol;
+
+        return view('coursebundles::livewire.tutor.bundle-listing.bundle-listing', compact('bundles', 'currency_symbol'));
     }
+
     protected function isAdmin(): bool
     {
         return auth()->check() && auth()->user()?->role === 'admin';
     }
-
-
 
     public function resetFilters()
     {
@@ -59,9 +66,9 @@ class BundleListing extends Component
 
     public function updatedPerPage()
     {
-
         $this->resetPage();
     }
+
     public function loadData()
     {
         $this->isLoading = false;
@@ -98,8 +105,6 @@ class BundleListing extends Component
         $this->updateBundleStatus($this->bundleId, 'published');
         $this->dispatch('toggleModel', id: 'course_completed_popup', action: 'hide');
     }
-
-
 
     #[On('delete-bundle')]
     public function deleteBundle($params = [])
