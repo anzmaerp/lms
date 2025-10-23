@@ -24,7 +24,7 @@ class Curriculum extends Component
     public $duration;
     public $yt_link;
     public $vm_link;
-    public $url; 
+    public $url;
     public $mediaType = 'video';
     public $curriculumVideo;
     public $curriculumPdf;
@@ -38,7 +38,6 @@ class Curriculum extends Component
     public $isCurriculumEditing = false;
     public $isDeletingCurriculum = false;
     public $content_length;
-
     public $curriculumId;
 
     public function mount($section)
@@ -82,14 +81,14 @@ class Curriculum extends Component
         $this->curriculumPdf = null;
         $this->yt_link = null;
         $this->vm_link = null;
-        $this->url = null; 
+        $this->url = null;
         if ($curriculumItem != null) {
             if ($curriculumItem['type'] === 'yt_link') {
                 $this->yt_link = $curriculumItem['media_path'];
             } elseif ($curriculumItem['type'] === 'vm_link') {
                 $this->vm_link = $curriculumItem['media_path'];
             } elseif ($curriculumItem['type'] === 'url') {
-                $this->url = $curriculumItem['media_path']; 
+                $this->url = $curriculumItem['media_path'];
             }
             $this->updateCurriculumState(false);
         }
@@ -106,7 +105,7 @@ class Curriculum extends Component
         $validatedData = $this->validate((new CurriculumRequest())->rules() + [
             'curriculumVideo' => 'nullable|file|mimes:' . implode(',', $this->allowVideoFileExt) . '|max:' . $this->videoFileSize,
             'curriculumPdf' => 'nullable|file|mimes:pdf|max:' . $this->pdfFileSize,
-            'url' => 'nullable|url', 
+            'url' => 'nullable|url',
         ]);
 
         $validatedData['section_id'] = $this->section->id;
@@ -115,7 +114,7 @@ class Curriculum extends Component
         $validatedData['thumbnail'] = null;
         $validatedData['type'] = $this->type;
         // Convert content_length from minutes to seconds if provided
-        $validatedData['content_length'] = $this->content_length ? (int)$this->content_length * 60 : null;
+        $validatedData['content_length'] = $this->content_length ? (int) $this->content_length * 60 : null;
 
         if ($this->curriculumVideo) {
             $fileName = time() . '_' . $this->curriculumVideo->getClientOriginalName();
@@ -164,8 +163,8 @@ class Curriculum extends Component
     public function rules(): array
     {
         return (new CurriculumRequest())->rules() + [
-            'url' => 'nullable|url', 
-            'content_length' => 'nullable|numeric|min:0', // Validate content_length as a non-negative number
+            'url' => 'nullable|url',
+            'content_length' => 'nullable|numeric|min:0',  // Validate content_length as a non-negative number
         ];
     }
 
@@ -226,7 +225,7 @@ class Curriculum extends Component
                     }
                 }
                 // Convert content_length from minutes to seconds
-                $contentLengthInSeconds = $this->content_length ? (int)$this->content_length * 60 : 0;
+                $contentLengthInSeconds = $this->content_length ? (int) $this->content_length * 60 : 0;
                 $curriculum = (new CurriculumService())->updateCurriculum(
                     $this->activeCurriculumItem['id'],
                     [
@@ -293,7 +292,7 @@ class Curriculum extends Component
                 'url.required' => 'Please enter a URL.',
                 'url.url' => 'Please enter a valid URL.',
             ]);
-            $contentLengthInSeconds = $this->content_length ? (int)$this->content_length * 60 : 0;
+            $contentLengthInSeconds = $this->content_length ? (int) $this->content_length * 60 : 0;
             $curriculum = (new CurriculumService())->updateCurriculum(
                 $this->activeCurriculumItem['id'],
                 [
@@ -362,5 +361,20 @@ class Curriculum extends Component
             return;
         }
         (new CurriculumService())->sortCurriculumItems($list, $this->section->id);
+    }
+
+    public function deleteRecord($curriculumId)
+    {
+        $response = isDemoSite();
+        if ($response) {
+            $this->dispatch('showAlertMessage', type: 'error', title: __('general.demosite_res_title'), message: __('general.demosite_res_txt'));
+            return;
+        }
+        $isDeleted = (new CourseService())->deleteCurriculum((int) $curriculumId);
+        if ($isDeleted) {
+            $this->dispatch('showAlertMessage', type: 'success', title: __('courses::courses.curriculum_deleted_successfully'), message: __('courses::courses.curriculum_deleted_successfully'));
+        } else {
+            $this->dispatch('showAlertMessage', type: 'error', title: __('courses::courses.curriculum_not_found'), message: __('courses::courses.curriculum_not_found'));
+        }
     }
 }

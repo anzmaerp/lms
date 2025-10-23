@@ -157,7 +157,6 @@ class CourseTaking extends Component
             status: null
         );
 
-        // Dynamically calculate content_length if not set
         if (empty($course->content_length) || $course->content_length == 0) {
             $totalContentLength = $course->sections->flatMap->curriculums->sum('content_length');
             $course->content_length = $totalContentLength > 0 ? $totalContentLength : 300;  // Default to 300 if no duration
@@ -247,43 +246,35 @@ class CourseTaking extends Component
 
     public function markAsCompleted()
     {
-        if (isDemoSite()) {
+        $response = isDemoSite();
+        if ($response) {
             $this->dispatch('showAlertMessage', type: 'error', title: __('general.demosite_res_title'), message: __('general.demosite_res_txt'));
             return;
         }
-        $curriculumId = (int) ($this->activeCurriculum['id'] ?? 0);
-        $sectionId = (int) ($this->activeCurriculum['section_id'] ?? 0);
-        $totalDuration = (int) ($this->activeCurriculum['content_length'] ?? 0);
-        if ($totalDuration === 0) {
-            $totalDuration = 300;  
-            \DB::table('curriculums')
-                ->where('id', $curriculumId)
-                ->update(['content_length' => $totalDuration]);
-        }
+        $curriculumId = (int)$this->activeCurriculum['id'] ?? 0;
+        $sectionId = (int) $this->activeCurriculum['section_id'] ?? 0;
+        $totalDuration = (int) $this->activeCurriculum['content_length'] ?? 0;
         $watchtime = (new CurriculumService())->getWatchtime($curriculumId, $sectionId);
         if ($watchtime) {
-            (new CurriculumService())->updateWatchtime($curriculumId, $sectionId, $totalDuration);
+            (new CurriculumService())->updateWatchtime((int) $curriculumId, (int) $sectionId, (int) $totalDuration);
         } else {
-            (new CurriculumService())->addWatchtime($this->course->id, $curriculumId, $sectionId, $totalDuration);
+            (new CurriculumService())->addWatchtime((int) $this->course?->id, (int) $curriculumId, (int) $sectionId, (int) $totalDuration);
         }
+
+        $courseDuration = (new CourseService())->getCourse(
+            courseId: $this->course->id,
+            withSum: [
+                'courseWatchtime' => 'duration'
+            ]
+        );
+
+        if (!empty($courseDuration->course_watchtime_sum_duration) && !empty($this->course->content_length)) {
+            $this->progress = floor(($courseDuration->course_watchtime_sum_duration / $this->course->content_length) * 100);
+        }
+
         $this->activeCurriculum['watchtime']['duration'] = $totalDuration;
-        $this->recalculateProgress();
-        $isAssigned = false;
-        if ($this->progress >= 100) {
-            if (isActiveModule('upcertify') && !empty($this->course?->certificate_id)) {
-                $metaData = $this->course->meta_data ?? null;
-                if (isActiveModule('Quiz')) {
-                    if (!empty($metaData['assign_quiz_certificate']) && $metaData['assign_quiz_certificate'] == 'none') {
-                        $this->generateCertificate();
-                    }
-                } else {
-                    $this->generateCertificate();
-                }
-            }
-            $isAssigned = $this->assignQuiz();
-            $this->assignAssignment();
-        }
-        $this->dispatch('updated-progress', progress: $this->progress, resultAssigned: $isAssigned);
+
+        $this->dispatch('updated-progress', progress: $this->progress);
     }
 
     #[Renderless]
@@ -297,12 +288,6 @@ class CourseTaking extends Component
         $sectionId = (int) ($this->activeCurriculum['section_id'] ?? 0);
         $totalDuration = (int) ($this->activeCurriculum['content_length'] ?? 0);
         $isAssigned = false;
-        if ($totalDuration === 0) {
-            $totalDuration = 300;  
-            \DB::table('curriculums')
-                ->where('id', $curriculumId)
-                ->update(['content_length' => $totalDuration]);
-        }
         $watchtime = (new CurriculumService())->getWatchtime($curriculumId, $sectionId);
         if ($watchtime) {
             $duration = $watchtime->duration;
@@ -528,7 +513,7 @@ class CourseTaking extends Component
                 $this->activeCurriculum['is_embeddable'] = $videoDetails['embeddable'];
                 if ($videoDetails['embeddable'] && empty($this->activeCurriculum['content_length'])) {
                     $this->activeCurriculum['content_length'] = $videoDetails['duration'];
-                    \DB::table('curriculums')
+                    \DB::table('courses_curriculums')
                         ->where('id', $this->activeCurriculum['id'])
                         ->update(['content_length' => $videoDetails['duration']]);
                 }
@@ -536,7 +521,7 @@ class CourseTaking extends Component
                 if (empty($this->activeCurriculum['content_length'])) {
                     $defaultDuration = 300; 
                     $this->activeCurriculum['content_length'] = $defaultDuration;
-                    \DB::table('curriculums')
+                    \DB::table('courses_curriculums')
                         ->where('id', $this->activeCurriculum['id'])
                         ->update(['content_length' => $defaultDuration]);
                 }

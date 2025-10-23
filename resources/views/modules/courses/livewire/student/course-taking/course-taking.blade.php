@@ -110,21 +110,21 @@
     <div class="cr-coursedetails_content">
         <div wire:ignore class="cr-usercourse_header">
             @role('student')
-<div x-data="{ progress: @js(floor($progress)) }"
-     x-on:updated-progress.window="
-         console.log('Progress updated:', $event.detail.progress, 'Assigned:', $event.detail.resultAssigned);
-         progress = $event.detail.progress;
-         if ($event.detail.resultAssigned) {
-             console.log('Showing modal');
-             let modal = new bootstrap.Modal(document.getElementById('course_completed_popup'));
-             modal.show();
-         }
-     " class="cr-usercourse_header_progress">
-    <span>{{ __('courses::courses.course_progress') }}<em x-text="progress+'%'"></em></span>
-    <div class="cr-usercourse_header_progress_bar">
-        <div class="cr-usercourse_header_progress_bar_inner" :style="'width: '+progress+'%'"></div>
-    </div>
-</div>
+                <div x-data="{ progress: @js(floor($progress)) }"
+                    x-on:updated-progress.window="
+                        console.log('Progress updated:', $event.detail.progress, 'Assigned:', $event.detail.resultAssigned);
+                        progress = $event.detail.progress;
+                        if ($event.detail.resultAssigned) {
+                            console.log('Showing modal');
+                            let modal = new bootstrap.Modal(document.getElementById('course_completed_popup'));
+                            modal.show();
+                        }
+                    " class="cr-usercourse_header_progress">
+                    <span>{{ __('courses::courses.course_progress') }}<em x-text="progress+'%'"></em></span>
+                    <div class="cr-usercourse_header_progress_bar">
+                        <div class="cr-usercourse_header_progress_bar_inner" :style="'width: '+progress+'%'"></div>
+                    </div>
+                </div>
             @endrole
             <div class="cr-usercourse_header_actions">
                 <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#cr-sharemodal" class="cr-btn">
@@ -471,10 +471,10 @@
                             <template x-if="iframeFailed">
                                 <div class="cr-url-fallback card">
                                     <div class="card-body">
-                                        <h5 class="card-title">{{ __('courses::courses.url_not_embeddable') }}</h5>
+                                        <h5 class="card-title">{{ __('general.url_not_embeddable') }}</h5>
                                         <p class="card-text">This content cannot be embedded. Please open it in a new tab.</p>
                                         <a href="{{ $url }}" target="_blank" class="btn btn-outline-primary am-btn">
-                                            {{ __('courses::courses.open_url') }}
+                                            {{ __('general.courses.open_url') }}
                                         </a>
                                     </div>
                                 </div>
@@ -502,7 +502,6 @@
                     </div>
                 </div>
                 @endif
-
             @else
                 <div wire:ignore class="cr-image-wrapper" x-data="{
                     isPlaying: false,

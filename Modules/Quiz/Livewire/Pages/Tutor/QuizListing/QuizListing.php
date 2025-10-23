@@ -72,7 +72,7 @@ class QuizListing extends Component
 
         $this->quizzable_types = [
             [
-                'label' => 'Subject',
+                'label' => __('general.subject'),
                 'value' => UserSubjectGroupSubject::class,
             ],
         ];
@@ -87,7 +87,7 @@ class QuizListing extends Component
 
         if (isActiveModule('Courses')) {
             $this->quizzable_types[] = [
-                'label' => 'Course',
+                'label' => __('general.course'),
                 'value' => \Modules\Courses\Models\Course::class,
             ];
         } else {
