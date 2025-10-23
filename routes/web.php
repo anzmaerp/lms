@@ -55,8 +55,8 @@ Route::get('/db', function () {
 
         // Alter the existing courses_bundles table
         DB::statement("
-            ALTER TABLE `courses_bundles` 
-            MODIFY `instructor_id` JSON NOT NULL;
+            ALTER TABLE `courses_bundles`
+            MODIFY `instructor_id` bigint(20) unsigned NULL;
         ");
 
         return '✅ SQL executed successfully!';
