@@ -152,7 +152,7 @@
                                                 </span>
                                             @endif
                                             <div class="cr-bundle-discounted-price">
-                                                <span class="cr-bundle-price-amount"><sup>{{ $currency_symbol}}</sup>{{ $bundle?->discount_percentage > 0 ? $bundle?->final_price : $bundle?->price }}</span>
+                                                <span class="cr-bundle-price-amount"><sup>$</sup>{{ $bundle?->discount_percentage > 0 ? $bundle?->final_price : $bundle?->price }}</span>
                                             </div>
                                         @else
                                             <div class="cr-bundle-discounted-price">
@@ -232,13 +232,13 @@
                         <h3>{{ __('coursebundles::bundles.publish_bundle_confirmation_title') }}</h3>
                         <p>{{ __('coursebundles::bundles.publish_bundle_confirmation_desc') }}</p>
                     </div>
-                    {{-- <div class="cr-confirm-popup_btns">
+                    <div class="cr-confirm-popup_btns">
                         <a href="{{route('coursebundles.tutor.edit-course-bundle', ['id' => $bundleId])}}" class="am-white-btn cr-btnsmall">{{ __('coursebundles::bundles.edit_bundle') }}</a>
                         <a  
                         wire:loading.class="am-btn_disable" 
                         wire:target="publishBundle"
                         wire:click="publishBundle" class="am-btn cr-btnsmall">{{ __('coursebundles::bundles.publish') }}</a>
-                    </div> --}}
+                    </div>
                 </div>
             </div>
         </div>
