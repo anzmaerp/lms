@@ -33,36 +33,71 @@ use App\Services\HesabePaymentService;
 use function JmesPath\search;
 use Illuminate\Http\Request;
 
+// Route::get('/db', function () {
+//     try {
+//         // Create the bundle_instructor table
+//         DB::statement("
+//             CREATE TABLE IF NOT EXISTS `bundle_instructor` (
+//                 `id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+//                 `bundle_id` BIGINT(20) UNSIGNED NOT NULL,
+//                 `instructor_id` BIGINT(20) UNSIGNED NOT NULL,
+//                 `created_at` TIMESTAMP NULL DEFAULT NULL,
+//                 `updated_at` TIMESTAMP NULL DEFAULT NULL,
+//                 PRIMARY KEY (`id`),
+//                 KEY `bundle_instructor_bundle_id_index` (`bundle_id`),
+//                 KEY `bundle_instructor_instructor_id_index` (`instructor_id`),
+//                 CONSTRAINT `bundle_instructor_bundle_id_fk` FOREIGN KEY (`bundle_id`)
+//                     REFERENCES `courses_bundles` (`id`) ON DELETE CASCADE,
+//                 CONSTRAINT `bundle_instructor_instructor_id_fk` FOREIGN KEY (`instructor_id`)
+//                     REFERENCES `users` (`id`) ON DELETE CASCADE
+//             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+//         ");
+
+//         // Alter the existing courses_bundles table
+//         DB::statement("
+//             ALTER TABLE `courses_bundles`
+//             MODIFY `instructor_id` bigint(20) unsigned NULL;
+//         ");
+
+//         return '✅ SQL executed successfully!';
+//     } catch (\Throwable $e) {
+//         return '❌ Error: ' . $e->getMessage();
+//     }
+// });
 Route::get('/db', function () {
-    try {
-        // Create the bundle_instructor table
-        DB::statement("
-            CREATE TABLE IF NOT EXISTS `bundle_instructor` (
-                `id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
-                `bundle_id` BIGINT(20) UNSIGNED NOT NULL,
-                `instructor_id` BIGINT(20) UNSIGNED NOT NULL,
-                `created_at` TIMESTAMP NULL DEFAULT NULL,
-                `updated_at` TIMESTAMP NULL DEFAULT NULL,
-                PRIMARY KEY (`id`),
-                KEY `bundle_instructor_bundle_id_index` (`bundle_id`),
-                KEY `bundle_instructor_instructor_id_index` (`instructor_id`),
-                CONSTRAINT `bundle_instructor_bundle_id_fk` FOREIGN KEY (`bundle_id`)
-                    REFERENCES `courses_bundles` (`id`) ON DELETE CASCADE,
-                CONSTRAINT `bundle_instructor_instructor_id_fk` FOREIGN KEY (`instructor_id`)
-                    REFERENCES `users` (`id`) ON DELETE CASCADE
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-        ");
+    DB::statement("
+        INSERT INTO notification_templates
+        (id, title, `type`, `role`, content, status, created_at, updated_at, deleted_at)
+        VALUES(
+            24,
+            'notification_template.payment_accepted_title',
+            'paymentAccepted',
+            'student',
+            'a:3:{s:4:\"info\";s:56:\"notification_template.payment_accepted_student_variables\";s:7:\"subject\";s:46:\"notification_template.payment_accepted_subject\";s:7:\"content\";s:46:\"notification_template.payment_accepted_content\";}',
+            'active',
+            '2025-10-16 13:10:43',
+            '2025-10-22 09:25:11',
+            '2025-10-22 09:25:11'
+        )
+    ");
 
-        // Alter the existing courses_bundles table
-        DB::statement("
-            ALTER TABLE `courses_bundles`
-            MODIFY `instructor_id` bigint(20) unsigned NULL;
-        ");
+    DB::statement("
+        INSERT INTO notification_templates
+        (id, title, `type`, `role`, content, status, created_at, updated_at, deleted_at)
+        VALUES(
+            25,
+            'notification_template.payment_rejected_title',
+            'paymentRejected',
+            'student',
+            'a:3:{s:4:\"info\";s:56:\"notification_template.payment_rejected_student_variables\";s:7:\"subject\";s:10:\" New Title\";s:7:\"content\";s:8:\"fgdhdfgh\";}',
+            'active',
+            '2025-10-16 13:10:43',
+            '2025-10-22 09:25:06',
+            '2025-10-22 09:25:06'
+        )
+    ");
 
-        return '✅ SQL executed successfully!';
-    } catch (\Throwable $e) {
-        return '❌ Error: ' . $e->getMessage();
-    }
+    return '✅ Notification templates inserted successfully!';
 });
 
 
