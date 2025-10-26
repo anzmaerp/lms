@@ -194,13 +194,13 @@ class KuponList extends Component
 
         if (\Nwidart\Modules\Facades\Module::has('courses') && \Nwidart\Modules\Facades\Module::isEnabled('courses')) {
             $this->couponable_types[] = [
-                'label' => 'Course',
+                'label' => __('general.course'),
                 'value' => \Modules\Courses\Models\Course::class,
             ];
         }
 
         $this->couponable_types[] = [
-            'label' => 'Subject',
+            'label' => __('general.subject'),
             'value' => UserSubjectGroupSubject::class,
         ];
 
