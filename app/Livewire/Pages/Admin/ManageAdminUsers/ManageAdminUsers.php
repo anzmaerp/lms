@@ -210,11 +210,12 @@ class ManageAdminUsers extends Component
             $this->dispatch('showAlertMessage', type: 'error', title: __('general.demosite_res_title'), message: __('general.demosite_res_txt'));
             return;
         }
+
+        $selectedRole = $this->form->userRole;
+
         $individualPlatform = setting('_general.individual_platform');
-        \Log::info($individualPlatform);
+
         if ($individualPlatform) {
-            $selectedRole = $this->form->userRole;
-            \Log::info($selectedRole);
             if ($selectedRole === 'tutor') {
                 $existingTutorCount = User::whereHas('roles', function ($q) {
                     $q->where('name', 'tutor');
@@ -233,8 +234,8 @@ class ManageAdminUsers extends Component
         }
 
         $date = now();
-
         $permissions = $this->form->permissions;
+
         $userData = [
             'email' => sanitizeTextField($this->form->email),
             'email_verified_at' => $date,
@@ -245,9 +246,7 @@ class ManageAdminUsers extends Component
         }
 
         $user = User::updateOrCreate(
-            [
-                'id' => $this->form->adminId,
-            ],
+            ['id' => $this->form->adminId],
             array_merge($userData, [
                 'gender' => $this->form->gender,
                 'phone' => $this->form->phone,
