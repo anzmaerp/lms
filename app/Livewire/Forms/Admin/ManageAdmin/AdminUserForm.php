@@ -9,6 +9,8 @@ class AdminUserForm extends Form
 {
 
     public $first_name, $last_name, $email, $phone,$gender, $password,$user,$permissions = [],$adminId;
+        public $userRole = 'tutor';
+
 
     private ?AdminUserRequest $adminUserRequest = null;
 

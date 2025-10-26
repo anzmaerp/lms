@@ -356,59 +356,83 @@ class Users extends Component
         }
     }
 
-    public function addUser()
-    {
-        $this->form->updateInfo();
-        $gender = (int) $this->form->gender; // Explicitly cast string "2" to integer 2
-        if (!in_array($gender, [1, 2])) {
-            Log::error('Invalid gender value', ['gender' => $gender, 'raw' => $this->form->gender]);
-            throw new \Exception('Invalid gender value');
-        }
-        Log::info('Gender before save', ['gender' => $gender]);
-        $response = isDemoSite();
-        if ($response) {
-            $this->dispatch('showAlertMessage', type: 'error', title: __('general.demosite_res_title'), message: __('general.demosite_res_txt'));
+public function addUser()
+{
+    $this->form->updateInfo();
+
+    $gender = (int) $this->form->gender;
+    if (!in_array($gender, [1, 2])) {
+        throw new \Exception('Invalid gender value');
+    }
+
+    
+    if (isDemoSite()) {
+        $this->dispatch('showAlertMessage', type: 'error', title: __('general.demosite_res_title'), message: __('general.demosite_res_txt'));
+        return;
+    }
+    
+    $selectedRole = $this->form->userRole;
+    
+    $individualPlatform = setting('_general.individual_platform');
+    if ($individualPlatform && $selectedRole === 'tutor') {
+        $existingTutorCount = User::whereHas('roles', function ($q) {
+            $q->where('name', 'tutor');
+        })->count();
+
+        if ($existingTutorCount >= 1) {
+            $this->dispatch(
+                'showAlertMessage',
+                type: 'error',
+                title: __('general.error_title'),
+                message: __('general.you_have_exceeded_the_limit')
+            );
             return;
         }
-        $date = now();
-        $user = User::create([
-            'email' => sanitizeTextField($this->form->email),
-            'phone' => sanitizeTextField($this->form->phone),
-            'gender' => sanitizeTextField($this->form->gender == 1 ? 'male' : 'female'),
-            'password' => Hash::make($this->form->password),
-            'email_verified_at' => $date,
-
-        ]);
-
-        $user->assignRole($this->form->userRole);
-
-        $first_name = $this->form->first_name;
-        $last_name = $this->form->last_name;
-        $slug = $first_name . ' ' . $last_name;
-
-        $profile = Profile::create([
-            'first_name' => sanitizeTextField($first_name),
-            'last_name' => sanitizeTextField($last_name),
-            'phone_number' => sanitizeTextField($this->form->phone),
-            'gender' => $gender,
-            'slug' => sanitizeTextField($slug),
-            'user_id' => $user->id
-        ]);
-
-        if ($user && $profile) {
-            $notifyService = new NotificationService;
-            $emailData = [
-                'user_name' => $user->profile->full_name,
-                'user_email' => $user->email,
-                'user_password' => $this->form->password,
-                'admin_name' => Auth::user()->profile->full_name
-            ];
-            $template = $notifyService->parseEmailTemplate('user_created', $this->form->userRole, $emailData);
-            if (!empty($template))
-                $user->notify(new EmailNotification($template));
-        }
-        $this->dispatch('showAlertMessage', type: 'success', title: __('general.success_title'), message: __('settings.updated_record'));
-        $this->dispatch('toggleModel', id: 'tb-add-user', action: 'hide');
-        $this->resetInputfields();
     }
+
+    $date = now();
+
+    $user = User::create([
+        'email'             => sanitizeTextField($this->form->email),
+        'phone'             => sanitizeTextField($this->form->phone),
+        'gender'            => $this->form->gender == 1 ? 'male' : 'female',
+        'password'          => Hash::make($this->form->password),
+        'email_verified_at' => $date,
+    ]);
+
+    $user->syncRoles([$selectedRole]);
+
+    $first_name = sanitizeTextField($this->form->first_name);
+    $last_name  = sanitizeTextField($this->form->last_name);
+    $slug       = sanitizeTextField($first_name . ' ' . $last_name);
+
+    $profile = Profile::create([
+        'first_name'   => $first_name,
+        'last_name'    => $last_name,
+        'phone_number' => sanitizeTextField($this->form->phone),
+        'gender'       => $gender,
+        'slug'         => $slug,
+        'user_id'      => $user->id,
+    ]);
+
+    if ($user && $profile) {
+        $notifyService = new NotificationService;
+        $emailData = [
+            'user_name'     => $user->profile->full_name,
+            'user_email'    => $user->email,
+            'user_password' => $this->form->password,
+            'admin_name'    => Auth::user()->profile->full_name,
+        ];
+
+        $template = $notifyService->parseEmailTemplate('user_created', $selectedRole, $emailData);
+        if (!empty($template)) {
+            $user->notify(new EmailNotification($template));
+        }
+    }
+
+    $this->dispatch('showAlertMessage', type: 'success', title: __('general.success_title'), message: __('settings.updated_record'));
+    $this->dispatch('toggleModel', id: 'tb-add-user', action: 'hide');
+    $this->resetInputfields();
+}
+
 }

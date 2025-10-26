@@ -39,13 +39,38 @@ new #[Layout('layouts.guest')] class extends Component {
     {
         $response = isDemoSite();
         if ($response) {
-            $this->dispatch('showAlertMessage', type: 'error', title: __('general.demosite_res_title'), message: __('general.demosite_res_txt'));
+            $this->dispatch(
+                'showAlertMessage',
+                type: 'error',
+                title: __('general.demosite_res_title'),
+                message: __('general.demosite_res_txt')
+            );
             return;
         }
 
         $validated = $this->validate((new RegisterUserRequest())->rules());
-        $user = (new RegisterService())->registerUser($validated);
-        Auth::login($user);
+
+        $individualPlatform = setting('_general.individual_platform');
+        if ($individualPlatform && $validated['user_role'] === 'tutor') {
+            $existingTutorCount = \App\Models\User::whereHas('roles', function ($q) {
+                $q->where('name', 'tutor');
+            })->count();
+
+            if ($existingTutorCount >= 1) {
+                $this->dispatch(
+                    'showAlertMessage',
+                    type: 'error',
+                    title: __('general.error_title'),
+                    message: __('general.you_have_exceeded_the_limit')
+                );
+                return;
+            }
+        }
+
+        $user = (new \App\Services\RegisterService())->registerUser($validated);
+
+        \Illuminate\Support\Facades\Auth::login($user);
+
         $this->redirect(route('tutor.profile.personal-details', absolute: false), navigate: true);
     }
 
@@ -71,14 +96,15 @@ new #[Layout('layouts.guest')] class extends Component {
         @if (!empty($googleFont))
             <link href="https://fonts.googleapis.com/css2?family={{ str_replace(' ', '+', $googleFont) }}&display=swap"
                 rel="stylesheet">
-            <style> * {
+            <style>
+                * {
                     font-family: '{{ $googleFont }}', sans-serif !important;
                 }
             </style>
         @endif
     </head>
     @slot('title')
-        {{ __('auth.join') }}
+    {{ __('auth.join') }}
     @endslot
     <x-auth-card>
         <x-slot name="logo">
@@ -116,8 +142,8 @@ new #[Layout('layouts.guest')] class extends Component {
                         </div>
                         <div class="form-group {{ $errors->get('email') ? 'am-invalid' : '' }}">
                             <x-input-label for="email" :value="__('auth.email_placeholder')" class="am-important" />
-                            <x-text-input id="email" wire:model="email"
-                                placeholder="{{ __('auth.email_placeholder') }}" type="email" autofocus />
+                            <x-text-input id="email" wire:model="email" placeholder="{{ __('auth.email_placeholder') }}"
+                                type="email" autofocus />
                             <x-input-error field_name="email" />
                         </div>
                         @if ($isProfilePhoneMendatory)
@@ -125,14 +151,15 @@ new #[Layout('layouts.guest')] class extends Component {
                                 <x-input-label for="phone_number" :value="__('general.phone')" class="am-important" />
                                 <div class="form-control_wrap">
                                     <x-text-input wire:model="phone_number" id="phone_number"
-                                        placeholder="{{ __('general.phone_placeholder') }}" name="phone_number"
-                                        type="text" class="block w-full mt-1" autocomplete="phone_number" />
+                                        placeholder="{{ __('general.phone_placeholder') }}" name="phone_number" type="text"
+                                        class="block w-full mt-1" autocomplete="phone_number" />
                                     <x-input-error field_name="phone_number" />
                                 </div>
                             </div>
                         @endif
                         <div class="form-group {{ $errors->get('password') ? 'am-invalid' : '' }}">
-                            <x-input-label for="password" :value="__('auth.password_placeholder')" class="am-important" />
+                            <x-input-label for="password" :value="__('auth.password_placeholder')"
+                                class="am-important" />
                             <div class="am-passwordfield">
                                 <x-text-input id="password" wire:model="password"
                                     placeholder="{{ __('auth.password_placeholder') }}" type="password" autofocus />
@@ -140,7 +167,8 @@ new #[Layout('layouts.guest')] class extends Component {
                             </div>
                         </div>
                         <div class="form-group {{ $errors->get('password') ? 'am-invalid' : '' }}">
-                            <x-input-label for="password_confirmation" :value="__('auth.confirm_password_placeholder')" class="am-important" />
+                            <x-input-label for="password_confirmation" :value="__('auth.confirm_password_placeholder')"
+                                class="am-important" />
                             <div class="am-passwordfield">
                                 <x-text-input id="password_confirmation" wire:model="password_confirmation"
                                     placeholder="{{ __('auth.confirm_password_placeholder') }}" type="password"
@@ -157,8 +185,8 @@ new #[Layout('layouts.guest')] class extends Component {
                                 <label for="gender_male" class="form-check-label">{{ __('auth.male') }}</label>
                             </div>
                             <div class="am-radio">
-                                <input type="radio" id="gender_female" name="gender" wire:model="gender"
-                                    value="2" class="form-check-input">
+                                <input type="radio" id="gender_female" name="gender" wire:model="gender" value="2"
+                                    class="form-check-input">
                                 <label for="gender_female" class="form-check-label">{{ __('auth.female') }}</label>
                             </div>
                             <x-input-error field_name="gender" />
@@ -172,8 +200,8 @@ new #[Layout('layouts.guest')] class extends Component {
                                     <x-input-label for="tutor" :value="$tutor_name" />
                                 </div>
                                 <div class="am-radio">
-                                    <input wire:model="user_role" id="student" value="student" type="radio"
-                                        autofocus name="user_role">
+                                    <input wire:model="user_role" id="student" value="student" type="radio" autofocus
+                                        name="user_role">
                                     <x-input-label for="student" :value="$student_name" />
                                 </div>
                             </div>
@@ -196,14 +224,14 @@ new #[Layout('layouts.guest')] class extends Component {
                 </div>
         </form>
         @if (
-            !empty(setting('_api.enable_social_login')) &&
-                (!empty(setting('_api.social_google_client_id')) && !empty(setting('_api.social_google_client_secret'))))
+                !empty(setting('_api.enable_social_login')) &&
+                (!empty(setting('_api.social_google_client_id')) && !empty(setting('_api.social_google_client_secret')))
+            )
             <div class="am-signinoption">
                 <span class="am-signinoption_br"><em>{{ __('auth.or') }}</em></span>
                 <a href="#" wire:click.prevent="redirectGoogle" wire:target="redirectGoogle"
                     wire:loading.class="am-btn_disable" class="am-signinoption_btn">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 21 21"
-                        fill="none">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 21 21" fill="none">
                         <path
                             d="M19.3 10.708C19.3 10.058 19.2417 9.43301 19.1333 8.83301H10.5V12.3788H15.4333C15.2208 13.5247 14.575 14.4955 13.6042 15.1455V17.4455H16.5667C18.3 15.8497 19.3 13.4997 19.3 10.708Z"
                             fill="#4285F4" />
@@ -225,7 +253,7 @@ new #[Layout('layouts.guest')] class extends Component {
 </div>
 @push('scripts')
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             function togglePasswordVisibility(toggleButton, passwordField) {
                 const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
                 passwordField.setAttribute('type', type);
@@ -238,11 +266,11 @@ new #[Layout('layouts.guest')] class extends Component {
             const toggleConfirmPassword = document.getElementById('toggleConfirmPassword');
             const confirmPasswordField = document.getElementById('password_confirmation');
 
-            togglePassword.addEventListener('click', function() {
+            togglePassword.addEventListener('click', function () {
                 togglePasswordVisibility(togglePassword, passwordField);
             });
 
-            toggleConfirmPassword.addEventListener('click', function() {
+            toggleConfirmPassword.addEventListener('click', function () {
                 togglePasswordVisibility(toggleConfirmPassword, confirmPasswordField);
             });
         });

@@ -316,6 +316,16 @@ $settings =  [
             'label_title'   => __('settings.technical_support_whatsapp_number'),
             'placeholder'   => __('settings.enter_technical_support_whatsapp_number'),
         ],
+         [
+            'id'            => 'individual_platform',
+            'type'          => 'switch',
+            'tab_id'        => 'general_tab',
+            'tab_title'     => __('settings.general'),
+            'class'         => '',
+            'label_title'   => __('settings.individual_platform'),
+            'field_desc'    => __('settings.enable_individual_platform'),
+            'value'         => '1',
+        ],
         [
             'id'            => 'allowed_file_extensions',
             'type'          => 'text',

@@ -73,7 +73,7 @@ class Course extends Model
     public const STATUS_COLOR = [
         'draft' => '#FFA500',
         'under_review' => '#0000FF',
-        'need_revision' => '#F79009',  // FF0000
+        'need_revision' => '#F79009',  
         'active' => '#008000',
         'inactive' => '#808080',
     ];

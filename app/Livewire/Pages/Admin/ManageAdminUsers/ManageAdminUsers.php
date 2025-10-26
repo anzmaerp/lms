@@ -2,40 +2,39 @@
 
 namespace App\Livewire\Pages\Admin\ManageAdminUsers;
 
-use App\Models\Role;
-use App\Models\User;
-use App\Models\Profile;
-use Livewire\Component;
-use Livewire\Attributes\On;
-use Livewire\WithPagination;
-use Livewire\Attributes\Layout;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Auth;
-use Maatwebsite\Excel\Facades\Excel;
-use Illuminate\Support\Facades\Hash;
-use Spatie\Permission\Models\Permission;
 use App\Livewire\Forms\Admin\ManageAdmin\AdminUserForm;
 use App\Livewire\Pages\Admin\ManageAdminUsers\AdminUsersExport;
+use App\Models\Profile;
+use App\Models\Role;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
+use Livewire\Attributes\Layout;
+use Livewire\Attributes\On;
+use Livewire\Component;
+use Livewire\WithPagination;
+use Maatwebsite\Excel\Facades\Excel;
+use Spatie\Permission\Models\Permission;
 
 class ManageAdminUsers extends Component
 {
     use WithPagination;
 
-    public      AdminUserForm $form;
-    public      $editMode           = false;
-    public      $search             = '';
-    public      $permissions       = [];
-    public      $sortby             = 'desc';
-    public      $selectedUsers      = [];
-    public      $per_page_opt       = [];
-    public      $roles;
-    public      $role;
-    public      $isEdit             = '';
-    public      $user_id            = '';
-    public      $per_page                        = '';
-    public      $filterUser                      = '';
-
+    public AdminUserForm $form;
+    public $editMode = false;
+    public $search = '';
+    public $permissions = [];
+    public $sortby = 'desc';
+    public $selectedUsers = [];
+    public $per_page_opt = [];
+    public $roles;
+    public $role;
+    public $isEdit = '';
+    public $user_id = '';
+    public $per_page = '';
+    public $filterUser = '';
 
     #[Layout('layouts.admin-app')]
     public function render()
@@ -43,23 +42,31 @@ class ManageAdminUsers extends Component
         if ($this->getErrorBag()->any()) {
             $this->dispatch('loadPageJs');
         }
-        $this->role =  request()->role;
-        $users = User::select('id', 'email', 'phone','gender', 'created_at', 'status', 'email_verified_at',)
-        ->with(
-            [
-                'roles',
-                'identityVerification' => function ($query) {
-                    $query->select('id', 'user_id', 'parent_verified_at');
-                }
-            ]
+        $this->role = request()->role;
+        $users = User::select(
+            'id',
+            'email',
+            'phone',
+            'gender',
+            'created_at',
+            'status',
+            'email_verified_at',
         )
-        ->whereHas('roles', function ($query) {
-            $query->where('name', 'sub_admin');
-        })
-        ->withWhereHas('profile', function ($query) {
-            $query->select('id', 'user_id', 'first_name', 'last_name', 'slug', 'image', 'recommend_tutor', 'verified_at');
-        });
-    
+            ->with(
+                [
+                    'roles',
+                    'identityVerification' => function ($query) {
+                        $query->select('id', 'user_id', 'parent_verified_at');
+                    }
+                ]
+            )
+            ->whereHas('roles', function ($query) {
+                $query->where('name', 'sub_admin');
+            })
+            ->withWhereHas('profile', function ($query) {
+                $query->select('id', 'user_id', 'first_name', 'last_name', 'slug', 'image', 'recommend_tutor', 'verified_at');
+            });
+
         if (!empty($this->filterUser)) {
             $users = $this->filterUser === 'active' ? $users->active() : $users->inactive();
         }
@@ -79,27 +86,27 @@ class ManageAdminUsers extends Component
     public function mount()
     {
         $protected_permissions = [
-            'can-manage-admin-users', 
+            'can-manage-admin-users',
             'can-manage-upgrade',
             'can-manage-addons',
         ];
 
         $this->permissions = Permission::whereNotIn('name', $protected_permissions)
-        ->get(['id', 'name'])?->pluck('name', 'id')?->toArray();
+            ->get(['id', 'name'])
+            ?->pluck('name', 'id')
+            ?->toArray();
 
         $this->dispatch('initSelect2', target: '.am-select2');
-    
-        
     }
 
     public function printUsersExcel()
-{
-    $fileName = 'sub_admins_' . now()->format('Y-m-d_H-i-s') . '.xlsx';
-    return Excel::download(
-        new AdminUsersExport($this->search, $this->filterUser, $this->sortby),
-        $fileName
-    );
-}
+    {
+        $fileName = 'sub_admins_' . now()->format('Y-m-d_H-i-s') . '.xlsx';
+        return Excel::download(
+            new AdminUsersExport($this->search, $this->filterUser, $this->sortby),
+            $fileName
+        );
+    }
 
     public function updated($propertyName)
     {
@@ -112,16 +119,15 @@ class ManageAdminUsers extends Component
     {
         $this->dispatch('loadPageJs');
     }
-    
+
     private function resetInputfields()
     {
-
-        $this->form->first_name       = '';
-        $this->form->last_name        = '';
-        $this->form->email            = '';
-        $this->form->phone            = '';
-        $this->form->gender           = '';
-        $this->form->password         = '';
+        $this->form->first_name = '';
+        $this->form->last_name = '';
+        $this->form->email = '';
+        $this->form->phone = '';
+        $this->form->gender = '';
+        $this->form->password = '';
     }
 
     #[On('update-status')]
@@ -150,29 +156,30 @@ class ManageAdminUsers extends Component
         }
     }
 
-    public function openModel(){
+    public function openModel()
+    {
         $this->dispatch('initSelect2', target: '.am-select2');
 
         $this->resetErrorBag();
         $this->form->adminId = '';
-        $this->form->permissions = []; 
+        $this->form->permissions = [];
         $this->resetInputfields();
-        $this->dispatch('toggleModel', id:'tb-add-user', action:'show');
+        $this->dispatch('toggleModel', id: 'tb-add-user', action: 'show');
     }
 
-    public function editAdminUser($id){
+    public function editAdminUser($id)
+    {
         $this->dispatch('initSelect2', target: '.am-select2');
-        $this->resetErrorBag(); 
+        $this->resetErrorBag();
         $user = User::find($id)->load(['profile']);
-        $this->form->adminId          = $id;
-        $this->form->first_name       = $user->profile->first_name;
-        $this->form->last_name        = $user->profile->last_name;
-        $this->form->gender           = $user->gender;
-        $this->form->email            = $user->email;
-        $this->form->phone            = $user->phone;
-        $this->form->permissions      = $user->permissions->pluck('id')->toArray();
-        $this->dispatch('toggleModel', id:'tb-add-user', action:'show');
-
+        $this->form->adminId = $id;
+        $this->form->first_name = $user->profile->first_name;
+        $this->form->last_name = $user->profile->last_name;
+        $this->form->gender = $user->gender;
+        $this->form->email = $user->email;
+        $this->form->phone = $user->phone;
+        $this->form->permissions = $user->permissions->pluck('id')->toArray();
+        $this->dispatch('toggleModel', id: 'tb-add-user', action: 'show');
     }
 
     #[On('delete-user')]
@@ -197,44 +204,72 @@ class ManageAdminUsers extends Component
     public function addUser()
     {
         $this->form->updateInfo();
+
         $response = isDemoSite();
         if ($response) {
             $this->dispatch('showAlertMessage', type: 'error', title: __('general.demosite_res_title'), message: __('general.demosite_res_txt'));
             return;
         }
+        $individualPlatform = setting('_general.individual_platform');
+        \Log::info($individualPlatform);
+        if ($individualPlatform) {
+            $selectedRole = $this->form->userRole;
+            \Log::info($selectedRole);
+            if ($selectedRole === 'tutor') {
+                $existingTutorCount = User::whereHas('roles', function ($q) {
+                    $q->where('name', 'tutor');
+                })->count();
+
+                if (empty($this->form->adminId) && $existingTutorCount >= 1) {
+                    $this->dispatch(
+                        'showAlertMessage',
+                        type: 'error',
+                        title: __('general.error_title'),
+                        message: __('general.you_have_exceeded_the_limit')
+                    );
+                    return;
+                }
+            }
+        }
+
         $date = now();
-        
+
         $permissions = $this->form->permissions;
         $userData = [
-            'email'             => sanitizeTextField($this->form->email),
+            'email' => sanitizeTextField($this->form->email),
             'email_verified_at' => $date,
         ];
-        if(empty($this->form->adminId)) {
+
+        if (empty($this->form->adminId)) {
             $userData['password'] = Hash::make($this->form->password);
         }
+
         $user = User::updateOrCreate(
             [
                 'id' => $this->form->adminId,
+            ],
+            array_merge($userData, [
                 'gender' => $this->form->gender,
                 'phone' => $this->form->phone,
-            ],
-            $userData
+            ])
         );
-        $user->assignRole('sub_admin');
+
+        $user->assignRole($selectedRole);
         $user->permissions()->sync($permissions);
 
-        $first_name    = $this->form->first_name;
-        $last_name     = $this->form->last_name;
-        $slug          = $first_name . ' ' . $last_name;
+        $first_name = sanitizeTextField($this->form->first_name);
+        $last_name = sanitizeTextField($this->form->last_name);
+        $slug = $first_name . ' ' . $last_name;
 
-        $profile = Profile::updateOrCreate([
-            'user_id' => $user->id,
-        ],[
-            'first_name'    => sanitizeTextField($first_name),
-            'last_name'     => sanitizeTextField($last_name),
-            'slug'          => sanitizeTextField($slug),
-            'user_id'       => $user->id,
-        ]);
+        Profile::updateOrCreate(
+            ['user_id' => $user->id],
+            [
+                'first_name' => $first_name,
+                'last_name' => $last_name,
+                'slug' => $slug,
+            ]
+        );
+
         $this->dispatch('showAlertMessage', type: 'success', title: __('general.success_title'), message: __('settings.updated_record'));
         $this->dispatch('toggleModel', id: 'tb-add-user', action: 'hide');
         $this->resetInputfields();

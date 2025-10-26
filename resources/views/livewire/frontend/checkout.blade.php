@@ -201,7 +201,7 @@
                                             <x-input-error field_name="form.phone" />
                                         </div>
                                         <div class="form-group">
-                                            <x-input-label for="country" :value="{{ __('profile.country')}}" />
+                                   <x-input-label for="country" :value="__('profile.country')" />
                                             <div @class([
                                                 'form-control_wrap',
                                                 'am-invalid' => $errors->has('form.country'),
@@ -243,11 +243,11 @@
                                             'am-invalid' => $errors->has('form.zipcode'),
                                         ])>
                                             <input wire:model="form.zipcode" type="text" class="form-control"
-                                                placeholder="{{ __('general.add_zipcode') }}>
+                                                placeholder="{{ __('general.add_zipcode') }}">
                                             <x-input-error field_name="form.zipcode" />
                                         </div>
                                         <div class="form-group" x-show="isOfflinePayment">
-                                            <x-input-label for="profile_photo" :value="{{ __('general.attach_file') }}" />
+                                            <x-input-label for="profile_photo" :value=" __('general.attach_file') " />
                                             <div class="am-uploadoption" x-data="{ isUploading: false, isDragging: false }"
                                                 wire:key="uploading-profile-photo-{{ time() }}">
                                                 <div class="tk-draganddrop"
