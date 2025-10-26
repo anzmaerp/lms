@@ -46,7 +46,7 @@ class CourseBundleListing extends Component
     public function render()
     {
         $bundles = $this->bundleService->getBundles(
-            with: ['thumbnail:mediable_id,mediable_type,type,path', 'instructor.profile'],
+            with: ['thumbnail:mediable_id,mediable_type,type,path', 'instructors.profile'],
             withCount: ['courses'],
             withSum: ['courses' => 'content_length'],
             filters: $this->filters,
