@@ -485,7 +485,7 @@
                                 <div class="cr-url-fallback card">
                                     <div class="card-body">
                                         <h5 class="card-title">{{ __('general.url_not_embeddable') }}</h5>
-                                        <p class="card-text">This content cannot be embedded. Please open it in a new tab.</p>
+                                        <p class="card-text">{{ __('general.content_not_availble_open_in_tap') }}</p>
                                         <a href="{{ $url }}" target="_blank" class="btn btn-outline-primary am-btn">
                                             {{ __('general.courses.open_url') }}
                                         </a>
