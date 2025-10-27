@@ -10,6 +10,16 @@
 !/vendor/larabuild/pagebuilder/resources/views/   
 /vendor/larabuild/pagebuilder/resources/views/*   
 !/vendor/larabuild/pagebuilder/resources/views/pages.blade.php  
+
+# Keep optionbuilder index.blade.php file
+!/vendor/larabuild/optionbuilder/
+ /vendor/larabuild/optionbuilder/*
+!/vendor/larabuild/optionbuilder/resources/
+ /vendor/larabuild/optionbuilder/resources/*
+!/vendor/larabuild/optionbuilder/resources/views/
+ /vendor/larabuild/optionbuilder/resources/views/*
+!/vendor/larabuild/optionbuilder/resources/views/index.blade.php
+
 /database/DB/*
 
 # Environment files

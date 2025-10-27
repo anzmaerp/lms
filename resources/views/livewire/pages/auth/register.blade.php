@@ -194,7 +194,7 @@ new #[Layout('layouts.guest')] class extends Component {
                         <div class="form-group am-form-groupradio">
                             <x-input-label :value="__('auth.role')" class="am-important" />
                             <div class="am-selectrole">
-                                <div class="am-radio">
+                                <div class="am-radio"  style="display: none;">
                                     <input wire:model="user_role" id="tutor" value="tutor" type="radio" autofocus
                                         name="user_role">
                                     <x-input-label for="tutor" :value="$tutor_name" />
