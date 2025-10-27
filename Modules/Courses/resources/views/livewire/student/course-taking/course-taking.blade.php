@@ -110,20 +110,21 @@
     <div class="cr-coursedetails_content">
         <div wire:ignore class="cr-usercourse_header">
             @role('student')
-<div x-data="{ progress: @js(floor($progress)) }"
-     x-on:updated-progress.window="
-         console.log('Progress updated:', $event.detail.progress);
-         progress = $event.detail.progress;
-         if( $event.detail.resultAssigned){
-             let modal = new bootstrap.Modal(document.getElementById('course_completed_popup'));
-             modal.show();
-         }
-     " class="cr-usercourse_header_progress">
-    <span>{{ __('courses::courses.course_progress') }}<em x-text="progress+'%'"></em></span>
-    <div class="cr-usercourse_header_progress_bar">
-        <div class="cr-usercourse_header_progress_bar_inner" :style="'width: '+progress+'%'"></div>
-    </div>
-</div>
+                <div x-data="{ progress: @js(floor($progress)) }"
+                    x-on:updated-progress.window="
+                        console.log('Progress updated:', $event.detail.progress, 'Assigned:', $event.detail.resultAssigned);
+                        progress = $event.detail.progress;
+                        if ($event.detail.resultAssigned) {
+                            console.log('Showing modal');
+                            let modal = new bootstrap.Modal(document.getElementById('course_completed_popup'));
+                            modal.show();
+                        }
+                    " class="cr-usercourse_header_progress">
+                    <span>{{ __('courses::courses.course_progress') }}<em x-text="progress+'%'"></em></span>
+                    <div class="cr-usercourse_header_progress_bar">
+                        <div class="cr-usercourse_header_progress_bar_inner" :style="'width: '+progress+'%'"></div>
+                    </div>
+                </div>
             @endrole
             <div class="cr-usercourse_header_actions">
                 <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#cr-sharemodal" class="cr-btn">
@@ -146,257 +147,409 @@
         </div>
         <div class="cr-coursedetails_body">
             <div class="cr-coursedetails_body_video">
-                @if(!empty($activeCurriculum))
-                    @php
-                        $nextItem = $nextCurriculumItem[$activeCurriculum['id']];
-                    @endphp
-                    @if(!empty($nextItem))
-                        <div class="cr-next-curriculum d-none">
-                            <div class="cr-next-curriculum_content">
-                                <span>{{ __('courses::courses.subtitle') }}</span>
-                                <h2 class="cr-next-curriculum-title">{{ $nextItem['title'] }}</h2>
-                                <p class="cr-next-curriculum-description">{{ $nextItem['description'] }}</p>
-                                <button class="cr-next-curriculum_btn" wire:click.prevent="nextCurriculum({{ $nextItem['id'] }})">
-                                    @if(in_array($nextItem['type'], ['video', 'yt_link', 'vm_link']))
-                                        <i class="am-icon-play-filled"></i>{{ __('courses::courses.play_next') }}
-                                    @else
-                                        <i class="am-icon-book-1"></i>{{ __('courses::courses.next') }}
-                                    @endif
-                                </button>
-                            </div>
-                        </div>
-                    @endif
-                    @if($activeCurriculum['type'] == 'video')
-                        <div class="cr-card-skeleton" id="cr-card-skeleton-{{ $activeCurriculum['id'] }}">
-                            <div class="cr-image-wrapper-skeleton"></div>
-                        </div>
-                        <div class="cr-coursetasking-video"
-                             x-data="{ showVideo: false }"
-                             x-init="
-                                 showVideo = true;
-                                 $nextTick(() => {
-                                     let video = document.getElementById('video-{{ $activeCurriculum['id'] }}');
-                                     if (video) {
-                                         let player = videojs(video, {
-                                             controls: true,
-                                             autoplay: false,
-                                             playbackRates: [0.5, 1, 1.5, 2]
-                                         });
-                                         player.ready(() => {
-                                             player.load();
-                                         });
-                                     }
-                                 });"
-                        >
-                            <template x-if="showVideo">
-                                <video
-                                    id="video-{{ $activeCurriculum['id'] }}"
-                                    preload="auto"
-                                    class="video-js vjs-default-skin d-none"
-                                    data-setup="{}"
-                                    onloadstart="initializeVideoPlayer(this, '{{ $activeCurriculum['id'] }}')"
-                                    onloadeddata="initializeVideoPlayer(this, '{{ $activeCurriculum['id'] }}')"
-                                    onplay="updateWatchtime({{ $activeCurriculum['id'] }})"
-                                    width="320"
-                                    height="240"
-                                    controls
-                                >
-                                    <source src="{{ $activeCurriculum['media_path'] }}" type="video/mp4">
-                                </video>
-                            </template>
-                            <strong class="am-logo">
-                                @if(!empty(setting('_general.watermark_logo')))
-                                    <img src="{{ url(Storage::url(setting('_general.watermark_logo')[0]['path'])) }}" alt="watermark-logo">
+            @if(!empty($activeCurriculum) && is_array($activeCurriculum))
+                @php
+                    $nextItem = isset($nextCurriculumItem[$activeCurriculum['id']]) ? $nextCurriculumItem[$activeCurriculum['id']] : null;
+                @endphp
+                @if(!empty($nextItem))
+                    <div class="cr-next-curriculum d-none">
+                        <div class="cr-next-curriculum_content">
+                            <span>{{ __('courses::courses.subtitle') }}</span>
+                            <h2 class="cr-next-curriculum-title">{{ $nextItem['title'] }}</h2>
+                            <p class="cr-next-curriculum-description">{{ $nextItem['description'] }}</p>
+                            <button class="cr-next-curriculum_btn" wire:click.prevent="nextCurriculum({{ $nextItem['id'] }})">
+                                @if(in_array($nextItem['type'], ['video', 'yt_link', 'vm_link']))
+                                    <i class="am-icon-play-filled"></i>{{ __('courses::courses.play_next') }}
                                 @else
-                                    <img src="{{ asset('modules/courses/images/green-logo.png') }}" alt="watermark-logo">
+                                    <i class="am-icon-book-1"></i>{{ __('courses::courses.next') }}
                                 @endif
-                            </strong>
-                            <div class="cr-video-info">
-                                <figure>
-                                    @if(!empty($course?->instructor?->profile?->image) && Storage::disk(getStorageDisk())->exists($course?->instructor?->profile?->image))
-                                        <img src="{{ resizedImage($course?->instructor?->profile?->image,50,50) }}" alt="{{ $course?->instructor?->profile?->image }}" />
-                                    @else
-                                        <img src="{{ setting('_general.default_avatar_for_user') ? url(Storage::url(setting('_general.default_avatar_for_user')[0]['path'])) : resizedImage('placeholder.png', 50, 50) }}" alt="{{ $course?->instructor?->profile?->image }}" />
-                                    @endif
-                                </figure>
-                                @if(!empty($course?->instructor?->profile?->full_name) || !empty($course?->instructor?->profile?->tagline))
-                                    <h6>
-                                        @if(!empty($course?->instructor?->profile?->full_name))
-                                            {{$course?->instructor?->profile?->full_name}}
-                                        @endif
-                                        @if(!empty($course?->instructor?->profile?->tagline))
-                                            <span>{{$course?->instructor?->profile?->tagline}}</span>
-                                        @endif
-                                    </h6>
-                                @endif
-                            </div>
+                            </button>
                         </div>
-                    @elseif($activeCurriculum['type'] == 'yt_link')
-                        @php
-                            $yt_link = explode('v=', $activeCurriculum['media_path']);
-                            $yt_id = end($yt_link);
-                        @endphp
-                        <div x-data="{
-                            onYouTubeIframeAPIReady(videoId){
-                                console.log('videoId: ' + videoId);
-                                const ytPlayer = new YT.Player(`yt-video-${videoId}`, {
-                                    events: {
-                                        onReady: function(event) {
-                                            const ytVideoDuration = event.target.getDuration();
-                                            console.log('evt', ytVideoDuration, event);
-                                            event.target.playVideo();
-                                            console.log('Video started playing');
-                                        },
-                                        onStateChange: function(event) {
-                                            console.log('onStateChange', event);
-                                            if(event.data === YT.PlayerState.ENDED) {
-                                                @role('student')
-                                                    @this.call('updateWatchtime', true);
-                                                @endrole
-                                                showNextItemContent();
-                                            }
-                                        }
-                                    }
-                                });
-                                console.log('ytPlayer', ytPlayer);
-                                ytPlayer.options.events.onStateChange = function() {
-                                    console.log('onStateChange');
-                                };
-                            }
-                        }">
-                            <iframe
-                                id="yt-video-{{ $activeCurriculum['id'] }}"
-                                src="https://www.youtube.com/embed/{{ $yt_id }}?enablejsapi=1"
-                                frameborder="0"
-                                x-on:load="onYouTubeIframeAPIReady('{{ $activeCurriculum['id'] }}')"
-                                allowfullscreen
-                            ></iframe>
-                        </div>
-                    @elseif($activeCurriculum['type'] == 'vm_link')
-                        @php
-                            $videoId = '';
-                            if(preg_match('/vimeo\.com\/(\d+)/', $activeCurriculum['media_path'], $matches)) {
-                                $videoId = $matches[1];
-                            }
-                        @endphp
-                        <div x-data="{
-                            onVimeoIframeAPIReady(videoId){
-                                console.log('videoId: ' + videoId);
-                                if(jQuery(`#vm-video-${videoId}`)?.length){
-                                    const vimeoPlayer = new Vimeo.Player(`vm-video-${videoId}`);
-                                    vimeoPlayer.on('ended', function() {
+                    </div>
+                @endif
+                @if($activeCurriculum['type'] == 'video')
+                    <div class="cr-coursetasking-video"
+                        x-data="{ showVideo: false }"
+                        x-init="
+                            showVideo = true;
+                            $nextTick(() => {
+                                let video = document.getElementById('video-{{ $activeCurriculum['id'] ?? 0 }}');
+                                if (video && !video.player) {
+                                    let player = videojs(video, {
+                                        controls: true,
+                                        autoplay: false,
+                                        playbackRates: [0.5, 1, 1.5, 2],
+                                        sources: [{ src: '{{ $activeCurriculum['media_path'] ?? '' }}', type: 'video/mp4' }]
+                                    }, function() {
+                                        console.log('Video.js player ready for curriculum ID: {{ $activeCurriculum['id'] ?? 0 }}');
+                                    });
+                                    player.ready(() => {
+                                        player.load();
+                                        player.removeClass('d-none');
+                                        console.log('Video loaded for curriculum ID: {{ $activeCurriculum['id'] ?? 0 }}');
+                                    });
+                                    player.on('error', (error) => {
+                                        console.error('Video.js error for curriculum ID: {{ $activeCurriculum['id'] ?? 0 }}', error);
+                                    });
+                                    player.on('ended', () => {
                                         @role('student')
                                             @this.call('updateWatchtime', true);
                                         @endrole
                                         showNextItemContent();
                                     });
+                                    video.player = player;
+                                } else if (!video) {
+                                    console.error('Video element not found for curriculum ID: {{ $activeCurriculum['id'] ?? 0 }}');
                                 }
-                            }
-                        }">
-                            <iframe
-                                id="vm-video-{{ $activeCurriculum['id'] }}"
-                                class="am-iframe-video"
-                                src="https://player.vimeo.com/video/{{ $videoId }}?api=1&player_id=vm-video-{{ $activeCurriculum['id'] }}"
-                                frameborder="0"
-                                x-on:load="onVimeoIframeAPIReady('{{ $activeCurriculum['id'] }}')"
-                                allowfullscreen
-                                wire:key="profile-video-src-{{ $activeCurriculum['id'] . time() }}"
-                            ></iframe>
+                            });"
+                        wire:key="video-{{ $activeCurriculum['id'] ?? 0 }}"
+                    >
+                        <template x-if="showVideo">
+                            <video
+                                id="video-{{ $activeCurriculum['id'] ?? 0 }}"
+                                class="video-js vjs-default-skin"
+                                preload="auto"
+                                width="100%"
+                                height="auto"
+                                controls
+                            >
+                                <source src="{{ $activeCurriculum['media_path'] ?? '' }}" type="video/mp4">
+                                <p>Your browser does not support the video tag. <a href="{{ $activeCurriculum['media_path'] ?? '' }}">Download the video</a>.</p>
+                            </video>
+                        </template>
+                        <strong class="am-logo">
+                            @if(!empty(setting('_general.watermark_logo')))
+                                <img src="{{ url(Storage::url(setting('_general.watermark_logo')[0]['path'])) }}" alt="watermark-logo">
+                            @else
+                                <img src="{{ asset('modules/courses/images/green-logo.png') }}" alt="watermark-logo">
+                            @endif
+                        </strong>
+                        <div class="cr-video-info">
+                            <figure>
+                                @if(!empty($course?->instructor?->profile?->image) && Storage::disk(getStorageDisk())->exists($course?->instructor?->profile?->image))
+                                    <img src="{{ resizedImage($course?->instructor?->profile?->image,50,50) }}" alt="{{ $course?->instructor?->profile?->image }}" />
+                                @else
+                                    <img src="{{ setting('_general.default_avatar_for_user') ? url(Storage::url(setting('_general.default_avatar_for_user')[0]['path'])) : resizedImage('placeholder.png', 50, 50) }}" alt="{{ $course?->instructor?->profile?->image }}" />
+                                @endif
+                            </figure>
+                            @if(!empty($course?->instructor?->profile?->full_name) || !empty($course?->instructor?->profile?->tagline))
+                                <h6>
+                                    @if(!empty($course?->instructor?->profile?->full_name))
+                                        {{$course?->instructor?->profile?->full_name}}
+                                    @endif
+                                    @if(!empty($course?->instructor?->profile?->tagline))
+                                        <span>{{$course?->instructor?->profile?->tagline}}</span>
+                                    @endif
+                                </h6>
+                            @endif
                         </div>
-                    @elseif($activeCurriculum['type'] == 'article')
+                    </div>
+                @elseif($activeCurriculum['type'] == 'yt_link')
+                    @php
+                        $yt_link = explode('v=', $activeCurriculum['media_path'] ?? '');
+                        $yt_id = !empty($yt_link) ? end($yt_link) : '';
+                    @endphp
+                    <div x-data="{
+                        onYouTubeIframeAPIReady(videoId){
+                            console.log('videoId: ' + videoId);
+                            const ytPlayer = new YT.Player(`yt-video-${videoId}`, {
+                                events: {
+                                    onReady: function(event) {
+                                        const ytVideoDuration = event.target.getDuration();
+                                        console.log('evt', ytVideoDuration, event);
+                                        event.target.playVideo();
+                                        console.log('Video started playing');
+                                    },
+                                    onStateChange: function(event) {
+                                        console.log('onStateChange', event);
+                                        if(event.data === YT.PlayerState.ENDED) {
+                                            @role('student')
+                                                @this.call('updateWatchtime', true);
+                                            @endrole
+                                            showNextItemContent();
+                                        }
+                                    }
+                                }
+                            });
+                            console.log('ytPlayer', ytPlayer);
+                            ytPlayer.options.events.onStateChange = function() {
+                                console.log('onStateChange');
+                            };
+                        }
+                    }">
+                        <iframe
+                            id="yt-video-{{ $activeCurriculum['id'] ?? 0 }}"
+                            src="https://www.youtube.com/embed/{{ $yt_id }}?enablejsapi=1"
+                            frameborder="0"
+                            x-on:load="onYouTubeIframeAPIReady('{{ $activeCurriculum['id'] ?? 0 }}')"
+                            allowfullscreen
+                        ></iframe>
+                    </div>
+                @elseif($activeCurriculum['type'] == 'vm_link')
+                    @php
+                        $videoId = '';
+                        if (!empty($activeCurriculum['media_path']) && preg_match('/vimeo\.com\/(\d+)/', $activeCurriculum['media_path'], $matches)) {
+                            $videoId = $matches[1];
+                        }
+                    @endphp
+                    <div x-data="{
+                        onVimeoIframeAPIReady(videoId){
+                            console.log('videoId: ' + videoId);
+                            if(jQuery(`#vm-video-${videoId}`)?.length){
+                                const vimeoPlayer = new Vimeo.Player(`vm-video-${videoId}`);
+                                vimeoPlayer.on('ended', function() {
+                                    @role('student')
+                                        @this.call('updateWatchtime', true);
+                                    @endrole
+                                    showNextItemContent();
+                                });
+                            }
+                        }
+                    }">
+                        <iframe
+                            id="vm-video-{{ $activeCurriculum['id'] ?? 0 }}"
+                            class="am-iframe-video"
+                            src="https://player.vimeo.com/video/{{ $videoId }}?api=1&player_id=vm-video-{{ $activeCurriculum['id'] ?? 0 }}"
+                            frameborder="0"
+                            x-on:load="onVimeoIframeAPIReady('{{ $activeCurriculum['id'] ?? 0 }}')"
+                            allowfullscreen
+                            wire:key="profile-video-src-{{ $activeCurriculum['id'] ?? 0 . time() }}"
+                        ></iframe>
+                    </div>
+                @elseif($activeCurriculum['type'] == 'article')
+                    @role('student')
+                        <div
+                            id="article-{{ $activeCurriculum['id'] ?? 0 }}"
+                            class="cr-coursedetails_article"
+                        >
+                            <div class="cr-coursedetails_article_wrap">{!! $activeCurriculum['article_content'] ?? '' !!}</div>
+                            <div class="cr-coursedetails_article_actions">
+                                @if(
+                                    isset($activeCurriculum['watchtime']['duration']) && 
+                                    isset($activeCurriculum['content_length']) && 
+                                    ($activeCurriculum['watchtime']['duration'] == $activeCurriculum['content_length'])
+                                )
+                                    @if(!empty($curriculumOrder[$activeCurriculum['id'] ?? 0]))
+                                        <a href="javascript:void(0);" class="am-btn" wire:click.prevent="nextCurriculum({{ $curriculumOrder[$activeCurriculum['id'] ?? 0] }})">Go to next item</a>
+                                    @endif
+                                    <button type="button" class="am-btnnext">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="17" height="16" viewBox="0 0 17 16" fill="none">
+                                            <path d="M3.16699 8.66667L6.50033 12L13.8337 4" stroke="#34A853" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg> Completed
+                                    </button>
+                                @else
+                                    <button type="button" class="am-btn" wire:click.prevent="markAsCompleted()">Mark as complete</button>
+                                @endif
+                            </div>
+                        </div>
+                    @else
+                        <div id="article-{{ $activeCurriculum['id'] ?? 0 }}" class="cr-coursedetails_article">
+                            <div class="cr-coursedetails_article_wrap">{!! $activeCurriculum['article_content'] ?? '' !!}</div>
+                        </div>
+                    @endrole
+                @elseif($activeCurriculum['type'] == 'pdf')
+                    <div
+                        id="pdf-{{ $activeCurriculum['id'] ?? 0 }}"
+                        class="cr-coursedetails_pdf"
+                    >
+                        <div class="cr-pdf-viewer">
+                            <embed
+                                src="{{ $activeCurriculum['media_path'] ?? '' }}"
+                                type="application/pdf"
+                                width="100%"
+                                height="600px"
+                            >
+                        </div>
                         @role('student')
                             <div
-                                id="article-{{ $activeCurriculum['id'] }}"
-                                class="cr-coursedetails_article"
+                                id="pdf-actions-{{ $activeCurriculum['id'] ?? 0 }}"
+                                class="cr-coursedetails_pdf_actions"
                             >
-                                <div class="cr-coursedetails_article_wrap">{!! $activeCurriculum['article_content'] !!}</div>
-                                <div class="cr-coursedetails_article_actions">
+                                <div class="cr-coursedetails_pdf_wrap">{!! $activeCurriculum['pdf_content'] ?? '' !!}</div>
+                                <div class="cr-coursedetails_pdf_actions_buttons">
                                     @if(
-                                        isset($activeCurriculum['watchtime']['duration']) && isset($activeCurriculum['content_length'])
-                                        && ($activeCurriculum['watchtime']['duration'] == $activeCurriculum['content_length'])
+                                        isset($activeCurriculum['watchtime']['duration']) && 
+                                        isset($activeCurriculum['content_length']) && 
+                                        ($activeCurriculum['watchtime']['duration'] == $activeCurriculum['content_length'])
                                     )
-                                        @if(!empty($curriculumOrder[$activeCurriculum['id']]))
-                                            <a href="javascript:void(0);" class="am-btn" wire:click.prevent="nextCurriculum({{ $curriculumOrder[$activeCurriculum['id']] }})">Go to next item</a>
+                                        @if(!empty($curriculumOrder[$activeCurriculum['id'] ?? 0]))
+                                            <a href="javascript:void(0);" class="am-btn" wire:click.prevent="nextCurriculum({{ $curriculumOrder[$activeCurriculum['id'] ?? 0] }})">Go to next item</a>
                                         @endif
-                                        <button type="button" class="am-btnnext"><svg xmlns="http://www.w3.org/2000/svg" width="17" height="16" viewBox="0 0 17 16" fill="none"><path d="M3.16699 8.66667L6.50033 12L13.8337 4" stroke="#34A853" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"/></svg> Completed</button>
+                                        <button type="button" class="am-btnnext">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="17" height="16" viewBox="0 0 17 16" fill="none">
+                                                <path d="M3.16699 8.66667L6.50033 12L13.8337 4" stroke="#34A853" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"/>
+                                            </svg> Completed
+                                        </button>
                                     @else
                                         <button type="button" class="am-btn" wire:click.prevent="markAsCompleted()">Mark as complete</button>
                                     @endif
                                 </div>
                             </div>
                         @else
-                            <div id="article-{{ $activeCurriculum['id'] }}" class="cr-coursedetails_article">
-                                <div class="cr-coursedetails_article_wrap">{!! $activeCurriculum['article_content'] !!}</div>
+                            <div id="pdf-content-{{ $activeCurriculum['id'] ?? 0 }}" class="cr-coursedetails_pdf">
+                                <div class="cr-coursedetails_pdf_wrap">{!! $activeCurriculum['pdf_content'] ?? '' !!}</div>
                             </div>
                         @endrole
-@elseif($activeCurriculum['type'] == 'pdf')
-    <div
-        id="pdf-{{ $activeCurriculum['id'] }}"
-        class="cr-coursedetails_pdf"
-    >
-        <div class="cr-pdf-viewer">
-            <embed
-                src="{{ $activeCurriculum['media_path'] }}"
-                type="application/pdf"
-                width="100%"
-                height="600px"
-                @role('student')
-                    onload="@this.call('markAsCompleted')"
-                @endrole
-            >
-        </div>
-        @role('student')
-            <div class="cr-coursedetails_pdf_actions">
-                @if(
-                    isset($activeCurriculum['watchtime']['duration']) && isset($activeCurriculum['content_length'])
-                    && ($activeCurriculum['watchtime']['duration'] == $activeCurriculum['content_length'])
-                )
-                    @if(!empty($curriculumOrder[$activeCurriculum['id']]))
-                        <a href="javascript:void(0);" class="am-btn" wire:click.prevent="nextCurriculum({{ $curriculumOrder[$activeCurriculum['id']] }})">Go to next item</a>
-                    @endif
-                    <button type="button" class="am-btnnext"><svg xmlns="http://www.w3.org/2000/svg" width="17" height="16" viewBox="0 0 17 16" fill="none"><path d="M3.16699 8.66667L6.50033 12L13.8337 4" stroke="#34A853" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"/></svg> Completed</button>
-                @else
-                    <button type="button" class="am-btn" wire:click.prevent="markAsCompleted()">Mark as complete</button>
-                @endif
-            </div>
-        @endrole
-    </div>
-@endif
-                @else
-                    <div wire:ignore class="cr-image-wrapper" x-data="{
-                        isPlaying: false,
-                        url: '{{ asset(Storage::url($course?->promotionalVideo?->path)) }}',
-                        playVideo() {
-                            this.isPlaying = true;
-                            this.$nextTick(() => {
-                                const player = videojs('promotional-video');
-                                player.play();
-                            });
-                        }
-                    }">
-                        <template x-if="isPlaying">
-                            <video class="video-js" data-setup='{"autoplay": true}' onloadeddata="videojs(this)" preload="auto" id="promotional-video" width="320" height="240" controls>
-                                <source :src="url" type="video/mp4">
-                            </video>
-                        </template>
-                        <template x-if="!isPlaying">
-                            <figure class="cr-image-wrapper">
-                                @if(!empty($course->thumbnail?->path) && Storage::disk(getStorageDisk())->exists($course->thumbnail?->path))
-                                    <img src="{{ Storage::url($course->thumbnail->path) }}" alt="{{ $course->title }}" class="cr-background-image" />
-                                @else
-                                    <img src="{{ asset('modules/courses/images/course.png') }}" alt="{{ $course->title }}" />
-                                @endif
-                                @if(!empty($course?->promotionalVideo?->path) && Storage::disk(getStorageDisk())->exists($course?->promotionalVideo?->path))
-                                    <figcaption @click="playVideo">
-                                        <button>
-                                            <i class="am-icon-play-filled"></i>
-                                        </button>
-                                    </figcaption>
-                                @endif
-                            </figure>
-                        </template>
                     </div>
+                @elseif($activeCurriculum['type'] == 'url')
+                    @php
+                        $url = $activeCurriculum['media_path'] ?? '';
+                        $embedUrl = $url;
+                        $isYouTube = false;
+                        $videoId = '';
+
+                        if (preg_match('/\.pdf$/i', $url)) {
+                            $embedUrl = 'https://docs.google.com/gview?embedded=true&url=' . urlencode($url);
+                        } 
+                        elseif (preg_match('/(youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/shorts\/)([a-zA-Z0-9_-]+)/', $url, $matches)) {
+                            $videoId = $matches[2];
+                            $embedUrl = 'https://www.youtube.com/embed/' . $videoId;
+                            $isYouTube = true;
+                        } 
+                        elseif (preg_match('/vimeo\.com\/(\d+)/', $url, $matches)) {
+                            $videoId = $matches[1];
+                            $embedUrl = 'https://player.vimeo.com/video/' . $videoId;
+                        } 
+                        elseif (preg_match('/drive\.google\.com/', $url)) {
+                            if (preg_match('/\/file\/d\/([a-zA-Z0-9_-]+)/', $url, $matches)) {
+                                $fileId = $matches[1];
+                                $embedUrl = "https://drive.google.com/file/d/{$fileId}/preview";
+                            } else {
+                                $embedUrl = $url;
+                            }
+                            if (preg_match('/\.(mp4|mp3|avi|mov|mkv)$/i', $url)) {
+                                $activeCurriculum['is_embeddable'] = false;
+                            }
+                        }
+                    @endphp
+
+                <div
+                    id="url-{{ $activeCurriculum['id'] ?? 0 }}"
+                    class="cr-coursedetails_url"
+                    x-data="{ iframeFailed: {{ !($activeCurriculum['is_embeddable'] ?? true) ? 'true' : 'false' }}, iframeLoaded: false }"
+                    x-init="
+                        $nextTick(() => {
+                            if (!iframeFailed) {
+                                const iframe = document.getElementById('url-iframe-{{ $activeCurriculum['id'] ?? 0 }}');
+                                if (iframe) {
+                                    let timeout = setTimeout(() => {
+                                        if (!iframeLoaded) {
+                                            console.error('Iframe load timeout for URL: {{ $url }}');
+                                            iframeFailed = true;
+                                        }
+                                    }, 6000);
+                                    iframe.addEventListener('load', () => {
+                                        clearTimeout(timeout);
+                                        iframeLoaded = true;
+                                        console.log('Iframe loaded successfully for URL: {{ $url }}');
+                                    });
+                                    iframe.addEventListener('error', () => {
+                                        clearTimeout(timeout);
+                                        console.error('Iframe failed to load for URL: {{ $url }}');
+                                        iframeFailed = true;
+                                    });
+                                } else {
+                                    console.error('Iframe element not found for curriculum ID: {{ $activeCurriculum['id'] ?? 0 }}');
+                                    iframeFailed = true;
+                                }
+                            }
+                        });
+                    "
+                >
+                    <div class="cr-coursedetails_header">
+                        <h3 class="cr-coursedetails_title">{{ $activeCurriculum['title'] ?? 'Untitled Curriculum' }}</h3>
+                        <div class="cr-coursedetails_meta">
+                            <span class="cr-coursedetails_type">{{ ucfirst($activeCurriculum['type']) }}</span>
+                            @if($activeCurriculum['content_length'] > 0)
+                                <span class="cr-coursedetails_duration">{{ getCourseDuration($activeCurriculum['content_length']) }}</span>
+                            @else
+                                <span class="cr-coursedetails_duration">Duration not set</span>
+                            @endif
+                        </div>
+                    </div>
+                    <div class="cr-coursedetails_url_wrap">
+                        <template x-if="!iframeFailed">
+                            <div class="cr-url-embed">
+                                <iframe
+                                    id="url-iframe-{{ $activeCurriculum['id'] ?? 0 }}"
+                                    src="{{ $embedUrl }}"
+                                    width="100%"
+                                    height="600px"
+                                    frameborder="0"
+                                    allowfullscreen
+                                    sandbox="allow-scripts allow-same-origin allow-popups allow-forms allow-presentation"
+                                    referrerpolicy="no-referrer"
+                                ></iframe>
+                            </template>
+                            <template x-if="iframeFailed">
+                                <div class="cr-url-fallback card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{ __('general.url_not_embeddable') }}</h5>
+                                        <p class="card-text">This content cannot be embedded. Please open it in a new tab.</p>
+                                        <a href="{{ $url }}" target="_blank" class="btn btn-outline-primary am-btn">
+                                            {{ __('general.courses.open_url') }}
+                                        </a>
+                                    </div>
+                                </div>
+                            </template>
+                        <div class="cr-coursedetails_url_actions">
+                            @role('student')
+                                @if(
+                                    isset($activeCurriculum['watchtime']['duration']) &&
+                                    isset($activeCurriculum['content_length']) &&
+                                    ($activeCurriculum['watchtime']['duration'] == $activeCurriculum['content_length'])
+                                )
+                                    @if(!empty($curriculumOrder[$activeCurriculum['id'] ?? 0]))
+                                        <a href="javascript:void(0);" class="am-btn" wire:click.prevent="nextCurriculum({{ $curriculumOrder[$activeCurriculum['id'] ?? 0] }})">Go to next item</a>
+                                    @endif
+                                    <button type="button" class="am-btnnext" x-data="{ show: false }" x-show="show">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="17" height="16" viewBox="0 0 17 16" fill="none">
+                                            <path d="M3.16699 8.66667L6.50033 12L13.8337 4" stroke="#34A853" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg> Completed
+                                    </button>
+                                @else
+                                    <button type="button" class="am-btn" wire:click.prevent="markAsCompleted()" x-on:click="console.log('Button clicked for curriculum ID: {{ $activeCurriculum['id'] ?? 0 }}')">Mark as complete</button>
+                                @endif
+                            @endrole
+                        </div>
+                    </div>
+                </div>
                 @endif
+            @else
+                <div wire:ignore class="cr-image-wrapper" x-data="{
+                    isPlaying: false,
+                    url: '{{ asset(Storage::url($course?->promotionalVideo?->path)) ?? '' }}',
+                    playVideo() {
+                        this.isPlaying = true;
+                        this.$nextTick(() => {
+                            const player = videojs('promotional-video');
+                            player.play();
+                        });
+                    }
+                }">
+                    <template x-if="isPlaying">
+                        <video class="video-js" data-setup='{"autoplay": true}' onloadeddata="videojs(this)" preload="auto" id="promotional-video" width="320" height="240" controls>
+                            <source :src="url" type="video/mp4">
+                        </video>
+                    </template>
+                    <template x-if="!isPlaying">
+                        <figure class="cr-image-wrapper">
+                            @if(!empty($course->thumbnail?->path) && Storage::disk(getStorageDisk())->exists($course->thumbnail?->path))
+                                <img src="{{ Storage::url($course->thumbnail->path) }}" alt="{{ $course->title }}" class="cr-background-image" />
+                            @else
+                                <img src="{{ asset('modules/courses/images/course.png') }}" alt="{{ $course->title }}" />
+                            @endif
+                            @if(!empty($course?->promotionalVideo?->path) && Storage::disk(getStorageDisk())->exists($course?->promotionalVideo?->path))
+                                <figcaption @click="playVideo">
+                                    <button>
+                                        <i class="am-icon-play-filled"></i>
+                                    </button>
+                                </figcaption>
+                            @endif
+                        </figure>
+                    </template>
+                </div>
+            @endif
             </div>
             <div class="cr-coursecontent">
                 <div class="cr-coursecontent_body" x-data="{ activeTab: 'cr-overview' }">
@@ -651,6 +804,15 @@
                                                 <div class="cr-includes-text">
                                                     <span class="cr-includes-value">{{ number_format($totalPdfs) }}</span>
                                                     <span class="cr-includes-label">{{ $totalPdfs == 1 ? __('courses::courses.pdf') : __('courses::courses.pdfs') }}</span>
+                                                </div>
+                                            </li>
+                                        @endif
+                                        @if(!empty($totalUrls))
+                                            <li class="cr-includes-item">
+                                                <i class="am-icon-file-text"></i>
+                                                <div class="cr-includes-text">
+                                                    <span class="cr-includes-value">{{ number_format($totalUrls) }}</span>
+                                                    <span class="cr-includes-label">{{ $totalUrls == 1 ? __('courses::courses.url') : __('courses::courses.urls') }}</span>
                                                 </div>
                                             </li>
                                         @endif
