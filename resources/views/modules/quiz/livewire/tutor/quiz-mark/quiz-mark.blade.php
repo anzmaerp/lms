@@ -38,7 +38,7 @@
                             <em>{{ __('quiz::quiz.question_number', ['number' => $loop->index + 1]) }}</em>
                             {!! getQuestionTitle($question)!!}
                         </h4>
-                        {{-- @if(in_array($question->type, [Modules\Quiz\Models\Question::TYPE_OPEN_ENDED_ESSAY, Modules\Quiz\Models\Question::TYPE_SHORT_ANSWER])) --}}
+                        @if(in_array($question->type, [Modules\Quiz\Models\Question::TYPE_OPEN_ENDED_ESSAY, Modules\Quiz\Models\Question::TYPE_SHORT_ANSWER]))
                             @php 
                                 $question_index = array_search($question->id, array_column($requiredAnswers, 'question_id'));
                             @endphp
@@ -56,14 +56,14 @@
                                     @enderror
                                 </span>
                             </div>
-                        {{-- @else
+                        @else
                             <div class="am-quiz-box_points">
                                 <span>{{ $question->attemptedQuestions?->first()?->marks_awarded ?? 0 }}
                                     /{{ $question?->points }} 
                                     {{ __('quiz::quiz.points') }}
                                 </span>
                             </div>
-                        @endif --}}
+                        @endif
                     </div>
                     <span>
                         <i class="am-icon-layer-01"></i>
