@@ -106,6 +106,7 @@ class Curriculum extends Component
             'curriculumVideo' => 'nullable|file|mimes:' . implode(',', $this->allowVideoFileExt) . '|max:' . $this->videoFileSize,
             'curriculumPdf' => 'nullable|file|mimes:pdf|max:' . $this->pdfFileSize,
             'url' => 'nullable|url',
+            'content_length' => $this->type === 'pdf' || $this->type === 'url' ? 'required|numeric|min:1' : 'nullable|numeric|min:0',
         ]);
 
         $validatedData['section_id'] = $this->section->id;
@@ -113,7 +114,6 @@ class Curriculum extends Component
         $validatedData['media_path'] = null;
         $validatedData['thumbnail'] = null;
         $validatedData['type'] = $this->type;
-        // Convert content_length from minutes to seconds if provided
         $validatedData['content_length'] = $this->content_length ? (int) $this->content_length * 60 : null;
 
         if ($this->curriculumVideo) {
@@ -164,7 +164,7 @@ class Curriculum extends Component
     {
         return (new CurriculumRequest())->rules() + [
             'url' => 'nullable|url',
-            'content_length' => 'nullable|numeric|min:0',  // Validate content_length as a non-negative number
+            'content_length' => 'nullable|numeric|min:0',
         ];
     }
 
@@ -175,6 +175,7 @@ class Curriculum extends Component
             'url.required' => 'Please enter a URL.',
             'content_length.numeric' => 'Content length must be a number.',
             'content_length.min' => 'Content length cannot be negative.',
+            'content_length.required' => 'Content length is required for PDF or URL types.',
         ];
     }
 
@@ -185,6 +186,23 @@ class Curriculum extends Component
             $this->dispatch('showAlertMessage', type: 'error', title: __('general.demosite_res_title'), message: __('general.demosite_res_txt'));
             return;
         }
+
+        // Validate content_length for pdf or url types
+        if (in_array($this->activeCurriculumItem['type'], ['pdf', 'url'])) {
+            $this->validate([
+                'content_length' => 'required|numeric|min:1',
+            ], [
+                'content_length.required' => 'Content length is required for PDF or URL types.',
+                'content_length.numeric' => 'Content length must be a number.',
+                'content_length.min' => 'Content length must be at least 1 minute.',
+            ]);
+
+            if (empty($this->content_length) || $this->content_length < 1) {
+                $this->dispatch('showAlertMessage', type: 'error', title: 'Validation Error', message: 'Please enter a valid content length for PDF or URL.');
+                return;
+            }
+        }
+
         if ($this->activeCurriculumItem['type'] == 'video') {
             if ($this->curriculumVideo) {
                 if ($this->curriculumVideo instanceof \Illuminate\Http\UploadedFile) {
@@ -224,8 +242,7 @@ class Curriculum extends Component
                         return;
                     }
                 }
-                // Convert content_length from minutes to seconds
-                $contentLengthInSeconds = $this->content_length ? (int) $this->content_length * 60 : 0;
+                $contentLengthInSeconds = (int) $this->content_length * 60;
                 $curriculum = (new CurriculumService())->updateCurriculum(
                     $this->activeCurriculumItem['id'],
                     [
@@ -288,11 +305,15 @@ class Curriculum extends Component
         } elseif ($this->activeCurriculumItem['type'] == 'url') {
             $this->validate([
                 'url' => 'required|url',
+                'content_length' => 'required|numeric|min:1',
             ], [
                 'url.required' => 'Please enter a URL.',
                 'url.url' => 'Please enter a valid URL.',
+                'content_length.required' => 'Content length is required for URL type.',
+                'content_length.numeric' => 'Content length must be a number.',
+                'content_length.min' => 'Content length must be at least 1 minute.',
             ]);
-            $contentLengthInSeconds = $this->content_length ? (int) $this->content_length * 60 : 0;
+            $contentLengthInSeconds = (int) $this->content_length * 60;
             $curriculum = (new CurriculumService())->updateCurriculum(
                 $this->activeCurriculumItem['id'],
                 [
