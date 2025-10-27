@@ -48,7 +48,7 @@
                                             <span>{{ formatAmount($bundle?->final_price) }}</span>
                                         </td>
                                         <td data-label="{{ __('courses::courses.instructor') }}">
-                                            <span>{{ $bundle->instructor?->profile?->full_name }}</span>
+                                              <span>{{ $bundle->instructors?->profile?->full_name }}</span>
                                         </td>
                                         <td data-label="{{ __('courses::courses.status') }}">
                                             <div class="am-status-tag">
