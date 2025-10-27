@@ -105,7 +105,7 @@
                                 <div class="cr-curriculum-btnconten">
                                     <figure><img src="{{ asset('modules/courses/images/document-icon.png') }}" alt="icon" />
                                     </figure>
-                                    <span>{{ __('courses::courses.write_article') }}</span>
+                                    <span>{{ __('courses::courses.edit_article') }}</span>
                                 </div>
                             </li>
                             <li wire:click="updateCurriculumType('pdf')" wire:target="updateCurriculumType('pdf')"
@@ -113,7 +113,15 @@
                                 class="{{ $activeCurriculumItem['type'] === 'pdf' ? 'cr-active' : '' }}">
                                 <div class="cr-curriculum-btnconten">
                                     <figure><img src="{{ asset('modules/courses/images/pdf-icon.png') }}" alt="icon" /></figure>
-                                    <span>{{ __('courses::courses.pdf_file') }}</span>
+                                    <span>{{ __('general.pdf_file') }}</span>
+                                </div>
+                            </li>
+                            <li wire:click="updateCurriculumType('url')" wire:target="updateCurriculumType('url')"
+                                wire:loading.class="am-btn_disable"
+                                class="{{ $activeCurriculumItem['type'] === 'url' ? 'cr-active' : '' }}">
+                                <div class="cr-curriculum-btnconten">
+                                    <figure><img src="{{ asset('modules/courses/images/url-icon.png') }}" alt="icon" /></figure>
+                                    <span>{{ __('general.url') }}</span>
                                 </div>
                             </li>
                         </ul>
@@ -134,9 +142,6 @@
                         @elseif(in_array($activeCurriculumItem['type'], ['video', 'yt_link', 'vm_link']))
                             <div class="am-upload-options">
                                 <h6 class="am-important">{{ __('courses::courses.video') }}</h6>
-                                <div class="am-radio"><input type="radio" id="video" name="media_type" value="video"
-                                        wire:model.live="activeCurriculumItem.type" /><label
-                                        for="video">{{ __('courses::courses.video') }}</label></div>
                                 <div class="am-radio"><input type="radio" id="yt_link" name="media_type" value="yt_link"
                                         wire:model.live="activeCurriculumItem.type" /><label
                                         for="yt_link">{{ __('courses::courses.youtube_link') }}</label></div>
@@ -145,55 +150,7 @@
                                         for="vimeo-link">{{ __('courses::courses.vimeo_link') }}</label></div>
                             </div>
                             @if($activeCurriculumItem['type'] === 'video')
-                                @if(empty($curriculumVideo) && (empty($curriculumItem->media_path) || empty(Storage::disk(getStorageDisk())->exists($curriculumItem->media_path))))
-                                    <div wire:loading.remove wire:target="curriculumVideo" class="form-group" id="video-upload-section"
-                                        wire:ignore.self>
-                                        <label for="at_upload_video{{ $activeCurriculumItem['id'] }}" class="am-uploadfile">
-                                            <svg class="am-border-svg">
-                                                <rect width="100%" height="100%"></rect>
-                                            </svg>
-                                            <input type="file" id="at_upload_video{{ $activeCurriculumItem['id'] }}"
-                                                wire:model="curriculumVideo"
-                                                accept="{{ !empty($allowVideoFileExt) ? join(',', array_map(function ($ex) {
-                                            return '.' . $ex; }, $allowVideoFileExt)) : '*' }}">
-                                            <span class="am-dropfileshadow"><span class="am-uploadiconanimation"><svg
-                                                        xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                                        fill="none">
-                                                        <path
-                                                            d="M18.5 10.98V12.98C18.5 15.1891 16.7091 16.98 14.5 16.98H8.5C6.29086 16.98 4.5 15.1891 4.5 12.98V10.98"
-                                                            stroke="#585858" stroke-width="1.5" stroke-miterlimit="10"
-                                                            stroke-linecap="round" />
-                                                        <path d="M8.76953 9.23999L11.4995 6.49999L14.2295 9.23999" stroke="#585858"
-                                                            stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round"
-                                                            stroke-linejoin="round" />
-                                                        <path d="M11.5 7.50998V12.98" stroke="#585858" stroke-width="1.5"
-                                                            stroke-miterlimit="10" stroke-linecap="round" />
-                                                    </svg></span>{{ __('courses::courses.drop_image_here_or') }}</span>
-                                            <em><i class="am-icon-export-03"></i></em>
-                                            <span>{{ __('courses::courses.drop_video_file_here_or') }}
-                                                <strong>{{ __('courses::courses.click_here') }} </strong>
-                                                @if (!empty($allowVideoFileExt))<span><em>{{ join(', ', array_map(function ($ex) {
-                                                    return ('.' . $ex); }, $allowVideoFileExt)) }}
-                                                (max. {{ $videoFileSize }} MB)</em></span>@endif</span>
-                                        </label>
-                                    </div>
-                                    <div wire:loading wire:target="curriculumVideo" class="am-uploadedfile am-noborder">
-                                        <figure></figure>
-                                    </div>
-                                @elseif(!empty($curriculumVideo) || (!empty($curriculumItem->media_path) && !empty(Storage::disk(getStorageDisk())->exists($curriculumItem->media_path))))
-                                    <div class="am-uploadedfile">
-                                        <figure>
-                                            <div class="cr-expert-video cr-custom-video"><video class="video-js d-none" data-setup='{}'
-                                                    onloadeddata="let player = videojs(this); player.removeClass('d-none'); @this.set('duration', Math.round(this.duration), false);"
-                                                    preload="auto" id="video-{{ $section->id . '_' . $curriculumItem->id }}" width="320"
-                                                    height="240" controls>
-                                                    <source
-                                                        src="{{ !empty($curriculumItem->media_path) ? Storage::url($curriculumItem->media_path) : $curriculumVideo->temporaryUrl() }}"
-                                                        wire:key="profile-video-src-{{ $curriculumItem->id . time() }}" type="video/mp4">
-                                                </video></div>
-                                        </figure>
-                                    </div>
-                                @endif
+                                {{-- Video upload section (commented out as in original) --}}
                             @elseif($activeCurriculumItem['type'] === 'yt_link')
                                 <div id="yt_link-input-section" class="form-group"
                                     x-data="{ onYouTubeIframeAPIReady(videoId){ console.log('videoId: ' + videoId); const ytPlayer = new YT.Player(`yt-video-${videoId}`, { events: { onReady: function (event) { const ytVideoDuration = event.target.getDuration(); console.log('evt', ytVideoDuration, event); @this.set('duration', Math.round(ytVideoDuration), false); }, }, }); }}">
@@ -231,58 +188,98 @@
                                     @endif
                                 </div>
                             @endif
+                        @elseif($activeCurriculumItem['type'] === 'pdf')
+                        @if(empty($curriculumPdf) && (empty($curriculumItem->media_path) || !Storage::disk(getStorageDisk())->exists($curriculumItem->media_path)))
+                        <div wire:loading.remove wire:target="curriculumPdf" class="form-group" id="pdf-upload-section" wire:ignore.self>
+                            <label for="at_upload_pdf{{ $activeCurriculumItem['id'] }}" class="am-uploadfile">
+                                <svg class="am-border-svg"><rect width="100%" height="100%"></rect></svg>
+                                <input type="file" id="at_upload_pdf{{ $activeCurriculumItem['id'] }}"
+                                    wire:model="curriculumPdf"
+                                    accept="{{ !empty($allowPdfFileExt) ? join(',', array_map(fn($ex) => '.' . $ex, $allowPdfFileExt)) : '.pdf' }}">
+                                <span class="am-dropfileshadow">
+                                    <span class="am-uploadiconanimation">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none">
+                                            <path d="M18.5 10.98V12.98C18.5 15.1891 16.7091 16.98 14.5 16.98H8.5C6.29086 16.98 4.5 15.1891 4.5 12.98V10.98" stroke="#585858" stroke-width="1.5" stroke-linecap="round"/>
+                                            <path d="M8.76953 9.23999L11.4995 6.49999L14.2295 9.23999" stroke="#585858" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                            <path d="M11.5 7.50998V12.98" stroke="#585858" stroke-width="1.5" stroke-linecap="round"/>
+                                        </svg>
+                                    </span>
+                                    {{ __('general.drop_pdf_here_or') }}
+                                </span>
+                                <em><i class="am-icon-export-03"></i></em>
+                                <span>
+                                    {{ __('general.drop_pdf_file_here_or') }}
+                                    <strong>{{ __('general.click_here') }}</strong>
+                                    @if (!empty($allowPdfFileExt))
+                                        <span><em>{{ join(', ', array_map(fn($ex) => '.' . $ex, $allowPdfFileExt)) }} (max. {{ $pdfFileSize ?? 10 }} MB)</em></span>
+                                    @else
+                                        <span><em>.pdf (max. {{ $pdfFileSize ?? 10 }} MB)</em></span>
+                                    @endif
+                                </span>
+                            </label>
+                        </div>
 
-@elseif($activeCurriculumItem['type'] === 'pdf')
-    @if(empty($curriculumPdf) && (empty($curriculumItem->media_path) || !Storage::disk(getStorageDisk())->exists($curriculumItem->media_path)))
-        <div wire:loading.remove wire:target="curriculumPdf" class="form-group" id="pdf-upload-section" wire:ignore.self>
-            <label for="at_upload_pdf{{ $activeCurriculumItem['id'] }}" class="am-uploadfile">
-                <svg class="am-border-svg">
-                    <rect width="100%" height="100%"></rect>
-                </svg>
-                <input type="file" id="at_upload_pdf{{ $activeCurriculumItem['id'] }}"
-                    wire:model="curriculumPdf"
-                    accept="{{ !empty($allowPdfFileExt) ? join(',', array_map(function ($ex) {
-                        return '.' . $ex; }, $allowPdfFileExt)) : '.pdf' }}">
-                <span class="am-dropfileshadow"><span class="am-uploadiconanimation"><svg
-                            xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                            <path
-                                d="M18.5 10.98V12.98C18.5 15.1891 16.7091 16.98 14.5 16.98H8.5C6.29086 16.98 4.5 15.1891 4.5 12.98V10.98"
-                                stroke="#585858" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" />
-                            <path d="M8.76953 9.23999L11.4995 6.49999L14.2295 9.23999" stroke="#585858"
-                                stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
-                            <path d="M11.5 7.50998V12.98" stroke="#585858" stroke-width="1.5"
-                                stroke-miterlimit="10" stroke-linecap="round" />
-                        </svg></span>{{ __('courses::courses.drop_pdf_here_or') }}</span>
-                <em><i class="am-icon-export-03"></i></em>
-                <span>{{ __('courses::courses.drop_pdf_file_here_or') }}
-                    <strong>{{ __('courses::courses.click_here') }} </strong>
-                    @if (!empty($allowPdfFileExt))<span><em>{{ join(', ', array_map(function ($ex) {
-                        return ('.' . $ex); }, $allowPdfFileExt)) }}
-                    (max. {{ $pdfFileSize ?? 10 }} MB)</em></span>@else<span><em>.pdf (max.
-                            {{ $pdfFileSize ?? 10 }} MB)</em></span>@endif</span>
-            </label>
-        </div>
-        <div wire:loading wire:target="curriculumPdf" class="am-uploadedfile am-noborder">
-            <figure></figure>
-        </div>
+                            <div wire:loading wire:target="curriculumPdf" class="am-uploadedfile am-noborder">
+                                <figure></figure>
+                            </div>
+
     @elseif(!empty($curriculumItem->media_path) && Storage::disk(getStorageDisk())->exists($curriculumItem->media_path))
+        <div class="am-uploadedfile">
+            <figure class="p-3 border rounded bg-light text-center">
+                <iframe 
+                    src="{{ Storage::disk(getStorageDisk())->url($curriculumItem->media_path) }}#toolbar=0"
+                    class="border rounded shadow-sm"
+                    style="width:100%; height:150px; background-color:#fff; border:1px solid #ddd;"
+                    allowfullscreen>
+                </iframe>
+            </figure>
+        </div>
+
+
+    @elseif(!empty($curriculumPdf))
         <div class="am-uploadedfile">
             <figure>
                 <div class="cr-expert-pdf cr-custom-pdf">
-                    <embed src="{{ Storage::disk(getStorageDisk())->url($curriculumItem->media_path) }}"
-                        type="application/pdf" width="320" height="240"
-                        wire:key="profile-pdf-src-{{ $curriculumItem->id . time() }}" />
+                    <span>{{ __('general.pdf_uploaded_waiting_save') }}</span>
+                    <span>{{ $curriculumPdf->getClientOriginalName() }}</span>
                 </div>
             </figure>
         </div>
-    @elseif(!empty($curriculumPdf))
-        <div class="am-uploadedfile am-noborder">
-            <figure>
-                <span>{{ __('courses::courses.pdf_uploaded_waiting_save') }}</span>
-                <span>{{ $curriculumPdf->getClientOriginalName() }}</span>
-            </figure>
+    @endif
+        @if(!empty($curriculumPdf) || (!empty($curriculumItem->media_path) && Storage::disk(getStorageDisk())->exists($curriculumItem->media_path)))
+        <div class="form-group mt-3 mb-0 text-start">
+            <label for="content_length_{{ $curriculumItem->id }}" class="form-label fw-bold">
+                {{ __('general.content_length') }}
+            </label>
+            <input 
+                type="text" 
+                id="content_length_{{ $curriculumItem->id }}" 
+                wire:model.defer="content_length"
+                class="form-control"
+                placeholder="{{ __('general.enter_content_length_in_minutes') }}">
         </div>
     @endif
+                        @elseif($activeCurriculumItem['type'] === 'url')
+                            <div id="url-input-section" class="form-group">
+                                <input type="text" class="form-control @error('url') is-invalid @enderror"
+                                    placeholder="{{ __('general.enter_url') }}"
+                                    wire:model.live.debounce.500ms="url">
+                                @error('url') <span class="text-danger">{{ $message }}</span> @enderror
+                            </div>
+
+                            <div id="content-length-section" class="form-group mt-3">
+                                <label for="content_length">{{ __('general.content_length') }}</label>
+                                <input 
+                                    type="text" 
+                                    id="content_length"
+                                    class="form-control @error('content_length') is-invalid @enderror"
+                                    placeholder="{{ __('general.enter_content_length_in_minutes') }}"
+                                    wire:model.defer="content_length">
+                                @error('content_length') 
+                                    <span class="text-danger">{{ $message }}</span> 
+                                @enderror
+                            </div>
+
                         @endif
                         <div class="cr-btns">
                             <div class="cr-preview">
@@ -290,9 +287,14 @@
                                 <input type="checkbox" id="preview" class="cr-toggle"
                                     wire:model="activeCurriculumItem.is_preview">
                             </div>
-                            @if(in_array($activeCurriculumItem['type'], ['audio', 'live', 'article', 'pdf']) || ($activeCurriculumItem['type'] === 'video' && !empty($curriculumVideo)) || ($activeCurriculumItem['type'] === 'yt_link' && !empty($yt_link)) || ($activeCurriculumItem['type'] === 'vm_link' && !empty($vm_link)))
-                                <button wire:click="updateActiveCurriculumItem" class="am-white-btn" wire:loading.attr="disabled"
-                                    wire:target="updateActiveCurriculumItem" wire:loading.class="am-btn_disable">
+                            @if(in_array($activeCurriculumItem['type'], ['audio', 'live', 'article', 'pdf', 'url']) || 
+                               ($activeCurriculumItem['type'] === 'video' && !empty($curriculumVideo)) || 
+                               ($activeCurriculumItem['type'] === 'yt_link' && !empty($yt_link)) || 
+                               ($activeCurriculumItem['type'] === 'vm_link' && !empty($vm_link)))
+                                <button wire:click="updateActiveCurriculumItem" class="am-white-btn" 
+                                        wire:loading.attr="disabled"
+                                        wire:target="updateActiveCurriculumItem" 
+                                        wire:loading.class="am-btn_disable">
                                     {{ __('courses::courses.skip') }}
                                 </button>
                                 <button wire:click="updateCurriculumContent" type="button" class="am-btn">
@@ -302,10 +304,17 @@
                                         wire:target="updateCurriculumContent">{{ __('courses::courses.saving') }}</span>
                                 </button>
                             @endif
-                            @if(($activeCurriculumItem['type'] === 'video' && !empty($curriculumVideo)) || ($activeCurriculumItem['type'] === 'yt_link' && !empty($yt_link)) || ($activeCurriculumItem['type'] === 'vm_link' && !empty($vm_link)) || ($activeCurriculumItem['type'] === 'pdf' && !empty($curriculumPdf)))
-                                <button wire:click="removeCurriculumContent" wire:loading.attr="disabled"
-                                    wire:target="removeCurriculumContent" wire:loading.class="am-btn_disable" type="click"
-                                    class="am-btn am-remove-curriculum">
+                            @if(($activeCurriculumItem['type'] === 'video' && !empty($curriculumVideo)) || 
+                               ($activeCurriculumItem['type'] === 'yt_link' && !empty($yt_link)) || 
+                               ($activeCurriculumItem['type'] === 'vm_link' && !empty($vm_link)) || 
+                               ($activeCurriculumItem['type'] === 'pdf' && !empty($curriculumPdf)) || 
+                               ($activeCurriculumItem['type'] === 'url' && !empty($url)))
+                                <button wire:click="removeCurriculumContent" 
+                                        wire:loading.attr="disabled"
+                                        wire:target="removeCurriculumContent" 
+                                        wire:loading.class="am-btn_disable" 
+                                        type="button"
+                                        class="am-btn am-remove-curriculum">
                                     <span wire:loading.remove
                                         wire:target="removeCurriculumContent">{{ __('courses::courses.remove') }}</span>
                                     <span wire:loading
@@ -329,7 +338,6 @@
                 @enderror
             </div>
             <div class="form-group @error('description') cr-invalid @enderror">
-                <label class="am-important" for="description">{{ __('courses::courses.description') }}</label>
                 <div class="am-editor-wrapper">
                     <div wire:ignore class="am-custom-editor am-custom-textarea">
                         <textarea class="form-control cr-summernote"
@@ -360,7 +368,6 @@
             <i class="am-icon-plus-02" wire:loading.remove wire:target="updateCurriculumState(true)"></i>
         </button>
     @endif
-    <!-- edit modal start -->
     <div wire:ignore.self class="modal fade cr-course-modal" id="edit-curriculum-{{ $section->id }}" tabindex="-1"
         aria-labelledby="edit-curriculumLabel-{{ $section->id }}" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">

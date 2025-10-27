@@ -219,46 +219,45 @@
                             </label>
                         </div>
 
-                            <div wire:loading wire:target="curriculumPdf" class="am-uploadedfile am-noborder">
-                                <figure></figure>
+                        <div wire:loading wire:target="curriculumPdf" class="am-uploadedfile am-noborder">
+                            <figure></figure>
+                        </div>
+                        @elseif(!empty($curriculumItem->media_path) && Storage::disk(getStorageDisk())->exists($curriculumItem->media_path))
+                            <div class="am-uploadedfile">
+                                <figure class="p-3 border rounded bg-light text-center">
+                                    <iframe 
+                                        src="{{ Storage::disk(getStorageDisk())->url($curriculumItem->media_path) }}#toolbar=0"
+                                        class="border rounded shadow-sm"
+                                        style="width:100%; height:150px; background-color:#fff; border:1px solid #ddd;"
+                                        allowfullscreen>
+                                    </iframe>
+                                </figure>
                             </div>
 
-    @elseif(!empty($curriculumItem->media_path) && Storage::disk(getStorageDisk())->exists($curriculumItem->media_path))
-        <div class="am-uploadedfile">
-            <figure class="p-3 border rounded bg-light text-center">
-                <iframe 
-                    src="{{ Storage::disk(getStorageDisk())->url($curriculumItem->media_path) }}#toolbar=0"
-                    class="border rounded shadow-sm"
-                    style="width:100%; height:150px; background-color:#fff; border:1px solid #ddd;"
-                    allowfullscreen>
-                </iframe>
-            </figure>
-        </div>
 
-
-    @elseif(!empty($curriculumPdf))
-        <div class="am-uploadedfile">
-            <figure>
-                <div class="cr-expert-pdf cr-custom-pdf">
-                    <span>{{ __('general.pdf_uploaded_waiting_save') }}</span>
-                    <span>{{ $curriculumPdf->getClientOriginalName() }}</span>
-                </div>
-            </figure>
-        </div>
-    @endif
-        @if(!empty($curriculumPdf) || (!empty($curriculumItem->media_path) && Storage::disk(getStorageDisk())->exists($curriculumItem->media_path)))
-        <div class="form-group mt-3 mb-0 text-start">
-            <label for="content_length_{{ $curriculumItem->id }}" class="form-label fw-bold">
-                {{ __('general.content_length') }}
-            </label>
-            <input 
-                type="text" 
-                id="content_length_{{ $curriculumItem->id }}" 
-                wire:model.defer="content_length"
-                class="form-control"
-                placeholder="{{ __('general.enter_content_length_in_minutes') }}">
-        </div>
-    @endif
+                        @elseif(!empty($curriculumPdf))
+                            <div class="am-uploadedfile">
+                                <figure>
+                                    <div class="cr-expert-pdf cr-custom-pdf">
+                                        <span>{{ __('general.pdf_uploaded_waiting_save') }}</span>
+                                        <span>{{ $curriculumPdf->getClientOriginalName() }}</span>
+                                    </div>
+                                </figure>
+                            </div>
+                        @endif
+                            @if(!empty($curriculumPdf) || (!empty($curriculumItem->media_path) && Storage::disk(getStorageDisk())->exists($curriculumItem->media_path)))
+                            <div class="form-group mt-3 mb-0 text-start">
+                                <label for="content_length_{{ $curriculumItem->id }}" class="form-label fw-bold">
+                                    {{ __('general.content_length') }}
+                                </label>
+                                <input 
+                                    type="text" 
+                                    id="content_length_{{ $curriculumItem->id }}" 
+                                    wire:model.defer="content_length"
+                                    class="form-control"
+                                    placeholder="{{ __('general.enter_content_length_in_minutes') }}">
+                            </div>
+                        @endif
                         @elseif($activeCurriculumItem['type'] === 'url')
                             <div id="url-input-section" class="form-group">
                                 <input type="text" class="form-control @error('url') is-invalid @enderror"
