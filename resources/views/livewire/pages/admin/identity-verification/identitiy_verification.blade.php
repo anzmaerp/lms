@@ -120,7 +120,7 @@
                                                             </li>
                                                         @endif
                                                         <li @click="$wire.dispatch('showConfirm', { id : {{ $single->user_id }}, type : 'rejected' , action : 'verified-template' })">
-                                                            <span>{{ __('identity.reject' )}}</span>
+                                                            <span>{{ __('general.reject' )}}</span>
                                                         </li>
                                                     </ul>   
                                                 </div>
