@@ -397,19 +397,32 @@
                         $embedUrl = $url;
                         $isYouTube = false;
                         $videoId = '';
+
                         if (preg_match('/\.pdf$/i', $url)) {
                             $embedUrl = 'https://docs.google.com/gview?embedded=true&url=' . urlencode($url);
-                        }
+                        } 
                         elseif (preg_match('/(youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/shorts\/)([a-zA-Z0-9_-]+)/', $url, $matches)) {
                             $videoId = $matches[2];
                             $embedUrl = 'https://www.youtube.com/embed/' . $videoId;
                             $isYouTube = true;
-                        }
+                        } 
                         elseif (preg_match('/vimeo\.com\/(\d+)/', $url, $matches)) {
                             $videoId = $matches[1];
                             $embedUrl = 'https://player.vimeo.com/video/' . $videoId;
+                        } 
+                        elseif (preg_match('/drive\.google\.com/', $url)) {
+                            if (preg_match('/\/file\/d\/([a-zA-Z0-9_-]+)/', $url, $matches)) {
+                                $fileId = $matches[1];
+                                $embedUrl = "https://drive.google.com/file/d/{$fileId}/preview";
+                            } else {
+                                $embedUrl = $url;
+                            }
+                            if (preg_match('/\.(mp4|mp3|avi|mov|mkv)$/i', $url)) {
+                                $activeCurriculum['is_embeddable'] = false;
+                            }
                         }
                     @endphp
+
                 <div
                     id="url-{{ $activeCurriculum['id'] ?? 0 }}"
                     class="cr-coursedetails_url"
