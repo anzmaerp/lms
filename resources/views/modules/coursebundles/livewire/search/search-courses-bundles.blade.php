@@ -83,21 +83,27 @@
                                     @endif
                                 </figure>
                                 <div class="cr-bundles_item_content">
-                                    <div class="cr-bundles_user">
-                                        <figure>
-                                            @if (!empty($bundle?->instructor?->profile?->image) && Storage::disk(getStorageDisk())->exists($bundle?->instructor?->profile?->image))
-                                                <img src="{{ resizedImage($bundle?->instructor?->profile?->image,50,50) }}" alt="{{$bundle?->instructor?->profile?->image}}" />
-                                            @else
-                                                <img src="{{ setting('_general.default_avatar_for_user') ? url(Storage::url(setting('_general.default_avatar_for_user')[0]['path'])) : resizedImage('placeholder.png', 50, 50) }}" alt="{{ $bundle?->instructor?->profile?->image }}" />
-                                            @endif
-                                        </figure>
-                                        <span>{{ $bundle?->instructor?->profile?->short_name }}</span>
-                                        <span>
-                                            <i class="am-icon-book-1"></i>
-                                            <em>{{ $bundle?->courses_count }}</em>
-                                            {{ $bundle?->courses_count == 1 ? __('coursebundles::bundles.Course') : __('coursebundles::bundles.Courses') }}
-                                        </span>
-                                    </div>
+                                    @php
+                                        $instructor = $bundle->instructors->first();
+                                    @endphp
+
+                                    @if ($instructor)
+                                        <div class="cr-bundles_user">
+                                            <figure>
+                                                @if (!empty($instructor?->profile?->image) && Storage::disk(getStorageDisk())->exists($instructor?->profile?->image))
+                                                    <img src="{{ resizedImage($instructor?->profile?->image,50,50) }}" alt="{{ $instructor?->profile?->image }}" />
+                                                @else
+                                                    <img src="{{ setting('_general.default_avatar_for_user') ? url(Storage::url(setting('_general.default_avatar_for_user')[0]['path'])) : resizedImage('placeholder.png', 50, 50) }}" alt="{{ $instructor?->profile?->image }}" />
+                                                @endif
+                                            </figure>
+                                            <span>{{ $instructor?->profile?->short_name }}</span>
+                                            <span>
+                                                <i class="am-icon-book-1"></i>
+                                                <em>{{ $bundle?->courses_count }}</em>
+                                                {{ $bundle?->courses_count == 1 ? __('coursebundles::bundles.Course') : __('coursebundles::bundles.Courses') }}
+                                            </span>
+                                        </div>
+                                    @endif
                                     @if(!empty($bundle?->title))
                                         <div class="cr-bundles_coursetitle">
                                             <a href="{{ route('coursebundles.bundle-details', ['slug' => $bundle?->slug]) }}">

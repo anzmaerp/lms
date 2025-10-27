@@ -206,7 +206,6 @@ class BundleService
             ->when(!empty($filters['max_price']), fn($query) => $query->where('final_price', '<=', $filters['max_price']))
             ->with($with);
 
-        // Custom withCount for courses, scoped by instructor if applicable
         if (in_array('courses', $withCount)) {
             $query->withCount([
                 'courses' => function ($q) use ($instructorId) {
@@ -222,14 +221,12 @@ class BundleService
             ]);
         }
 
-        // Handle other withCount relations
         foreach ($withCount as $relation) {
             if ($relation !== 'courses') {
                 $query->withCount([$relation]);
             }
         }
 
-        // Custom withSum for courses, scoped by instructor if applicable
         if (!empty($withSum) && isset($withSum['courses'])) {
             $query->withSum([
                 'courses' => function ($q) use ($instructorId) {
@@ -245,7 +242,6 @@ class BundleService
             ], $withSum['courses']);
         }
 
-        // Handle other withSum relations
         foreach ($withSum as $relation => $column) {
             if ($relation !== 'courses') {
                 $query->withSum($relation, $column);
