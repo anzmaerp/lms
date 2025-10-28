@@ -10,7 +10,6 @@ use App\Models\UserSubjectGroupSubject;
 use App\Models\UserSubjectSlot;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\On;
 use Livewire\Component;
@@ -33,22 +32,20 @@ class QuizAttempt extends Component
     public $questions;
     public $questionIndex = 0;
     public $blanks = [];
-
     public $questionNumber = 1;
-
     // Timer
-    public $duration        = 0;
-    public $elapsedTime     = 0;
-    public $remainingTime   = 0;
+    public $duration = 0;
+    public $elapsedTime = 0;
+    public $remainingTime = 0;
     public $animateClass = 'am-animate-fadeinup';
     protected QuizService $quizService;
     protected QuestionService $questionService;
 
     public function boot(QuizService $quizService, QuestionService $questionService)
     {
-        $this->quizService      = $quizService;
-        $this->questionService  = $questionService;
-        $this->user             = Auth::user();
+        $this->quizService = $quizService;
+        $this->questionService = $questionService;
+        $this->user = Auth::user();
     }
 
     /**
@@ -91,9 +88,10 @@ class QuizAttempt extends Component
         }
 
         if (empty($this->quizAttempt->active_question_id)) {
+            $firstQuestionId = $this->quizAttempt->quiz->questions->first()->id ?? null;
             $this->quizService->updateActiveQuestion(
                 quizAttempt: $this->quizAttempt,
-                activeQuestionId: $this->quizAttempt->quiz->questions->first()->id,
+                activeQuestionId: $firstQuestionId,
                 started_at: now()
             );
         }
@@ -104,9 +102,6 @@ class QuizAttempt extends Component
 
         $this->questions = $this->quizAttempt->quiz?->questions;
 
-
-
-        // Get active question from quiz attempt
         if ($this->quizAttempt && $this->quizAttempt->active_question_id) {
             $this->questionIndex = $this->questions->search(function ($question) {
                 return $question->id == $this->quizAttempt->active_question_id;
@@ -128,12 +123,11 @@ class QuizAttempt extends Component
     #[Layout('quiz::layouts.quiz')]
     public function render()
     {
-
         $this->elapsedTime = now()->timestamp - $this->quizAttempt?->started_at?->timestamp ?? 0;
         $this->remainingTime = $this->duration - $this->elapsedTime;
+
         return view('quiz::livewire.student.quiz-attempt.quiz-attempt', []);
     }
-
 
     public function submitQuestion()
     {
@@ -151,7 +145,7 @@ class QuizAttempt extends Component
             $this->submitMultipOptionQustion();
         }
 
-        //is descriptive question
+        // is descriptive question
         if ($this->question->isDescriptive()) {
             if ($this->question->isDescriptive() && !empty($this->question->settings['answer_required']) && empty($this->answer)) {
                 return $this->dispatch(
@@ -165,7 +159,7 @@ class QuizAttempt extends Component
             $this->submitDescriptiveQustion();
         }
 
-        //is fill in blanks question
+        // is fill in blanks question
         if ($this->question->isFillInBlanks()) {
             if ($this->question->isFillInBlanks() && !empty($this->question->settings['answer_required']) && empty($this->blanks)) {
                 return $this->dispatch('showAlertMessage', type: 'error', title: __('quiz::quiz.answer_required'), message: __('quiz::quiz.answer_required_text'));
@@ -174,22 +168,21 @@ class QuizAttempt extends Component
             $this->submitFillInBlanksQustion();
         }
 
-
         $this->answer = null;
         $this->blanks = [];
+
         if ($this->question->is($this->questions->last())) {
             return $this->finishQuiz();
         }
 
-
-        $this->questionIndex    = $this->questionIndex + 1;
-        $this->questionNumber   = $this->questionNumber + 1;
+        $this->questionIndex = $this->questionIndex + 1;
+        $this->questionNumber = $this->questionNumber + 1;
 
         $this->question = $this->questions[$this->questionIndex];
 
         // Update active question in database
         if ($this->quizAttempt) {
-            $this->quizAttempt->update([
+            $updateResult = $this->quizAttempt->update([
                 'active_question_id' => $this->question->id
             ]);
         }
@@ -200,45 +193,44 @@ class QuizAttempt extends Component
         $isCorrect = $this->answer == $this->question->options?->where('is_correct', '1')->first()?->id;
 
         $questionAttemptData = [
-            'quiz_attempt_id'       => $this->quizAttempt->id,
-            'question_id'           => $this->question->id,
-            'question_option_id'    => $this->answer,
-            'answer'                => null,
-            'is_correct'            => $isCorrect,
-            'marks_awarded'         => $isCorrect ? $this->question->points : 0
+            'quiz_attempt_id' => $this->quizAttempt->id,
+            'question_id' => $this->question->id,
+            'question_option_id' => $this->answer,
+            'answer' => null,
+            'is_correct' => $isCorrect,
+            'marks_awarded' => $isCorrect ? $this->question->points : 0
         ];
 
-        $this->questionService->createQuestionAttempt($questionAttemptData);
+        $result = $this->questionService->createQuestionAttempt($questionAttemptData);
     }
 
     private function submitDescriptiveQustion()
     {
-
         $questionAttemptData = [
-            'quiz_attempt_id'       => $this->quizAttempt->id,
-            'question_id'           => $this->question->id,
-            'answer'                => $this->answer,
+            'quiz_attempt_id' => $this->quizAttempt->id,
+            'question_id' => $this->question->id,
+            'answer' => $this->answer,
         ];
 
-        $this->questionService->createQuestionAttempt($questionAttemptData);
+        $result = $this->questionService->createQuestionAttempt($questionAttemptData);
     }
 
     private function submitFillInBlanksQustion()
     {
-        $answer     = array_map('trim', array_map('strtolower', $this->blanks));
-        $options    = array_map('trim', array_map('strtolower', $this->question->options->pluck('option_text')->toArray()));
+        $answer = array_map('trim', array_map('strtolower', $this->blanks));
+        $options = array_map('trim', array_map('strtolower', $this->question->options->pluck('option_text')->toArray()));
 
-        $isCorrect  = $answer == $options;
+        $isCorrect = $answer == $options;
 
         $questionAttemptData = [
-            'quiz_attempt_id'       => $this->quizAttempt->id,
-            'question_id'           => $this->question->id,
-            'is_correct'            => $isCorrect,
-            'answer'                => implode('|', $this->blanks),
-            'marks_awarded'         => $isCorrect ? $this->question->points : 0
+            'quiz_attempt_id' => $this->quizAttempt->id,
+            'question_id' => $this->question->id,
+            'is_correct' => $isCorrect,
+            'answer' => implode('|', $this->blanks),
+            'marks_awarded' => $isCorrect ? $this->question->points : 0
         ];
 
-        $this->questionService->createQuestionAttempt($questionAttemptData);
+        $result = $this->questionService->createQuestionAttempt($questionAttemptData);
     }
 
     private function finishQuiz()
@@ -257,10 +249,10 @@ class QuizAttempt extends Component
         );
 
         if (!empty($generateResult)) {
-            $passingGrade           = $this->quizAttempt?->quiz->settings?->where('meta_key', 'passing_grade')->first()?->meta_value ?? 0;
-            $correctAnswers         = $quizAttempt->attemptedQuestions->where('is_correct', true)->count();
-            $inCorrectAnswers       = $quizAttempt->attemptedQuestions->where('is_correct', false)->count();
-            $earnedMarks            = $quizAttempt->attemptedQuestions->sum('marks_awarded');
+            $passingGrade = $this->quizAttempt?->quiz->settings?->where('meta_key', 'passing_grade')->first()?->meta_value ?? 0;
+            $correctAnswers = $quizAttempt->attemptedQuestions->where('is_correct', true)->count();
+            $inCorrectAnswers = $quizAttempt->attemptedQuestions->where('is_correct', false)->count();
+            $earnedMarks = $quizAttempt->attemptedQuestions->sum('marks_awarded');
         }
 
         try {
@@ -268,34 +260,30 @@ class QuizAttempt extends Component
 
             if (!empty($generateResult)) {
                 $quizAttemptData = [
-                    'correct_answers'           => $correctAnswers,
-                    'incorrect_answers'         => $inCorrectAnswers,
-                    'earned_marks'              => $earnedMarks,
-                    'completed_at'              => now(),
+                    'correct_answers' => $correctAnswers,
+                    'incorrect_answers' => $inCorrectAnswers,
+                    'earned_marks' => $earnedMarks,
+                    'completed_at' => now(),
                 ];
                 $quizAttempt->update($quizAttemptData);
+
                 $percentageMarks = $earnedMarks / $this->quizAttempt->total_marks * 100;
                 $percentageMarks = round($percentageMarks, 2);
-
-                $quizAttempt->result  = $percentageMarks >= $passingGrade ? 'pass' : 'fail';
-
+                $quizAttempt->result = $percentageMarks >= $passingGrade ? 'pass' : 'fail';
                 $quizAttempt->save();
 
-
-
-
                 $emailData = [
-                    'quizTitle'       => $quizAttempt?->quiz?->title,
-                    'studentName'     => $student?->profile?->full_name,
-                    'tutorName'       => $quizAttempt?->quiz?->tutor?->profile?->full_name,
-                    'quizUrl'         => route('quiz.quiz-result', ['attemptId' => $quizAttempt->id])
+                    'quizTitle' => $quizAttempt?->quiz?->title,
+                    'studentName' => $student?->profile?->full_name,
+                    'tutorName' => $quizAttempt?->quiz?->tutor?->profile?->full_name,
+                    'quizUrl' => route('quiz.quiz-result', ['attemptId' => $quizAttempt->id])
                 ];
 
                 $notifyData = [
-                    'quizTitle'       => $quizAttempt?->quiz?->title,
-                    'studentName'     => $student?->profile?->full_name,
-                    'tutorName'       => $quizAttempt?->quiz?->tutor?->profile?->full_name,
-                    'quizResultUrl'   => route('quiz.quiz-result', ['attemptId' => $quizAttempt->id])
+                    'quizTitle' => $quizAttempt?->quiz?->title,
+                    'studentName' => $student?->profile?->full_name,
+                    'tutorName' => $quizAttempt?->quiz?->tutor?->profile?->full_name,
+                    'quizResultUrl' => route('quiz.quiz-result', ['attemptId' => $quizAttempt->id])
                 ];
 
                 dispatch(new SendNotificationJob('generateQuizResult', $student, $emailData));
@@ -306,22 +294,21 @@ class QuizAttempt extends Component
                 if (isActiveModule('Upcertify') && $quizAttempt->result == 'pass') {
                     $allQuizAttempts = ModelsQuizAttempt::where('student_id', auth()->user()?->id)
                         ->whereHas('quiz', function ($query) {
-                            $query->where('quizzable_id', $this->quizAttempt?->quiz?->quizzable_id)
+                            $query
+                                ->where('quizzable_id', $this->quizAttempt?->quiz?->quizzable_id)
                                 ->where('quizzable_type', $this->quizAttempt?->quiz?->quizzable_type);
                         })
                         ->where('result', '<>', ModelsQuizAttempt::PASS)
                         ->exists();
-                    if (isActiveModule('Courses') && $this->quizAttempt->quiz?->quizzable_type == \Modules\Courses\Models\Course::class) {
 
+                    if (isActiveModule('Courses') && $this->quizAttempt->quiz?->quizzable_type == Course::class) {
                         $this->course = $this->quizAttempt->quiz?->quizzable;
-
                         $metaData = $this->course->meta_data['assign_quiz_certificate'] ?? null;
 
                         if (!empty($metaData)) {
                             if ($metaData == 'any') {
                                 $this->generateCertificate();
                             }
-
                             if ($metaData == 'all') {
                                 if (!$allQuizAttempts) {
                                     $this->generateCertificate();
@@ -335,14 +322,14 @@ class QuizAttempt extends Component
                             foreach ($slots as $slot) {
                                 if (!empty($slot->metadata['template_id'])) {
                                     if ($slot->metadata['assign_quiz_certificate'] == 'any') {
-                                        $booking = $slot->bookings->whereStudentId(auth()?->user()?->id)->first();
+                                        $booking = $slot->bookings->whereStudentId(auth()->user()?->id)->first();
                                         if ($booking) {
                                             dispatch(new GenerateCertificateJob($booking));
                                         }
                                     }
                                     if ($slot->metadata['assign_quiz_certificate'] == 'all') {
                                         if (!$allQuizAttempts) {
-                                            $booking = $slot->bookings->whereStudentId(auth()?->user()?->id)->first();
+                                            $booking = $slot->bookings->whereStudentId(auth()->user()?->id)->first();
                                             if ($booking) {
                                                 dispatch(new GenerateCertificateJob($booking));
                                             }
@@ -354,25 +341,24 @@ class QuizAttempt extends Component
                     }
                 }
             } else {
-                $quizAttempt->completed_at  = now();
-                $quizAttempt->result        = ModelsQuizAttempt::RESULT_IN_REVIEW;
+                $quizAttempt->completed_at = now();
+                $quizAttempt->result = ModelsQuizAttempt::RESULT_IN_REVIEW;
+                $quizAttempt->save();
 
                 $emailData = [
-                    'quizTitle'       => $quizAttempt?->quiz?->title,
-                    'studentName'     => $student?->profile?->full_name,
-                    'tutorName'       => $quizAttempt?->quiz?->tutor?->profile?->full_name,
+                    'quizTitle' => $quizAttempt?->quiz?->title,
+                    'studentName' => $student?->profile?->full_name,
+                    'tutorName' => $quizAttempt?->quiz?->tutor?->profile?->full_name,
                 ];
 
                 $notifyData = [
-                    'quizTitle'       => $quizAttempt?->quiz?->title,
-                    'studentName'     => $student?->profile?->full_name,
-                    'tutorName'       => $quizAttempt?->quiz?->tutor?->profile?->full_name,
+                    'quizTitle' => $quizAttempt?->quiz?->title,
+                    'studentName' => $student?->profile?->full_name,
+                    'tutorName' => $quizAttempt?->quiz?->tutor?->profile?->full_name,
                 ];
 
                 dispatch(new SendNotificationJob('reviewedQuiz', $quizAttempt?->quiz?->tutor, $emailData));
                 dispatch(new SendDbNotificationJob('reviewedQuiz', $quizAttempt?->quiz?->tutor, $notifyData));
-
-                $quizAttempt->save();
 
                 DB::commit();
             }
@@ -381,7 +367,6 @@ class QuizAttempt extends Component
 
             return redirect()->route('quiz.quiz-result', ['attemptId' => $this->quizAttempt->id]);
         } catch (\Throwable $th) {
-            Log::error($th);
             $this->dispatch('showAlertMessage', type: 'error', title: __('quiz::quiz.quiz_finished'), message: __('general.error_msg'));
             DB::rollBack();
         }
@@ -395,29 +380,28 @@ class QuizAttempt extends Component
 
     public function generateCertificate()
     {
-
         $wildcard_data = [
-            'tutor_name'         => $this->course?->instructor?->profile?->full_name ?? '',
-            'student_name'       => auth()->user()->profile?->full_name ?? '',
-            'gender'             => !empty(auth()->user()->profile?->gender) ? ucfirst(auth()->user()->profile?->gender) : '',
-            'tutor_tagline'      => $this->course?->instructor?->profile?->tagline ?? '',
-            'issued_by'          => $this->course?->instructor?->profile?->full_name ?? '',
-            'platform_name'      => setting('_general.site_name'),
-            'platform_email'     => setting('_general.site_email'),
-            'course_title'       => $this->course?->title ?? '',
-            'course_subtitle'    => $this->course?->subtitle ?? '',
+            'tutor_name' => $this->course?->instructor?->profile?->full_name ?? '',
+            'student_name' => auth()->user()->profile?->full_name ?? '',
+            'gender' => !empty(auth()->user()->profile?->gender) ? ucfirst(auth()->user()->profile?->gender) : '',
+            'tutor_tagline' => $this->course?->instructor?->profile?->tagline ?? '',
+            'issued_by' => $this->course?->instructor?->profile?->full_name ?? '',
+            'platform_name' => setting('_general.site_name'),
+            'platform_email' => setting('_general.site_email'),
+            'course_title' => $this->course?->title ?? '',
+            'course_subtitle' => $this->course?->subtitle ?? '',
             'course_description' => $this->course?->description ?? '',
-            'course_category'    => $this->course?->category?->name ?? '',
+            'course_category' => $this->course?->category?->name ?? '',
             'course_subcategory' => $this->course?->subCategory?->name ?? '',
-            'course_type'        => $this->course?->type ?? '',
-            'course_level'       => $this->course?->level ?? '',
-            'course_language'    => $this->course?->language?->name ?? '',
-            'free_course'        => $this->course?->is_free ? 'Yes' : 'No',
-            'course_price'       => $this->course?->pricing?->price ? formatAmount($this->course?->pricing?->price) : '',
-            'course_discount'    => $this->course?->pricing?->discount ? formatAmount($this->course?->pricing?->discount) : '',
-            'issue_date'         => now()->format(setting('_general.date_format')),
-            'student_email'      => auth()->user()->email ?? '',
-            'tutor_email'        => $this->course?->instructor?->email ?? '',
+            'course_type' => $this->course?->type ?? '',
+            'course_level' => $this->course?->level ?? '',
+            'course_language' => $this->course?->language?->name ?? '',
+            'free_course' => $this->course?->is_free ? 'Yes' : 'No',
+            'course_price' => $this->course?->pricing?->price ? formatAmount($this->course?->pricing?->price) : '',
+            'course_discount' => $this->course?->pricing?->discount ? formatAmount($this->course?->pricing?->discount) : '',
+            'issue_date' => now()->format(setting('_general.date_format')),
+            'student_email' => auth()->user()->email ?? '',
+            'tutor_email' => $this->course?->instructor?->email ?? '',
         ];
 
         if (Certificate::where('template_id', $this->course?->certificate_id)->where('modelable_type', User::class)->where('modelable_id', auth()->user()->id)->exists()) {

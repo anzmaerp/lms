@@ -487,7 +487,7 @@
                                         <h5 class="card-title">{{ __('general.url_not_embeddable') }}</h5>
                                         <p class="card-text">{{ __('general.content_not_availble_open_in_tap') }}</p>
                                         <a href="{{ $url }}" target="_blank" class="btn btn-outline-primary am-btn">
-                                            {{ __('general.courses.open_url') }}
+                                            {{ __('general.open_url') }}
                                         </a>
                                     </div>
                                 </div>
