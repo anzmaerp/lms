@@ -338,7 +338,7 @@
                                         </svg> Completed
                                     </button>
                                 @else
-                                    <button type="button" class="am-btn" wire:click.prevent="markAsCompleted()">Mark as complete</button>
+                                    <button type="button" class="am-btn" wire:click.prevent="markAsCompleted()">{{ __('general.mark_as_complete') }}</button>
                                 @endif
                             </div>
                         </div>
@@ -381,7 +381,7 @@
                                             </svg> Completed
                                         </button>
                                     @else
-                                        <button type="button" class="am-btn" wire:click.prevent="markAsCompleted()">Mark as complete</button>
+                                        <button type="button" class="am-btn" wire:click.prevent="markAsCompleted()">{{ __('general.mark_as_complete') }}</button>
                                     @endif
                                 </div>
                             </div>
