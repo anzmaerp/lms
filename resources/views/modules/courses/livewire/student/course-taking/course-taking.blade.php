@@ -391,130 +391,65 @@
                             </div>
                         @endrole
                     </div>
-                @elseif($activeCurriculum['type'] == 'url')
-                    @php
-                        $url = $activeCurriculum['media_path'] ?? '';
-                        $embedUrl = $url;
-                        $isYouTube = false;
-                        $videoId = '';
+            @elseif($activeCurriculum['type'] == 'url')
+            @php
+                $url = $activeCurriculum['media_path'] ?? '';
+                $title = $activeCurriculum['title'] ?? 'Untitled Curriculum';
+                $duration = $activeCurriculum['content_length'] > 0 
+                    ? getCourseDuration($activeCurriculum['content_length']) 
+                    : __('general.duration_not_set');
+            @endphp
 
-                        if (preg_match('/\.pdf$/i', $url)) {
-                            $embedUrl = 'https://docs.google.com/gview?embedded=true&url=' . urlencode($url);
-                        } 
-                        elseif (preg_match('/(youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/shorts\/)([a-zA-Z0-9_-]+)/', $url, $matches)) {
-                            $videoId = $matches[2];
-                            $embedUrl = 'https://www.youtube.com/embed/' . $videoId;
-                            $isYouTube = true;
-                        } 
-                        elseif (preg_match('/vimeo\.com\/(\d+)/', $url, $matches)) {
-                            $videoId = $matches[1];
-                            $embedUrl = 'https://player.vimeo.com/video/' . $videoId;
-                        } 
-                        elseif (preg_match('/drive\.google\.com/', $url)) {
-                            if (preg_match('/\/file\/d\/([a-zA-Z0-9_-]+)/', $url, $matches)) {
-                                $fileId = $matches[1];
-                                $embedUrl = "https://drive.google.com/file/d/{$fileId}/preview";
-                            } else {
-                                $embedUrl = $url;
-                            }
-                            if (preg_match('/\.(mp4|mp3|avi|mov|mkv)$/i', $url)) {
-                                $activeCurriculum['is_embeddable'] = false;
-                            }
-                        }
-                    @endphp
-
-                <div
-                    id="url-{{ $activeCurriculum['id'] ?? 0 }}"
-                    class="cr-coursedetails_url"
-                    x-data="{ iframeFailed: {{ !($activeCurriculum['is_embeddable'] ?? true) ? 'true' : 'false' }}, iframeLoaded: false }"
-                    x-init="
-                        $nextTick(() => {
-                            if (!iframeFailed) {
-                                const iframe = document.getElementById('url-iframe-{{ $activeCurriculum['id'] ?? 0 }}');
-                                if (iframe) {
-                                    let timeout = setTimeout(() => {
-                                        if (!iframeLoaded) {
-                                            console.error('Iframe load timeout for URL: {{ $url }}');
-                                            iframeFailed = true;
-                                        }
-                                    }, 6000);
-                                    iframe.addEventListener('load', () => {
-                                        clearTimeout(timeout);
-                                        iframeLoaded = true;
-                                        console.log('Iframe loaded successfully for URL: {{ $url }}');
-                                    });
-                                    iframe.addEventListener('error', () => {
-                                        clearTimeout(timeout);
-                                        console.error('Iframe failed to load for URL: {{ $url }}');
-                                        iframeFailed = true;
-                                    });
-                                } else {
-                                    console.error('Iframe element not found for curriculum ID: {{ $activeCurriculum['id'] ?? 0 }}');
-                                    iframeFailed = true;
-                                }
-                            }
-                        });
-                    "
-                >
-                    <div class="cr-coursedetails_header">
-                        <h3 class="cr-coursedetails_title">{{ $activeCurriculum['title'] ?? 'Untitled Curriculum' }}</h3>
-                        <div class="cr-coursedetails_meta">
-                            <span class="cr-coursedetails_type">{{ ucfirst($activeCurriculum['type']) }}</span>
-                            @if($activeCurriculum['content_length'] > 0)
-                                <span class="cr-coursedetails_duration">{{ getCourseDuration($activeCurriculum['content_length']) }}</span>
-                            @else
-                                <span class="cr-coursedetails_duration">Duration not set</span>
-                            @endif
-                        </div>
-                    </div>
-                    <div class="cr-coursedetails_url_wrap">
-                        <template x-if="!iframeFailed">
-                            <div class="cr-url-embed">
-                                <iframe
-                                    id="url-iframe-{{ $activeCurriculum['id'] ?? 0 }}"
-                                    src="{{ $embedUrl }}"
-                                    width="100%"
-                                    height="600px"
-                                    frameborder="0"
-                                    allowfullscreen
-                                    sandbox="allow-scripts allow-same-origin allow-popups allow-forms allow-presentation"
-                                    referrerpolicy="no-referrer"
-                                ></iframe>
-                            </template>
-                            <template x-if="iframeFailed">
-                                <div class="cr-url-fallback card">
-                                    <div class="card-body">
-                                        <h5 class="card-title">{{ __('general.url_not_embeddable') }}</h5>
-                                        <p class="card-text">{{ __('general.content_not_availble_open_in_tap') }}</p>
-                                        <a href="{{ $url }}" target="_blank" class="btn btn-outline-primary am-btn">
-                                            {{ __('general.open_url') }}
-                                        </a>
-                                    </div>
-                                </div>
-                            </template>
-                        <div class="cr-coursedetails_url_actions">
-                            @role('student')
-                                @if(
-                                    isset($activeCurriculum['watchtime']['duration']) &&
-                                    isset($activeCurriculum['content_length']) &&
-                                    ($activeCurriculum['watchtime']['duration'] == $activeCurriculum['content_length'])
-                                )
-                                    @if(!empty($curriculumOrder[$activeCurriculum['id'] ?? 0]))
-                                        <a href="javascript:void(0);" class="am-btn" wire:click.prevent="nextCurriculum({{ $curriculumOrder[$activeCurriculum['id'] ?? 0] }})">Go to next item</a>
-                                    @endif
-                                    <button type="button" class="am-btnnext" x-data="{ show: false }" x-show="show">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="17" height="16" viewBox="0 0 17 16" fill="none">
-                                            <path d="M3.16699 8.66667L6.50033 12L13.8337 4" stroke="#34A853" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"/>
-                                        </svg> Completed
-                                    </button>
-                                @else
-                                    <button type="button" class="am-btn" wire:click.prevent="markAsCompleted()" x-on:click="console.log('Button clicked for curriculum ID: {{ $activeCurriculum['id'] ?? 0 }}')">Mark as complete</button>
-                                @endif
-                            @endrole
-                        </div>
+            <div id="url-{{ $activeCurriculum['id'] ?? 0 }}" class="cr-coursedetails_url">
+                <div class="cr-coursedetails_header">
+                    <h3 class="cr-coursedetails_title">{{ $title }}</h3>
+                    <div class="cr-coursedetails_meta">
+                        <span class="cr-coursedetails_type">{{ ucfirst($activeCurriculum['type']) }}</span>
+                        <span class="cr-coursedetails_duration">{{ $duration }}</span>
                     </div>
                 </div>
-                @endif
+
+                <div class="cr-url-fallback card mt-3">
+                    <div class="card-body text-center">
+                        <h5 class="card-title mb-2">{{ __('general.url_not_embeddable') }}</h5>
+                        <p class="card-text mb-3">{{ __('general.content_not_availble_open_in_tap') }}</p>
+                        <a href="{{ $url }}" target="_blank" rel="noopener noreferrer" class="btn btn-primary am-btn">
+                            {{ __('general.open_url') }}
+                        </a>
+                    </div>
+                </div>
+
+                <div class="cr-coursedetails_url_actions mt-4 text-center">
+                    @role('student')
+                        @if(
+                            isset($activeCurriculum['watchtime']['duration']) &&
+                            isset($activeCurriculum['content_length']) &&
+                            ($activeCurriculum['watchtime']['duration'] == $activeCurriculum['content_length'])
+                        )
+                            @if(!empty($curriculumOrder[$activeCurriculum['id'] ?? 0]))
+                                <a href="javascript:void(0);" 
+                                    class="am-btn" 
+                                    wire:click.prevent="nextCurriculum({{ $curriculumOrder[$activeCurriculum['id'] ?? 0] }})">
+                                    {{ __('general.go_to_next_item') }}
+                                </a>
+                            @endif
+                            <button type="button" class="am-btnnext" disabled>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="17" height="16" viewBox="0 0 17 16" fill="none">
+                                    <path d="M3.16699 8.66667L6.50033 12L13.8337 4" stroke="#34A853" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                                {{ __('general.completed') }}
+                            </button>
+                        @else
+                            <button type="button" class="am-btn" 
+                                wire:click.prevent="markAsCompleted()">
+                                {{ __('general.mark_as_complete') }}
+                            </button>
+                        @endif
+                    @endrole
+                </div>
+            </div>
+            @endif
+
             @else
                 <div wire:ignore class="cr-image-wrapper" x-data="{
                     isPlaying: false,
