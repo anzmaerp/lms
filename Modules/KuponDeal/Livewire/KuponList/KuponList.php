@@ -50,7 +50,7 @@ class KuponList extends Component
     public $instructorId = null;
     protected $couponService, $subjectService;
     public $selectAllInstructors = false;
-    public $selectAllCouponableIds = false; 
+    public $selectAllCouponableIds = false;
     public $isLocked = false;
 
     public function toggleSelectAllInstructors($value)
@@ -58,8 +58,8 @@ class KuponList extends Component
         $this->selectAllInstructors = $value;
 
         if ($value) {
-            $allInstructors = collect($this->instructors)->pluck('id')->toArray();
             $this->lines = [];
+            $allInstructors = collect($this->instructors)->pluck('id')->toArray();
 
             foreach ($allInstructors as $insId) {
                 $allItems = [];
@@ -139,6 +139,10 @@ class KuponList extends Component
     {
         if ($this->isAdmin && $index !== null) {
             $selected = $this->lines[$index]['couponable_id'] ?? [];
+            // Ensure $selected is an array
+            if (is_string($selected)) {
+                $selected = json_decode($selected, true) ?? [];
+            }
 
             if (empty($this->lines[$index]['couponable_ids'])) {
                 return;
@@ -272,7 +276,7 @@ class KuponList extends Component
         $this->subjectService = new SubjectService($user);
         $this->couponable_ids = $this->initOptions($value);
         $this->form['couponable_id'] = [];
-        $this->selectAllCouponableIds = false; 
+        $this->selectAllCouponableIds = false;
         $this->dispatch('couponableValuesUpdated', options: array_values($this->couponable_ids), reset: true);
     }
 
@@ -324,12 +328,16 @@ class KuponList extends Component
         }
         $this->form['expiry_date'] = !empty($this->form['expiry_date']) ? Carbon::parse($this->form['expiry_date'])->format('Y-m-d') : null;
 
+        // Ensure couponable_id is an array
+        $couponableIds = is_array($coupon->couponable_id)
+            ? $coupon->couponable_id
+            : (is_string($coupon->couponable_id) ? json_decode($coupon->couponable_id, true) ?? [] : []);
+
         // Handle admin-specific lines for instructors and couponable types
         if ($this->isAdmin) {
             $this->lines = [];
             $instructorId = $coupon->instructor_id;
             $couponableType = $coupon->couponable_type;
-            $couponableIds = is_array($coupon->couponable_id) ? $coupon->couponable_id : json_decode($coupon->couponable_id, true) ?? [];
 
             // Initialize options for the couponable type
             $options = $this->initOptions($couponableType, $instructorId);
@@ -341,9 +349,12 @@ class KuponList extends Component
             ];
             $this->selectAllInstructors = false;
             $this->isLocked = false;
-        } else {
+        } else
+
+ {
             $this->couponable_ids = $this->initOptions($coupon->couponable_type, Auth::id());
-            $this->selectAllCouponableIds = count($this->form['couponable_id']) === count($this->couponable_ids);
+            $this->form['couponable_id'] = $couponableIds;
+            $this->selectAllCouponableIds = count($couponableIds) === count($this->couponable_ids);
         }
 
         $this->dispatch(
@@ -351,7 +362,7 @@ class KuponList extends Component
             discount_type: $coupon->discount_type,
             discount_value: $coupon->discount_value,
             expiry_date: $coupon->expiry_date,
-            couponable_id: $coupon->couponable_id,
+            couponable_id: $couponableIds,
             couponable_type: $coupon->couponable_type,
             conditions: $coupon->conditions,
             color: $coupon->color,
@@ -445,7 +456,7 @@ class KuponList extends Component
             foreach ($this->lines as $line) {
                 $instructorId = $line['instructorId'] ?? null;
                 $type = $line['couponable_type'] ?? null;
-                $ids = $line['couponable_id'] ?? [];
+                $ids = is_array($line['couponable_id']) ? $line['couponable_id'] : (json_decode($line['couponable_id'], true) ?? []);
 
                 $targetInstructors = ($instructorId === 'alltutors')
                     ? User::whereHas('roles', fn($q) => $q->where('name', 'tutor'))->pluck('id')->toArray()
@@ -490,7 +501,7 @@ class KuponList extends Component
 
         $this->resetForm();
         $this->use_conditions = false;
-        $this->selectAllCouponableIds = false; 
+        $this->selectAllCouponableIds = false;
 
         $this->dispatch(
             'showAlertMessage',
@@ -506,7 +517,7 @@ class KuponList extends Component
     {
         $this->resetForm();
         $this->use_conditions = false;
-        $this->selectAllCouponableIds = false; 
+        $this->selectAllCouponableIds = false;
         $this->lines = [
             [
                 'instructorId' => null,
@@ -550,7 +561,7 @@ class KuponList extends Component
                 'couponable_id' => [],
             ]
         ];
-        $this->selectAllCouponableIds = false; 
+        $this->selectAllCouponableIds = false;
         $this->isLocked = false;
         $this->resetErrorBag();
     }
@@ -562,7 +573,7 @@ class KuponList extends Component
             $this->subjectService = new SubjectService($user);
             $this->couponable_ids = $this->initOptions($this->form['couponable_type']);
             $this->form['couponable_id'] = [];
-            $this->selectAllCouponableIds = false; 
+            $this->selectAllCouponableIds = false;
         }
     }
 
