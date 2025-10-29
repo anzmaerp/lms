@@ -330,12 +330,12 @@
                                     ($activeCurriculum['watchtime']['duration'] == $activeCurriculum['content_length'])
                                 )
                                     @if(!empty($curriculumOrder[$activeCurriculum['id'] ?? 0]))
-                                        <a href="javascript:void(0);" class="am-btn" wire:click.prevent="nextCurriculum({{ $curriculumOrder[$activeCurriculum['id'] ?? 0] }})">Go to next item</a>
+                                        <a href="javascript:void(0);" class="am-btn" wire:click.prevent="nextCurriculum({{ $curriculumOrder[$activeCurriculum['id'] ?? 0] }})">{{ __('general.go_to_next_item') }}</a>
                                     @endif
                                     <button type="button" class="am-btnnext">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="17" height="16" viewBox="0 0 17 16" fill="none">
                                             <path d="M3.16699 8.66667L6.50033 12L13.8337 4" stroke="#34A853" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"/>
-                                        </svg> Completed
+                                        </svg> {{ __('general.completed') }}
                                     </button>
                                 @else
                                     <button type="button" class="am-btn" wire:click.prevent="markAsCompleted()">{{ __('general.mark_as_complete') }}</button>
@@ -373,12 +373,12 @@
                                         ($activeCurriculum['watchtime']['duration'] == $activeCurriculum['content_length'])
                                     )
                                         @if(!empty($curriculumOrder[$activeCurriculum['id'] ?? 0]))
-                                            <a href="javascript:void(0);" class="am-btn" wire:click.prevent="nextCurriculum({{ $curriculumOrder[$activeCurriculum['id'] ?? 0] }})">Go to next item</a>
+                                            <a href="javascript:void(0);" class="am-btn" wire:click.prevent="nextCurriculum({{ $curriculumOrder[$activeCurriculum['id'] ?? 0] }})">{{ __('general.go_to_next_item') }}</a>
                                         @endif
                                         <button type="button" class="am-btnnext">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="17" height="16" viewBox="0 0 17 16" fill="none">
                                                 <path d="M3.16699 8.66667L6.50033 12L13.8337 4" stroke="#34A853" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"/>
-                                            </svg> Completed
+                                            </svg> {{ __('general.completed') }}
                                         </button>
                                     @else
                                         <button type="button" class="am-btn" wire:click.prevent="markAsCompleted()">{{ __('general.mark_as_complete') }}</button>
