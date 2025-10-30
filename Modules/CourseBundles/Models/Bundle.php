@@ -56,17 +56,17 @@ class Bundle extends Model
         );
     }
 
-    public function instructors(): BelongsToMany
+    public function instructor(): BelongsToMany
     {
         return $this
             ->belongsToMany(User::class, 'bundle_instructor', 'bundle_id', 'instructor_id')
             ->withTimestamps();
     }
 
-    public function instructor(): BelongsTo
-    {
-        return $this->belongsTo(User::class, 'instructor_id');
-    }
+    // public function instructor(): BelongsTo
+    // {
+    //     return $this->belongsTo(User::class, 'instructor_id');
+    // }
 
     public function thumbnail(): MorphOne
     {
