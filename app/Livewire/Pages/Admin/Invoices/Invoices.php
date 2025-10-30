@@ -75,55 +75,54 @@ class Invoices extends Component
         $this->dispatch('openInvoiceModal', id: 'invoicePreviewModal', action: 'show');
     }
 
-public function paymentStatus($id, $st)
-{
-    if (empty($id) || empty($st)) {
-        return;
-    }
+    public function paymentStatus($id, $st)
+    {
+        if (empty($id) || empty($st)) {
+            return;
+        }
 
-    $st = strtoupper(trim($st)); 
+        $st = strtoupper(trim($st));
 
-    DB::transaction(function () use ($id, $st) {
-        $isPaid = $st === 'Y' ? 'Y' : 'N';
+        DB::transaction(function () use ($id, $st) {
+            $isPaid = $st === 'Y' ? 'Y' : 'N';
 
-        DB::table('orders')
-            ->where('id', $id)
-            ->update(['payment_acceptnce' => $isPaid]);
+            DB::table('orders')
+                ->where('id', $id)
+                ->update(['payment_acceptnce' => $isPaid]);
 
-        DB::table('courses_enrollments')
-            ->where('order_id', $id)
-            ->update(['is_paid' => $isPaid]);
+            DB::table('courses_enrollments')
+                ->where('order_id', $id)
+                ->update(['is_paid' => $isPaid]);
 
-        $enrollment = DB::table('courses_enrollments')
-            ->where('order_id', $id)
-            ->first();
+            $enrollment = DB::table('courses_enrollments')
+                ->where('order_id', $id)
+                ->first();
 
-        $order = DB::table('orders')->where('id', $id)->first();
+            $order = DB::table('orders')->where('id', $id)->first();
 
-        if ($enrollment) {
-            $student = User::find($enrollment->student_id);
-            $course = DB::table('courses_courses')->where('id', $enrollment->course_id)->first();
+            if ($enrollment) {
+                $student = User::find($enrollment->student_id);
+                $course = DB::table('courses_courses')->where('id', $enrollment->course_id)->first();
 
-            if ($student) {
-                $notificationData = [
-                    'userName' => $student->email ?? 'User',
-                    'orderId' => $order->id ?? '',
-                    'courseTitle' => $course->title ?? '',
-                ];
+                if ($student) {
+                    $notificationData = [
+                        'userName' => $student->email ?? 'User',
+                        'orderId' => $order->id ?? '',
+                        'courseTitle' => $course->title ?? '',
+                    ];
 
-                if ($isPaid === 'Y') {
-                    dispatch(new SendDbNotificationJob('paymentAccepted', $student, $notificationData));
-                } else {
-                    dispatch(new SendDbNotificationJob('paymentRejected', $student, $notificationData));
+                    if ($isPaid === 'Y') {
+                        dispatch(new SendDbNotificationJob('paymentAccepted', $student, $notificationData));
+                    } else {
+                        dispatch(new SendDbNotificationJob('paymentRejected', $student, $notificationData));
+                    }
                 }
             }
-        }
-    });
+        });
 
-    $this->dispatch('showAlertMessage',
-        type: 'success',
-        title: __('general.success_title'),
-        message: __('settings.updated_record_success'));
-}
-
+        $this->dispatch('showAlertMessage',
+            type: 'success',
+            title: __('general.success_title'),
+            message: __('settings.updated_record_success'));
+    }
 }

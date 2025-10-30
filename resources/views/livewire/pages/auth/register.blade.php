@@ -51,6 +51,7 @@ new #[Layout('layouts.guest')] class extends Component {
         $validated = $this->validate((new RegisterUserRequest())->rules());
 
         $individualPlatform = setting('_general.individual_platform');
+
         if ($individualPlatform && $validated['user_role'] === 'tutor') {
             $existingTutorCount = \App\Models\User::whereHas('roles', function ($q) {
                 $q->where('name', 'tutor');
@@ -191,21 +192,42 @@ new #[Layout('layouts.guest')] class extends Component {
                             </div>
                             <x-input-error field_name="gender" />
                         </div>
-                        <div class="form-group am-form-groupradio">
-                            <x-input-label :value="__('auth.role')" class="am-important" />
-                            <div class="am-selectrole">
-                                <div class="am-radio"  style="display: none;">
-                                    <input wire:model="user_role" id="tutor" value="tutor" type="radio" autofocus
-                                        name="user_role">
-                                    <x-input-label for="tutor" :value="$tutor_name" />
-                                </div>
-                                <div class="am-radio">
-                                    <input wire:model="user_role" id="student" value="student" type="radio" autofocus
-                                        name="user_role">
-                                    <x-input-label for="student" :value="$student_name" />
+                        @php
+                            $individualPlatform = setting('_general.individual_platform');
+                        @endphp
+                        @if($individualPlatform)
+                            <div class="form-group am-form-groupradio">
+                                <x-input-label :value="__('auth.role')" class="am-important" />
+                                <div class="am-selectrole">
+                                    <div class="am-radio" style="display: none;">
+                                        <input wire:model="user_role" id="tutor" value="tutor" type="radio" autofocus
+                                            name="user_role">
+                                        <x-input-label for="tutor" :value="$tutor_name" />
+                                    </div>
+                                    <div class="am-radio">
+                                        <input wire:model="user_role" id="student" value="student" type="radio" autofocus
+                                            name="user_role">
+                                        <x-input-label for="student" :value="$student_name" />
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        @else
+                            <div class="form-group am-form-groupradio">
+                                <x-input-label :value="__('auth.role')" class="am-important" />
+                                <div class="am-selectrole">
+                                    <div class="am-radio">
+                                        <input wire:model="user_role" id="tutor" value="tutor" type="radio" autofocus
+                                            name="user_role">
+                                        <x-input-label for="tutor" :value="$tutor_name" />
+                                    </div>
+                                    <div class="am-radio">
+                                        <input wire:model="user_role" id="student" value="student" type="radio" autofocus
+                                            name="user_role">
+                                        <x-input-label for="student" :value="$student_name" />
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
                         <div class="form-group @error('terms') am-invalid @enderror am-terms-check">
                             <div class="am-checkbox am-signup-check">
                                 <input wire:model="terms" type="checkbox" id="terms" name="terms">
