@@ -229,171 +229,151 @@
                                 @endif
                             @endif
                         </div>
-                            @if ($bundle->instructors && $bundle->instructors->isNotEmpty())
-                                @foreach ($bundle->instructors as $instructor)
-                                    <div class="am-similar-user">
-                                        <div class="am-tutordetail_user">
-                                            {{-- Profile Image --}}
-                                            <figure class="am-tutorvone_img">
-                                                @if (!empty($instructor->profile?->image) && Storage::disk(getStorageDisk())->exists($instructor->profile?->image))
-                                                    <img src="{{ url(Storage::url($instructor->profile->image)) }}" alt="{{ $instructor->profile?->short_name }}">
-                                                @else
-                                                    <img src="{{ setting('_general.default_avatar_for_user') ? url(Storage::url(setting('_general.default_avatar_for_user')[0]['path'])) : resizedImage('placeholder.png', 34, 34) }}" alt="profile image" />
-                                                @endif
-                                            </figure>
-
-                                            {{-- Name & Verification --}}
-                                            <div class="am-tutordetail_user_name">
-                                                <h3>
-                                                    @if(!empty($instructor->profile?->full_name))  
-                                                        <a href="javascript:void(0);">{{ $instructor->profile->full_name }}</a>
-                                                    @endif
-
-                                                    {{-- Verified Badge --}}
-                                                    @if (!empty($instructor->profile?->verified_at))
-                                                        <div class="am-custom-tooltip">
-                                                            <span class="am-tooltip-text"><span>{{ __('courses::courses.verified') }}</span></span>
-                                                            <i class="am-icon-user-check"></i>
-                                                        </div>
-                                                    @endif
-
-                                                    {{-- Country Flag --}}
-                                                    @if(!empty($instructor->address?->country?->short_code))
-                                                        <div class="am-custom-tooltip">
-                                                            <span class="am-tooltip-text">
-                                                                <span>{{ ucfirst($instructor->address->country->name) }}</span>
-                                                            </span>
-                                                            <span class="flag flag-{{ strtolower($instructor->address->country->short_code) }}"></span>
-                                                        </div>
-                                                    @endif
-                                                </h3>
-
-                                                {{-- Tagline --}}
-                                                @if(!empty($instructor->profile?->tagline))
-                                                    <span>{{ $instructor->profile->tagline }}</span>
+                        @if (!empty($bundle->instructor))
+                            <div class="am-similar-user">
+                                <div class="am-tutordetail_user">
+                                    @if(!empty($bundle->instructor->profile?->image))   
+                                        <figure class="am-tutorvone_img">
+                                            <img src="{{ url(Storage::url($bundle->instructor->profile?->image)) }}" alt="{{ $bundle->instructor->profile?->short_name }}">
+                                        </figure> 
+                                    @else
+                                        <figure class="am-tutorvone_img">
+                                            <img src="{{ setting('_general.default_avatar_for_user') ? url(Storage::url(setting('_general.default_avatar_for_user')[0]['path'])) : resizedImage('placeholder.png', 34, 34) }}" alt="profile image" />
+                                        </figure> 
+                                    @endif
+                                    <div class="am-tutordetail_user_name">
+                                        <h3>
+                                            @if(!empty($bundle->instructor->profile?->full_name))  
+                                                <a href="javascript:void(0);">{{ $bundle->instructor->profile?->full_name }}</a>
+                                            @endif
+                                            <div class="am-custom-tooltip">
+                                                @if (!empty($bundle->instructor?->profile?->verified_at))
+                                                <span class="am-tooltip-text">
+                                                    <span>{{ __('courses::courses.verified') }}</span>
+                                                </span>
+                                                <i class="am-icon-user-check"></i>
                                                 @endif
                                             </div>
-                                        </div>
-
-                                        {{-- Reviews, Courses, Students, Languages --}}
-                                        <ul class="am-tutorreviews-list">
-                                            {{-- Rating --}}
-                                            @if(!empty($instructor->reviews_avg_rating) || !empty($instructor->reviews_count))
-                                                <li>
-                                                    <div class="am-tutorreview-item">
-                                                        <div class="am-tutorreview-item_icon"><i class="am-icon-star-filled"></i></div>
-                                                        <span class="am-uniqespace">
-                                                            @if(!empty($instructor->reviews_avg_rating))
-                                                                {{ number_format($instructor->reviews_avg_rating, 1) }} /5.0
-                                                            @endif
-                                                            @if(!empty($instructor->reviews_count))
-                                                                <em>({{ $instructor->reviews_count }} {{ __('coursebundles::bundles.reviews') }})</em>
-                                                            @endif
-                                                        </span>
-                                                    </div>
-                                                </li>
+                                            @if(!empty($bundle->instructor?->address?->country?->short_code))
+                                                <div class="am-custom-tooltip">
+                                                    <span class="am-tooltip-text">
+                                                        <span>{{ ucfirst($bundle->instructor?->address?->country?->name) }}</span>
+                                                    </span>
+                                                    <span class="flag flag-{{ strtolower($bundle->instructor?->address?->country?->short_code) }}"></span>
+                                                </div>
                                             @endif
-
-                                            {{-- Active Students --}}
-                                            @if(!empty($instructor->active_students))
-                                                <li>
-                                                    <div class="am-tutorreview-item">
-                                                        <div class="am-tutorreview-item_icon"><i class="am-icon-user-group"></i></div>
-                                                        <span>
-                                                            {{ $instructor->active_students }}
-                                                            <em>
-                                                                {{ $instructor->active_students == 1 ? __('coursebundles::bundles.active_student') : __('coursebundles::bundles.active_students') }}
-                                                            </em>
-                                                        </span>
-                                                    </div>
-                                                </li>
-                                            @endif
-
-                                            {{-- Courses Count --}}
-                                            @if(!empty($instructor->courses))
-                                                <li>
-                                                    <div class="am-tutorreview-item">
-                                                        <div class="am-tutorreview-item_icon">
-                                                            <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-                                                                <g opacity="0.7">
-                                                                    <path d="M9 16.5C13.1421 16.5 16.5 13.1421 16.5 9C16.5 4.85786 13.1421 1.5 9 1.5C4.85786 1.5 1.5 4.85786 1.5 9C1.5 13.1421 4.85786 16.5 9 16.5Z" stroke="#585858" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                                                                    <path d="M7.18201 7.23984C7.18201 6.4545 8.04578 5.97564 8.71184 6.39173L11.5295 8.15195C12.1564 8.54359 12.1564 9.45654 11.5295 9.84817L8.71184 11.6084C8.04578 12.0245 7.18201 11.5456 7.18201 10.7603V7.23984Z" stroke="#585858" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                                                                </g>
-                                                            </svg>
-                                                        </div>
-                                                        <span>{{ $instructor->courses->count() }} <em>{{ __('coursebundles::bundles.Courses') }}</em></span>
-                                                    </div>
-                                                </li>
-                                            @endif
-
-                                            {{-- Languages --}}
-                                            @if(!empty($instructor->profile?->native_language) || !empty($instructor->languages))
-                                                <li>
-                                                    <div class="am-tutorreview-item">
-                                                        <div class="am-tutorreview-item_icon"><i class="am-icon-megaphone-01"></i></div>
-                                                        <span><em>{{ __('coursebundles::bundles.i_can_speak') }}</em></span>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <div class="am-tutorreview-item">
-                                                        <div class="wa-tags-list">
-                                                            <ul>
-                                                                @if(!empty($instructor->profile?->native_language))
-                                                                    <li>
-                                                                        <span>{{ ucfirst($instructor->profile->native_language) }}
-                                                                            <em>{{ __('coursebundles::bundles.native') }}</em>
-                                                                        </span>
-                                                                    </li>
-                                                                @endif
-
-                                                                @foreach ($instructor->languages as $language)
-                                                                    <li><span>{{ $language->name }}</span></li>
-                                                                @endforeach
-
-                                                                @if($instructor->languages->count() > 2)
-                                                                    <li><span>+{{ $instructor->languages->count() - 2 }} {{ __('coursebundles::bundles.more') }}</span></li>
-                                                                @endif
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                            @endif
-                                        </ul>
-
-                                        {{-- Instructor Bio --}}
-                                        @if(!empty($instructor->profile?->description))
-                                            <p class="cr-instructor-bio">{{ Str::words(strip_tags($instructor->profile->description), 50) }}</p>
+                                        </h3>
+                                        @if(!empty($bundle->instructor?->profile?->tagline))
+                                            <span>{{ $bundle->instructor?->profile?->tagline }}</span>
                                         @endif
-
-                                        {{-- Footer (Social Links + Profile Link) --}}
-                                        <div class="cr-profile-footer">
-                                            @if(!empty($instructor->socialProfiles) && $instructor->socialProfiles->isNotEmpty())
-                                                <ul class="cr-social-icons">
-                                                    @php
-                                                        $validProfiles = $instructor->socialProfiles->filter(fn($profile) => !empty($profile->url))->take(4);
-                                                    @endphp
-                                                    @foreach ($validProfiles as $socialProfile)
-                                                        <li>
-                                                            <a href="{{ $socialProfile->url }}" target="_blank">
-                                                                <span class="am-tooltip-text"><span>{{ $socialProfile->type }}</span></span>
-                                                                @if($socialProfile->type == 'Pinterest')
-                                                                    <x-courses::icons.pinterest />
-                                                                @else
-                                                                    <i class="{{ $socialIcons[$socialProfile->type] ?? '' }}"></i>
-                                                                @endif
-                                                            </a>
-                                                        </li>
-                                                    @endforeach
-                                                </ul>
-                                            @endif
-
-                                            <a href="{{ route('tutor-detail', ['slug' => $instructor->profile?->slug]) }}">
-                                                <button class="cr-view-profile-btn">{{ __('courses::courses.view_profile') }}</button>
-                                            </a>
-                                        </div>
                                     </div>
-                                @endforeach
-                            @endif
+                                </div>
+                                <ul class="am-tutorreviews-list">
+                                    @if (!empty($bundle?->instructor?->reviews_avg_rating) || !empty($bundle?->instructor?->reviews_count))
+                                        <li>
+                                            <div class="am-tutorreview-item">
+                                                <div class="am-tutorreview-item_icon">
+                                                    <i class="am-icon-star-filled"></i>
+                                                </div>
+                                                <span class="am-uniqespace">@if(!empty($bundle?->instructor?->reviews_avg_rating)) {{ number_format($bundle?->instructor?->reviews_avg_rating, 1) }} /5.0 @endif
+                                                    <em>@if(!empty($bundle?->instructor?->reviews_count)) ({{ $bundle?->instructor?->reviews_count }} {{ __('coursebundles::bundles.reviews') }}) @endif</em>
+                                                </span>
+                                            </div>
+                                        </li>
+                                    @endif
+                                    @if(!empty($bundle->instructor?->active_students))
+                                        <li>
+                                            <div class="am-tutorreview-item">
+                                                <div class="am-tutorreview-item_icon">
+                                                    <i class="am-icon-user-group"></i>
+                                                </div>
+                                                <span>{{ $bundle->instructor?->active_students }}
+                                                    <em>
+                                                        {{ $bundle->instructor?->active_students == '1' ? __('coursebundles::bundles.active_student') : __('coursebundles::bundles.active_students') }}
+                                                    </em>
+                                                </span>
+                                            </div>
+                                        </li>
+                                    @endIf
+                                    @if(!empty($bundle->instructor?->courses))
+                                        <li>
+                                            <div class="am-tutorreview-item">
+                                                <div class="am-tutorreview-item_icon">
+                                                    <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><g opacity="0.7"><path d="M9 16.5C13.1421 16.5 16.5 13.1421 16.5 9C16.5 4.85786 13.1421 1.5 9 1.5C4.85786 1.5 1.5 4.85786 1.5 9C1.5 13.1421 4.85786 16.5 9 16.5Z" stroke="#585858" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path><path d="M7.18201 7.23984C7.18201 6.4545 8.04578 5.97564 8.71184 6.39173L11.5295 8.15195C12.1564 8.54359 12.1564 9.45654 11.5295 9.84817L8.71184 11.6084C8.04578 12.0245 7.18201 11.5456 7.18201 10.7603V7.23984Z" stroke="#585858" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></g></svg>
+                                                </div>
+                                                <span> {{ $bundle->instructor?->courses->count() }} <em>{{ __('coursebundles::bundles.Courses') }}</em></span>
+                                            </div>
+                                        </li>
+                                    @endif
+                                    @if(!empty($bundle->instructor?->profile?->native_language) || !empty($bundle->instructor?->languages))
+                                        <li>
+                                            <div class="am-tutorreview-item">
+                                                <div class="am-tutorreview-item_icon">
+                                                    <i class="am-icon-megaphone-01"></i>
+                                                </div>
+                                                <span><em>{{ __('coursebundles::bundles.i_can_speak') }}</em></span>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="am-tutorreview-item">
+                                                <div class="wa-tags-list">
+                                                    <ul>
+                                                        @if(!empty($bundle->instructor->profile?->native_language))
+                                                            <li>
+                                                                <span>
+                                                                    {{ ucfirst($bundle->instructor->profile->native_language) }}
+                                                                    <em>{{ __('coursebundles::bundles.native') }}</em>
+                                                                </span>
+                                                            </li>
+                                                        @endif
+                                                        @foreach ($bundle->instructor?->languages as $language)
+                                                            <li><span>{{ $language->name }}</span></li>
+                                                        @endforeach
+                                                       
+                                                        @if($bundle->instructor->languages->count() > 2)
+                                                            <li><span>+{{ $bundle->instructor->languages->count() - 2 }} {{ __('coursebundles::bundles.more') }}</span></li>
+                                                        @endif
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    @endif
+                                </ul>
+                                @if($bundle->instructor?->profile?->description)
+                                    <p class="cr-instructor-bio">   
+                                        {{ Str::words(strip_tags($bundle->instructor?->profile?->description), 50) }}
+                                    </p>
+                                @endif
+                                <div class="cr-profile-footer">
+                                    @if(!empty($bundle->instructor?->socialProfiles) && $bundle->instructor?->socialProfiles->isNotEmpty())
+                                        <ul class="cr-social-icons">
+                                            @php
+                                                $validProfiles = $bundle->instructor?->socialProfiles->filter(function($profile) {
+                                                    return !empty($profile->url);
+                                                })->take(4);
+                                            @endphp
+                                            @foreach ($validProfiles as $socialProfile)
+                                                <li>
+                                                    <a href="{{ $socialProfile->url }}" target="_blank">
+                                                        <span class="am-tooltip-text">
+                                                            <span>{{ $socialProfile->type }}</span>
+                                                        </span>
+                                                        @if($socialProfile->type == 'Pinterest')
+                                                            <x-courses::icons.pinterest />
+                                                        @else
+                                                            <i class="{{ $socialIcons[$socialProfile->type] }}"></i>
+                                                        @endif
+                                                    </a>
+                                                </li>
+                                            @endforeach
+                                        </ul>
+                                    @endif
+                                    <a href="{{ route('tutor-detail', ['slug' => $bundle->instructor?->profile->slug]) }}">
+                                        <button class="cr-view-profile-btn">{{ __('courses::courses.view_profile') }}</button>
+                                    </a>
+                                </div>
+                            </div>
+                        @endIf
                     </div>
                 </div>
             </section>
@@ -422,32 +402,14 @@
         
                                                 <div class="cr-bundles_item_content">
                                                     <div class="cr-bundles_user">
-                                                        @if ($relatedBundle->instructors->isNotEmpty())
-                                                            @foreach ($relatedBundle->instructors as $instructor)
-                                                                <figure>
-                                                                    @if (!empty($instructor->profile?->image) && Storage::disk(getStorageDisk())->exists($instructor->profile?->image))
-                                                                        <img src="{{ resizedImage($instructor->profile?->image, 50, 50) }}" alt="{{ $instructor->profile?->full_name }}" />
-                                                                    @else
-                                                                        <img src="{{ setting('_general.default_avatar_for_user') 
-                                                                            ? url(Storage::url(setting('_general.default_avatar_for_user')[0]['path'])) 
-                                                                            : resizedImage('placeholder.png', 50, 50) }}" 
-                                                                            alt="default profile" />
-                                                                    @endif
-                                                                </figure>
-                                                                @if(!empty($instructor->profile?->short_name))
-                                                                    <span>{{ $instructor->profile?->short_name }}</span>
-                                                                @endif
-                                                            @endforeach
-                                                        @else
-                                                            {{-- fallback if bundle has no instructors --}}
-                                                            <figure>
-                                                                <img src="{{ setting('_general.default_avatar_for_user') 
-                                                                    ? url(Storage::url(setting('_general.default_avatar_for_user')[0]['path'])) 
-                                                                    : resizedImage('placeholder.png', 50, 50) }}" alt="profile" />
-                                                            </figure>
-                                                            <span>{{ __('coursebundles::bundles.no_instructor_assigned') }}</span>
-                                                        @endif
-
+                                                        <figure>
+                                                            @if (!empty($relatedBundle?->instructor?->profile?->image) && Storage::disk(getStorageDisk())->exists($relatedBundle?->instructor?->profile?->image))
+                                                                <img src="{{ resizedImage($relatedBundle?->instructor?->profile?->image,50,50) }}" alt="{{$relatedBundle?->instructor?->profile?->full_name}}" />
+                                                            @else
+                                                                <img src="{{ setting('_general.default_avatar_for_user') ? url(Storage::url(setting('_general.default_avatar_for_user')[0]['path'])) : resizedImage('placeholder.png', 50, 50) }}" alt="{{ $bundle?->instructor?->profile?->image }}" />
+                                                            @endif
+                                                        </figure>
+                                                        @if(!empty($relatedBundle?->instructor?->profile?->short_name)) <span>{{ $relatedBundle?->instructor?->profile?->short_name }}</span> @endif
                                                         @if(!empty($relatedBundle?->courses_count))
                                                             <span>
                                                                 <i class="am-icon-book-1"></i>
@@ -456,7 +418,6 @@
                                                             </span>
                                                         @endif
                                                     </div>
-
                                                     @if(!empty($relatedBundle?->title))
                                                         <div class="cr-bundles_coursetitle">
                                                             <a href="{{ route('coursebundles.bundle-details', ['slug' => $relatedBundle?->slug]) }}">
@@ -464,35 +425,28 @@
                                                             </a>
                                                         </div>
                                                     @endif
-
-                                                    @if(!empty($relatedBundle?->short_description))
-                                                        <p>{{ $relatedBundle?->short_description }}</p>
-                                                    @endif
-
+                                                    @if(!empty($relatedBundle?->short_description)) <p>{{ $relatedBundle?->short_description }}</p> @endif
                                                     <div class="cr-bundle-price-container">
                                                         <div class="cr-bundle-price-info">
                                                             @if($relatedBundle?->discount_percentage > 0)
                                                                 <span class="cr-bundle-original-price">
-                                                                    {{ $relatedBundle?->price }}
+                                                                    {{ $bundle?->price }}
                                                                     <svg width="38" height="11" viewBox="0 0 38 11" fill="none">
                                                                         <rect x="37" width="1" height="37.3271" transform="rotate(77.2617 37 0)" fill="#686868"/>
                                                                         <rect x="37.2188" y="0.975342" width="1" height="37.3271" transform="rotate(77.2617 37.2188 0.975342)" fill="#F7F7F8"/>
                                                                     </svg>
                                                                 </span>
                                                             @endif
-
                                                             <div class="cr-bundle-discounted-price">
-                                                                <span class="cr-bundle-price-amount">
-                                                                    <sup>{{ $currency_symbol }}</sup>
-                                                                    {{ $relatedBundle?->discount_percentage > 0 ? $relatedBundle?->final_price : $relatedBundle?->price }}
-                                                                </span>
+                                                                <span class="cr-bundle-price-amount"><sup>$</sup>{{ $relatedBundle?->discount_percentage > 0 ? $relatedBundle?->final_price : $relatedBundle?->price }}</span>
                                                             </div>
                                                         </div>
-
                                                         @if($relatedBundle?->courses_sum_content_length)
                                                             <div class="cr-bundle-duration-info">
                                                                 <i class="am-icon-time"></i>
-                                                                <span>{{ getCourseDuration($relatedBundle?->courses_sum_content_length) }}</span>
+                                                                <span>
+                                                                    {{ getCourseDuration($relatedBundle?->courses_sum_content_length)}}
+                                                                </span>
                                                             </div>
                                                         @endif
                                                     </div>

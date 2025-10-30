@@ -1,4 +1,3 @@
-
 <div class="cr-bundles" wire:init="loadData">
     <div class="am-title_wrap">
         <div class="am-title">
@@ -125,18 +124,6 @@
                                             </span>
                                             <em>{{\Carbon\Carbon::parse($bundle?->created_at)->format('M d, Y')}}</em>
                                         </li>
-                                            @if ($bundle?->createdBy?->profile)
-                                            <li>
-                                                <span>
-                                                    <i class="am-icon-book-1"></i>
-                                                    {{ __('coursebundles::bundles.created_by') }}
-                                                </span>
-                                                <em>
-                                                    {{ $bundle->createdBy->profile->first_name }}
-                                                    {{ $bundle->createdBy->profile->last_name }}
-                                                </em>
-                                            </li>
-                                        @endif
                                     </ul>
                                 </div>
                                 <div class="cr-bundle-price-container">
@@ -152,7 +139,7 @@
                                                 </span>
                                             @endif
                                             <div class="cr-bundle-discounted-price">
-                                                <span class="cr-bundle-price-amount"><sup>{{ $currency_symbol }}</sup>{{ $bundle?->discount_percentage > 0 ? $bundle?->final_price : $bundle?->price }}</span>
+                                                <span class="cr-bundle-price-amount"><sup>$</sup>{{ $bundle?->discount_percentage > 0 ? $bundle?->final_price : $bundle?->price }}</span>
                                             </div>
                                         @else
                                             <div class="cr-bundle-discounted-price">

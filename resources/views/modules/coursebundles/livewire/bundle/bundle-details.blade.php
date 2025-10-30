@@ -229,8 +229,7 @@
                                 @endif
                             @endif
                         </div>
-                            @if ($bundle->instructors && $bundle->instructors->isNotEmpty())
-                                @foreach ($bundle->instructors as $instructor)
+                            @if ($bundle->instructor && $bundle->instructor->isNotEmpty())
                                     <div class="am-similar-user">
                                         <div class="am-tutordetail_user">
                                             {{-- Profile Image --}}
@@ -392,7 +391,6 @@
                                             </a>
                                         </div>
                                     </div>
-                                @endforeach
                             @endif
                     </div>
                 </div>
@@ -422,8 +420,7 @@
         
                                                 <div class="cr-bundles_item_content">
                                                     <div class="cr-bundles_user">
-                                                        @if ($relatedBundle->instructors->isNotEmpty())
-                                                            @foreach ($relatedBundle->instructors as $instructor)
+                                                        @if ($relatedBundle->instructor->isNotEmpty())
                                                                 <figure>
                                                                     @if (!empty($instructor->profile?->image) && Storage::disk(getStorageDisk())->exists($instructor->profile?->image))
                                                                         <img src="{{ resizedImage($instructor->profile?->image, 50, 50) }}" alt="{{ $instructor->profile?->full_name }}" />
@@ -437,7 +434,6 @@
                                                                 @if(!empty($instructor->profile?->short_name))
                                                                     <span>{{ $instructor->profile?->short_name }}</span>
                                                                 @endif
-                                                            @endforeach
                                                         @else
                                                             {{-- fallback if bundle has no instructors --}}
                                                             <figure>

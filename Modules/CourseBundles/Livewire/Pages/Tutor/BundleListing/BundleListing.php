@@ -6,9 +6,9 @@ use Livewire\Attributes\Layout;
 use Livewire\Attributes\On;
 use Livewire\Component;
 use Livewire\WithPagination;
-use Modules\CourseBundles\Casts\BundleStatusCast;
-use Modules\CourseBundles\Models\Bundle;
 use Modules\CourseBundles\Services\BundleService;
+use Modules\CourseBundles\Models\Bundle;
+use Modules\CourseBundles\Casts\BundleStatusCast;
 
 class BundleListing extends Component
 {
@@ -25,42 +25,32 @@ class BundleListing extends Component
     {
         $this->dispatch('initSelect2', target: '.am-select2');
 
-        $this->statuses = BundleStatusCast::$statusMap;
+        $this->statuses =  BundleStatusCast::$statusMap;
     }
 
     #[Layout('layouts.app')]
-public function render()
-{
-    $bundles = (new BundleService())->getBundles(
-        instructorId: $this->isAdmin() ? null : auth()->id(),
-        with: [
-            'thumbnail:mediable_id,mediable_type,type,path',
-            'createdBy.profile:id,user_id,first_name,last_name',
-            'instructors.profile:id,user_id,first_name,last_name',
-        ],
-        withCount: ['courses'],
-        withSum: ['courses' => 'content_length'],
-        filters: $this->filters,
-        perPage: $this->perPage
-    );
-    // dd($bundles->toArray());
-
-    $currency = setting('_general.currency');
-    $currency_detail = !empty($currency) ? currencyList($currency) : [];
-
-    if (!empty($currency_detail['symbol'])) {
-        $this->currency_symbol = $currency_detail['symbol'];
+    public function render()
+    {
+        $bundles = [];
+        $bundles = (new BundleService())->getBundles(
+            instructorId: $this->isAdmin() ? null : auth()->id(),
+            with: [
+                'thumbnail:mediable_id,mediable_type,type,path',
+                'createdBy.profile:id,user_id,first_name,last_name'
+            ],
+            withCount: ['courses'],
+            withSum: ['courses' => '    '],
+            filters: $this->filters,
+            perPage: $this->perPage
+        );
+        return view('coursebundles::livewire.tutor.bundle-listing.bundle-listing', compact('bundles'));
     }
-
-    return view('coursebundles::livewire.tutor.bundle-listing.bundle-listing', [
-        'bundles' => $bundles,
-        'currency_symbol' => $this->currency_symbol,
-    ]);
-}
     protected function isAdmin(): bool
     {
         return auth()->check() && auth()->user()?->role === 'admin';
     }
+
+
 
     public function resetFilters()
     {
@@ -69,9 +59,9 @@ public function render()
 
     public function updatedPerPage()
     {
+
         $this->resetPage();
     }
-
     public function loadData()
     {
         $this->isLoading = false;
@@ -108,6 +98,8 @@ public function render()
         $this->updateBundleStatus($this->bundleId, 'published');
         $this->dispatch('toggleModel', id: 'course_completed_popup', action: 'hide');
     }
+
+
 
     #[On('delete-bundle')]
     public function deleteBundle($params = [])

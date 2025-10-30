@@ -4,45 +4,39 @@ namespace Modules\CourseBundles\Livewire\Pages\Bundle;
 
 use App\Facades\Cart;
 use App\Services\BookingService;
-use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Illuminate\Support\Facades\Auth;
 use Modules\CourseBundles\Models\Bundle;
 use Modules\CourseBundles\Services\BundleService;
 
 class BundleDetails extends Component
-{
+{   
     use WithPagination;
-
     public string $slug;
 
     public $isBuyable = true;
-
     public $viewCourse = false;
-
     public $role;
 
     public $isLoading = true;
-
     public $perPage;
-
     public $perPageList = [10, 25, 50, 100];
 
     public $filters = [
-        'statuses' => [Bundle::STATUS_PUBLISHED]
+        'statuses'      => [Bundle::STATUS_PUBLISHED]
     ];
-
     public $socialIcons = [
-        'Facebook' => 'am-icon-facebook-1',
-        'X/Twitter' => 'am-icon-twitter-02',
-        'LinkedIn' => 'am-icon-linkedin-02',
-        'Instagram' => 'am-icon-instagram',
-        'Pinterest' => 'am-icon-pinterest',
-        'YouTube' => 'am-icon-youtube',
-        'TikTok' => 'am-icon-tiktok-02',
-        'WhatsApp' => 'am-icon-whatsapp',
+        'Facebook'      => 'am-icon-facebook-1',
+        'X/Twitter'     => 'am-icon-twitter-02',
+        'LinkedIn'      => 'am-icon-linkedin-02',
+        'Instagram'     => 'am-icon-instagram',
+        'Pinterest'     => 'am-icon-pinterest',
+        'YouTube'       => 'am-icon-youtube',
+        'TikTok'        => 'am-icon-tiktok-02',
+        'WhatsApp'      => 'am-icon-whatsapp',
     ];
 
     #[Layout('layouts.frontend-app')]
@@ -50,16 +44,13 @@ class BundleDetails extends Component
     {
         $this->role = auth()?->user()?->role;
         $this->slug = $slug;
-        $this->perPage = setting('_general.per_page_record') ?? 10;
+        $this->perPage =  setting('_general.per_page_record') ?? 10;
 
-        if ($this->role == 'student') {
-            // Use the first instructor's ID for checking purchased bundles
-            $bundle = $this->bundle;
-            $tutorId = $bundle->instructors->first()->id ?? null;
+        if($this->role == 'student'){
             $bundleAddedToStudent = (new BundleService())->getPurchasedBundles(
-                bundleId: $bundle->id,
+                bundleId: $this->bundle->id, 
                 studentId: Auth::id(),
-                tutorId: $tutorId
+                tutorId: $this->bundle->instructor_id
             );
             $this->viewCourse = !empty($bundleAddedToStudent);
         }
@@ -71,21 +62,15 @@ class BundleDetails extends Component
         return (new BundleService())->getBundle(
             slug: $this->slug,
             relations: [
-                'instructors' => fn($q) => $q
-                    ->withCount(['bookingSlots as active_students' => fn($query) => $query->whereStatus('active')])
-                    ->withCount('reviews')
-                    ->withAvg('reviews', 'rating'),
-                'thumbnail:mediable_id,mediable_type,type,path',
-                'instructors.profile',
-                'courses',
-                'courses.category',
-                'courses.subcategory',
-                'courses.language',
-                'courses.instructor.profile',
-                'courses.pricing',
-                'courses.curriculums',
-                'courses' => fn($q) => $q->withCount('curriculums', 'videoCurriculums')->withSum('videoCurriculums', 'content_length')
-            ],
+                            'instructor' => fn($q) => $q
+                                    ->withCount(['bookingSlots as active_students'  => fn($query) => $query->whereStatus('active')])
+                                    ->withCount('reviews')
+                                    ->withAvg('reviews', 'rating'),
+                            'thumbnail:mediable_id,mediable_type,type,path',
+                            'instructor.profile',
+                            'courses','courses.category','courses.subcategory','courses.language','courses.instructor.profile', 'courses.pricing', 'courses.curriculums',
+                            'courses'=> fn($q) => $q->withCount('curriculums', 'videoCurriculums')->withSum('videoCurriculums', 'content_length')
+                        ],
             withAvg: ['reviews:rating'],
             withCount: [
                 'courses'
@@ -117,7 +102,7 @@ class BundleDetails extends Component
     {
         $excludedId = $this->bundle->id ?? null;
         return (new BundleService())->getAllBundles(
-            with: ['thumbnail:mediable_id,mediable_type,type,path', 'instructors.profile'],
+            with: ['thumbnail:mediable_id,mediable_type,type,path','instructor.profile'],
             withCount: ['courses'],
             withSum: ['courses' => 'content_length'],
             filters: $this->filters,
@@ -134,26 +119,19 @@ class BundleDetails extends Component
     public function render()
     {
         $bundle = $this->bundle;
-        if (empty($bundle)) {
+        if(empty($bundle)){
             abort(404);
         }
         $bundleCourses = $this->bundleCourses;
         $bundlesData = $this->relatedBundles;
-        $currency = setting('_general.currency');
-        $currency_detail = !empty($currency) ? currencyList($currency) : array();
-
-        if (!empty($currency_detail['symbol'])) {
-            $this->currency_symbol = $currency_detail['symbol'];
-        }
-        $currency_symbol = $this->currency_symbol;
-
-        return view('coursebundles::livewire.bundle.bundle-details', compact('bundle', 'bundlesData', 'bundleCourses', 'currency_symbol'));
+        return view('coursebundles::livewire.bundle.bundle-details', compact('bundle','bundlesData', 'bundleCourses'));
     }
 
     public function loadData()
     {
         $this->isLoading = false;
     }
+
 
     public function addToCart()
     {
@@ -200,17 +178,13 @@ class BundleDetails extends Component
             $this->dispatch('showAlertMessage', type: 'error', title: __('general.demosite_res_title'), message: __('general.demosite_res_txt'));
             return;
         }
-
-        if (!auth()->check()) {
-            session()->put('url.intended', request()->fullUrl());
-
+        if (!auth()?->check()) {
             $this->dispatch(
                 'showAlertMessage',
                 type: 'error',
                 message: __('courses::courses.login_required')
             );
-
-            return redirect('/login');
+            return;
         }
 
         if (!auth()?->user()?->role == 'student') {
@@ -224,14 +198,14 @@ class BundleDetails extends Component
 
         $response = (new BookingService())->getFreeBundle($this->bundle->id);
 
-        if (empty($response['success'])) {
+        if(empty($response['success'])) {
             return $this->dispatch(
                 'showAlertMessage',
                 type: 'error',
                 message: __($response['message'])
-            );
+            ); 
         }
 
-        return redirect()->route('courses.course-list');
+        return redirect()->route('courses.course-list');  
     }
 }
