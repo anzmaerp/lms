@@ -125,43 +125,48 @@
                                             @role('student')
                                                 <td data-label="{{ __('booking.tutor_name') }}">
                                                     <div class="tb-varification_userinfo">
-                                                        @php
-                                                            $instructor = null;
-                                                            $imagePath = null;
-                                                            $firstName = '-';
-                                                            $defaultAvatar = setting('_general.default_avatar_for_user')
-                                                                ? url(Storage::url(setting('_general.default_avatar_for_user')[0]['path']))
-                                                                : resizedImage('placeholder.png', 34, 34);
-                                                        @endphp
-
                                                         @if ($order?->orderable_type == \Modules\Courses\Models\Course::class)
-                                                            @php
-                                                                $instructor = $order?->orderable?->instructor?->first() ?? $order?->orderable?->instructor;
-                                                                $imagePath = $instructor?->profile?->image;
-                                                                $firstName = $instructor?->profile?->first_name ?? '-';
-                                                            @endphp
+                                                            <strong class="tb-adminhead__img">
+                                                                @if (
+                                                                    !empty($order?->orderable?->instructor?->profile?->image) &&
+                                                                        Storage::disk(getStorageDisk())->exists($order?->orderable?->instructor?->profile?->image))
+                                                                    <img src="{{ resizedImage($order?->orderable?->instructor?->profile?->image, 34, 34) }}"
+                                                                        alt="{{ $order?->orderable?->instructor?->profile?->image }}" />
+                                                                @else
+                                                                    <img src="{{ setting('_general.default_avatar_for_user') ? url(Storage::url(setting('_general.default_avatar_for_user')[0]['path'])) : resizedImage('placeholder.png', 34, 34) }}"
+                                                                        alt="{{ $order?->orderable?->instructor?->profile?->image }}" />
+                                                                @endif
+                                                            </strong>
+                                                            <span>{{ $order?->orderable?->instructor?->profile?->first_name }}</span>
                                                         @elseif($order?->orderable_type == App\Models\SlotBooking::class)
-                                                            @php
-                                                                $instructor = $order?->orderable?->tutor?->first() ?? $order?->orderable?->tutor;
-                                                                $imagePath = $instructor?->image;
-                                                                $firstName = $instructor?->first_name ?? '-';
-                                                            @endphp
+                                                            <strong class="tb-adminhead__img">
+                                                                @if (
+                                                                    !empty($order?->orderable?->tutor?->image) &&
+                                                                        Storage::disk(getStorageDisk())->exists($order?->orderable?->tutor?->image))
+                                                                    <img src="{{ resizedImage($order?->orderable?->tutor?->image, 34, 34) }}"
+                                                                        alt="{{ $order?->orderable?->tutor?->image }}" />
+                                                                @else
+                                                                    <img src="{{ setting('_general.default_avatar_for_user') ? url(Storage::url(setting('_general.default_avatar_for_user')[0]['path'])) : resizedImage('placeholder.png', 34, 34) }}"
+                                                                        alt="{{ $order?->orderable?->tutor?->image }}" />
+                                                                @endif
+                                                            </strong>
+                                                            <span>{{ $order?->orderable?->tutor?->first_name }}</span>
                                                         @elseif($order?->orderable_type == \Modules\CourseBundles\Models\Bundle::class)
-                                                            @php
-                                                                $instructor = $order?->orderable?->instructor?->first() ?? $order?->orderable?->instructor;
-                                                                $imagePath = $instructor?->profile?->image;
-                                                                $firstName = $instructor?->profile?->first_name ?? '-';
-                                                            @endphp
+                                                            <strong class="tb-adminhead__img">
+                                                                @if (
+                                                                    !empty($order?->orderable?->instructor?->profile?->image) &&
+                                                                        Storage::disk(getStorageDisk())->exists($order?->orderable?->instructor?->profile?->image))
+                                                                    <img src="{{ resizedImage($order?->orderable?->instructor?->profile?->image, 34, 34) }}"
+                                                                        alt="{{ $order?->orderable?->instructor?->profile?->image }}" />
+                                                                @else
+                                                                    <img src="{{ setting('_general.default_avatar_for_user') ? url(Storage::url(setting('_general.default_avatar_for_user')[0]['path'])) : resizedImage('placeholder.png', 34, 34) }}"
+                                                                        alt="{{ $order?->orderable?->instructor?->profile?->image }}" />
+                                                                @endif
+                                                            </strong>
+                                                            <span>{{ $order?->orderable?->instructor?->profile?->first_name }}</span>
+                                                        @else
+                                                            <span>-</span>
                                                         @endif
-
-                                                        <strong class="tb-adminhead__img">
-                                                            @if ($instructor && !empty($imagePath) && Storage::disk(getStorageDisk())->exists($imagePath))
-                                                                <img src="{{ resizedImage($imagePath, 34, 34) }}" alt="Instructor Image" />
-                                                            @else
-                                                                <img src="{{ $defaultAvatar }}" alt="Default Avatar" />
-                                                            @endif
-                                                        </strong>
-                                                        <span>{{ $firstName }}</span>
                                                     </div>
                                                 </td>
                                                 <td data-label="{{ __('booking.amount') }}">

@@ -63,9 +63,9 @@ class Bundle extends Model
             ->withTimestamps();
     }
 
-    public function instructor()
+    public function instructor(): BelongsTo
     {
-        return $this->instructors();
+        return $this->belongsTo(User::class, 'instructor_id');
     }
 
     public function thumbnail(): MorphOne
